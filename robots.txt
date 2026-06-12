@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://itadreamteam.com/sitemap.xml
