@@ -627,14 +627,320 @@
       .amenities-grid { grid-template-columns: 1fr !important; }
       .photo-quad { grid-template-columns: 1fr !important; }
     }
+
+    /* ────────────────────────────────────────────────────────
+       CURTAIN EFFECT
+    ──────────────────────────────────────────────────────── */
+    .curtain {
+      position: fixed; inset: 0; z-index: 900;
+      display: grid; grid-template-columns: 1fr 1fr;
+      pointer-events: none;
+    }
+    .curtain-panel {
+      background: var(--navy);
+      transition: transform 1.4s cubic-bezier(0.76, 0, 0.24, 1);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .curtain-panel-left  { transform-origin: left;  }
+    .curtain-panel-right { transform-origin: right; justify-content: flex-end; }
+    .curtain-logo {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      text-align: center; pointer-events: none;
+    }
+    .curtain-logo-text {
+      font-family: var(--serif); font-size: clamp(64px, 14vw, 140px);
+      font-weight: 400; color: var(--beige); line-height: .9;
+      letter-spacing: -3px;
+    }
+    .curtain-logo-text em { color: var(--gold); font-style: italic; }
+    .curtain-logo-sub {
+      font-family: var(--sans); font-size: clamp(9px, 1.5vw, 12px);
+      letter-spacing: 4px; text-transform: uppercase; color: rgba(242,236,224,.4);
+      margin-top: 20px;
+    }
+    .curtain-rule {
+      width: 80px; height: 0.5px; background: var(--gold);
+      margin: 16px auto;
+    }
+    .curtain.open .curtain-panel-left  { transform: translateX(-100%); }
+    .curtain.open .curtain-panel-right { transform: translateX(100%); }
+    .curtain.done { display: none; }
+
+    /* ────────────────────────────────────────────────────────
+       PARTNER FORM MODAL
+    ──────────────────────────────────────────────────────── */
+    .pf-backdrop {
+      position: fixed; inset: 0; z-index: 800;
+      background: rgba(10,22,40,.55);
+      backdrop-filter: blur(6px);
+      opacity: 0; pointer-events: none;
+      transition: opacity .5s ease;
+    }
+    .pf-backdrop.show { opacity: 1; pointer-events: all; }
+
+    .pf-modal {
+      position: fixed; z-index: 801;
+      bottom: 0; left: 0; right: 0;
+      background: var(--beige);
+      max-height: 94svh;
+      overflow-y: auto;
+      border-radius: 16px 16px 0 0;
+      padding: 0;
+      transform: translateY(100%);
+      transition: transform .6s cubic-bezier(0.32, 0.72, 0, 1);
+      -webkit-overflow-scrolling: touch;
+    }
+    .pf-modal.show { transform: translateY(0); }
+
+    /* Desktop: diventa un modal centrato */
+    @media (min-width: 700px) {
+      .pf-modal {
+        bottom: auto; left: 50%; top: 50%;
+        transform: translate(-50%, -40%) scale(.97);
+        opacity: 0;
+        width: 100%; max-width: 680px;
+        border-radius: 4px;
+        transition: transform .6s cubic-bezier(0.32, 0.72, 0, 1), opacity .5s ease;
+        max-height: 90svh;
+      }
+      .pf-modal.show {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .pf-header {
+      background: var(--navy); padding: 28px 32px 24px;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .pf-eyebrow {
+      font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;
+    }
+    .pf-eyebrow::before { content:''; width: 16px; height: 0.5px; background: var(--gold); }
+    .pf-header-title {
+      font-family: var(--serif); font-size: clamp(22px, 5vw, 32px);
+      font-weight: 400; color: var(--beige); line-height: 1.1; letter-spacing: -.5px;
+    }
+    .pf-header-sub {
+      font-size: 12px; color: rgba(242,236,224,.5); margin-top: 8px; font-weight: 300;
+    }
+    .pf-close {
+      position: absolute; top: 20px; right: 24px;
+      background: rgba(242,236,224,.1); border: 0.5px solid rgba(242,236,224,.2);
+      color: var(--beige); width: 36px; height: 36px; border-radius: 50%;
+      cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .pf-close:hover { background: rgba(242,236,224,.2); }
+
+    .pf-body { padding: 28px 32px 40px; }
+    .pf-section-label {
+      font-size: 8px; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(10,22,40,.4); margin-bottom: 16px; margin-top: 28px;
+      padding-bottom: 8px; border-bottom: 0.5px solid var(--hair);
+    }
+    .pf-section-label:first-child { margin-top: 0; }
+
+    .pf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .pf-grid-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
+    @media (max-width: 600px) {
+      .pf-grid, .pf-grid-3 { grid-template-columns: 1fr; }
+      .pf-body { padding: 20px; }
+      .pf-header { padding: 24px 20px 20px; }
+      .pf-close { top: 16px; right: 16px; }
+    }
+
+    .pf-field {
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .pf-label {
+      font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(10,22,40,.5); font-weight: 400;
+    }
+    .pf-input {
+      background: #fff; border: 0.5px solid var(--hair);
+      padding: 13px 14px; font-size: 14px; color: var(--navy);
+      font-family: var(--sans); font-weight: 300; outline: none;
+      border-radius: 2px; transition: border-color .2s;
+      -webkit-appearance: none;
+    }
+    .pf-input:focus { border-color: var(--navy); }
+    .pf-input::placeholder { color: rgba(10,22,40,.3); }
+    .pf-select {
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230a1628' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center;
+      border: 0.5px solid var(--hair); padding: 13px 36px 13px 14px;
+      font-size: 14px; color: var(--navy); font-family: var(--sans); font-weight: 300;
+      outline: none; border-radius: 2px; cursor: pointer;
+      -webkit-appearance: none; appearance: none; transition: border-color .2s;
+    }
+    .pf-select:focus { border-color: var(--navy); }
+
+    .pf-radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    .pf-radio {
+      flex: 1; min-width: 100px;
+      border: 0.5px solid var(--hair); background: #fff;
+      padding: 11px 14px; cursor: pointer; text-align: center;
+      font-size: 12px; color: rgba(10,22,40,.6); border-radius: 2px;
+      transition: border-color .2s, background .2s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .pf-radio input { display: none; }
+    .pf-radio.selected { border-color: var(--navy); background: var(--navy); color: var(--beige); }
+
+    .pf-submit {
+      width: 100%; margin-top: 28px;
+      background: var(--navy); color: var(--beige);
+      border: none; padding: 18px; cursor: pointer;
+      font-family: var(--sans); font-size: 11px; font-weight: 400;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      transition: opacity .2s; border-radius: 2px;
+    }
+    .pf-submit:hover { opacity: .85; }
+    .pf-disclaimer {
+      font-size: 10px; color: rgba(10,22,40,.35); text-align: center;
+      margin-top: 14px; line-height: 1.7;
+    }
+
+    /* Trigger button — floating (riapre il form) */
+    .pf-trigger {
+      position: fixed; bottom: 28px; right: 28px; z-index: 700;
+      background: var(--navy); color: var(--beige);
+      border: none; border-radius: 2px; cursor: pointer;
+      font-family: var(--sans); font-size: 9px; font-weight: 400;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      padding: 14px 20px; box-shadow: 0 4px 24px rgba(10,22,40,.25);
+      transition: opacity .2s, transform .2s;
+      display: none;
+    }
+    .pf-trigger.visible { display: flex; align-items: center; gap: 8px; }
+    .pf-trigger:hover { opacity: .85; transform: translateY(-2px); }
+    .pf-trigger-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--gold); flex-shrink: 0;
+    }
   </style>
 
 </head>
 <body>
 
+
+<!-- ══════════════════════════════════════════
+     CURTAIN
+════════════════════════════════════════════ -->
+<div class="curtain" id="curtain">
+  <div class="curtain-panel curtain-panel-left"></div>
+  <div class="curtain-panel curtain-panel-right"></div>
+  <div class="curtain-logo">
+    <div class="curtain-logo-text">it<em>.</em></div>
+    <div class="curtain-rule"></div>
+    <div class="curtain-logo-sub">itassistance &middot; Firenze</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     PARTNER FORM MODAL
+════════════════════════════════════════════ -->
+<div class="pf-backdrop" id="pfBackdrop"></div>
+<div class="pf-modal" id="pfModal" role="dialog" aria-modal="true" aria-label="Diventa partner itassistance">
+  <div class="pf-header">
+    <button class="pf-close" id="pfClose" aria-label="Chiudi">&times;</button>
+    <div class="pf-eyebrow">Diventa Partner</div>
+    <div class="pf-header-title">Porta il tuo appartamento<br/>nella rete itassistance.</div>
+    <div class="pf-header-sub">Compila in 2 minuti &mdash; Risposta entro 24 ore &mdash; Nessun impegno</div>
+  </div>
+  <div class="pf-body">
+
+    <!-- Appartamento -->
+    <div class="pf-section-label">🏠 &nbsp;L'appartamento</div>
+    <div class="pf-field" style="margin-bottom:12px">
+      <label class="pf-label" for="pf-address">Indirizzo</label>
+      <input class="pf-input" id="pf-address" type="text" placeholder="Via Roma 12, Firenze" />
+    </div>
+    <div class="pf-grid-3">
+      <div class="pf-field">
+        <label class="pf-label" for="pf-type">Tipo</label>
+        <select class="pf-select" id="pf-type">
+          <option value="">Seleziona</option>
+          <option>Appartamento</option>
+          <option>Monolocale</option>
+          <option>Bilocale</option>
+          <option>Villa / Casa</option>
+          <option>Loft / Attico</option>
+        </select>
+      </div>
+      <div class="pf-field">
+        <label class="pf-label" for="pf-rooms">Camere</label>
+        <select class="pf-select" id="pf-rooms">
+          <option value="">N&deg;</option>
+          <option>1</option><option>2</option><option>3</option>
+          <option>4</option><option>5+</option>
+        </select>
+      </div>
+      <div class="pf-field">
+        <label class="pf-label" for="pf-baths">Bagni</label>
+        <select class="pf-select" id="pf-baths">
+          <option value="">N&deg;</option>
+          <option>1</option><option>2</option><option>3+</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Piattaforme -->
+    <div class="pf-section-label" style="margin-top:24px">📱 &nbsp;Sei già online?</div>
+    <div class="pf-radio-group" id="pf-platforms">
+      <label class="pf-radio" onclick="togglePlatform(this)">
+        <input type="checkbox" value="Airbnb"> Airbnb
+      </label>
+      <label class="pf-radio" onclick="togglePlatform(this)">
+        <input type="checkbox" value="Booking.com"> Booking.com
+      </label>
+      <label class="pf-radio" onclick="togglePlatform(this)">
+        <input type="checkbox" value="Vrbo"> Vrbo
+      </label>
+      <label class="pf-radio" onclick="togglePlatform(this)">
+        <input type="checkbox" value="Gestisco da solo"> Gestisco da solo
+      </label>
+      <label class="pf-radio" onclick="togglePlatform(this)">
+        <input type="checkbox" value="Non ancora online"> Non ancora online
+      </label>
+    </div>
+
+    <!-- Contatti -->
+    <div class="pf-section-label" style="margin-top:24px">👤 &nbsp;I tuoi contatti</div>
+    <div class="pf-grid">
+      <div class="pf-field">
+        <label class="pf-label" for="pf-name">Nome e Cognome</label>
+        <input class="pf-input" id="pf-name" type="text" placeholder="Marco Rossi" />
+      </div>
+      <div class="pf-field">
+        <label class="pf-label" for="pf-phone">Telefono / WhatsApp</label>
+        <input class="pf-input" id="pf-phone" type="tel" placeholder="+39 333 000 0000" />
+      </div>
+    </div>
+    <div class="pf-field" style="margin-top:12px">
+      <label class="pf-label" for="pf-email">Email</label>
+      <input class="pf-input" id="pf-email" type="email" placeholder="marco@email.com" />
+    </div>
+    <div class="pf-field" style="margin-top:12px">
+      <label class="pf-label" for="pf-note">Note (opzionale)</label>
+      <textarea class="pf-input" id="pf-note" rows="3" placeholder="Qualcosa che vuoi dirci sul tuo appartamento..."></textarea>
+    </div>
+
+    <button class="pf-submit" id="pfSubmit">Invia la richiesta &rarr;</button>
+    <p class="pf-disclaimer">Rispondiamo entro 24h &middot; Sopralluogo gratuito &middot; Nessun contratto iniziale</p>
+  </div>
+</div>
+
+<!-- Floating re-open button -->
+<button class="pf-trigger" id="pfTrigger">
+  <span class="pf-trigger-dot"></span>
+  Diventa Partner
+</button>
+
 <!-- ══════════════════════════════════════════
      HERO IMAGE
-══════════════════════════════════════════ -->
+════════════════════════════════════════════ -->
 <img src="hero.png" alt="itassistance · Firenze" class="hero-image"/>
 
 <!-- ══════════════════════════════════════════
@@ -890,7 +1196,7 @@
 <!-- APPARTAMENTI DUO — qualità interiors -->
 <div class="photo-duo">
   <div class="photo-card" style="height:480px">
-    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1000&q=85&fit=crop" alt="Appartamento lusso Firenze"/>
+    <img src="https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=1000&q=85&fit=crop&crop=center" alt="Palazzina tipica italiana Firenze"/>
     <div class="photo-card-overlay"></div>
     <div class="photo-card-text">
       <div class="photo-card-tag">Qualità · Interiors</div>
@@ -899,7 +1205,7 @@
     </div>
   </div>
   <div class="photo-card" style="height:480px">
-    <img src="https://images.unsplash.com/photo-1574362848149-11496d93a7c7?w=1000&q=85&fit=crop" alt="Firenze centro storico"/>
+    <img src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=1000&q=85&fit=crop&crop=center" alt="Facciata palazzina centro Firenze"/>
     <div class="photo-card-overlay"></div>
     <div class="photo-card-text">
       <div class="photo-card-tag">Firenze · Centro Storico</div>
@@ -1235,6 +1541,105 @@
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') overlay.classList.remove('open');
   });
+</script>
+
+<script>
+/* ────────────────────────────────────────────────────────
+   CURTAIN + PARTNER FORM
+──────────────────────────────────────────────────────── */
+(function() {
+  var curtain    = document.getElementById('curtain');
+  var backdrop   = document.getElementById('pfBackdrop');
+  var modal      = document.getElementById('pfModal');
+  var closeBtn   = document.getElementById('pfClose');
+  var trigger    = document.getElementById('pfTrigger');
+  var submitBtn  = document.getElementById('pfSubmit');
+
+  /* 1 ─ CURTAIN: apri dopo 120ms, rimuovi dopo la fine dell'animazione */
+  setTimeout(function() {
+    curtain.classList.add('open');
+  }, 120);
+
+  curtain.addEventListener('transitionend', function handler(e) {
+    if (e.target !== curtain.querySelector('.curtain-panel-left')) return;
+    curtain.classList.add('done');
+    curtain.removeEventListener('transitionend', handler);
+    /* 2 ─ Mostra form dopo che la tenda è scomparsa */
+    showForm();
+  });
+
+  /* 2 ─ FORM: mostra / nascondi */
+  function showForm() {
+    backdrop.classList.add('show');
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    trigger.classList.remove('visible');
+  }
+
+  function hideForm() {
+    backdrop.classList.remove('show');
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+    setTimeout(function() { trigger.classList.add('visible'); }, 400);
+  }
+
+  closeBtn.addEventListener('click', hideForm);
+  backdrop.addEventListener('click', hideForm);
+  trigger.addEventListener('click', showForm);
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') hideForm();
+  });
+
+  /* 3 ─ PIATTAFORME: toggle stile pillola */
+  window.togglePlatform = function(label) {
+    label.classList.toggle('selected');
+    var cb = label.querySelector('input');
+    cb.checked = !cb.checked;
+  };
+
+  /* 4 ─ SUBMIT → WhatsApp */
+  submitBtn.addEventListener('click', function() {
+    var address = document.getElementById('pf-address').value.trim();
+    var type    = document.getElementById('pf-type').value;
+    var rooms   = document.getElementById('pf-rooms').value;
+    var baths   = document.getElementById('pf-baths').value;
+    var name    = document.getElementById('pf-name').value.trim();
+    var phone   = document.getElementById('pf-phone').value.trim();
+    var email   = document.getElementById('pf-email').value.trim();
+    var note    = document.getElementById('pf-note').value.trim();
+
+    var platforms = [];
+    document.querySelectorAll('#pf-platforms input:checked').forEach(function(cb) {
+      platforms.push(cb.value);
+    });
+
+    if (!name || !address) {
+      alert('Inserisci almeno nome e indirizzo dell’appartamento.');
+      return;
+    }
+
+    var msg = [
+      '🏠 *Richiesta di partnership itassistance*',
+      '',
+      '*Appartamento*',
+      '📍 Indirizzo: ' + (address || '—'),
+      '🏡 Tipo: ' + (type || '—'),
+      '🛌 Camere: ' + (rooms || '—') + ' | Bagni: ' + (baths || '—'),
+      '📱 Piattaforme: ' + (platforms.length ? platforms.join(', ') : 'Non ancora online'),
+      '',
+      '*Contatto*',
+      '👤 ' + name,
+      '📞 ' + (phone || '—'),
+      '📧 ' + (email || '—'),
+      note ? ('\n💬 ' + note) : ''
+    ].join('\n');
+
+    var url = 'https://wa.me/393510380392?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank');
+  });
+
+})();
 </script>
 </body>
 </html>
