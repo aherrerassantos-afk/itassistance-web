@@ -537,12 +537,95 @@
     .pts-body strong { color: #fff; font-weight: 600; }
     .pts-body.dark strong { color: var(--navy); }
 
+    /* ─────────────────────────────────────────────────────────
+       MOBILE — Responsive
+    ───────────────────────────────────────────────────────── */
     @media (max-width: 860px) {
-      .photo-duo, .photo-trio, .photo-quad, .photo-text-split { grid-template-columns: 1fr; }
-      .photo-banner { height: 340px; }
-      .photo-banner-text { padding: 24px; }
-      .photo-text-split .text-side { padding: 40px 24px; }
-      .photo-quad .photo-card { height: 220px; }
+      /* Layout grids → 1 colonna */
+      .photo-duo, .photo-trio, .photo-quad,
+      .photo-text-split, .model-cols, .steps-cols,
+      .services-grid, .amenities-grid, .pricing-cols,
+      .modello-lead, .services-lead, .amenities-lead { grid-template-columns: 1fr !important; }
+
+      /* Nav */
+      .nav-bar { padding: 0 20px; height: 52px; }
+      .nav-overlay-top, .nav-overlay-cta { padding-left: 20px; padding-right: 20px; }
+      .nav-overlay-links a { font-size: clamp(32px, 9vw, 52px); padding: 10px 0; }
+
+      /* Hero */
+      .hero-image { height: 60svh; }
+
+      /* Masthead */
+      .masthead { padding: 0 20px; }
+      .masthead-top { font-size: 8px; gap: 8px; flex-wrap: wrap; }
+      .masthead-title { padding: 40px 0 32px; }
+      .masthead-title h1 { font-size: clamp(52px, 15vw, 88px); letter-spacing: -2px; }
+      .masthead-deck { flex-direction: column; gap: 24px; padding: 28px 0 32px; }
+      .masthead-price { text-align: left; font-size: 36px; }
+      .masthead-ctas { flex-direction: column; gap: 10px; padding-bottom: 32px; }
+      .btn-navy, .btn-outline { text-align: center; padding: 16px 24px; width: 100%; }
+      .masthead-stats { flex-wrap: wrap; }
+      .mstat { min-width: 33%; border-bottom: 0.5px solid var(--hair); }
+
+      /* Sezioni — padding ridotto ma generoso */
+      #modello, #come-funziona, #servizi,
+      #amenities, #pricing { padding: 72px 20px; }
+      #contatti { padding: 80px 20px; }
+
+      /* Art titles — più piccoli ma ancora forti */
+      .art-title { font-size: clamp(36px, 9vw, 56px); letter-spacing: -1px; }
+      .art-subtitle { font-size: 16px; }
+      .sec-header { margin-bottom: 48px; }
+      .pull-quote { font-size: clamp(18px, 5vw, 26px); }
+
+      /* Foto */
+      .photo-banner { height: 320px; }
+      .photo-banner-text { padding: 20px; }
+      .photo-banner-title { font-size: clamp(22px, 7vw, 36px); }
+      .photo-card { height: 280px !important; }
+      .photo-card-title { font-size: 18px; }
+      .photo-text-split .text-side { padding: 48px 20px; }
+      .photo-text-split .photo-side { min-height: 280px; }
+
+      /* Modello cols */
+      .model-col { padding: 36px 24px; }
+      .model-col-price { font-size: 32px; }
+      .step-col { padding: 36px 24px; }
+      .step-col-num { font-size: 80px; }
+
+      /* Servizi */
+      .srv-card { padding: 32px 24px; }
+      .srv-name { font-size: 20px; }
+
+      /* Amenities */
+      .amenities-grid { grid-template-columns: 1fr 1fr !important; }
+      .amenity-col { padding: 28px 16px; }
+
+      /* Pricing */
+      .pricing-feature { padding: 60px 20px; }
+      .pricing-big { font-size: clamp(72px, 16vw, 110px); }
+      .pricing-col { padding: 32px 20px; }
+
+      /* CTA */
+      .cta-title { font-size: clamp(40px, 11vw, 72px); letter-spacing: -1px; }
+      .cta-buttons { flex-direction: column; align-items: center; }
+      .btn-beige, .btn-ghost-light { width: 100%; max-width: 340px; text-align: center; padding: 18px; }
+      .cta-infos { gap: 32px; }
+
+      /* Footer */
+      footer { flex-direction: column; gap: 12px; padding: 20px; text-align: center; }
+      .footer-meta { text-align: center; }
+
+      /* Merch quad → 2 colonne su mobile */
+      .photo-quad { grid-template-columns: 1fr 1fr !important; }
+      .photo-quad .photo-card { height: 200px !important; }
+    }
+
+    /* Extra small — iPhone SE, 375px */
+    @media (max-width: 400px) {
+      .masthead-title h1 { font-size: clamp(44px, 14vw, 64px); }
+      .amenities-grid { grid-template-columns: 1fr !important; }
+      .photo-quad { grid-template-columns: 1fr !important; }
     }
   </style>
 
@@ -641,14 +724,14 @@
   </div>
 </div>
 
-<!-- Foto team: check-in reale -->
+<!-- APPARTAMENTO BANNER — full width editorial -->
 <div class="photo-banner">
-  <img src="https://www.itadreamteam.com/art-checkin.png" alt="Check-in itassistance in persona"/>
+  <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1800&q=85&fit=crop" alt="Appartamento di lusso a Firenze"/>
   <div class="photo-banner-overlay"></div>
   <div class="photo-banner-text">
-    <div class="photo-banner-rubric">§ 1 — Il Servizio · Check-in</div>
-    <div class="photo-banner-title">Il primo minuto.<br/>La prima impressione.</div>
-    <div class="photo-banner-desc">Il check-in itassistance è in persona, ogni volta. Il turista viene accolto come in un hotel. €20 + IVA per check-in.</div>
+    <div class="photo-banner-rubric">Firenze · Il tuo appartamento</div>
+    <div class="photo-banner-title">Il tuo appartamento.<br/>La nostra reputazione.</div>
+    <div class="photo-banner-desc">Ogni struttura partner itassistance diventa, agli occhi del turista, un hotel a tutti gli effetti. Standard impeccabili. Sempre.</div>
   </div>
 </div>
 
@@ -773,24 +856,55 @@
   </div>
 </section>
 
-<!-- Presenza Firenze: SUV + vetrofania -->
-<div class="photo-duo">
-  <div class="photo-card" style="height:400px">
-    <img src="https://www.itadreamteam.com/brand/suv.png" alt="SUV itassistance al Duomo di Firenze"/>
+<!-- APPARTAMENTI TRIO — 3 colonne -->
+<div class="photo-trio">
+  <div class="photo-card">
+    <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=85&fit=crop" alt="Soggiorno appartamento Firenze"/>
     <div class="photo-card-overlay"></div>
     <div class="photo-card-text">
-      <div class="photo-card-tag">Presenza — Firenze</div>
-      <div class="photo-card-title">Siamo in città.<br/>Ogni giorno.</div>
-      <div class="photo-card-sub">Il nostro SUV brandizzato percorre Firenze 7 giorni su 7. Riconoscibili, puntuali, sempre presenti.</div>
+      <div class="photo-card-tag">Appartamento · Soggiorno</div>
+      <div class="photo-card-title">Uno spazio.<br/>Un'esperienza.</div>
+      <div class="photo-card-sub">Ogni dettaglio curato come in un boutique hotel. Il turista lo percepisce appena entra.</div>
     </div>
   </div>
-  <div class="photo-card" style="height:400px">
-    <img src="https://www.itadreamteam.com/brand/window.png" alt="Vetrofania itassistance a Firenze"/>
+  <div class="photo-card">
+    <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&q=85&fit=crop" alt="Camera da letto appartamento Firenze"/>
     <div class="photo-card-overlay"></div>
     <div class="photo-card-text">
-      <div class="photo-card-tag">Presenza — Vetrofania</div>
-      <div class="photo-card-title">Il tuo appartamento.<br/>Con la nostra firma.</div>
-      <div class="photo-card-sub">Ogni struttura partner può esporre il brand itassistance. Un segnale di qualità per il turista.</div>
+      <div class="photo-card-tag">Appartamento · Camera</div>
+      <div class="photo-card-title">Notti da<br/>cinque stelle.</div>
+      <div class="photo-card-sub">Biancheria curata, letto preparato. Il turista dorme bene. Le recensioni lo dimostrano.</div>
+    </div>
+  </div>
+  <div class="photo-card">
+    <img src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=900&q=85&fit=crop" alt="Vista panoramica Firenze"/>
+    <div class="photo-card-overlay"></div>
+    <div class="photo-card-text">
+      <div class="photo-card-tag">Firenze · La città</div>
+      <div class="photo-card-title">Una vista<br/>che non si dimentica.</div>
+      <div class="photo-card-sub">Firenze fuori dalla finestra. Un privilegio che i turisti ricordano per sempre.</div>
+    </div>
+  </div>
+</div>
+
+<!-- APPARTAMENTI DUO — qualità interiors -->
+<div class="photo-duo">
+  <div class="photo-card" style="height:480px">
+    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1000&q=85&fit=crop" alt="Appartamento lusso Firenze"/>
+    <div class="photo-card-overlay"></div>
+    <div class="photo-card-text">
+      <div class="photo-card-tag">Qualità · Interiors</div>
+      <div class="photo-card-title">Ogni appartamento.<br/><em style="font-style:italic;color:var(--gold)">Hotel quality.</em></div>
+      <div class="photo-card-sub">Non serve essere un hotel per offrire un'esperienza da hotel. Serve itassistance.</div>
+    </div>
+  </div>
+  <div class="photo-card" style="height:480px">
+    <img src="https://images.unsplash.com/photo-1574362848149-11496d93a7c7?w=1000&q=85&fit=crop" alt="Firenze centro storico"/>
+    <div class="photo-card-overlay"></div>
+    <div class="photo-card-text">
+      <div class="photo-card-tag">Firenze · Centro Storico</div>
+      <div class="photo-card-title">Nel cuore<br/>di Firenze.</div>
+      <div class="photo-card-sub">Il turista non sceglie solo un appartamento. Sceglie Firenze. Noi rendiamo quella scelta indimenticabile.</div>
     </div>
   </div>
 </div>
@@ -1077,7 +1191,7 @@
   <div class="cta-rule"></div>
   <p class="cta-sub">Rispondiamo entro 24 ore. Nessun impegno. Vieni a vedere come lavoriamo.</p>
   <div class="cta-buttons">
-    <a href="https://wa.me/393XXXXXXXXX" class="btn-beige">WhatsApp — Scrivici ora</a>
+    <a href="https://wa.me/393510380392" class="btn-beige">WhatsApp — Scrivici ora</a>
     <a href="mailto:info@itassistance.it" class="btn-ghost-light">Email · Richiedi info</a>
   </div>
   <div class="cta-infos">
