@@ -104,60 +104,100 @@
     }
     .nav-overlay-cta a:hover { background: var(--navy2); }
 
-    /* ═══════════════════════════════════════════
-       HERO IMAGE
-    ═══════════════════════════════════════════ */
-    .hero-image {
-      width: 100%; height: 100svh;
-      object-fit: cover; object-position: center;
-      display: block;
+    /* ═════════════════════════════════════════════
+       HERO FORM SECTION
+    ═════════════════════════════════════════════ */
+    .hero-form-wrap {
+      position: relative; width: 100%; height: 100svh;
+      display: flex; flex-direction: column;
+      justify-content: flex-end; overflow: hidden;
+    }
+    .hero-form-bg {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: center; display: block;
+    }
+    .hero-form-gradient {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,.25) 50%, rgba(0,0,0,.08) 100%);
+    }
+    .hero-form-inner {
+      position: relative; z-index: 2;
+      padding: 0 56px 72px; text-align: center;
+    }
+    .hero-tag {
+      font-size: 8px; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 22px; display: block;
+    }
+    .hero-form-h1 {
+      font-family: var(--serif); font-size: clamp(36px, 6.5vw, 80px);
+      font-weight: 400; color: #fff; line-height: 1.0;
+      letter-spacing: -2px; margin-bottom: 44px;
+    }
+    /* --- Hero Bar --- */
+    .hero-bar {
+      max-width: 920px; margin: 0 auto;
+      background: rgba(5,5,5,.92);
+      backdrop-filter: blur(10px) saturate(1.2);
+      -webkit-backdrop-filter: blur(10px) saturate(1.2);
+    }
+    .hbar-top {
+      padding: 9px 28px; border-bottom: 0.5px solid rgba(255,255,255,.1);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hbar-top-item {
+      font-size: 7.5px; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,.4); padding: 0 18px;
+    }
+    .hbar-top-sep { width: 1px; height: 10px; background: rgba(255,255,255,.18); flex-shrink: 0; }
+    .hbar-fields {
+      display: flex; align-items: stretch; min-height: 78px;
+    }
+    .hbar-field {
+      flex: 1; padding: 18px 26px;
+      display: flex; flex-direction: column; justify-content: center;
+      transition: background .15s;
+    }
+    .hbar-field:hover { background: rgba(255,255,255,.04); }
+    .hbar-label {
+      font-size: 7px; letter-spacing: 2.5px; text-transform: uppercase;
+      color: rgba(255,255,255,.3); margin-bottom: 8px;
+    }
+    .hbar-input {
+      background: none; border: none; outline: none;
+      font-family: var(--serif); font-size: 17px;
+      font-weight: 400; color: #fff; width: 100%;
+    }
+    .hbar-input::placeholder { color: rgba(255,255,255,.3); }
+    .hbar-select { cursor: pointer; }
+    .hbar-select option { background: #111; color: #fff; }
+    .hbar-sep { width: 0.5px; background: rgba(255,255,255,.12); margin: 16px 0; flex-shrink: 0; }
+    .hbar-btn {
+      background: var(--gold); color: #000; border: none; cursor: pointer;
+      padding: 0 36px; font-family: var(--sans); font-size: 9.5px;
+      letter-spacing: 2px; text-transform: uppercase; font-weight: 600;
+      transition: background .2s, color .2s;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .hbar-btn:hover { background: #b89040; color: #fff; }
+    /* Hero stats row */
+    .hero-stats {
+      max-width: 920px; margin: 0 auto;
+      display: flex; border-top: 0.5px solid rgba(255,255,255,.1);
+      background: rgba(5,5,5,.7);
+    }
+    .hstat {
+      flex: 1; padding: 14px 0; text-align: center;
+      border-right: 0.5px solid rgba(255,255,255,.08);
+    }
+    .hstat:last-child { border-right: none; }
+    .hstat-num {
+      font-family: var(--serif); font-size: 20px; font-weight: 400; color: #fff;
+    }
+    .hstat-lab {
+      font-size: 7px; letter-spacing: 2px; text-transform: uppercase;
+      color: rgba(255,255,255,.3); margin-top: 4px;
     }
 
-    /* ═══════════════════════════════════════════
-       MAGAZINE MASTHEAD (dopo l'immagine)
-    ═══════════════════════════════════════════ */
-    .masthead {
-      background: var(--beige); padding: 0 48px;
-      border-bottom: 3px solid var(--navy);
-    }
-    .masthead-top {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--rule-dark);
-      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-      color: rgba(0,0,0,.5);
-    }
-    .masthead-title {
-      text-align: center; padding: 32px 0 24px;
-    }
-    .masthead-title h1 {
-      font-family: var(--serif);
-      font-size: clamp(56px, 10vw, 120px);
-      font-weight: 400; line-height: .95;
-      letter-spacing: -2px; color: var(--navy);
-    }
-    .masthead-title h1 em { font-style: italic; color: var(--gold); }
-    .masthead-deck {
-      display: flex; justify-content: space-between; align-items: flex-end;
-      padding: 20px 0 28px; gap: 40px;
-    }
-    .masthead-deck-text {
-      font-size: 15px; line-height: 1.7; color: var(--navy);
-      max-width: 520px; font-weight: 300;
-    }
-    .masthead-deck-text strong { font-weight: 600; }
-    .masthead-price {
-      font-family: var(--serif); font-size: 40px; font-weight: 400;
-      color: var(--navy); white-space: nowrap; text-align: right;
-    }
-    .masthead-price small {
-      display: block; font-family: var(--sans); font-size: 10px;
-      font-weight: 400; letter-spacing: 2px; text-transform: uppercase;
-      color: rgba(0,0,0,.5); margin-top: 4px;
-    }
-    .masthead-ctas {
-      display: flex; gap: 12px; padding-bottom: 28px;
-    }
     .btn-navy {
       font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-weight: 600;
       background: var(--navy); color: var(--beige); padding: 14px 32px;
@@ -170,21 +210,6 @@
       text-decoration: none; transition: background .2s, color .2s;
     }
     .btn-outline:hover { background: var(--navy); color: var(--beige); }
-    .masthead-stats {
-      display: flex; gap: 0; border-top: 0.5px solid var(--hair);
-    }
-    .mstat {
-      flex: 1; padding: 20px 0; text-align: center;
-      border-right: 0.5px solid var(--hair);
-    }
-    .mstat:last-child { border-right: none; }
-    .mstat-num {
-      font-family: var(--serif); font-size: 28px; font-weight: 400; color: var(--navy);
-    }
-    .mstat-lab {
-      font-size: 8px; letter-spacing: 2.5px; text-transform: uppercase;
-      color: rgba(0,0,0,.4); margin-top: 6px; font-weight: 400;
-    }
 
     /* ─────────────────────────────────────────────────────────
        PERIODICO — elementi comuni di sezione
@@ -545,44 +570,33 @@
        MOBILE — Responsive
     ───────────────────────────────────────────────────────── */
     @media (max-width: 860px) {
-      /* Layout grids → 1 colonna */
       .photo-duo, .photo-trio, .photo-quad,
       .photo-text-split, .model-cols, .steps-cols,
       .services-grid, .amenities-grid, .pricing-cols,
       .modello-lead, .services-lead, .amenities-lead { grid-template-columns: 1fr !important; }
 
-      /* Nav */
       .nav-bar { padding: 0 20px; height: 52px; }
       .nav-overlay-top, .nav-overlay-cta { padding-left: 20px; padding-right: 20px; }
       .nav-overlay-links a { font-size: clamp(32px, 9vw, 52px); padding: 10px 0; }
 
-      /* Hero */
-      .hero-image { height: 60svh; }
+      .hero-form-inner { padding: 0 20px 48px; }
+      .hero-form-h1 { margin-bottom: 32px; }
+      .hbar-fields { flex-direction: column; min-height: auto; }
+      .hbar-field { border-bottom: 0.5px solid rgba(255,255,255,.1); padding: 16px 20px; }
+      .hbar-sep { display: none; }
+      .hbar-btn { padding: 18px; }
+      .hero-stats { flex-wrap: wrap; }
+      .hstat { min-width: 33%; border-bottom: 0.5px solid rgba(255,255,255,.08); }
 
-      /* Masthead */
-      .masthead { padding: 0 20px; }
-      .masthead-top { font-size: 8px; gap: 8px; flex-wrap: wrap; }
-      .masthead-title { padding: 40px 0 32px; }
-      .masthead-title h1 { font-size: clamp(52px, 15vw, 88px); letter-spacing: -2px; }
-      .masthead-deck { flex-direction: column; gap: 24px; padding: 28px 0 32px; }
-      .masthead-price { text-align: left; font-size: 36px; }
-      .masthead-ctas { flex-direction: column; gap: 10px; padding-bottom: 32px; }
-      .btn-navy, .btn-outline { text-align: center; padding: 16px 24px; width: 100%; }
-      .masthead-stats { flex-wrap: wrap; }
-      .mstat { min-width: 33%; border-bottom: 0.5px solid var(--hair); }
-
-      /* Sezioni — padding ridotto ma generoso */
       #modello, #come-funziona, #servizi,
       #amenities, #pricing { padding: 72px 20px; }
       #contatti { padding: 80px 20px; }
 
-      /* Art titles — più piccoli ma ancora forti */
       .art-title { font-size: clamp(36px, 9vw, 56px); letter-spacing: -1px; }
       .art-subtitle { font-size: 16px; }
       .sec-header { margin-bottom: 48px; }
       .pull-quote { font-size: clamp(18px, 5vw, 26px); }
 
-      /* Foto */
       .photo-banner { height: 320px; }
       .photo-banner-text { padding: 20px; }
       .photo-banner-title { font-size: clamp(22px, 7vw, 36px); }
@@ -591,50 +605,38 @@
       .photo-text-split .text-side { padding: 48px 20px; }
       .photo-text-split .photo-side { min-height: 280px; }
 
-      /* Modello cols */
       .model-col { padding: 36px 24px; }
       .model-col-price { font-size: 32px; }
       .step-col { padding: 36px 24px; }
       .step-col-num { font-size: 80px; }
 
-      /* Servizi */
       .srv-card { padding: 32px 24px; }
       .srv-name { font-size: 20px; }
 
-      /* Amenities */
       .amenities-grid { grid-template-columns: 1fr 1fr !important; }
       .amenity-col { padding: 28px 16px; }
 
-      /* Pricing */
       .pricing-feature { padding: 60px 20px; }
       .pricing-big { font-size: clamp(72px, 16vw, 110px); }
       .pricing-col { padding: 32px 20px; }
 
-      /* CTA */
       .cta-title { font-size: clamp(40px, 11vw, 72px); letter-spacing: -1px; }
       .cta-buttons { flex-direction: column; align-items: center; }
       .btn-beige, .btn-ghost-light { width: 100%; max-width: 340px; text-align: center; padding: 18px; }
       .cta-infos { gap: 32px; }
 
-      /* Footer */
       footer { flex-direction: column; gap: 12px; padding: 20px; text-align: center; }
       .footer-meta { text-align: center; }
 
-      /* Merch quad → 2 colonne su mobile */
       .photo-quad { grid-template-columns: 1fr 1fr !important; }
       .photo-quad .photo-card { height: 200px !important; }
     }
 
-    /* Extra small — iPhone SE, 375px */
     @media (max-width: 400px) {
-      .masthead-title h1 { font-size: clamp(44px, 14vw, 64px); }
       .amenities-grid { grid-template-columns: 1fr !important; }
       .photo-quad { grid-template-columns: 1fr !important; }
     }
 
-    /* ────────────────────────────────────────────────────────
-       CURTAIN EFFECT
-    ──────────────────────────────────────────────────────── */
     .curtain {
       position: fixed; inset: 0; z-index: 900;
       display: grid; grid-template-columns: 1fr 1fr;
@@ -670,9 +672,6 @@
     .curtain.open .curtain-panel-right { transform: translateX(100%); }
     .curtain.done { display: none; }
 
-    /* ────────────────────────────────────────────────────────
-       PARTNER FORM MODAL
-    ──────────────────────────────────────────────────────── */
     .pf-backdrop {
       position: fixed; inset: 0; z-index: 800;
       background: rgba(0,0,0,.55);
@@ -696,7 +695,6 @@
     }
     .pf-modal.show { transform: translateY(0); }
 
-    /* Desktop: diventa un modal centrato */
     @media (min-width: 700px) {
       .pf-modal {
         bottom: auto; left: 50%; top: 50%;
@@ -806,7 +804,6 @@
       margin-top: 14px; line-height: 1.7;
     }
 
-    /* Trigger button — floating (riapre il form) */
     .pf-trigger {
       position: fixed; bottom: 28px; right: 28px; z-index: 700;
       background: var(--navy); color: var(--beige);
@@ -828,10 +825,6 @@
 </head>
 <body>
 
-
-<!-- ══════════════════════════════════════════
-     CURTAIN
-════════════════════════════════════════════ -->
 <div class="curtain" id="curtain">
   <div class="curtain-panel curtain-panel-left"></div>
   <div class="curtain-panel curtain-panel-right"></div>
@@ -842,9 +835,6 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     PARTNER FORM MODAL
-════════════════════════════════════════════ -->
 <div class="pf-backdrop" id="pfBackdrop"></div>
 <div class="pf-modal" id="pfModal" role="dialog" aria-modal="true" aria-label="Diventa partner itassistance">
   <div class="pf-header">
@@ -854,8 +844,6 @@
     <div class="pf-header-sub">Compila in 2 minuti &mdash; Risposta entro 24 ore &mdash; Nessun impegno</div>
   </div>
   <div class="pf-body">
-
-    <!-- Appartamento -->
     <div class="pf-section-label">🏠 &nbsp;L'appartamento</div>
     <div class="pf-field" style="margin-bottom:12px">
       <label class="pf-label" for="pf-address">Indirizzo</label>
@@ -889,8 +877,6 @@
         </select>
       </div>
     </div>
-
-    <!-- Piattaforme -->
     <div class="pf-section-label" style="margin-top:24px">📱 &nbsp;Sei già online?</div>
     <div class="pf-radio-group" id="pf-platforms">
       <label class="pf-radio" onclick="togglePlatform(this)">
@@ -909,8 +895,6 @@
         <input type="checkbox" value="Non ancora online"> Non ancora online
       </label>
     </div>
-
-    <!-- Contatti -->
     <div class="pf-section-label" style="margin-top:24px">👤 &nbsp;I tuoi contatti</div>
     <div class="pf-grid">
       <div class="pf-field">
@@ -943,74 +927,58 @@
 </button>
 
 <!-- ══════════════════════════════════════════
-     HERO IMAGE
-════════════════════════════════════════════ -->
-<img src="hero.png" alt="itassistance · Firenze" class="hero-image"/>
-
-<!-- ══════════════════════════════════════════
-     NAV BAR (sticky sotto l'immagine)
+     HERO FORM SECTION
 ══════════════════════════════════════════ -->
-<nav class="nav-bar" id="main-nav">
-  <a href="#" class="nav-brand">ITASSISTANCE · FIRENZE</a>
-  <button class="nav-burger" id="burger-btn" aria-label="Apri menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-
-<!-- ══════════════════════════════════════════
-     NAV OVERLAY
-══════════════════════════════════════════ -->
-<div class="nav-overlay" id="nav-overlay">
-  <div class="nav-overlay-top">
-    <span class="nav-overlay-brand">ITASSISTANCE · FIRENZE</span>
-    <button class="nav-close" id="close-btn">✕</button>
-  </div>
-  <ul class="nav-overlay-links">
-    <li><a href="#modello"       onclick="closeNav()">Il Modello</a></li>
-    <li><a href="#come-funziona" onclick="closeNav()">Come Funziona</a></li>
-    <li><a href="#servizi"       onclick="closeNav()">Servizi</a></li>
-    <li><a href="#amenities"     onclick="closeNav()">Amenities</a></li>
-    <li><a href="#pricing"       onclick="closeNav()">Prezzi</a></li>
-  </ul>
-  <div class="nav-overlay-cta">
-    <a href="#contatti" onclick="closeNav()">Diventa Partner →</a>
-  </div>
-</div>
-
-<!-- ══════════════════════════════════════════
-     MASTHEAD — testata del periodico
-══════════════════════════════════════════ -->
-<header class="masthead" id="home">
-  <div class="masthead-top">
-    <span>Albergo Online · Firenze, Italia</span>
-    <span>Blue Arroyo srl · P.IVA IT07480210488</span>
-    <span>7 Giorni su 7 · 24/7</span>
-  </div>
-  <div class="masthead-title">
-    <h1>Il tuo<br/>appartamento.<br/><em>Un albergo.</em></h1>
-  </div>
-  <div class="masthead-deck">
-    <p class="masthead-deck-text">
-      I tuoi turisti meritano un'<strong>esperienza da 5 stelle</strong>.
-      Tu paghi un canone fisso mensile. Noi ci occupiamo di tutto il resto —
-      check-in in persona, customer care, manutenzione, amenities esclusive.
-    </p>
-    <div class="masthead-price">
-      €55 <small>/ mese · canone fisso</small>
+<section class="hero-form-wrap" id="home">
+  <img class="hero-form-bg"
+    src="https://images.unsplash.com/photo-1504214208698-ea1916a2195a?w=2000&q=90&fit=crop&crop=center"
+    alt="Appartamenti Firenze — itassistance"/>
+  <div class="hero-form-gradient"></div>
+  <div class="hero-form-inner">
+    <span class="hero-tag">Gestione Appartamenti · Italia · Spagna · Francia</span>
+    <h1 class="hero-form-h1">Il tuo appartamento.<br/>La nostra reputazione.</h1>
+    <div class="hero-bar">
+      <div class="hbar-top">
+        <span class="hbar-top-item">Gestione completa</span>
+        <div class="hbar-top-sep"></div>
+        <span class="hbar-top-item">Canone fisso €55/mese</span>
+        <div class="hbar-top-sep"></div>
+        <span class="hbar-top-item">Assistenza 24/7</span>
+      </div>
+      <div class="hbar-fields">
+        <div class="hbar-field">
+          <div class="hbar-label">Indirizzo appartamento</div>
+          <input id="hf-addr" class="hbar-input" placeholder="Via, città…"/>
+        </div>
+        <div class="hbar-sep"></div>
+        <div class="hbar-field">
+          <div class="hbar-label">Tipo immobile</div>
+          <select id="hf-type" class="hbar-input hbar-select">
+            <option value="">Seleziona…</option>
+            <option>Appartamento</option>
+            <option>Bilocale</option>
+            <option>Monolocale</option>
+            <option>Villa / Casa</option>
+            <option>Studio</option>
+          </select>
+        </div>
+        <div class="hbar-sep"></div>
+        <div class="hbar-field">
+          <div class="hbar-label">Nome e contatto</div>
+          <input id="hf-contact" class="hbar-input" placeholder="Nome · +39…"/>
+        </div>
+        <button class="hbar-btn" onclick="sendHeroForm()">Entra nella rete ›</button>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-num">300+</div><div class="hstat-lab">Partner</div></div>
+        <div class="hstat"><div class="hstat-num">5.0★</div><div class="hstat-lab">Rating</div></div>
+        <div class="hstat"><div class="hstat-num">€55</div><div class="hstat-lab">/ mese fisso</div></div>
+        <div class="hstat"><div class="hstat-num">24/7</div><div class="hstat-lab">Disponibili</div></div>
+        <div class="hstat"><div class="hstat-num">2h</div><div class="hstat-lab">Manutenzione</div></div>
+      </div>
     </div>
   </div>
-  <div class="masthead-ctas">
-    <a href="#pricing" class="btn-navy">Vedi il piano — €55/mese</a>
-    <a href="#modello" class="btn-outline">Come funziona</a>
-  </div>
-  <div class="masthead-stats">
-    <div class="mstat"><div class="mstat-num">300+</div><div class="mstat-lab">Partner</div></div>
-    <div class="mstat"><div class="mstat-num">5.0★</div><div class="mstat-lab">Rating</div></div>
-    <div class="mstat"><div class="mstat-num">€20</div><div class="mstat-lab">Check-in</div></div>
-    <div class="mstat"><div class="mstat-num">24/7</div><div class="mstat-lab">Disponibili</div></div>
-    <div class="mstat"><div class="mstat-num">2h</div><div class="mstat-lab">Manutenzione</div></div>
-  </div>
-</header>
+</section>
 
 <!-- ══════════════════════════════════════════
      § ABOUT US — Il Team
@@ -1644,6 +1612,30 @@
   });
 
 })();
+</script>
+<script>
+/* ────────────────────────────────────────────────────────
+   HERO FORM → WhatsApp
+──────────────────────────────────────────────────────── */
+function sendHeroForm() {
+  var addr    = document.getElementById('hf-addr').value.trim();
+  var type    = document.getElementById('hf-type').value;
+  var contact = document.getElementById('hf-contact').value.trim();
+  if (!addr && !contact) {
+    alert('Inserisci almeno l\'indirizzo o il tuo contatto per procedere.');
+    return;
+  }
+  var msg = [
+    '🏠 *Richiesta partnership itassistance*',
+    '',
+    '📍 Indirizzo: ' + (addr    || '—'),
+    '🏡 Tipo: '      + (type    || '—'),
+    '👤 Contatto: '  + (contact || '—'),
+    '',
+    '— Inviato dal sito itadreamteam.com'
+  ].join('\n');
+  window.open('https://wa.me/393510380392?text=' + encodeURIComponent(msg), '_blank');
+}
 </script>
 </body>
 </html>
