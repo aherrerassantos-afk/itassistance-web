@@ -445,11 +445,28 @@
     footer {
       background: var(--beige); padding: 28px 72px;
       display: flex; justify-content: space-between; align-items: center;
-      border-top: 2px solid var(--navy);
+      border-top: 2px solid var(--navy); gap: 24px; flex-wrap: wrap;
     }
     .footer-brand { font-family: var(--serif); font-size: 16px; font-weight: 400; color: var(--navy); }
     .footer-brand span { color: var(--gold); }
     .footer-meta { font-size: 9px; color: rgba(0,0,0,.35); letter-spacing: .5px; line-height: 2; text-align: right; font-weight: 300; }
+    /* Social links */
+    .footer-social { display: flex; align-items: center; gap: 20px; }
+    .social-link {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+      color: rgba(0,0,0,.45); text-decoration: none; font-weight: 400;
+      transition: color .2s;
+    }
+    .social-link:hover { color: var(--navy); }
+    .social-link svg { width: 16px; height: 16px; flex-shrink: 0; }
+    /* Promo badge in modal */
+    .pf-promo-badge {
+      display: inline-block; margin: 10px 0 4px;
+      background: var(--gold); color: #000;
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      font-weight: 600; padding: 5px 14px; font-family: var(--sans);
+    }
 
     /* ─────────────────────────────────────────────────────────
        EDITORIAL PHOTO CARDS
@@ -840,6 +857,7 @@
   <div class="pf-header">
     <button class="pf-close" id="pfClose" aria-label="Chiudi">&times;</button>
     <div class="pf-eyebrow">Diventa Partner</div>
+    <div class="pf-promo-badge">🎁 Primo mese gratis</div>
     <div class="pf-header-title">Porta il tuo appartamento<br/>nella rete itassistance.</div>
     <div class="pf-header-sub">Compila in 2 minuti &mdash; Risposta entro 24 ore &mdash; Nessun impegno</div>
   </div>
@@ -1491,6 +1509,31 @@
 <!-- FOOTER -->
 <footer>
   <div class="footer-brand">it<span>.</span>assistance · Firenze</div>
+
+  <!-- Social links -->
+  <div class="footer-social">
+    <a href="https://www.instagram.com/itassitance_2026" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="5"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+      @itassitance_2026
+    </a>
+    <a href="https://www.threads.net/@itassitance_2026" target="_blank" rel="noopener" class="social-link" aria-label="Threads">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12.186 24h-.007c-3.581-.028-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.5 12.068V12c.02-6.628 4.11-10.5 10.5-10.5 4.14 0 7.14 1.68 8.84 4.86l-2.24 1.2c-1.28-2.38-3.46-3.58-6.6-3.58-4.58 0-7.98 2.8-8 8.02v.06c-.02 2.89.6 5.18 1.8 6.78 1.32 1.76 3.34 2.66 6.2 2.68h.07c2.5-.02 4.14-.72 5.22-2.22.9-1.22 1.36-2.96 1.38-5.18-.86.16-1.8.24-2.82.24C9.5 14.14 7 12.52 7 9.5c0-3.18 2.7-5 6.5-5 4.32 0 6.5 2.28 6.5 6.5 0 5.28-2.18 8.84-6.5 9h-.33zm.64-16c-2.18 0-3.5.86-3.5 2 0 1.18 1.46 1.98 3.7 1.98 1.06 0 1.96-.12 2.7-.34-.24-2.36-1.18-3.64-2.9-3.64z"/>
+      </svg>
+      Threads
+    </a>
+    <a href="https://wa.me/393510380392" target="_blank" rel="noopener" class="social-link" aria-label="WhatsApp">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      WhatsApp
+    </a>
+  </div>
+
   <div class="footer-meta">
     Blue Arroyo srl · P.IVA IT07480210488<br/>
     © 2026 itassistance · Tutti i diritti riservati
