@@ -1701,7 +1701,7 @@
     cb.checked = !cb.checked;
   };
 
-  /* 4 ─ SUBMIT → WhatsApp + conferma in-modal */
+  /* 4 ─ SUBMIT → chiudi subito + email in background */
   submitBtn.addEventListener('click', function() {
     var address = document.getElementById('pf-address').value.trim();
     var name    = document.getElementById('pf-name').value.trim();
@@ -1718,39 +1718,27 @@
       return;
     }
 
-    /* 1 — Manda su WhatsApp */
-    var firstName = name.split(' ')[0];
-    var msg = [
-      '\uD83C\uDFE0 *Nuova richiesta partner itassistance*', '',
-      '\uD83D\uDCCD Indirizzo: ' + address,
-      '\uD83D\uDC64 Nome: '      + name,
-      '\uD83D\uDCDE Telefono: '  + (phone || '\u2014'),
-      '\uD83D\uDCE7 Email: '     + (email || '\u2014'), '',
-      '\u2014 Inviato da itadreamteam.com'
-    ].join('\n');
-    window.open('https://wa.me/393510380392?text=' + encodeURIComponent(msg), '_blank');
+    /* 1 — Chiudi il popup subito */
+    hideForm();
 
-    /* 2 — Sostituisci corpo modal con messaggio di conferma */
-    var body = modal.querySelector('.pf-body');
-    body.innerHTML =
-      '<div style="text-align:center;padding:56px 24px 48px;">' +
-        '<div style="font-size:36px;margin-bottom:24px;color:#111;">\u2713</div>' +
-        '<div style="font-family:var(--serif);font-size:clamp(24px,5vw,30px);' +
-          'font-weight:400;color:#111;line-height:1.2;letter-spacing:-.3px;margin-bottom:16px;">' +
-          'Ci metteremo<br/>in contatto.' +
-        '</div>' +
-        '<p style="font-size:13px;color:rgba(0,0,0,.38);font-weight:300;line-height:1.8;">' +
-          'Grazie ' + firstName + ' \u2014 la tua richiesta<br/>' +
-          '\xe8 stata ricevuta su WhatsApp.<br/>' +
-          'Ti risponderemo entro 24 ore.' +
-        '</p>' +
-      '</div>';
-
-    /* 3 — Chiudi automaticamente dopo 3.5s */
-    setTimeout(hideForm, 3500);
+    /* 2 — Invia email in background (nessuna attesa per l'utente) */
+    var fd = new FormData();
+    fd.append('_subject',  'Nuova richiesta partner itassistance');
+    fd.append('_template', 'table');
+    fd.append('_captcha',  'false');
+    fd.append('Indirizzo', address);
+    fd.append('Nome',      name);
+    fd.append('Telefono',  phone || '-');
+    fd.append('Email',     email || '-');
+    fd.append('Fonte',     'itadreamteam.com');
+    fetch('https://formsubmit.co/ajax/itassitance@bluearroyo.it', {
+      method: 'POST', body: fd,
+      headers: { 'Accept': 'application/json' }
+    });
   });
 
 })();
+
 </script>
 <script>
 /* ────────────────────────────────────────────────────────
