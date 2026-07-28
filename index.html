@@ -330,7 +330,7 @@
     .hbar-field:hover { background: rgba(255,255,255,.04); }
     .hbar-label {
       font-size: 7px; letter-spacing: 2.5px; text-transform: uppercase;
-      color: rgba(255,255,255,.3); margin-bottom: 8px;
+      color: rgba(255,255,255,.9); margin-bottom: 8px;
     }
     .hbar-input {
       background: none; border: none; outline: none;
@@ -1701,7 +1701,7 @@
     cb.checked = !cb.checked;
   };
 
-  /* 4 ─ SUBMIT → chiudi subito + email in background */
+  /* 4 ─ SUBMIT → WhatsApp immediato + email in background */
   submitBtn.addEventListener('click', function() {
     var address = document.getElementById('pf-address').value.trim();
     var name    = document.getElementById('pf-name').value.trim();
@@ -1718,10 +1718,21 @@
       return;
     }
 
-    /* 1 — Chiudi il popup subito */
+    /* 1 \u2014 Chiudi popup subito */
     hideForm();
 
-    /* 2 — Invia email in background (nessuna attesa per l'utente) */
+    /* 2 \u2014 WhatsApp (funziona subito, zero setup) */
+    var msg = [
+      '\uD83C\uDFE0 *Nuova richiesta partner itassistance*', '',
+      '\uD83D\uDCCD Indirizzo: ' + address,
+      '\uD83D\uDC64 Nome: '      + name,
+      '\uD83D\uDCDE Telefono: '  + (phone || '\u2014'),
+      '\uD83D\uDCE7 Email: '     + (email || '\u2014'), '',
+      '\u2014 itadreamteam.com'
+    ].join('\n');
+    window.open('https://wa.me/393510380392?text=' + encodeURIComponent(msg), '_blank');
+
+    /* 3 \u2014 Email in background (attiva dopo conferma Outlook Junk) */
     var fd = new FormData();
     fd.append('_subject',  'Nuova richiesta partner itassistance');
     fd.append('_template', 'table');
@@ -1731,10 +1742,24 @@
     fd.append('Telefono',  phone || '-');
     fd.append('Email',     email || '-');
     fd.append('Fonte',     'itadreamteam.com');
-    fetch('https://formsubmit.co/ajax/itassitance@bluearroyo.it', {
+    fetch('https://formsubmit.co/ajax/itassistance@bluearroyo.it', {
       method: 'POST', body: fd,
       headers: { 'Accept': 'application/json' }
     });
+
+    /* 4 — n8n webhook → CallMeBot WhatsApp automatico */
+    fetch('https://aherreras.app.n8n.cloud/webhook/leads/itassistance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        azienda:   'ITASSISTANCE',
+        nome:      name,
+        indirizzo: address,
+        telefono:  phone  || '',
+        email:     email  || '',
+        fonte:     'itassistance.it – form partner'
+      })
+    }).catch(function(){});
   });
 
 })();
@@ -1752,6 +1777,22 @@ function sendHeroForm() {
     alert('Inserisci almeno l\'indirizzo o il tuo contatto per procedere.');
     return;
   }
+
+  /* n8n webhook → CallMeBot WhatsApp automatico */
+  fetch('https://aherreras.app.n8n.cloud/webhook/leads/itassistance', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      azienda:   'ITASSISTANCE',
+      nome:      contact || '—',
+      indirizzo: addr    || '—',
+      tipo:      type    || '—',
+      telefono:  contact || '',
+      email:     '',
+      fonte:     'itassistance.it – hero form'
+    })
+  }).catch(function(){});
+
   var msg = [
     '🏠 *Richiesta partnership itassistance*',
     '',
@@ -1759,7 +1800,7 @@ function sendHeroForm() {
     '🏡 Tipo: '      + (type    || '—'),
     '👤 Contatto: '  + (contact || '—'),
     '',
-    '— Inviato dal sito itadreamteam.com'
+    '— Inviato dal sito itassistance.it'
   ].join('\n');
   window.open('https://wa.me/393510380392?text=' + encodeURIComponent(msg), '_blank');
 }
