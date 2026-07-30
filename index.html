@@ -992,45 +992,7 @@
   </div>
 </div>
 
-<div class="pf-backdrop" id="pfBackdrop"></div>
-<div class="pf-modal" id="pfModal" role="dialog" aria-modal="true" aria-label="Diventa partner itassistance">
-  <div class="pf-header">
-    <button class="pf-close" id="pfClose" aria-label="Chiudi">&times;</button>
-    <div class="pf-eyebrow">Diventa Partner</div>
-    <div class="pf-promo-badge">🎁 Primo mese gratis</div>
-    <div class="pf-header-title">Porta il tuo appartamento<br/>nella rete itassistance.</div>
-    <div class="pf-header-sub">Compila in 2 minuti &mdash; Risposta entro 24 ore &mdash; Nessun impegno</div>
-  </div>
-  <div class="pf-body">
-    <div class="pf-field" style="margin-bottom:16px">
-      <label class="pf-label" for="pf-address">Indirizzo appartamento</label>
-      <input class="pf-input" id="pf-address" type="text" placeholder="Via Roma 12, Firenze" />
-    </div>
-    <div class="pf-grid">
-      <div class="pf-field">
-        <label class="pf-label" for="pf-name">Nome e Cognome</label>
-        <input class="pf-input" id="pf-name" type="text" placeholder="Marco Rossi" />
-      </div>
-      <div class="pf-field">
-        <label class="pf-label" for="pf-phone">Telefono / WhatsApp</label>
-        <input class="pf-input" id="pf-phone" type="tel" placeholder="+39 333 000 0000" />
-      </div>
-    </div>
-    <div class="pf-field" style="margin-top:16px">
-      <label class="pf-label" for="pf-email">Email</label>
-      <input class="pf-input" id="pf-email" type="email" placeholder="marco@email.com" />
-    </div>
 
-    <button class="pf-submit" id="pfSubmit">Invia la richiesta &rarr;</button>
-    <p class="pf-disclaimer">Rispondiamo entro 24h &middot; Sopralluogo gratuito &middot; Nessun contratto iniziale</p>
-  </div>
-</div>
-
-<!-- Floating re-open button -->
-<button class="pf-trigger" id="pfTrigger">
-  <span class="pf-trigger-dot"></span>
-  Diventa Partner
-</button>
 
 <!-- ══════════════════════════════════════════
      HERO FORM SECTION
@@ -1631,11 +1593,6 @@
 ──────────────────────────────────────────────────────── */
 (function() {
   var curtain    = document.getElementById('curtain');
-  var backdrop   = document.getElementById('pfBackdrop');
-  var modal      = document.getElementById('pfModal');
-  var closeBtn   = document.getElementById('pfClose');
-  var trigger    = document.getElementById('pfTrigger');
-  var submitBtn  = document.getElementById('pfSubmit');
 
   /* 1 ─ CURTAIN: apri dopo 120ms, rimuovi dopo la fine dell'animazione */
   setTimeout(function() {
@@ -1646,100 +1603,16 @@
     if (e.target !== curtain.querySelector('.curtain-panel-left')) return;
     curtain.classList.add('done');
     curtain.removeEventListener('transitionend', handler);
-    /* 2 ─ Mostra form dopo che la tenda è scomparsa */
-    showForm();
   });
 
-  /* 2 ─ FORM: mostra / nascondi */
-  function showForm() {
-    backdrop.classList.add('show');
-    modal.classList.add('show');
-    document.body.style.overflow = 'hidden';
-    trigger.classList.remove('visible');
-  }
-
-  function hideForm() {
-    backdrop.classList.remove('show');
-    modal.classList.remove('show');
-    document.body.style.overflow = '';
-    setTimeout(function() { trigger.classList.add('visible'); }, 400);
-  }
-
-  closeBtn.addEventListener('click', hideForm);
-  backdrop.addEventListener('click', hideForm);
-  trigger.addEventListener('click', showForm);
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') hideForm();
-  });
-
-  /* 3 ─ PIATTAFORME: toggle stile pillola */
+  /* 2 ─ PIATTAFORME: toggle stile pillola */
   window.togglePlatform = function(label) {
     label.classList.toggle('selected');
     var cb = label.querySelector('input');
     cb.checked = !cb.checked;
   };
 
-  /* 4 ─ SUBMIT → WhatsApp immediato + email in background */
-  submitBtn.addEventListener('click', function() {
-    var address = document.getElementById('pf-address').value.trim();
-    var name    = document.getElementById('pf-name').value.trim();
-    var phone   = document.getElementById('pf-phone').value.trim();
-    var email   = document.getElementById('pf-email').value.trim();
-
-    if (!name || !address) {
-      submitBtn.textContent = 'Inserisci nome e indirizzo';
-      submitBtn.style.background = '#c0392b';
-      setTimeout(function(){
-        submitBtn.textContent = 'Invia la richiesta \u2192';
-        submitBtn.style.background = '#111';
-      }, 2000);
-      return;
-    }
-
-    /* 1 \u2014 Chiudi popup subito */
-    hideForm();
-
-    /* 2 \u2014 WhatsApp (funziona subito, zero setup) */
-    var msg = [
-      '\uD83C\uDFE0 *Nuova richiesta partner itassistance*', '',
-      '\uD83D\uDCCD Indirizzo: ' + address,
-      '\uD83D\uDC64 Nome: '      + name,
-      '\uD83D\uDCDE Telefono: '  + (phone || '\u2014'),
-      '\uD83D\uDCE7 Email: '     + (email || '\u2014'), '',
-      '\u2014 itadreamteam.com'
-    ].join('\n');
-    window.open('https://wa.me/393510380392?text=' + encodeURIComponent(msg), '_blank');
-
-    /* 3 \u2014 Email in background (attiva dopo conferma Outlook Junk) */
-    var fd = new FormData();
-    fd.append('_subject',  'Nuova richiesta partner itassistance');
-    fd.append('_template', 'table');
-    fd.append('_captcha',  'false');
-    fd.append('Indirizzo', address);
-    fd.append('Nome',      name);
-    fd.append('Telefono',  phone || '-');
-    fd.append('Email',     email || '-');
-    fd.append('Fonte',     'itadreamteam.com');
-    fetch('https://formsubmit.co/ajax/itassistance@bluearroyo.it', {
-      method: 'POST', body: fd,
-      headers: { 'Accept': 'application/json' }
-    });
-
-    /* 4 — n8n webhook → CallMeBot WhatsApp automatico */
-    fetch('https://aherreras.app.n8n.cloud/webhook/leads/itassistance', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        azienda:   'ITASSISTANCE',
-        nome:      name,
-        indirizzo: address,
-        telefono:  phone  || '',
-        email:     email  || '',
-        fonte:     'itassistance.it – form partner'
-      })
-    }).catch(function(){});
-  });
+});
 
 })();
 
