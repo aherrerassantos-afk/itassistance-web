@@ -438,12 +438,19 @@
   acc.addEventListener('click',function(){
     var now=new Date();
     var ref='ITA-'+now.getFullYear()+'-'+Math.random().toString(36).slice(2,7).toUpperCase();
+    var nome = document.getElementById('f-nome').value.trim();
+    var cf = document.getElementById('f-cf').value.trim();
+    var imm = document.getElementById('f-imm').value.trim();
+    var cin = document.getElementById('f-cin').value.trim();
+    var email = document.getElementById('f-email').value.trim();
+    var tel = document.getElementById('f-tel').value.trim();
+
     var rows=[
       ['Riferimento',ref],
-      ['Sottoscrittore',document.getElementById('f-nome').value.trim()],
-      ['C.F. / P.IVA',document.getElementById('f-cf').value.trim()],
-      ['Immobile',document.getElementById('f-imm').value.trim()],
-      ['CIN',document.getElementById('f-cin').value.trim()],
+      ['Sottoscrittore',nome],
+      ['C.F. / P.IVA',cf],
+      ['Immobile',imm],
+      ['CIN',cin],
       ['Data e ora',now.toLocaleString('it-IT')],
       ['Durata','4 anni · disdetta 60 giorni'],
       ['Canone','€ 55,00 al mese + IVA']
@@ -454,6 +461,37 @@
     summary=rows.map(function(r){return r[0]+': '+(r[1]||'—')}).join('\n')+
       '\nAccettazione contratto e approvazione specifica clausole artt. 1341–1342 c.c.: SÌ';
     done.classList.add('on');
+
+    /* ── Invio Email ── */
+    var fd = new FormData();
+    fd.append('_subject',  'Nuovo Contratto Accettato: ' + nome);
+    fd.append('_template', 'table');
+    fd.append('_replyto',  email);
+    fd.append('Riferimento', ref);
+    fd.append('Sottoscrittore', nome);
+    fd.append('C.F. / P.IVA', cf);
+    fd.append('E-mail', email);
+    fd.append('Telefono', tel);
+    fd.append('Immobile', imm);
+    fd.append('CIN', cin);
+    fd.append('Data accettazione', now.toLocaleString('it-IT'));
+    fd.append('Note', 'Accettazione contratto e clausole vessatorie: SÌ');
+    
+    // Invio al sistema (FormSubmit) per notificare l'admin (itassistance@bluearroyo.it)
+    fetch('https://formsubmit.co/ajax/itassistance@bluearroyo.it', {
+      method: 'POST', body: fd,
+      headers: { 'Accept': 'application/json' }
+    });
+    
+    // N8N Webhook "Contratto Generator" se configurato (usiamo l'endpoint standard webhook)
+    fetch('https://aherreras.app.n8n.cloud/webhook/contratto-accettato', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        riferimento: ref, nome: nome, cf: cf, immobile: imm, 
+        cin: cin, email: email, telefono: tel, data: now.toISOString()
+      })
+    }).catch(function(){});
   });
 
   document.getElementById('copy').addEventListener('click',function(){
