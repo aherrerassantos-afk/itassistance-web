@@ -1,10 +1,12 @@
 {
-  "cleanUrls": true,
   "trailingSlash": false,
-  "rewrites": [
-    {
-      "source": "/google46bff38939cde236.html",
-      "destination": "/google46bff38939cde236.html"
-    }
+  "redirects": [
+    { "source": "/assistenza-ospiti-airbnb-firenze.html", "destination": "/assistenza-ospiti-airbnb-firenze", "permanent": true },
+    { "source": "/check-in-airbnb-firenze.html", "destination": "/check-in-airbnb-firenze", "permanent": true },
+    { "source": "/prezzi.html", "destination": "/prezzi", "permanent": true },
+    { "source": "/gestione-ospiti-firenze.html", "destination": "/gestione-ospiti-firenze", "permanent": true },
+    { "source": "/assistenza-airbnb-centro-storico-firenze.html", "destination": "/assistenza-airbnb-centro-storico-firenze", "permanent": true },
+    { "source": "/assistenza-airbnb-toscana.html", "destination": "/assistenza-airbnb-toscana", "permanent": true },
+    { "source": "/contratto.html", "destination": "/contratto", "permanent": true }
   ]
 }
