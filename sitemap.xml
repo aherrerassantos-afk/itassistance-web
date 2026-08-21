@@ -46,4 +46,7 @@
     <priority>0.80</priority>
     <changefreq>monthly</changefreq>
   </url>
+  <url><loc>https://www.itadreamteam.com/airbnb-guest-assistant-florence</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.itadreamteam.com/gestion-huespedes-airbnb-florencia</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.itadreamteam.com/gestion-voyageurs-airbnb-florence</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.80</priority></url>
 </urlset>
