@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
-Sitemap: https://itadreamteam.com/sitemap.xml
+Disallow: /contratto.html
+
+Sitemap: https://www.itadreamteam.com/sitemap.xml

@@ -2,11 +2,48 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://itadreamteam.com/</loc>
-    <lastmod>2026-06-13</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://www.itadreamteam.com/</loc>
+    <lastmod>2026-08-21</lastmod>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="it" href="https://itadreamteam.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://itadreamteam.com/"/>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="it" href="https://www.itadreamteam.com/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.itadreamteam.com/es/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.itadreamteam.com/fr/"/>
+  </url>
+  <url>
+    <loc>https://www.itadreamteam.com/assistenza-ospiti-airbnb-firenze</loc>
+    <lastmod>2026-08-21</lastmod>
+    <priority>0.95</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.itadreamteam.com/check-in-airbnb-firenze</loc>
+    <lastmod>2026-08-21</lastmod>
+    <priority>0.90</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.itadreamteam.com/prezzi</loc>
+    <lastmod>2026-08-21</lastmod>
+    <priority>0.90</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.itadreamteam.com/gestione-ospiti-firenze</loc>
+    <lastmod>2026-08-21</lastmod>
+    <priority>0.85</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.itadreamteam.com/assistenza-airbnb-centro-storico-firenze</loc>
+    <lastmod>2026-08-21</lastmod>
+    <priority>0.85</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.itadreamteam.com/assistenza-airbnb-toscana</loc>
+    <lastmod>2026-08-21</lastmod>
+    <priority>0.80</priority>
+    <changefreq>monthly</changefreq>
   </url>
 </urlset>
