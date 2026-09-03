@@ -1752,8 +1752,6 @@ function sendHeroForm() {
 
     <div id="step-3" class="step-container">
       <h2>3. Dintorni & Servizi</h2>
-      <div class="checkin-field"><label>Supermercato (Nome e Orari)</label><input type="text" id="ci-super" placeholder="es. Conad City, Via Roma (08:00 - 20:00)"></div>
-      <div class="checkin-field"><label>Parcheggio Consigliato</label><input type="text" id="ci-park" placeholder="es. Garage delle Terme, Via delle Terme 47"></div>
       <div class="checkin-field"><label>Rete WiFi</label><input type="text" id="ci-wifi" placeholder="es. Itassistance_Guest"></div>
       <div class="checkin-field"><label>Password WiFi</label><input type="text" id="ci-pass" placeholder="es. Firenze2026"></div>
       <div class="checkin-nav">
@@ -1835,28 +1833,72 @@ function sendHeroForm() {
     document.getElementById('step-' + step).classList.add('active');
   }
 
-  function generatePDF() {
+  async function generatePDF() {
+    var generateBtn = document.querySelector('.checkin-btn[onclick="generatePDF()"]');
+    var originalBtnText = generateBtn.textContent;
+    generateBtn.textContent = "Ricerca Dintorni...";
+    generateBtn.disabled = true;
+
     document.getElementById('p-guest').textContent = document.getElementById('ci-guest').value || 'Ospite';
     document.getElementById('p-apt').textContent = document.getElementById('ci-apt').value;
     document.getElementById('p-date').textContent = document.getElementById('ci-date').value;
-    document.getElementById('p-addr').textContent = document.getElementById('ci-addr').value;
+    var addr = document.getElementById('ci-addr').value;
+    document.getElementById('p-addr').textContent = addr;
     document.getElementById('p-code').textContent = document.getElementById('ci-code').value || 'Non necessario';
     document.getElementById('p-floor').textContent = document.getElementById('ci-floor').value;
     document.getElementById('p-elevator').textContent = document.getElementById('ci-elevator').value;
     document.getElementById('p-ztl').textContent = document.getElementById('ci-ztl').value;
     document.getElementById('p-wifi').textContent = document.getElementById('ci-wifi').value;
     document.getElementById('p-pass').textContent = document.getElementById('ci-pass').value;
-    document.getElementById('p-super').textContent = document.getElementById('ci-super').value;
-    document.getElementById('p-park').textContent = document.getElementById('ci-park').value;
     document.getElementById('p-trash').textContent = document.getElementById('ci-trash').value;
     document.getElementById('p-checkout').textContent = document.getElementById('ci-checkout').value;
+
+    // Automatica ricerca API (Nominatim + Overpass)
+    try {
+      var geoRes = await fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(addr + ' Firenze, Italy'));
+      var geoData = await geoRes.json();
+      if(geoData.length > 0) {
+        var lat = geoData[0].lat;
+        var lon = geoData[0].lon;
+        
+        var query = '[out:json];(node["shop"="supermarket"](around:800,'+lat+','+lon+');node["amenity"="parking"](around:800,'+lat+','+lon+'););out 5;';
+        var overpassRes = await fetch('https://overpass-api.de/api/interpreter', {
+          method: 'POST', body: query
+        });
+        var overpassData = await overpassRes.json();
+        
+        var supermarkets = overpassData.elements.filter(e => e.tags && e.tags.shop === 'supermarket');
+        var parkings = overpassData.elements.filter(e => e.tags && e.tags.amenity === 'parking');
+        
+        if (supermarkets.length > 0) {
+          var s = supermarkets[0].tags;
+          document.getElementById('p-super').textContent = (s.name || 'Supermercato Locale') + (s['addr:street'] ? ', ' + s['addr:street'] : '') + (s.opening_hours ? ' (Orari: ' + s.opening_hours + ')' : '');
+        } else {
+          document.getElementById('p-super').textContent = 'Nessun supermercato mappato nelle immediate vicinanze.';
+        }
+        
+        if (parkings.length > 0) {
+          var p = parkings[0].tags;
+          document.getElementById('p-park').textContent = (p.name || 'Parcheggio Locale') + (p['addr:street'] ? ', ' + p['addr:street'] : '');
+        } else {
+          document.getElementById('p-park').textContent = 'Nessun parcheggio mappato nelle immediate vicinanze.';
+        }
+      } else {
+         document.getElementById('p-super').textContent = 'Indirizzo non trovato su mappa per calcolare il supermercato.';
+         document.getElementById('p-park').textContent = 'Indirizzo non trovato su mappa per calcolare il parcheggio.';
+      }
+    } catch(err) {
+       console.error(err);
+       document.getElementById('p-super').textContent = 'Errore nella ricerca automatica dei servizi.';
+       document.getElementById('p-park').textContent = 'Errore nella ricerca automatica dei parcheggi.';
+    }
 
     var element = document.getElementById('pdf-template');
     element.style.display = 'block';
     
     var opt = {
       margin:       10,
-      filename:     'Istruzioni_Checkin_' + (document.getElementById('ci-guest').value || 'Ospite').replace(/\s/g,'_') + '.pdf',
+      filename:     'Istruzioni_Checkin_' + (document.getElementById('ci-guest').value || 'Ospite').replace(/\\s/g,'_') + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2 },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -1864,6 +1906,8 @@ function sendHeroForm() {
 
     html2pdf().set(opt).from(element).save().then(() => {
       element.style.display = 'none';
+      generateBtn.textContent = originalBtnText;
+      generateBtn.disabled = false;
       closeCheckinModal();
     });
   }
