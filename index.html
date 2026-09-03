@@ -1742,7 +1742,7 @@ function sendHeroForm() {
       <div class="checkin-field"><label>Piano</label><input type="text" id="ci-floor" placeholder="es. Primo piano"></div>
       <div class="checkin-field"><label>Ascensore</label><input type="text" id="ci-elevator" placeholder="es. Non è presente l'ascensore"></div>
       <div class="checkin-field"><label>ZTL (Zona a Traffico Limitato)</label>
-        <input type="text" id="ci-ztl" value="Il tuo appartamento si trova in ZTL. Contattaci per prenotare il garage partner.">
+        <input type="text" id="ci-ztl" value="Il tuo appartamento si trova in ZTL. / Your apartment is in a Restricted Traffic Zone.">
       </div>
       <div class="checkin-nav">
         <button class="checkin-btn outline" onclick="nextStep(1)">&larr; Indietro</button>
@@ -1763,10 +1763,12 @@ function sendHeroForm() {
     <div id="step-4" class="step-container">
       <h2>4. Regole & Checkout</h2>
       <div class="checkin-field"><label>Istruzioni Spazzatura</label>
-        <textarea id="ci-trash" rows="3">I cassonetti si trovano in fondo alla via. Separa carta, plastica/metallo, vetro e organico.</textarea>
+        <textarea id="ci-trash" rows="3">I cassonetti si trovano in fondo alla via. Separa carta, plastica/metallo, vetro e organico.
+The bins are at the end of the street. Please separate paper, plastic/metal, glass, and organic waste.</textarea>
       </div>
       <div class="checkin-field"><label>Istruzioni Checkout</label>
-        <textarea id="ci-checkout" rows="3">Il checkout è alle ore 10:00. Lascia le chiavi sul tavolo. Opzione late checkout fino alle 13:00 su richiesta.</textarea>
+        <textarea id="ci-checkout" rows="3">Il checkout è alle ore 10:00. Lascia le chiavi sul tavolo.
+Checkout is at 10:00 AM. Please leave the keys on the table.</textarea>
       </div>
       <div class="checkin-nav">
         <button class="checkin-btn outline" onclick="nextStep(3)">&larr; Indietro</button>
@@ -1783,42 +1785,44 @@ function sendHeroForm() {
       <div class="pdf-subtitle">itassistance &middot; Firenze</div>
     </div>
     
-    <div class="pdf-title">Istruzioni Check-in</div>
+    <div class="pdf-title">Istruzioni Check-in / Check-in Instructions</div>
     
     <div class="pdf-section">
-      <p>Gentile <strong><span id="p-guest"></span></strong>,</p>
-      <p>Benvenuto in <strong><span id="p-apt"></span></strong>! Il tuo arrivo è previsto per il <span id="p-date"></span>.</p>
+      <p>Gentile / <em>Dear</em> <strong><span id="p-guest"></span></strong>,</p>
+      <p>Benvenuto in / <em>Welcome to</em> <strong><span id="p-apt"></span></strong>! Il tuo arrivo è previsto per il / <em>Your arrival is scheduled for</em> <span id="p-date"></span>.</p>
     </div>
 
     <div class="pdf-section">
-      <h3>📍 Indirizzo e Accesso</h3>
-      <p><strong>Indirizzo:</strong> <span id="p-addr"></span></p>
-      <p><em>N.B. I numeri rossi a Firenze indicano attività commerciali, per le abitazioni civili seguire la numerazione blu.</em></p>
-      <p><strong>Codice Portone:</strong> <span id="p-code">N/A</span></p>
-      <p><strong>Piano:</strong> <span id="p-floor"></span> (<span id="p-elevator"></span>)</p>
+      <h3>📍 Indirizzo e Accesso / <em>Address & Access</em></h3>
+      <p><strong>Indirizzo / <em>Address</em>:</strong> <span id="p-addr"></span></p>
+      <p><small><em>N.B. I numeri rossi a Firenze indicano attività commerciali, per le abitazioni civili seguire la numerazione blu.<br>
+      Note: Red street numbers in Florence are for commercial businesses; for residential buildings, follow the blue numbers.</em></small></p>
+      <p><strong>Codice Portone / <em>Building Code</em>:</strong> <span id="p-code">N/A</span></p>
+      <p><strong>Piano / <em>Floor</em>:</strong> <span id="p-floor"></span> (<span id="p-elevator"></span>)</p>
       <p><span id="p-ztl"></span></p>
     </div>
 
     <div class="pdf-section">
-      <h3>📶 Servizi</h3>
-      <p><strong>Rete WiFi:</strong> <span id="p-wifi"></span></p>
+      <h3>📶 Servizi / <em>Amenities</em></h3>
+      <p><strong>Rete WiFi / <em>Network</em>:</strong> <span id="p-wifi"></span></p>
       <p><strong>Password:</strong> <span id="p-pass"></span></p>
     </div>
 
     <div class="pdf-section">
-      <h3>🛒 Dintorni</h3>
-      <p><strong>Supermercato:</strong> <span id="p-super"></span></p>
-      <p><strong>Parcheggio:</strong> <span id="p-park"></span></p>
+      <h3>🛒 Dintorni / <em>Neighborhood</em></h3>
+      <p><strong>Supermercato / <em>Supermarket</em>:</strong> <span id="p-super"></span></p>
+      <p><strong>Parcheggio / <em>Parking</em>:</strong> <span id="p-park"></span></p>
     </div>
 
     <div class="pdf-section">
-      <h3>♻️ Regole e Checkout</h3>
-      <p><strong>Rifiuti:</strong> <span id="p-trash"></span></p>
+      <h3>♻️ Regole e Checkout / <em>Rules & Checkout</em></h3>
+      <p><strong>Rifiuti / <em>Trash</em>:</strong> <span id="p-trash"></span></p>
       <p><strong>Checkout:</strong> <span id="p-checkout"></span></p>
     </div>
 
     <div class="pdf-footer">
-      Per qualsiasi necessità, il nostro Customer Care è disponibile 24/7 al numero <strong>+39 0550517452</strong> o +39 351 038 0392.
+      Per qualsiasi necessità, il nostro Customer Care è disponibile 24/7 al numero <strong>+39 0550517452</strong> o +39 351 038 0392.<br>
+      <em>For any assistance, our Customer Care is available 24/7 at <strong>+39 0550517452</strong> or +39 351 038 0392.</em>
     </div>
   </div>
 </div>
