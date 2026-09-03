@@ -1776,7 +1776,7 @@ function sendHeroForm() {
   </div>
 </div>
 
-<div id="pdf-template-wrapper" style="display:none;">
+<div id="pdf-template-wrapper" style="position: absolute; left: -9999px; top: -9999px; width: 800px; background: white;">
   <div id="pdf-template">
     <div class="pdf-header">
       <div class="pdf-logo">it<em>.</em></div>
@@ -1894,7 +1894,6 @@ function sendHeroForm() {
     }
 
     var element = document.getElementById('pdf-template');
-    element.style.display = 'block';
     
     var opt = {
       margin:       10,
@@ -1905,7 +1904,6 @@ function sendHeroForm() {
     };
 
     html2pdf().set(opt).from(element).save().then(() => {
-      element.style.display = 'none';
       generateBtn.textContent = originalBtnText;
       generateBtn.disabled = false;
       closeCheckinModal();
