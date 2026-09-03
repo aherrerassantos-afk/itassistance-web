@@ -1656,5 +1656,218 @@ function sendHeroForm() {
   window.open('https://wa.me/393510380392?text=' + encodeURIComponent(msg), '_blank');
 }
 </script>
+
+<!-- ==============================================
+     CHECK-IN PDF GENERATOR
+     ============================================== -->
+<style>
+  .checkin-trigger {
+    position: fixed; bottom: 28px; left: 28px; z-index: 700;
+    background: var(--gold, #D4AF37); color: #111;
+    border: none; border-radius: 2px; cursor: pointer;
+    font-family: var(--sans, sans-serif); font-size: 10px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 14px 20px; box-shadow: 0 4px 24px rgba(0,0,0,.25);
+    transition: opacity .2s, transform .2s;
+  }
+  .checkin-trigger:hover { opacity: .9; transform: translateY(-2px); }
+
+  .checkin-modal {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(17,17,17,0.95); z-index: 9000;
+    display: none; align-items: center; justify-content: center;
+    backdrop-filter: blur(5px);
+  }
+  .checkin-modal.show { display: flex; }
+  
+  .checkin-content {
+    background: #fff; width: 100%; max-width: 500px;
+    border-radius: 4px; padding: 32px; position: relative;
+    font-family: var(--sans, sans-serif); max-height: 90vh; overflow-y: auto;
+  }
+  
+  .checkin-close {
+    position: absolute; top: 20px; right: 20px;
+    background: none; border: none; font-size: 24px; cursor: pointer; color: #111;
+  }
+  
+  .step-container { display: none; }
+  .step-container.active { display: block; animation: fadeIn 0.3s; }
+  @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
+
+  .checkin-content h2 { margin-top: 0; margin-bottom: 24px; font-family: var(--serif, serif); font-size: 24px; }
+  .checkin-field { margin-bottom: 16px; }
+  .checkin-field label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; margin-bottom: 6px; }
+  .checkin-field input, .checkin-field textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 2px; font-family: inherit; box-sizing: border-box; }
+  
+  .checkin-nav { display: flex; justify-content: space-between; margin-top: 24px; }
+  .checkin-btn { background: #111; color: #fff; border: none; padding: 12px 24px; cursor: pointer; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
+  .checkin-btn.outline { background: transparent; color: #111; border: 1px solid #111; }
+
+  /* PDF Template (hidden) */
+  #pdf-template { display: none; background: #f8f8f8; color: #111; font-family: 'Inter', sans-serif; padding: 40px; width: 700px; }
+  .pdf-header { text-align: left; margin-bottom: 30px; border-bottom: 2px solid #111; padding-bottom: 20px; }
+  .pdf-logo { font-size: 32px; font-weight: bold; margin-bottom: 10px; font-family: 'Playfair Display', serif;}
+  .pdf-logo em { color: #D4AF37; font-style: normal; }
+  .pdf-subtitle { font-size: 14px; color: #555; }
+  .pdf-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
+  .pdf-section { margin-bottom: 25px; }
+  .pdf-section h3 { font-size: 16px; color: #D4AF37; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+  .pdf-section p { font-size: 14px; line-height: 1.6; margin: 0 0 10px 0; }
+  .pdf-section strong { font-weight: 600; }
+  .pdf-footer { margin-top: 40px; font-size: 12px; color: #888; text-align: center; border-top: 1px solid #ddd; padding-top: 20px; }
+</style>
+
+<button class="checkin-trigger" onclick="openCheckinModal()">Istruzioni Check-in PDF</button>
+
+<div id="checkin-modal" class="checkin-modal">
+  <div class="checkin-content">
+    <button class="checkin-close" onclick="closeCheckinModal()">&times;</button>
+    
+    <div id="step-1" class="step-container active">
+      <h2>1. Dati Base</h2>
+      <div class="checkin-field"><label>Nome Appartamento</label><input type="text" id="ci-apt" placeholder="es. Appartamento Ponte Vecchio"></div>
+      <div class="checkin-field"><label>Indirizzo Esatto</label><input type="text" id="ci-addr" placeholder="es. Borgo San Jacopo 25 blu"></div>
+      <div class="checkin-field"><label>Nome Ospite</label><input type="text" id="ci-guest" placeholder="es. Marco Rossi"></div>
+      <div class="checkin-field"><label>Data di Arrivo</label><input type="date" id="ci-date"></div>
+      <div class="checkin-nav">
+        <div></div>
+        <button class="checkin-btn" onclick="nextStep(2)">Avanti &rarr;</button>
+      </div>
+    </div>
+
+    <div id="step-2" class="step-container">
+      <h2>2. Logistica & Accesso</h2>
+      <div class="checkin-field"><label>Codice Portone</label><input type="text" id="ci-code" placeholder="es. 113 (o lascia vuoto)"></div>
+      <div class="checkin-field"><label>Piano</label><input type="text" id="ci-floor" placeholder="es. Primo piano"></div>
+      <div class="checkin-field"><label>Ascensore</label><input type="text" id="ci-elevator" placeholder="es. Non è presente l'ascensore"></div>
+      <div class="checkin-field"><label>ZTL (Zona a Traffico Limitato)</label>
+        <input type="text" id="ci-ztl" value="Il tuo appartamento si trova in ZTL. Contattaci per prenotare il garage partner.">
+      </div>
+      <div class="checkin-nav">
+        <button class="checkin-btn outline" onclick="nextStep(1)">&larr; Indietro</button>
+        <button class="checkin-btn" onclick="nextStep(3)">Avanti &rarr;</button>
+      </div>
+    </div>
+
+    <div id="step-3" class="step-container">
+      <h2>3. Dintorni & Servizi</h2>
+      <div class="checkin-field"><label>Supermercato (Nome e Orari)</label><input type="text" id="ci-super" placeholder="es. Conad City, Via Roma (08:00 - 20:00)"></div>
+      <div class="checkin-field"><label>Parcheggio Consigliato</label><input type="text" id="ci-park" placeholder="es. Garage delle Terme, Via delle Terme 47"></div>
+      <div class="checkin-field"><label>Rete WiFi</label><input type="text" id="ci-wifi" placeholder="es. Itassistance_Guest"></div>
+      <div class="checkin-field"><label>Password WiFi</label><input type="text" id="ci-pass" placeholder="es. Firenze2026"></div>
+      <div class="checkin-nav">
+        <button class="checkin-btn outline" onclick="nextStep(2)">&larr; Indietro</button>
+        <button class="checkin-btn" onclick="nextStep(4)">Avanti &rarr;</button>
+      </div>
+    </div>
+
+    <div id="step-4" class="step-container">
+      <h2>4. Regole & Checkout</h2>
+      <div class="checkin-field"><label>Istruzioni Spazzatura</label>
+        <textarea id="ci-trash" rows="3">I cassonetti si trovano in fondo alla via. Separa carta, plastica/metallo, vetro e organico.</textarea>
+      </div>
+      <div class="checkin-field"><label>Istruzioni Checkout</label>
+        <textarea id="ci-checkout" rows="3">Il checkout è alle ore 10:00. Lascia le chiavi sul tavolo. Opzione late checkout fino alle 13:00 su richiesta.</textarea>
+      </div>
+      <div class="checkin-nav">
+        <button class="checkin-btn outline" onclick="nextStep(3)">&larr; Indietro</button>
+        <button class="checkin-btn" onclick="generatePDF()">Genera PDF &darr;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pdf-template-wrapper" style="display:none;">
+  <div id="pdf-template">
+    <div class="pdf-header">
+      <div class="pdf-logo">it<em>.</em></div>
+      <div class="pdf-subtitle">itassistance &middot; Firenze</div>
+    </div>
+    
+    <div class="pdf-title">Istruzioni Check-in</div>
+    
+    <div class="pdf-section">
+      <p>Gentile <strong><span id="p-guest"></span></strong>,</p>
+      <p>Benvenuto in <strong><span id="p-apt"></span></strong>! Il tuo arrivo è previsto per il <span id="p-date"></span>.</p>
+    </div>
+
+    <div class="pdf-section">
+      <h3>📍 Indirizzo e Accesso</h3>
+      <p><strong>Indirizzo:</strong> <span id="p-addr"></span></p>
+      <p><em>N.B. I numeri rossi a Firenze indicano attività commerciali, per le abitazioni civili seguire la numerazione blu.</em></p>
+      <p><strong>Codice Portone:</strong> <span id="p-code">N/A</span></p>
+      <p><strong>Piano:</strong> <span id="p-floor"></span> (<span id="p-elevator"></span>)</p>
+      <p><span id="p-ztl"></span></p>
+    </div>
+
+    <div class="pdf-section">
+      <h3>📶 Servizi</h3>
+      <p><strong>Rete WiFi:</strong> <span id="p-wifi"></span></p>
+      <p><strong>Password:</strong> <span id="p-pass"></span></p>
+    </div>
+
+    <div class="pdf-section">
+      <h3>🛒 Dintorni</h3>
+      <p><strong>Supermercato:</strong> <span id="p-super"></span></p>
+      <p><strong>Parcheggio:</strong> <span id="p-park"></span></p>
+    </div>
+
+    <div class="pdf-section">
+      <h3>♻️ Regole e Checkout</h3>
+      <p><strong>Rifiuti:</strong> <span id="p-trash"></span></p>
+      <p><strong>Checkout:</strong> <span id="p-checkout"></span></p>
+    </div>
+
+    <div class="pdf-footer">
+      Per qualsiasi necessità, il nostro Customer Care è disponibile 24/7 al numero <strong>+39 0550517452</strong> o +39 351 038 0392.
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+  function openCheckinModal() { document.getElementById('checkin-modal').classList.add('show'); }
+  function closeCheckinModal() { document.getElementById('checkin-modal').classList.remove('show'); }
+  
+  function nextStep(step) {
+    document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
+    document.getElementById('step-' + step).classList.add('active');
+  }
+
+  function generatePDF() {
+    document.getElementById('p-guest').textContent = document.getElementById('ci-guest').value || 'Ospite';
+    document.getElementById('p-apt').textContent = document.getElementById('ci-apt').value;
+    document.getElementById('p-date').textContent = document.getElementById('ci-date').value;
+    document.getElementById('p-addr').textContent = document.getElementById('ci-addr').value;
+    document.getElementById('p-code').textContent = document.getElementById('ci-code').value || 'Non necessario';
+    document.getElementById('p-floor').textContent = document.getElementById('ci-floor').value;
+    document.getElementById('p-elevator').textContent = document.getElementById('ci-elevator').value;
+    document.getElementById('p-ztl').textContent = document.getElementById('ci-ztl').value;
+    document.getElementById('p-wifi').textContent = document.getElementById('ci-wifi').value;
+    document.getElementById('p-pass').textContent = document.getElementById('ci-pass').value;
+    document.getElementById('p-super').textContent = document.getElementById('ci-super').value;
+    document.getElementById('p-park').textContent = document.getElementById('ci-park').value;
+    document.getElementById('p-trash').textContent = document.getElementById('ci-trash').value;
+    document.getElementById('p-checkout').textContent = document.getElementById('ci-checkout').value;
+
+    var element = document.getElementById('pdf-template');
+    element.style.display = 'block';
+    
+    var opt = {
+      margin:       10,
+      filename:     'Istruzioni_Checkin_' + (document.getElementById('ci-guest').value || 'Ospite').replace(/\s/g,'_') + '.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save().then(() => {
+      element.style.display = 'none';
+      closeCheckinModal();
+    });
+  }
+</script>
+
 </body>
 </html>
