@@ -1779,51 +1779,89 @@ Checkout is at 10:00 AM. Please leave the keys on the table.</textarea>
 </div>
 
 <div id="pdf-template-wrapper" style="position: absolute; left: -9999px; top: -9999px; width: 800px; background: white;">
+  
   <div id="pdf-template">
-    <div class="pdf-header">
-      <img src="https://www.itadreamteam.com/brand/logo.png" alt="itassistance Dream Team" style="height: 60px; margin-bottom: 10px;">
-    </div>
-    
-    <div class="pdf-title">Istruzioni Check-in / Check-in Instructions</div>
-    
-    <div class="pdf-section">
-      <p>Gentile / <em>Dear</em> <strong><span id="p-guest"></span></strong>,</p>
-      <p>Benvenuto in / <em>Welcome to</em> <strong><span id="p-apt"></span></strong>! Il tuo arrivo è previsto per il / <em>Your arrival is scheduled for</em> <span id="p-date"></span>.</p>
+    <!-- ITALIAN PAGE -->
+    <div class="pdf-page">
+      <div class="pdf-header">
+        <img src="https://www.itadreamteam.com/brand/logo.png" alt="itassistance Dream Team" style="height: 60px; margin-bottom: 10px;">
+      </div>
+      <div class="pdf-title">Istruzioni Check-in 🇮🇹</div>
+      
+      <div class="pdf-section">
+        <p>Gentile <strong><span class="p-guest"></span></strong>,</p>
+        <p>Benvenuto in <strong><span class="p-apt"></span></strong>! Il tuo arrivo è previsto per il <span class="p-date"></span>.</p>
+      </div>
+      <div class="pdf-section">
+        <h3>📍 Indirizzo e Accesso</h3>
+        <p><strong>Indirizzo:</strong> <span class="p-addr"></span></p>
+        <p><small><em>N.B. I numeri rossi a Firenze indicano attività commerciali, per le abitazioni civili seguire la numerazione blu.</em></small></p>
+        <p><strong>Codice Portone:</strong> <span class="p-code">N/A</span></p>
+        <p><strong>Piano:</strong> <span class="p-floor"></span> (<span class="p-elevator"></span>)</p>
+        <p><span class="p-ztl-it"></span></p>
+      </div>
+      <div class="pdf-section">
+        <h3>📶 Servizi</h3>
+        <p><strong>Rete WiFi:</strong> <span class="p-wifi"></span></p>
+        <p><strong>Password:</strong> <span class="p-pass"></span></p>
+      </div>
+      <div class="pdf-section">
+        <h3>🛒 Dintorni</h3>
+        <p><strong>Supermercato:</strong> <span class="p-super-it"></span></p>
+        <p><strong>Parcheggio:</strong> <span class="p-park-it"></span></p>
+      </div>
+      <div class="pdf-section">
+        <h3>♻️ Regole e Checkout</h3>
+        <p><strong>Rifiuti:</strong> <span class="p-trash-it"></span></p>
+        <p><strong>Checkout:</strong> <span class="p-checkout-it"></span></p>
+      </div>
+      <div class="pdf-footer">
+        Per qualsiasi necessità, il nostro Customer Care è disponibile 24/7 al numero <strong>+39 0550517452</strong> o +39 351 038 0392.
+      </div>
     </div>
 
-    <div class="pdf-section">
-      <h3>📍 Indirizzo e Accesso / <em>Address & Access</em></h3>
-      <p><strong>Indirizzo / <em>Address</em>:</strong> <span id="p-addr"></span></p>
-      <p><small><em>N.B. I numeri rossi a Firenze indicano attività commerciali, per le abitazioni civili seguire la numerazione blu.<br>
-      Note: Red street numbers in Florence are for commercial businesses; for residential buildings, follow the blue numbers.</em></small></p>
-      <p><strong>Codice Portone / <em>Building Code</em>:</strong> <span id="p-code">N/A</span></p>
-      <p><strong>Piano / <em>Floor</em>:</strong> <span id="p-floor"></span> (<span id="p-elevator"></span>)</p>
-      <p><span id="p-ztl"></span></p>
-    </div>
+    <div class="html2pdf__page-break"></div>
 
-    <div class="pdf-section">
-      <h3>📶 Servizi / <em>Amenities</em></h3>
-      <p><strong>Rete WiFi / <em>Network</em>:</strong> <span id="p-wifi"></span></p>
-      <p><strong>Password:</strong> <span id="p-pass"></span></p>
-    </div>
-
-    <div class="pdf-section">
-      <h3>🛒 Dintorni / <em>Neighborhood</em></h3>
-      <p><strong>Supermercato / <em>Supermarket</em>:</strong> <span id="p-super"></span></p>
-      <p><strong>Parcheggio / <em>Parking</em>:</strong> <span id="p-park"></span></p>
-    </div>
-
-    <div class="pdf-section">
-      <h3>♻️ Regole e Checkout / <em>Rules & Checkout</em></h3>
-      <p><strong>Rifiuti / <em>Trash</em>:</strong> <span id="p-trash"></span></p>
-      <p><strong>Checkout:</strong> <span id="p-checkout"></span></p>
-    </div>
-
-    <div class="pdf-footer">
-      Per qualsiasi necessità, il nostro Customer Care è disponibile 24/7 al numero <strong>+39 0550517452</strong> o +39 351 038 0392.<br>
-      <em>For any assistance, our Customer Care is available 24/7 at <strong>+39 0550517452</strong> or +39 351 038 0392.</em>
+    <!-- ENGLISH PAGE -->
+    <div class="pdf-page">
+      <div class="pdf-header">
+        <img src="https://www.itadreamteam.com/brand/logo.png" alt="itassistance Dream Team" style="height: 60px; margin-bottom: 10px;">
+      </div>
+      <div class="pdf-title">Check-in Instructions 🇬🇧🇺🇸</div>
+      
+      <div class="pdf-section">
+        <p>Dear <strong><span class="p-guest"></span></strong>,</p>
+        <p>Welcome to <strong><span class="p-apt"></span></strong>! Your arrival is scheduled for <span class="p-date"></span>.</p>
+      </div>
+      <div class="pdf-section">
+        <h3>📍 Address & Access</h3>
+        <p><strong>Address:</strong> <span class="p-addr"></span></p>
+        <p><small><em>Note: Red street numbers in Florence are for commercial businesses; for residential buildings, follow the blue numbers.</em></small></p>
+        <p><strong>Building Code:</strong> <span class="p-code">N/A</span></p>
+        <p><strong>Floor:</strong> <span class="p-floor"></span> (<span class="p-elevator"></span>)</p>
+        <p><span class="p-ztl-en"></span></p>
+      </div>
+      <div class="pdf-section">
+        <h3>📶 Amenities</h3>
+        <p><strong>Network:</strong> <span class="p-wifi"></span></p>
+        <p><strong>Password:</strong> <span class="p-pass"></span></p>
+      </div>
+      <div class="pdf-section">
+        <h3>🛒 Neighborhood</h3>
+        <p><strong>Supermarket:</strong> <span class="p-super-en"></span></p>
+        <p><strong>Parking:</strong> <span class="p-park-en"></span></p>
+      </div>
+      <div class="pdf-section">
+        <h3>♻️ Rules & Checkout</h3>
+        <p><strong>Trash:</strong> <span class="p-trash-en"></span></p>
+        <p><strong>Checkout:</strong> <span class="p-checkout-en"></span></p>
+      </div>
+      <div class="pdf-footer">
+        For any assistance, our Customer Care is available 24/7 at <strong>+39 0550517452</strong> or +39 351 038 0392.
+      </div>
     </div>
   </div>
+</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -1842,21 +1880,32 @@ Checkout is at 10:00 AM. Please leave the keys on the table.</textarea>
     generateBtn.textContent = "Ricerca Dintorni...";
     generateBtn.disabled = true;
 
-    document.getElementById('p-guest').textContent = document.getElementById('ci-guest').value || 'Ospite';
-    document.getElementById('p-apt').textContent = document.getElementById('ci-apt').value;
-    document.getElementById('p-date').textContent = document.getElementById('ci-date').value;
-    var addr = document.getElementById('ci-addr').value;
-    document.getElementById('p-addr').textContent = addr;
-    document.getElementById('p-code').textContent = document.getElementById('ci-code').value || 'Non necessario';
-    document.getElementById('p-floor').textContent = document.getElementById('ci-floor').value;
-    document.getElementById('p-elevator').textContent = document.getElementById('ci-elevator').value;
-    document.getElementById('p-ztl').textContent = document.getElementById('ci-ztl').value;
-    document.getElementById('p-wifi').textContent = document.getElementById('ci-wifi').value;
-    document.getElementById('p-pass').textContent = document.getElementById('ci-pass').value;
-    document.getElementById('p-trash').textContent = document.getElementById('ci-trash').value;
-    document.getElementById('p-checkout').textContent = document.getElementById('ci-checkout').value;
+    function setAll(cls, val) {
+      document.querySelectorAll('.' + cls).forEach(el => el.textContent = val);
+    }
 
-    // Automatica ricerca API (Nominatim + Overpass)
+    setAll('p-guest', document.getElementById('ci-guest').value || 'Ospite');
+    setAll('p-apt', document.getElementById('ci-apt').value);
+    setAll('p-date', document.getElementById('ci-date').value);
+    var addr = document.getElementById('ci-addr').value;
+    setAll('p-addr', addr);
+    setAll('p-code', document.getElementById('ci-code').value || 'Non necessario');
+    setAll('p-floor', document.getElementById('ci-floor').value);
+    setAll('p-elevator', document.getElementById('ci-elevator').value);
+    setAll('p-wifi', document.getElementById('ci-wifi').value);
+    setAll('p-pass', document.getElementById('ci-pass').value);
+
+    var ztl = document.getElementById('ci-ztl').value;
+    var trash = document.getElementById('ci-trash').value;
+    var checkout = document.getElementById('ci-checkout').value;
+    
+    setAll('p-ztl-it', ztl.split('/')[0] || ztl);
+    setAll('p-ztl-en', ztl.split('/')[1] || ztl);
+    setAll('p-trash-it', trash.split('\n')[0] || trash);
+    setAll('p-trash-en', trash.split('\n')[1] || trash);
+    setAll('p-checkout-it', checkout.split('\n')[0] || checkout);
+    setAll('p-checkout-en', checkout.split('\n')[1] || checkout);
+
     try {
       var geoRes = await fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(addr + ' Firenze, Italy'));
       var geoData = await geoRes.json();
@@ -1875,34 +1924,44 @@ Checkout is at 10:00 AM. Please leave the keys on the table.</textarea>
         
         if (supermarkets.length > 0) {
           var s = supermarkets[0].tags;
-          document.getElementById('p-super').textContent = (s.name || 'Supermercato Locale') + (s['addr:street'] ? ', ' + s['addr:street'] : '') + (s.opening_hours ? ' (Orari: ' + s.opening_hours + ')' : '');
+          var super_str = (s.name || 'Supermercato Locale') + (s['addr:street'] ? ', ' + s['addr:street'] : '') + (s.opening_hours ? ' (Orari: ' + s.opening_hours + ')' : '');
+          setAll('p-super-it', super_str);
+          setAll('p-super-en', super_str.replace('Orari', 'Hours'));
         } else {
-          document.getElementById('p-super').textContent = 'Nessun supermercato mappato nelle immediate vicinanze.';
+          setAll('p-super-it', 'Nessun supermercato mappato nelle immediate vicinanze.');
+          setAll('p-super-en', 'No supermarket mapped nearby.');
         }
         
         if (parkings.length > 0) {
           var p = parkings[0].tags;
-          document.getElementById('p-park').textContent = (p.name || 'Parcheggio Locale') + (p['addr:street'] ? ', ' + p['addr:street'] : '');
+          var park_str = (p.name || 'Parcheggio Locale') + (p['addr:street'] ? ', ' + p['addr:street'] : '');
+          setAll('p-park-it', park_str);
+          setAll('p-park-en', park_str);
         } else {
-          document.getElementById('p-park').textContent = 'Nessun parcheggio mappato nelle immediate vicinanze.';
+          setAll('p-park-it', 'Nessun parcheggio mappato nelle immediate vicinanze.');
+          setAll('p-park-en', 'No parking mapped nearby.');
         }
       } else {
-         document.getElementById('p-super').textContent = 'Indirizzo non trovato su mappa per calcolare il supermercato.';
-         document.getElementById('p-park').textContent = 'Indirizzo non trovato su mappa per calcolare il parcheggio.';
+         setAll('p-super-it', 'Indirizzo non trovato su mappa.');
+         setAll('p-super-en', 'Address not found on map.');
+         setAll('p-park-it', 'Indirizzo non trovato su mappa.');
+         setAll('p-park-en', 'Address not found on map.');
       }
     } catch(err) {
        console.error(err);
-       document.getElementById('p-super').textContent = 'Errore nella ricerca automatica dei servizi.';
-       document.getElementById('p-park').textContent = 'Errore nella ricerca automatica dei parcheggi.';
+       setAll('p-super-it', 'Errore nella ricerca automatica dei servizi.');
+       setAll('p-super-en', 'Error searching amenities.');
+       setAll('p-park-it', 'Errore nella ricerca automatica dei parcheggi.');
+       setAll('p-park-en', 'Error searching parking.');
     }
 
     var element = document.getElementById('pdf-template');
     
     var opt = {
       margin:       10,
-      filename:     'Istruzioni_Checkin_' + (document.getElementById('ci-guest').value || 'Ospite').replace(/\\s/g,'_') + '.pdf',
+      filename:     'Istruzioni_Checkin_' + (document.getElementById('ci-guest').value || 'Ospite').replace(/\s/g,'_') + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
+      html2canvas:  { scale: 2, useCORS: true },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
