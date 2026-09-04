@@ -1728,9 +1728,7 @@ function sendHeroForm() {
       <h2>1. Dati Base</h2>
       <div class="checkin-field"><label>Nome Appartamento</label><input type="text" id="ci-apt" placeholder="es. Appartamento Ponte Vecchio"></div>
       <div class="checkin-field"><label>Indirizzo Esatto</label><input type="text" id="ci-addr" placeholder="es. Borgo San Jacopo 25 blu"></div>
-      <div class="checkin-field"><label>Nome Ospite</label><input type="text" id="ci-guest" placeholder="es. Marco Rossi"></div>
-      <div class="checkin-field"><label>Data di Arrivo</label><input type="date" id="ci-date"></div>
-      <div class="checkin-nav">
+                  <div class="checkin-nav">
         <div></div>
         <button class="checkin-btn" onclick="nextStep(2)">Avanti &rarr;</button>
       </div>
@@ -1789,8 +1787,7 @@ Checkout is at 10:00 AM. Please leave the keys on the table.</textarea>
       <div class="pdf-title">Istruzioni Check-in 🇮🇹</div>
       
       <div class="pdf-section">
-        <p>Gentile <strong><span class="p-guest"></span></strong>,</p>
-        <p>Benvenuto in <strong><span class="p-apt"></span></strong>! Il tuo arrivo è previsto per il <span class="p-date"></span>.</p>
+        <p>Benvenuto in <strong><span class="p-apt"></span></strong>!</p>
       </div>
       <div class="pdf-section">
         <h3>📍 Indirizzo e Accesso</h3>
@@ -1830,8 +1827,7 @@ Checkout is at 10:00 AM. Please leave the keys on the table.</textarea>
       <div class="pdf-title">Check-in Instructions 🇬🇧🇺🇸</div>
       
       <div class="pdf-section">
-        <p>Dear <strong><span class="p-guest"></span></strong>,</p>
-        <p>Welcome to <strong><span class="p-apt"></span></strong>! Your arrival is scheduled for <span class="p-date"></span>.</p>
+        <p>Welcome to <strong><span class="p-apt"></span></strong>!</p>
       </div>
       <div class="pdf-section">
         <h3>📍 Address & Access</h3>
@@ -1884,10 +1880,8 @@ Checkout is at 10:00 AM. Please leave the keys on the table.</textarea>
       document.querySelectorAll('.' + cls).forEach(el => el.textContent = val);
     }
 
-    setAll('p-guest', document.getElementById('ci-guest').value || 'Ospite');
-    setAll('p-apt', document.getElementById('ci-apt').value);
-    setAll('p-date', document.getElementById('ci-date').value);
-    var addr = document.getElementById('ci-addr').value;
+        setAll('p-apt', document.getElementById('ci-apt').value);
+        var addr = document.getElementById('ci-addr').value;
     setAll('p-addr', addr);
     setAll('p-code', document.getElementById('ci-code').value || 'Non necessario');
     setAll('p-floor', document.getElementById('ci-floor').value);
@@ -1959,7 +1953,7 @@ Checkout is at 10:00 AM. Please leave the keys on the table.</textarea>
     
     var opt = {
       margin:       10,
-      filename:     'Istruzioni_Checkin_' + (document.getElementById('ci-guest').value || 'Ospite').replace(/\s/g,'_') + '.pdf',
+      filename:     'Istruzioni_Checkin_' + (document.getElementById('ci-apt').value || 'Appartamento').replace(/\s/g,'_') + '.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
       html2canvas:  { scale: 2, useCORS: true },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
