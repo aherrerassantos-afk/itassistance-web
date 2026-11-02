@@ -114,6 +114,7 @@ Dopo **OGNI deploy** in produzione, la risposta all'utente deve SEMPRE concluder
 | **🧾 Amministrazione (`billing`)** | Emissione Fattura da Cliente attivo + Download PDF | Desktop | 7 clic · 6 campi · 50 sec | **2 clic · 1 selezione · 10 sec** | **−71% clic · −80% tempo** |
 | **🧾 Amministrazione (`billing`)** | Rimborso Garanzia 14 gg + Sospensione automatica Cliente | Desktop | 5 clic · 2 tab · 40 sec | **1 tap · 0 campi · 5 sec** | **−80% clic · −87% tempo** |
 | **👥 HR / 🧹 Fornitori** | Registrazione nuovo collaboratore o fornitore certificato Firenze | Desktop | 7 clic · 6 campi · 60 sec | **3 clic · 2 campi · 15 sec** | **−57% clic · −75% tempo** |
+| **📈 Revenue Manager (+10%)** | Regia Prezzi Variabili & Sblocco Buchi Orfani su 1–4 portali (`/admin.html`) | Mobile / Desktop | 18 clic su 3 portali · 14 campi data · 15 min | **1 tap strategia (`Smartbookings` / `High ADR` / `Riempi Buchi`) · 0 campi · 5 sec** | **−94% clic · −99% tempo** |
 
 #### B. Ruoli Esterni (`Prospect`, `Cliente Attivo`, `Ospite`, `Partner / Fornitore`)
 
@@ -123,6 +124,7 @@ Dopo **OGNI deploy** in produzione, la risposta all'utente deve SEMPRE concluder
 | **💳 Prospect in Attivazione** | Attivazione Piano 99 €/mese (o 1.188 €/anno) con Garanzia 14 gg | `/checkout.html` (Mobile / Desktop) | 5 clic · 6 campi obbligatori · 90 sec | **2 tap · 3 campi essenziali · 30 sec** | **−60% clic · −50% campi · −66% tempo** |
 | **🏠 Cliente Attivo (Proprietario)** | Login + Risoluzione problema del giorno (Check-in 20€, Guasto 30€, Documenti, CSV) | `/login.html` → `/app.html` (Mobile) | 6 clic · 3 campi login · 75 sec | **1 tap login + 1 tap azione · 0 campi · 10 sec** | **−66% clic · −100% campi · −86% tempo** |
 | **🏠 Cliente Attivo (Proprietario)** | Inserimento nuova prenotazione o spesa fornitore standard | `/app.html` (Mobile / Desktop) | 5 clic · 6 campi prenotazione (3 spesa) · 60 sec | **1–2 tap · 2 campi prenotazione (0 spesa chip) · 12 sec** | **−60% clic · −80% tempo** |
+| **🏠 Cliente Attivo (Proprietario)** | Gestione Prezzi Variabili & Channel Manager su 1 o più portali (`Airbnb`, `Booking`, `Vrbo`, `Diretto`) | `/app.html?tab=extra` | 15–20 clic su 2–3 portali diversi · 14 campi · 15 min | **0–1 tap in Auto-Pilot da un unico punto · 0 campi · 5 sec** | **−95% clic · −99% tempo** |
 | **🏠 Cliente Attivo (Proprietario)** | Preparazione & Scarico Schedina Alloggiati Web precompilata da ospite | `/app.html#view-alloggiati` | 4 clic · 12 campi visibili · 60 sec | **1 tap (`⚡ Scarica .txt + Segna Inviata`) · 0 campi · 5 sec** | **−75% clic · −91% tempo** |
 | **🛂 Ospite Turistico (IT/EN)** | Self Check-in Documento (Art. 109 TULPS) + Download PDF Istruzioni | `/ospiti.html` (Mobile) | 5 tap · 12 campi · 90 sec | **2 tap (1 Chip Paese + Invio) · 5 campi · 30 sec** | **−60% clic · −58% campi · −66% tempo** |
 | **🤝 Partner / Fornitore Esterno** | Richiesta accreditamento Studio Commercialista / Agenzia / Fornitore FI | `/partner.html` (Desktop / Mobile) | 4 clic · 4 campi obbligatori · 60 sec | **2 tap (1 Chip Ruolo + Invio) · 2 campi · 20 sec** | **−50% clic · −50% campi · −66% tempo** |

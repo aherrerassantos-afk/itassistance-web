@@ -941,6 +941,21 @@
               <tbody id="bookings-tbody"></tbody>
             </table>
           </div>
+
+          <!-- Barra Rapida Channel Manager Prezzi Variabili in Calendario Operativo -->
+          <div style="margin-top:14px;background:linear-gradient(135deg,#0F1A2E 0%,#1B2A4A 100%);color:#fff;border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;border:1.5px solid var(--gold);">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span class="badge badge-gold">📡 Channel Manager Stile Smartbookings</span>
+                <strong style="font-size:14px;color:#fff;" id="op-cm-quick-summary">Prezzi Variabili Comportamentali attivi su 3 portali</strong>
+              </div>
+              <div style="font-size:12px;color:#CBD5E1;margin-top:4px;">Il motore rileva in automatico notti orfane (buchi da 1 notte), last-minute (0–4gg), weekend ed eventi a Firenze per alzare o abbassare i prezzi da un unico punto.</div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-gold btn-sm" onclick="saveCmGuardrailsAndSync()">⚡ 1-Clic: Sincronizza Prezzi Ora</button>
+              <button type="button" class="btn btn-outline btn-sm" style="color:#fff;border-color:rgba(255,255,255,0.35);" onclick="switchTab('extra')">Apri Console Channel Manager (+10%) →</button>
+            </div>
+          </div>
         </div>
 
         <!-- Coordinamento Turni Pulizie -->
@@ -1452,6 +1467,150 @@
           <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--border);font-size:12.5px;color:var(--text-muted);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
             <div><strong>📅 Picchi Alta Domanda Firenze (Alert Tariffe +35%/+60%):</strong> Pitti Uomo (Gen/Giu) · Pasqua &amp; Ponti · Firenze Rocks · Estate Internazionale · Florence Marathon · Immacolata &amp; Capodanno.</div>
             <a href="/revenue-management-prezzi-affitti-brevi-firenze.html" target="_blank" style="color:var(--navy);font-weight:700;text-decoration:underline;">Vedi Guida &amp; Calendario Eventi Firenze →</a>
+          </div>
+        </div>
+
+        <!-- CHANNEL MANAGER UNIFICATO (STILE SMARTBOOKINGS) & MOTORE PREZZI VARIABILI COMPORTAMENTALI -->
+        <div class="panel-card" id="channel-manager-card" style="border:2px solid var(--navy);">
+          <div class="panel-head" style="border-bottom:1px solid var(--border);padding-bottom:14px;margin-bottom:16px;">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+                <span class="badge badge-gold">📡 CHANNEL MANAGER MULTI-PORTALE (STILE SMARTBOOKINGS)</span>
+                <span class="badge badge-ok" id="cm-autopilot-badge">🤖 Auto-Pilot Comportamentale: ATTIVO</span>
+                <span style="font-size:12px;color:var(--text-muted);" id="cm-last-sync-label">Ultimo sync: oggi</span>
+              </div>
+              <div class="panel-title">🧠 Capo Revenue Management: Prezzi Variabili in base al Comportamento Umano</div>
+              <p style="font-size:13px;color:var(--text-muted);">
+                Gestisci i prezzi da <strong>un unico punto centrale</strong> sia che tu abbia <strong>1 solo portale</strong> (es. solo Airbnb) sia che ne abbia <strong>2, 3 o 4 contemporaneamente</strong> (Airbnb, Booking.com, Vrbo, Sito Diretto). Il motore legge i comportamenti reali di prenotazione dei viaggiatori e decide in automatico <strong>quando ALZARE (▲)</strong> e <strong>quando ABBASSARE o SBLOCCARE 1 NOTTE (▼)</strong> per massimizzare riempimento calendario e incasso netto.
+              </p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <button type="button" class="btn btn-outline btn-sm" id="btn-cm-autopilot" onclick="toggleCmAutoPilot()">🤖 Auto-Pilot: ON</button>
+              <button type="button" class="btn btn-gold btn-sm" onclick="saveCmGuardrailsAndSync()">⚡ 1-Clic: Sincronizza Tutti i Portali</button>
+            </div>
+          </div>
+
+          <!-- KPI Rapidi Revenue & Riempimento Calendario 14gg -->
+          <div class="kpi-grid" style="margin-bottom:18px;">
+            <div class="kpi-card" style="background:#F8FAFC;">
+              <div class="kpi-label">Portali Sincronizzati (1 Unico Punto)</div>
+              <div class="kpi-val" id="cm-kpi-portals">3 portali</div>
+              <div class="kpi-sub" id="cm-kpi-portals-sub">Airbnb · Booking (+4%) · Diretto (-8%)</div>
+            </div>
+            <div class="kpi-card" style="background:#F8FAFC;">
+              <div class="kpi-label">Tariffa Media Ottimizzata (ADR 14gg)</div>
+              <div class="kpi-val" id="cm-kpi-adr">178 €</div>
+              <div class="kpi-sub">Protetta tra Floor e Cap impostati</div>
+            </div>
+            <div class="kpi-card" style="background:#F8FAFC;">
+              <div class="kpi-label">Azioni Automatiche Attive (14gg)</div>
+              <div class="kpi-val" id="cm-kpi-actions" style="font-size:20px;">▲ Alza / ▼ Riempi</div>
+              <div class="kpi-sub" id="cm-kpi-orphans">Sblocco automatico buchi da 1 notte</div>
+            </div>
+            <div class="kpi-card" style="background:var(--gold-light);border-color:var(--gold);">
+              <div class="kpi-label" style="color:#92400E;">Extra Rendimento Stimato (+10% RM)</div>
+              <div class="kpi-val" id="cm-kpi-uplift" style="color:var(--green);">+420 €/mese</div>
+              <div class="kpi-sub" style="color:#92400E;">Rispetto a tariffa fissa statica</div>
+            </div>
+          </div>
+
+          <!-- STEP 1: Portali Collegati (1 Tap per attivare/disattivare chi ha 1 o più portali) -->
+          <div style="background:#F8FAFC;border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+              <div>
+                <strong style="font-size:13.5px;color:var(--navy);">1️⃣ Seleziona i tuoi Portali collegati al Channel Manager (funziona con 1 solo portale o con tutti):</strong>
+                <div style="font-size:12px;color:var(--text-muted);">Un solo prezzo base → il Channel Manager allinea in automatico le tariffe su ogni portale compensando le diverse commissioni OTA.</div>
+              </div>
+              <label style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--navy);cursor:pointer;background:#fff;padding:6px 10px;border-radius:8px;border:1px solid var(--border);">
+                <input type="checkbox" id="cm-markup-auto" checked onchange="toggleCmMarkupAuto()"/>
+                ⚖️ Compensa Commissioni OTA (+4% Booking / -8% Diretto)
+              </label>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;" id="cm-portals-grid"></div>
+          </div>
+
+          <!-- STEP 2: Strategia Comportamentale (1 Tap) + 3 Guardrail Prezzi -->
+          <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:16px;margin-bottom:16px;" class="form-grid-2">
+            <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;">
+              <strong style="font-size:13.5px;color:var(--navy);display:block;margin-bottom:8px;">2️⃣ Strategia Comportamentale di Riempimento Calendario (1 Tap):</strong>
+              <div style="display:flex;flex-direction:column;gap:8px;" id="cm-strategy-buttons">
+                <button type="button" class="btn btn-outline btn-sm" id="cm-strat-smart_fill" style="justify-content:flex-start;text-align:left;padding:10px 12px;" onclick="setCmStrategy('smart_fill')">
+                  <div>
+                    <div style="font-weight:800;color:var(--navy);">⚖️ Smartbookings Bilanciata (Consigliata — Riempi &amp; Alza)</div>
+                    <div style="font-size:11.5px;color:var(--text-muted);font-weight:500;">Alza nei weekend/eventi (+22%/+38%) e per chi prenota con anticipo; abbassa (-12%/-14%) e apre 1 notte sui buchi orfani e last-minute 0–4gg.</div>
+                  </div>
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" id="cm-strat-high_adr" style="justify-content:flex-start;text-align:left;padding:10px 12px;" onclick="setCmStrategy('high_adr')">
+                  <div>
+                    <div style="font-weight:800;color:var(--navy);">📈 High ADR &amp; Difesa Tariffa (Target Alto Spendente)</div>
+                    <div style="font-size:11.5px;color:var(--text-muted);font-weight:500;">Mantiene i prezzi più alti (+15% base), riduce al minimo gli sconti last-minute (-8%) e privilegia soggiorni di almeno 2–3 notti.</div>
+                  </div>
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" id="cm-strat-max_occupancy" style="justify-content:flex-start;text-align:left;padding:10px 12px;" onclick="setCmStrategy('max_occupancy')">
+                  <div>
+                    <div style="font-weight:800;color:var(--navy);">🧲 Massima Occupazione &amp; Zero Notti Vuote (Aggressiva sui Buchi)</div>
+                    <div style="font-size:11.5px;color:var(--text-muted);font-weight:500;">Spinge l'algoritmo di visibilità Airbnb/Booking abbassando subito (-16%/-22%) le date infrasettimanali invendute per arrivare al 90%+ di occupazione.</div>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;">
+              <div>
+                <strong style="font-size:13.5px;color:var(--navy);display:block;margin-bottom:8px;">3️⃣ Guardrail di Sicurezza (Prezzo Base, Minimo e Massimo):</strong>
+                <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px;">L'algoritmo non scenderà <strong>mai</strong> sotto il tuo Prezzo Minimo (Floor) e spingerà fino al Cap durante eventi e fiere a Firenze.</p>
+                <div class="form-grid-3" style="gap:10px;">
+                  <div class="field">
+                    <label>Prezzo Base (€/notte)</label>
+                    <input type="number" id="cm-base-rate" value="165" min="50" max="1500" onchange="saveCmGuardrailsAndSync()"/>
+                  </div>
+                  <div class="field">
+                    <label>Minimo Floor (€)</label>
+                    <input type="number" id="cm-floor-rate" value="118" min="40" max="1000" onchange="saveCmGuardrailsAndSync()"/>
+                  </div>
+                  <div class="field">
+                    <label>Massimo Eventi (€)</label>
+                    <input type="number" id="cm-ceiling-rate" value="320" min="80" max="3000" onchange="saveCmGuardrailsAndSync()"/>
+                  </div>
+                </div>
+              </div>
+              <div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span style="font-size:12px;color:var(--text-muted);">Modifica un valore per ricalcolare tutte le date in tempo reale.</span>
+                <button type="button" class="btn btn-primary btn-sm" onclick="saveCmGuardrailsAndSync()">⚡ Applica &amp; Propaga ai Portali</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- I 5 COMPORTAMENTI UMANI RILEVATI DAL MOTORE (QUANDO ALZARE E QUANDO ABBASSARE) -->
+          <div style="background:var(--gold-light);border:1px solid var(--gold);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:12.5px;">
+            <div style="font-weight:800;color:var(--navy);margin-bottom:6px;">🧠 Come ragiona il Motore Comportamentale (Quando ALZA ▲ e quando ABBASSA ▼ in automatico):</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;color:#334155;">
+              <div><strong style="color:#065F46;">▲ 1. Early Planners (&gt;10gg):</strong> Chi prenota Firenze con largo anticipo (USA/UK/Nord Europa) cerca qualità e non prezzo → <strong>Alza +10% e Min. 2 notti</strong>.</div>
+              <div><strong style="color:#065F46;">▲ 2. Weekend &amp; Eventi Firenze:</strong> Picco ricerche Ven–Sab, Pitti Uomo, Maratona, Ponti → <strong>Alza +22% / +38% e protegge con Min. 2–3 notti</strong>.</div>
+              <div><strong style="color:#B45309;">▼ 3. Buchi Orfani (1 Notte tra 2 prenotazioni):</strong> Nessuno può prenotarla se hai Min. 2 notti → <strong>Sblocca in automatico Min. 1 notte e abbassa -12%</strong> per riempire il buco!</div>
+              <div><strong style="color:#B45309;">▼ 4. Impulso Mobile Last-Minute (0–4gg):</strong> Sotto i 4 giorni dall'arrivo chi cerca da smartphone filtra per prezzo → <strong>Abbassa -14%/-18% (mai sotto il Floor)</strong> per vendere la notte.</div>
+            </div>
+          </div>
+
+          <!-- MATRICE CALENDARIO 14 GIORNI CON PREZZI SINCRONIZZATI SU TUTTI I PORTALI -->
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+            <strong style="font-size:14px;color:var(--navy);">📅 Matrice Calendario 14 Giorni — Prezzi Variabili &amp; Sincronizzazione Multi-Portale da Unico Punto</strong>
+            <button type="button" class="btn btn-outline btn-sm" onclick="clearCmOverrides()">🔄 Ripristina Tutti i Prezzi al Calcolo Automatico AI</button>
+          </div>
+          <div class="table-wrap">
+            <table class="app-table">
+              <thead>
+                <tr>
+                  <th>Data &amp; Giorno</th>
+                  <th>Atteggiamento Umano / Regola Rilevata</th>
+                  <th>Azione Automatica Prezzo</th>
+                  <th>Min. Notti</th>
+                  <th>Prezzo Unificato &amp; Portali Collegati</th>
+                  <th>Override 1-Tap (Fissa €)</th>
+                </tr>
+              </thead>
+              <tbody id="cm-calendar-tbody"></tbody>
+            </table>
           </div>
         </div>
 
@@ -1982,6 +2141,8 @@
       } else if (guestDocBadge) {
         guestDocBadge.style.display = 'none';
       }
+
+      renderChannelManager();
     }
 
     function populateCheckinFormFromState() {
@@ -2456,6 +2617,236 @@
       } else {
         showToast('Extra +10% disattivato. Piano base 99 €/mese attivo.');
       }
+    }
+
+    // ═══ CHANNEL MANAGER (STILE SMARTBOOKINGS) & PREZZI VARIABILI COMPORTAMENTALI ═══
+    function renderChannelManager() {
+      if (!window.ITACloudSync || !ITACloudSync.computeBehavioralCalendarMatrix) return;
+      var matrixData = ITACloudSync.computeBehavioralCalendarMatrix();
+      var st = matrixData.state;
+      var kpi = matrixData.kpi;
+
+      // Inputs
+      var baseEl = document.getElementById('cm-base-rate');
+      var floorEl = document.getElementById('cm-floor-rate');
+      var ceilEl = document.getElementById('cm-ceiling-rate');
+      var markupEl = document.getElementById('cm-markup-auto');
+      if (baseEl && document.activeElement !== baseEl) baseEl.value = st.baseRate;
+      if (floorEl && document.activeElement !== floorEl) floorEl.value = st.floorRate;
+      if (ceilEl && document.activeElement !== ceilEl) ceilEl.value = st.ceilingRate;
+      if (markupEl) markupEl.checked = !!st.portalMarkupAuto;
+
+      // Auto-Pilot status
+      var apBadge = document.getElementById('cm-autopilot-badge');
+      var apBtn = document.getElementById('btn-cm-autopilot');
+      if (apBadge && apBtn) {
+        if (st.autoPilot) {
+          apBadge.className = 'badge badge-ok';
+          apBadge.textContent = '🤖 Auto-Pilot Comportamentale: ATTIVO';
+          apBtn.textContent = '🤖 Auto-Pilot: ON';
+          apBtn.className = 'btn btn-green btn-sm';
+        } else {
+          apBadge.className = 'badge badge-warn';
+          apBadge.textContent = '✋ Modalità Manuale (Auto-Pilot in pausa)';
+          apBtn.textContent = '🤖 Attiva Auto-Pilot';
+          apBtn.className = 'btn btn-outline btn-sm';
+        }
+      }
+
+      var syncLbl = document.getElementById('cm-last-sync-label');
+      if (syncLbl) syncLbl.textContent = 'Ultimo sync multi-portale: ' + (st.lastSyncAt || 'oggi');
+
+      // Portals Grid (1 or more portals)
+      var pGrid = document.getElementById('cm-portals-grid');
+      var activeNames = [];
+      if (pGrid && st.portals) {
+        var pHtml = '';
+        Object.keys(st.portals).forEach(function (pk) {
+          var p = st.portals[pk];
+          if (p.active) activeNames.push(p.name.split(' ')[0]);
+          var markupTxt = p.markupPct === 0
+            ? 'Prezzo Base (0% diff.)'
+            : (p.markupPct > 0 ? '+' + p.markupPct + '% compensazione comm.' : p.markupPct + '% sconto zero comm.');
+          if (!st.portalMarkupAuto) markupTxt = 'Stesso prezzo identico (0%)';
+          pHtml += '<div onclick="toggleCmPortal(\'' + pk + '\')" style="cursor:pointer;border:' + (p.active ? '2px solid var(--navy)' : '1px dashed var(--border)') + ';background:' + (p.active ? '#fff' : '#F1F5F9') + ';border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;transition:all 0.15s;">' +
+            '<div>' +
+              '<div style="font-weight:800;font-size:13px;color:' + (p.active ? 'var(--navy)' : 'var(--text-muted)') + ';">' + p.icon + ' ' + p.name + '</div>' +
+              '<div style="font-size:11px;color:var(--text-muted);">' + markupTxt + '</div>' +
+            '</div>' +
+            '<span class="badge ' + (p.active ? 'badge-ok' : 'badge-neutral') + '">' + (p.active ? '✓ Collegato' : 'Off') + '</span>' +
+          '</div>';
+        });
+        pGrid.innerHTML = pHtml;
+      }
+
+      // Strategy buttons highlight
+      ['smart_fill', 'high_adr', 'max_occupancy'].forEach(function (sk) {
+        var b = document.getElementById('cm-strat-' + sk);
+        if (b) {
+          if (st.strategy === sk) {
+            b.style.borderColor = 'var(--navy)';
+            b.style.borderWidth = '2px';
+            b.style.background = 'var(--gold-light)';
+          } else {
+            b.style.borderColor = 'var(--border)';
+            b.style.borderWidth = '1px';
+            b.style.background = '#fff';
+          }
+        }
+      });
+
+      // KPIs
+      var kPortals = document.getElementById('cm-kpi-portals');
+      var kPortalsSub = document.getElementById('cm-kpi-portals-sub');
+      var opSummary = document.getElementById('op-cm-quick-summary');
+      var countLabel = kpi.activePortalCount === 1 ? '1 portale unico' : kpi.activePortalCount + ' portali sincronizzati';
+      if (kPortals) kPortals.textContent = countLabel;
+      if (kPortalsSub) kPortalsSub.textContent = activeNames.join(' · ') || 'Airbnb';
+      if (opSummary) opSummary.textContent = 'Prezzi Variabili attivi su ' + countLabel + ' (' + activeNames.join(', ') + ') · Media ' + kpi.avgDynamicRate + ' €/notte';
+
+      var kAdr = document.getElementById('cm-kpi-adr');
+      if (kAdr) kAdr.textContent = kpi.avgDynamicRate + ' €/notte';
+
+      var kActions = document.getElementById('cm-kpi-actions');
+      var kOrphans = document.getElementById('cm-kpi-orphans');
+      if (kActions) kActions.textContent = '▲ ' + kpi.raisedDays + 'gg rialzo · ▼ ' + kpi.loweredDays + 'gg riempimento';
+      if (kOrphans) {
+        kOrphans.textContent = kpi.orphanDaysUnlocked > 0
+          ? '✓ ' + kpi.orphanDaysUnlocked + ' buco/i da 1 notte sbloccato/i in automatico'
+          : '✓ Nessun buco orfano bloccato nei prossimi 14gg';
+      }
+
+      var kUplift = document.getElementById('cm-kpi-uplift');
+      if (kUplift) kUplift.textContent = '+' + kpi.estimatedMonthlyGainEur.toLocaleString('it-IT') + ' €/mese';
+
+      // 14-day table
+      var tbody = document.getElementById('cm-calendar-tbody');
+      if (tbody) {
+        var rowsHtml = '';
+        matrixData.days.forEach(function (d) {
+          var badgeHtml = '<span class="badge ' + d.badgeClass + '">' + d.actionLabel + '</span>';
+          var portalPills = [];
+          Object.keys(d.portalPrices).forEach(function (pk) {
+            var pInfo = st.portals[pk];
+            if (pInfo) {
+              portalPills.push('<span style="display:inline-block;background:#F1F5F9;border:1px solid #CBD5E1;border-radius:6px;padding:2px 6px;font-size:11px;font-weight:700;color:var(--navy);margin-right:4px;margin-top:3px;">' + pInfo.icon + ' ' + pInfo.name.split(' ')[0] + ': ' + d.portalPrices[pk] + ' €</span>');
+            }
+          });
+          var customVal = (st.customDayOverrides && st.customDayOverrides[d.iso]) ? st.customDayOverrides[d.iso] : '';
+          rowsHtml += '<tr style="' + (d.isBooked ? 'background:#F0FDF4;' : (d.actionType === 'lower_unlock' ? 'background:#FFFBEB;' : '')) + '">' +
+            '<td><strong>' + d.label + '</strong>' + (d.isWeekend ? ' <span class="badge badge-gold" style="font-size:10px;padding:1px 6px;">Weekend</span>' : '') + '</td>' +
+            '<td>' +
+              '<div style="font-weight:700;color:var(--navy);font-size:12.5px;">' + d.behaviorRule + '</div>' +
+              '<div style="font-size:11.5px;color:var(--text-muted);">' + d.behaviorDetail + '</div>' +
+            '</td>' +
+            '<td>' + badgeHtml + '</td>' +
+            '<td style="text-align:center;"><strong>' + d.minStay + (d.minStay === 1 ? ' notte' : ' notti') + '</strong></td>' +
+            '<td>' +
+              '<div style="font-size:15px;font-weight:800;color:var(--navy);">' + d.baseDynamic + ' € <span style="font-size:11px;font-weight:500;color:var(--text-muted);">(' + (d.deltaPct >= 0 ? '+' + d.deltaPct : d.deltaPct) + '% vs base)</span></div>' +
+              '<div>' + portalPills.join('') + '</div>' +
+            '</td>' +
+            '<td>' +
+              (d.isBooked
+                ? '<span style="font-size:11.5px;color:var(--green);font-weight:700;">✓ Già venduta</span>'
+                : '<input type="number" placeholder="' + d.baseDynamic + ' €" value="' + customVal + '" min="40" max="3000" style="width:92px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:12.5px;font-weight:700;" onchange="setCmCustomDayOverride(\'' + d.iso + '\', this.value)"/>') +
+            '</td>' +
+          '</tr>';
+        });
+        tbody.innerHTML = rowsHtml;
+      }
+    }
+
+    function toggleCmPortal(portalKey) {
+      if (!window.ITACloudSync) return;
+      var st = ITACloudSync.getChannelRevenueState();
+      if (!st.portals || !st.portals[portalKey]) return;
+      // Ensure at least 1 portal remains active
+      var activeCount = Object.keys(st.portals).filter(function (k) { return st.portals[k].active; }).length;
+      if (st.portals[portalKey].active && activeCount <= 1) {
+        showToast('⚠️ Mantieni almeno 1 portale attivo nel Channel Manager.');
+        return;
+      }
+      st.portals[portalKey].active = !st.portals[portalKey].active;
+      ITACloudSync.saveChannelRevenueState(st);
+      renderChannelManager();
+      showToast('✓ Portali collegati aggiornati e sincronizzati da un unico punto.');
+    }
+
+    function toggleCmAutoPilot() {
+      if (!window.ITACloudSync) return;
+      var st = ITACloudSync.getChannelRevenueState();
+      st.autoPilot = !st.autoPilot;
+      ITACloudSync.saveChannelRevenueState(st);
+      renderChannelManager();
+      showToast(st.autoPilot
+        ? '🤖 Auto-Pilot Prezzi Variabili Comportamentali ATTIVATO.'
+        : '✋ Auto-Pilot in pausa: prezzi fissati al valore base.');
+    }
+
+    function toggleCmMarkupAuto() {
+      if (!window.ITACloudSync) return;
+      var st = ITACloudSync.getChannelRevenueState();
+      var el = document.getElementById('cm-markup-auto');
+      st.portalMarkupAuto = el ? !!el.checked : !st.portalMarkupAuto;
+      ITACloudSync.saveChannelRevenueState(st);
+      renderChannelManager();
+      showToast(st.portalMarkupAuto
+        ? '⚖️ Compensazione commissioni OTA attivata (+4% Booking, +3% Vrbo, -8% Diretto).'
+        : 'Prezzo identico impostato su tutti i portali collegati.');
+    }
+
+    function setCmStrategy(stratKey) {
+      if (!window.ITACloudSync) return;
+      var st = ITACloudSync.getChannelRevenueState();
+      st.strategy = stratKey;
+      st.autoPilot = true;
+      ITACloudSync.saveChannelRevenueState(st);
+      renderChannelManager();
+      var labels = {
+        smart_fill: '⚖️ Strategia Smartbookings Bilanciata attiva su tutti i portali!',
+        high_adr: '📈 Strategia High ADR & Difesa Tariffa attiva su tutti i portali!',
+        max_occupancy: '🧲 Strategia Massima Occupazione & Zero Buchi attiva su tutti i portali!'
+      };
+      showToast(labels[stratKey] || '✓ Strategia aggiornata.');
+    }
+
+    function saveCmGuardrailsAndSync() {
+      if (!window.ITACloudSync) return;
+      var st = ITACloudSync.getChannelRevenueState();
+      var b = parseInt((document.getElementById('cm-base-rate') || {}).value, 10);
+      var f = parseInt((document.getElementById('cm-floor-rate') || {}).value, 10);
+      var c = parseInt((document.getElementById('cm-ceiling-rate') || {}).value, 10);
+      if (b && b >= 40) st.baseRate = b;
+      if (f && f >= 35) st.floorRate = Math.min(f, st.baseRate);
+      if (c && c >= st.baseRate) st.ceilingRate = c;
+      ITACloudSync.saveChannelRevenueState(st);
+      renderChannelManager();
+      showToast('⚡ Prezzi variabili ricalcolati e sincronizzati in 1 clic su tutti i portali attivi!');
+    }
+
+    function setCmCustomDayOverride(isoDate, val) {
+      if (!window.ITACloudSync) return;
+      var st = ITACloudSync.getChannelRevenueState();
+      if (!st.customDayOverrides) st.customDayOverrides = {};
+      var num = parseInt(val, 10);
+      if (!num || num < 35) {
+        delete st.customDayOverrides[isoDate];
+      } else {
+        st.customDayOverrides[isoDate] = num;
+      }
+      ITACloudSync.saveChannelRevenueState(st);
+      renderChannelManager();
+      showToast('📌 Prezzo personalizzato sincronizzato sui portali per il ' + isoDate + '.');
+    }
+
+    function clearCmOverrides() {
+      if (!window.ITACloudSync) return;
+      var st = ITACloudSync.getChannelRevenueState();
+      st.customDayOverrides = {};
+      st.autoPilot = true;
+      ITACloudSync.saveChannelRevenueState(st);
+      renderChannelManager();
+      showToast('🔄 Tutti i giorni riportati al calcolo automatico comportamentale.');
     }
 
     function requestFlorenceService(serviceName) {
@@ -2990,6 +3381,9 @@
           renderAll();
           if (msg && msg.type === 'admin_task_pushed') {
             showToast('🔔 Nuovo compito ricevuto dal Team itassistance Firenze!');
+          } else if (msg && msg.type === 'channel_revenue_updated') {
+            renderChannelManager();
+            showToast('📡 Prezzi Channel Manager aggiornati in tempo reale dal Revenue Manager!');
           }
         });
       }

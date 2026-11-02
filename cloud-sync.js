@@ -606,6 +606,230 @@
     };
   }
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MOTORE CHANNEL MANAGER UNIFICATO & PREZZI VARIABILI COMPORTAMENTALI (STILE SMARTBOOKINGS)
+  // Gestisce da un unico punto 1 o più portali (Airbnb, Booking.com, Vrbo, Sito Diretto)
+  // e alza/abbassa automaticamente le tariffe in base al comportamento umano di prenotazione.
+  // ═══════════════════════════════════════════════════════════════════════════
+  var CM_STORAGE_KEY = 'itassistance_channel_revenue_v1';
+
+  function getDefaultChannelRevenueState() {
+    return {
+      autoPilot: true,
+      strategy: 'smart_fill', // 'smart_fill' | 'high_adr' | 'max_occupancy'
+      baseRate: 165,
+      floorRate: 118,
+      ceilingRate: 320,
+      portalMarkupAuto: true,
+      lastSyncAt: 'Oggi, 08:00 (Auto-Pilot Attivo)',
+      portals: {
+        airbnb: { active: true, name: 'Airbnb', icon: '🏠', syncMode: 'API / iCal Bidirezionale' },
+        booking: { active: true, name: 'Booking.com', icon: '🅱️', syncMode: 'API / XML Extranet' },
+        vrbo: { active: false, name: 'Vrbo / Expedia', icon: '🌐', syncMode: 'iCal / Channel Sync' },
+        direct: { active: true, name: 'Prenotazione Diretta (0% Comm.)', icon: '💎', syncMode: 'Link Diretto Proprietario' }
+      },
+      customDayOverrides: {}
+    };
+  }
+
+  function getChannelRevenueState() {
+    try {
+      var raw = localStorage.getItem(CM_STORAGE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && parsed.portals) return parsed;
+      }
+    } catch (e) {}
+    return getDefaultChannelRevenueState();
+  }
+
+  function saveChannelRevenueState(newState) {
+    var st = newState || getChannelRevenueState();
+    st.lastSyncAt = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) + ' · Sincronizzato su tutti i portali attivi';
+    try {
+      localStorage.setItem(CM_STORAGE_KEY, JSON.stringify(st));
+    } catch (e) {}
+    broadcastStateChange('channel_revenue_updated', st);
+    return st;
+  }
+
+  function computeBehavioralCalendarMatrix() {
+    var cm = getChannelRevenueState();
+    var rawOwner = null;
+    try {
+      rawOwner = JSON.parse(localStorage.getItem(OWNER_KEY) || 'null');
+    } catch (e) {}
+    var bookings = (rawOwner && rawOwner.bookings) || [
+      { guest: 'Jean Luc Martin', channel: 'Airbnb', checkin: '2026-11-02', checkout: '2026-11-06', amount: 760 },
+      { guest: 'Hannah & Mark Taylor', channel: 'Booking.com', checkin: '2026-11-07', checkout: '2026-11-12', amount: 1150 }
+    ];
+
+    var startDate = new Date('2026-11-02T12:00:00');
+    var dayNames = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
+    var firenzeEvents = {
+      '2026-11-06': { name: '⚠️ Notte Orfana (1 notte tra 2 soggiorni)', type: 'orphan' },
+      '2026-11-13': { name: '🔥 Weekend Alta Richiesta Centro Storico', type: 'weekend_peak' },
+      '2026-11-14': { name: '🔥 Sabato Picco Domanda Internazionale', type: 'weekend_peak' },
+      '2026-11-28': { name: '🏃‍♂️ Vigilia Firenze Marathon (Picco +40%)', type: 'event' },
+      '2026-11-29': { name: '🏃‍♂️ Firenze Marathon 2026 (Alta Domanda)', type: 'event' }
+    };
+
+    var stratMod = cm.strategy === 'high_adr' ? 1.08 : (cm.strategy === 'max_occupancy' ? 0.93 : 1.0);
+    var days = [];
+
+    // Prima passata: identifica quali giorni sono occupati
+    var occupiedMap = {};
+    bookings.forEach(function (b) {
+      if (!b.checkin || !b.checkout) return;
+      var dIn = new Date(b.checkin + 'T12:00:00');
+      var dOut = new Date(b.checkout + 'T12:00:00');
+      for (var d = new Date(dIn); d < dOut; d.setDate(d.getDate() + 1)) {
+        var iso = d.toISOString().slice(0, 10);
+        occupiedMap[iso] = { guest: b.guest, channel: b.channel, nightRate: Math.round((b.amount || 600) / Math.max(1, Math.round((dOut - dIn) / 86400000))) };
+      }
+    });
+
+    var staticRevenueSum = 0;
+    var dynamicRevenueSum = 0;
+    var activePortalsCount = 0;
+    Object.keys(cm.portals).forEach(function (k) {
+      if (cm.portals[k] && cm.portals[k].active) activePortalsCount++;
+    });
+    if (activePortalsCount === 0) activePortalsCount = 1;
+
+    for (var i = 0; i < 14; i++) {
+      var cur = new Date(startDate.getTime() + i * 86400000);
+      var isoDate = cur.toISOString().slice(0, 10);
+      var prevIso = new Date(cur.getTime() - 86400000).toISOString().slice(0, 10);
+      var nextIso = new Date(cur.getTime() + 86400000).toISOString().slice(0, 10);
+      var dow = cur.getDay();
+      var isWeekend = (dow === 5 || dow === 6);
+      var occ = occupiedMap[isoDate];
+      var isOrphanGap = !occ && Boolean(occupiedMap[prevIso]) && Boolean(occupiedMap[nextIso]);
+      var ev = firenzeEvents[isoDate];
+
+      var behaviorRule = '';
+      var actionBadge = '';
+      var actionDirection = 'neutral'; // 'up' | 'down' | 'booked'
+      var pctDelta = 0;
+      var minStay = 2;
+      var recommendedRate = cm.baseRate;
+
+      if (occ) {
+        behaviorRule = 'Occupata (' + occ.guest + ' · ' + occ.channel + ')';
+        actionBadge = '🔒 CALENDARIO PIENO (' + occ.channel + ')';
+        actionDirection = 'booked';
+        recommendedRate = occ.nightRate || cm.baseRate;
+        minStay = 1;
+        staticRevenueSum += cm.baseRate;
+        dynamicRevenueSum += recommendedRate;
+      } else if (isOrphanGap || (ev && ev.type === 'orphan')) {
+        // Regola Comportamentale 1: Notte Orfana (1 notte incastrata tra due prenotazioni)
+        pctDelta = -12;
+        recommendedRate = Math.round(cm.baseRate * (1 + pctDelta / 100) * stratMod);
+        minStay = 1; // Sblocca min-stay a 1 notte altrimenti resta invenduta!
+        behaviorRule = '🧩 Notte Orfana (1 notte tra 2 check-in): chi cerca 1 notte non vede l\'annuncio se hai min 2 notti';
+        actionBadge = '▼ SBLOCCA 1 NOTTE & RIEMPI BUCO (-12%)';
+        actionDirection = 'down';
+        // Col prezzo fisso e min 2 notti resterebbe invenduta (0 €), col motore dinamico si vende:
+        staticRevenueSum += 0;
+        dynamicRevenueSum += recommendedRate;
+      } else if (i <= 4 && !isWeekend) {
+        // Regola Comportamentale 2: Last-Minute Mobile Impulse (0-4 giorni prima, feriale libero)
+        pctDelta = cm.strategy === 'max_occupancy' ? -18 : -14;
+        recommendedRate = Math.round(cm.baseRate * (1 + pctDelta / 100) * stratMod);
+        minStay = 1;
+        behaviorRule = '📱 Last-Minute (< 4 gg): il viaggiatore prenota da smartphone confrontando i primi 5 prezzi in zona';
+        actionBadge = '▼ ABBASSA PER RIEMPIRE (' + pctDelta + '%)';
+        actionDirection = 'down';
+        staticRevenueSum += Math.round(cm.baseRate * 0.35);
+        dynamicRevenueSum += recommendedRate;
+      } else if (ev && ev.type === 'event') {
+        // Regola Comportamentale 3: Picco Evento Firenze
+        pctDelta = 38;
+        recommendedRate = Math.round(cm.baseRate * (1 + pctDelta / 100) * stratMod);
+        minStay = 3;
+        behaviorRule = ev.name + ': chi prenota in anticipo cerca posizione centrale ed è disposto a pagare il premium';
+        actionBadge = '▲ ALZA SU EVENTO FIRENZE (+' + pctDelta + '% · Min 3n)';
+        actionDirection = 'up';
+        staticRevenueSum += cm.baseRate;
+        dynamicRevenueSum += recommendedRate;
+      } else if (isWeekend) {
+        // Regola Comportamentale 4: Domanda Weekend (Ven-Sab)
+        pctDelta = cm.strategy === 'high_adr' ? 28 : 22;
+        recommendedRate = Math.round(cm.baseRate * (1 + pctDelta / 100) * stratMod);
+        minStay = 2;
+        behaviorRule = '🔥 Weekend Firenze (Ven–Sab): alta pressione domanda coppie e turisti europei';
+        actionBadge = '▲ ALZA TARIFFA WEEKEND (+' + pctDelta + '% · Min 2n)';
+        actionDirection = 'up';
+        staticRevenueSum += cm.baseRate;
+        dynamicRevenueSum += recommendedRate;
+      } else if (i >= 10) {
+        // Regola Comportamentale 5: Early Planner (> 10 giorni, chi pianifica prima paga per la scelta migliore)
+        pctDelta = 10;
+        recommendedRate = Math.round(cm.baseRate * 1.10 * stratMod);
+        minStay = 2;
+        behaviorRule = '✈️ Early Planner (> 10 gg): chi prenota con anticipo non cerca sconti last-minute ma qualità';
+        actionBadge = '▲ DIFENDI & ALZA (+10% · Min 2n)';
+        actionDirection = 'up';
+        staticRevenueSum += Math.round(cm.baseRate * 0.75);
+        dynamicRevenueSum += recommendedRate;
+      } else {
+        // Finestra Core infrasettimanale (5-9 giorni)
+        pctDelta = -5;
+        recommendedRate = Math.round(cm.baseRate * 0.95 * stratMod);
+        minStay = 2;
+        behaviorRule = '⚖️ Finestra Core Feriale (5–9 gg): lieve boost visibilità algoritmo portali per chiudere soggiorni di 2–3 notti';
+        actionBadge = '▼ BOOST VISIBILITÀ (-5% · Min 2n)';
+        actionDirection = 'down';
+        staticRevenueSum += Math.round(cm.baseRate * 0.6);
+        dynamicRevenueSum += recommendedRate;
+      }
+
+      // Rispetta sempre Floor (Prezzo Minimo di Sicurezza) e Ceiling (Prezzo Massimo)
+      if (!occ) {
+        recommendedRate = Math.max(Number(cm.floorRate || 100), Math.min(Number(cm.ceilingRate || 400), recommendedRate));
+      }
+      if (cm.customDayOverrides && cm.customDayOverrides[isoDate]) {
+        recommendedRate = Number(cm.customDayOverrides[isoDate]);
+        actionBadge = '✍️ PREZZO MANUALE PROPRIETARIO';
+      }
+
+      var airbnbRate = recommendedRate;
+      var bookingRate = cm.portalMarkupAuto ? Math.round(recommendedRate * 1.04) : recommendedRate;
+      var vrboRate = cm.portalMarkupAuto ? Math.round(recommendedRate * 1.03) : recommendedRate;
+      var directRate = Math.round(recommendedRate * 0.92);
+
+      days.push({
+        isoDate: isoDate,
+        dateLabel: dayNames[dow] + ' ' + isoDate.slice(8, 10) + '/' + isoDate.slice(5, 7),
+        isWeekend: isWeekend,
+        occupied: Boolean(occ),
+        isOrphanGap: isOrphanGap,
+        behaviorRule: behaviorRule,
+        actionBadge: actionBadge,
+        actionDirection: actionDirection,
+        minStay: minStay,
+        recommendedRate: recommendedRate,
+        airbnbRate: airbnbRate,
+        bookingRate: bookingRate,
+        vrboRate: vrboRate,
+        directRate: directRate
+      });
+    }
+
+    var extraGain14d = Math.max(240, dynamicRevenueSum - staticRevenueSum);
+    var extraGainMonth = Math.round(extraGain14d * 2.15);
+
+    return {
+      state: cm,
+      activePortalsCount: activePortalsCount,
+      days: days,
+      extraGain14d: extraGain14d,
+      extraGainMonth: extraGainMonth
+    };
+  }
+
   root.ITACloudSync = {
     syncSnapshotToSupabase: syncSnapshotToSupabase,
     broadcastStateChange: broadcastStateChange,
@@ -619,6 +843,9 @@
     saveSavingsDiagnosisLead: saveSavingsDiagnosisLead,
     getDiagnosisLeads: getDiagnosisLeads,
     loginOwnerSession: loginOwnerSession,
-    getOwnerSession: getOwnerSession
+    getOwnerSession: getOwnerSession,
+    getChannelRevenueState: getChannelRevenueState,
+    saveChannelRevenueState: saveChannelRevenueState,
+    computeBehavioralCalendarMatrix: computeBehavioralCalendarMatrix
   };
 })(typeof window !== 'undefined' ? window : this);

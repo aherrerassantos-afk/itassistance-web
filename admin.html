@@ -756,6 +756,57 @@
           </div>
         </div>
 
+        <!-- REGIA CENTRALE CHANNEL MANAGER & PREZZI VARIABILI COMPORTAMENTALI (+10% REVENUE MANAGEMENT) -->
+        <div class="panel-card" id="adm-channel-manager-card" style="border:2px solid var(--gold);">
+          <div class="panel-head">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+                <span class="badge badge-gold">📡 CHANNEL MANAGER CENTRALE (STILE SMARTBOOKINGS)</span>
+                <span class="badge badge-ok" id="adm-cm-status-badge">🤖 Auto-Pilot Attivo · 3 Portali Sincronizzati</span>
+              </div>
+              <div class="panel-title">📈 Capo Revenue Management (+10%): Controllo Prezzi Variabili da Unico Punto</div>
+              <p style="font-size:13px;color:var(--text-muted);">
+                Postazione di <strong>Davide Galli (Revenue Manager)</strong> e <strong>Super Admin</strong>: governa in 1 clic la strategia comportamentale di tutti i portali collegati del proprietario (sia chi ha 1 solo portale sia chi ne ha 2–4: Airbnb, Booking.com, Vrbo, Sito Diretto), sbloccando buchi da 1 notte e alzando le tariffe sui picchi di Firenze.
+              </p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <a href="/app.html?tab=extra" target="_blank" class="btn btn-outline btn-sm">🔍 Apri Matrice 14gg in Area Proprietario →</a>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px;">
+            <div style="background:#F8FAFC;border:1px solid var(--border);border-radius:10px;padding:12px;">
+              <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Portali Sincronizzati</div>
+              <div style="font-size:18px;font-weight:800;color:var(--navy);margin-top:2px;" id="adm-cm-portals">Airbnb · Booking · Diretto</div>
+              <div style="font-size:11.5px;color:var(--green);font-weight:600;" id="adm-cm-sync-time">Ultimo sync: oggi</div>
+            </div>
+            <div style="background:#F8FAFC;border:1px solid var(--border);border-radius:10px;padding:12px;">
+              <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Media Tariffa Dinamica (14gg)</div>
+              <div style="font-size:18px;font-weight:800;color:var(--navy);margin-top:2px;" id="adm-cm-adr">178 €/notte</div>
+              <div style="font-size:11.5px;color:var(--text-muted);" id="adm-cm-guardrails">Base 165 € · Floor 118 € · Cap 320 €</div>
+            </div>
+            <div style="background:#F8FAFC;border:1px solid var(--border);border-radius:10px;padding:12px;">
+              <div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;">Manovre Comportamentali</div>
+              <div style="font-size:16px;font-weight:800;color:var(--navy);margin-top:2px;" id="adm-cm-actions">▲ Rialzi Eventi / ▼ Riempi Buchi</div>
+              <div style="font-size:11.5px;color:var(--amber);font-weight:700;" id="adm-cm-orphans">Sblocco automatico notti orfane</div>
+            </div>
+            <div style="background:var(--gold-light);border:1px solid var(--gold);border-radius:10px;padding:12px;">
+              <div style="font-size:11px;font-weight:700;color:#92400E;text-transform:uppercase;">Extra Incasso Generato (+10% RM)</div>
+              <div style="font-size:18px;font-weight:800;color:var(--green);margin-top:2px;" id="adm-cm-uplift">+420 €/mese</div>
+              <div style="font-size:11.5px;color:#92400E;">Fee itassistance +10% giustificata al 100%</div>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:#F8FAFC;padding:12px 14px;border-radius:10px;border:1px solid var(--border);">
+            <div style="font-size:12.5px;font-weight:700;color:var(--navy);">⚡ 1-Tap Regia Prezzi Variabili (propaga subito a tutti i portali e a <code>/app.html</code>):</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-outline btn-sm" id="adm-btn-strat-smart_fill" onclick="adminTriggerChannelSync('smart_fill')">⚖️ Smartbookings Bilanciata</button>
+              <button type="button" class="btn btn-outline btn-sm" id="adm-btn-strat-high_adr" onclick="adminTriggerChannelSync('high_adr')">📈 Spingi High ADR &amp; Eventi</button>
+              <button type="button" class="btn btn-outline btn-sm" id="adm-btn-strat-max_occupancy" onclick="adminTriggerChannelSync('max_occupancy')">🧲 Riempi Buchi &amp; Last-Minute</button>
+            </div>
+          </div>
+        </div>
+
         <!-- PANNELLO CONTROLLO SEO + GEO E CONFIGURAZIONE (CHIUSO IN DETAILS PER ZERO-SCROLL QUOTIDIANO) -->
         <div class="panel-card" id="adm-seo-config-card">
           <details>
@@ -1870,6 +1921,7 @@ P.IVA: 07480210488</div>
       document.getElementById('cnt-fornitori').textContent = admState.suppliers.length;
       document.getElementById('cnt-fatture').textContent = admState.invoices.length;
       document.getElementById('cnt-accounts').textContent = admState.accounts.length;
+      renderAdminChannelManager();
 
       // 1. Partners Table
       var ptHtml = '';
@@ -2638,6 +2690,54 @@ P.IVA: 07480210488</div>
       showToast('✓ Credenziali ripristinate ai valori predefiniti!');
     }
 
+    function renderAdminChannelManager() {
+      if (!window.ITACloudSync || !ITACloudSync.computeBehavioralCalendarMatrix) return;
+      var m = ITACloudSync.computeBehavioralCalendarMatrix();
+      var st = m.state;
+      var kpi = m.kpi;
+      var activeNames = [];
+      if (st.portals) {
+        Object.keys(st.portals).forEach(function (k) {
+          if (st.portals[k].active) activeNames.push(st.portals[k].name.split(' ')[0]);
+        });
+      }
+      var bEl = document.getElementById('adm-cm-status-badge');
+      if (bEl) {
+        bEl.textContent = (st.autoPilot ? '🤖 Auto-Pilot Attivo · ' : '✋ Manuale · ') + kpi.activePortalCount + (kpi.activePortalCount === 1 ? ' Portale' : ' Portali');
+      }
+      var pEl = document.getElementById('adm-cm-portals');
+      if (pEl) pEl.textContent = activeNames.join(' · ') || 'Airbnb';
+      var sEl = document.getElementById('adm-cm-sync-time');
+      if (sEl) sEl.textContent = 'Ultimo sync: ' + (st.lastSyncAt || 'oggi');
+      var aEl = document.getElementById('adm-cm-adr');
+      if (aEl) aEl.textContent = kpi.avgDynamicRate + ' €/notte';
+      var gEl = document.getElementById('adm-cm-guardrails');
+      if (gEl) gEl.textContent = 'Base ' + st.baseRate + ' € · Floor ' + st.floorRate + ' € · Cap ' + st.ceilingRate + ' €';
+      var actEl = document.getElementById('adm-cm-actions');
+      if (actEl) actEl.textContent = '▲ ' + kpi.raisedDays + 'gg rialzo · ▼ ' + kpi.loweredDays + 'gg riempimento';
+      var orpEl = document.getElementById('adm-cm-orphans');
+      if (orpEl) orpEl.textContent = kpi.orphanDaysUnlocked > 0 ? ('✓ ' + kpi.orphanDaysUnlocked + ' buco/i da 1 notte sbloccato/i') : '✓ Zero notti orfane bloccate';
+      var upEl = document.getElementById('adm-cm-uplift');
+      if (upEl) upEl.textContent = '+' + kpi.estimatedMonthlyGainEur.toLocaleString('it-IT') + ' €/mese';
+
+      ['smart_fill', 'high_adr', 'max_occupancy'].forEach(function (sk) {
+        var btn = document.getElementById('adm-btn-strat-' + sk);
+        if (btn) {
+          btn.className = (st.strategy === sk) ? 'btn btn-gold btn-sm' : 'btn btn-outline btn-sm';
+        }
+      });
+    }
+
+    function adminTriggerChannelSync(stratKey) {
+      if (!window.ITACloudSync) return;
+      var st = ITACloudSync.getChannelRevenueState();
+      if (stratKey) st.strategy = stratKey;
+      st.autoPilot = true;
+      ITACloudSync.saveChannelRevenueState(st);
+      renderAdminChannelManager();
+      showToast('📡 Prezzi Variabili sincronizzati in 1 tap su tutti i portali collegati e inviati a /app.html!');
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
       renderAdminAll();
       renderReportLogsInAdmin();
@@ -2645,6 +2745,7 @@ P.IVA: 07480210488</div>
       if (window.ITACloudSync) {
         ITACloudSync.onLiveSync(function () {
           renderReportLogsInAdmin();
+          renderAdminChannelManager();
         });
       }
       var params = new URLSearchParams(window.location.search);
