@@ -1775,6 +1775,44 @@
           </div>
         </div>
 
+        <!-- ═══ PERCORSO RAPIDO PROSPECT: DAL PROBLEMA ALLA SOLUZIONE IN 1 CLIC ═══ -->
+        <div style="background:#FFFFFF;border:1.5px solid var(--gold);border-radius:16px;padding:24px;margin-bottom:28px;box-shadow:0 10px 28px rgba(15,35,66,0.06);" id="risolvi-in-1-clic">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px;">
+            <div>
+              <span style="display:inline-block;background:var(--navy);color:var(--gold);font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;">⚡ Dal Problema a Come Sistemarlo in 1 Clic</span>
+              <h3 style="font-family:var(--serif);font-size:24px;color:var(--navy);margin:0;">Qual è il problema principale del tuo affitto breve a Firenze oggi?</h3>
+            </div>
+            <span style="font-size:12.5px;color:var(--text-muted);font-weight:600;">Clicca il tuo caso per vedere soluzione, guida e attivazione immediata</span>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:16px;">
+            <button type="button" class="btn btn-outline btn-sm" id="prob-btn-pm" onclick="selectProspectProblem('pm')" style="justify-content:flex-start;text-align:left;padding:12px 14px;border-color:var(--gold);background:#FBF7EC;">
+              💸 1. Il Property Manager mi prende il 20%
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" id="prob-btn-buro" onclick="selectProspectProblem('buro')" style="justify-content:flex-start;text-align:left;padding:12px 14px;">
+              🛂 2. Ansia da Alloggiati Web, CIN, Tassa e ISTAT
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" id="prob-btn-checkin" onclick="selectProspectProblem('checkin')" style="justify-content:flex-start;text-align:left;padding:12px 14px;">
+              🔑 3. Non posso essere presente al Check-in
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" id="prob-btn-guasto" onclick="selectProspectProblem('guasto')" style="justify-content:flex-start;text-align:left;padding:12px 14px;">
+              🔧 4. Guasti improvvisi e coordinamento pulizie
+            </button>
+          </div>
+
+          <div id="prob-solution-box" style="background:var(--cream);border:1px solid var(--border);border-radius:12px;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:260px;">
+              <div style="font-size:11.5px;font-weight:700;color:var(--gold-dark);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:4px;" id="prob-sol-tag">SOLUZIONE IMMEDIATA · ZERO COMMISSIONI SULLE PRENOTAZIONI</div>
+              <div style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:6px;" id="prob-sol-title">Sostituisci il 18%–25% di commissione con 99 €/mese fissi (IVA inclusa)</div>
+              <p style="font-size:13.5px;color:var(--text-muted);margin:0;" id="prob-sol-desc">Tieni il 100% degli incassi Airbnb e Booking sul tuo conto corrente. Su 30.000 €/anno risparmi <strong>4.812 € netti ogni anno</strong> controllando tutto in 10 minuti alle 08:00.</p>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+              <a href="/alternativa-property-manager.html" id="prob-sol-guide" class="btn btn-outline btn-sm">📖 Approfondisci nella Guida</a>
+              <a href="/checkout.html" id="prob-sol-cta" class="btn btn-gold btn-sm">⚡ Risolvi Subito (Prova 14 gg) →</a>
+            </div>
+          </div>
+        </div>
+
         <!-- Calcolatore Interattivo di Risparmio -->
         <div class="calc-box" id="calcolatore">
           <div class="calc-grid">
@@ -1828,12 +1866,15 @@
                 </h4>
               </div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:center;">
-              <input type="text" id="lead-diag-name" placeholder="Tuo Nome (es. Marco)" style="padding:11px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;"/>
-              <input type="tel" id="lead-diag-phone" placeholder="WhatsApp (es. +39 340...)" style="padding:11px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;"/>
-              <input type="email" id="lead-diag-email" placeholder="La tua Email" style="padding:11px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;"/>
-              <button type="button" class="btn btn-gold btn-sm" style="padding:12px 18px;white-space:nowrap;" onclick="submitSavingsDiagnosisLead()">
-                📲 Ricevi Diagnosi Gratuita →
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto auto;gap:10px;align-items:center;">
+              <input type="text" id="lead-diag-name" placeholder="Tuo Nome (opzionale)" style="padding:11px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;"/>
+              <input type="tel" id="lead-diag-phone" placeholder="WhatsApp * (es. +39 340...)" style="padding:11px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;"/>
+              <input type="email" id="lead-diag-email" placeholder="Oppure la tua Email *" style="padding:11px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;"/>
+              <button type="button" class="btn btn-outline btn-sm" style="padding:12px 14px;white-space:nowrap;" onclick="submitSavingsDiagnosisLead()">
+                📲 Ricevi su WhatsApp
+              </button>
+              <button type="button" class="btn btn-gold btn-sm" style="padding:12px 16px;white-space:nowrap;" onclick="goToCheckoutPrefilled()">
+                ⚡ Attiva in 1 Clic con Questi Dati →
               </button>
             </div>
             <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--text-muted);">
@@ -2314,15 +2355,75 @@
       }
     }
 
-    async function submitSavingsDiagnosisLead() {
+    var PROSPECT_SOLUTIONS = {
+      pm: {
+        tag: 'SOLUZIONE IMMEDIATA · ZERO COMMISSIONI SULLE PRENOTAZIONI',
+        title: 'Sostituisci il 18%–25% di commissione con 99 €/mese fissi (IVA inclusa)',
+        desc: 'Tieni il 100% degli incassi Airbnb e Booking sul tuo conto corrente. Su 30.000 €/anno risparmi 4.812 € netti ogni anno controllando tutto in 10 minuti alle 08:00.',
+        guideUrl: '/alternativa-property-manager.html',
+        ctaUrl: '/checkout.html'
+      },
+      buro: {
+        tag: 'SOLUZIONE IMMEDIATA · CONFORMITÀ GUIDATA IN 3 MINUTI',
+        title: 'L’ospite compila il documento su /ospiti e il Report delle 08:00 ti guida passo passo',
+        desc: 'Alloggiati Web (24h/6h), Tassa di Soggiorno Firenze (max 7 notti, giorno 16), CIN e Ross1000 entro il giorno 5: l’app prepara tutto e se vuoi delegare l’invio attivi l’opzione +10%.',
+        guideUrl: '/registrazione-ospiti-alloggiati-web.html',
+        ctaUrl: '/checkout.html?extra10=1'
+      },
+      checkin: {
+        tag: 'SOLUZIONE IMMEDIATA · TEAM OPERATIVO A FIRENZE 09:00–23:00',
+        title: 'PDF Check-in Bilingue IT/EN con Mappa + Operatore a Firenze a 20 € quando ti serve',
+        desc: 'Generi in 60 secondi il PDF con Wi-Fi, ZTL e numerazione civica rossa/nera. E se un giorno non puoi accogliere l’ospite di persona, mandi un nostro incaricato a Firenze a soli 20 €.',
+        guideUrl: '/servizi-check-in-e-manutenzione-firenze.html',
+        ctaUrl: '/checkout.html'
+      },
+      guasto: {
+        tag: 'SOLUZIONE IMMEDIATA · TECNICO A FIRENZE 30 € & CHECKLIST 4 FOTO PULIZIE',
+        title: 'Intervento manutenzione a 30 € a Firenze e verifica pulizie 10:00–15:00 con 4 foto',
+        desc: 'Coordini i tuoi addetti con la checklist fotografica WhatsApp e per qualsiasi imprevisto tecnico in appartamento richiedi in 1 clic un intervento a Firenze a 30 €.',
+        guideUrl: '/pulizie-e-manutenzione-affitti-brevi-firenze.html',
+        ctaUrl: '/checkout.html'
+      }
+    };
+
+    function selectProspectProblem(key) {
+      var sol = PROSPECT_SOLUTIONS[key] || PROSPECT_SOLUTIONS.pm;
+      ['pm', 'buro', 'checkin', 'guasto'].forEach(function (k) {
+        var b = document.getElementById('prob-btn-' + k);
+        if (b) {
+          b.style.borderColor = (k === key) ? 'var(--gold)' : 'var(--border)';
+          b.style.background = (k === key) ? '#FBF7EC' : '#FFFFFF';
+        }
+      });
+      document.getElementById('prob-sol-tag').textContent = sol.tag;
+      document.getElementById('prob-sol-title').textContent = sol.title;
+      document.getElementById('prob-sol-desc').textContent = sol.desc;
+      document.getElementById('prob-sol-guide').href = sol.guideUrl;
+      document.getElementById('prob-sol-cta').href = sol.ctaUrl;
+    }
+
+    function goToCheckoutPrefilled() {
       var name = (document.getElementById('lead-diag-name').value || '').trim();
+      var phone = (document.getElementById('lead-diag-phone').value || '').trim();
+      var email = (document.getElementById('lead-diag-email').value || '').trim();
+      var addon10 = document.getElementById('lead-diag-addon10') && document.getElementById('lead-diag-addon10').checked;
+      var q = [];
+      if (name) q.push('nome=' + encodeURIComponent(name));
+      if (phone) q.push('tel=' + encodeURIComponent(phone));
+      if (email) q.push('email=' + encodeURIComponent(email));
+      if (addon10) q.push('extra10=1');
+      window.location.href = '/checkout.html' + (q.length ? ('?' + q.join('&')) : '');
+    }
+
+    async function submitSavingsDiagnosisLead() {
+      var name = (document.getElementById('lead-diag-name').value || '').trim() || 'Proprietario Firenze';
       var phone = (document.getElementById('lead-diag-phone').value || '').trim();
       var email = (document.getElementById('lead-diag-email').value || '').trim();
       var addon10 = document.getElementById('lead-diag-addon10') && document.getElementById('lead-diag-addon10').checked;
       var rev = parseFloat(document.getElementById('calc-number').value) || 30000;
 
-      if (!name || (!phone && !email)) {
-        alert('Inserisci il tuo nome e almeno un recapito (WhatsApp o Email) per ricevere la diagnosi personalizzata.');
+      if (!phone && !email) {
+        alert('Inserisci almeno un recapito (WhatsApp oppure Email) per ricevere la diagnosi personalizzata.');
         return;
       }
 

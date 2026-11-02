@@ -356,9 +356,12 @@
           </div>
         </div>
 
-        <!-- STEP 2: DATI PROPRIETARIO -->
+        <!-- STEP 2: DATI PROPRIETARIO (OTTIMIZZATO: SOLO 3 CAMPI ESSENZIALI) -->
         <div class="co-card">
-          <h2 class="co-card-title">2. I tuoi dati per l'attivazione e la ricevuta</h2>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+            <h2 class="co-card-title" style="margin:0;">2. I tuoi dati essenziali (Attivazione Rapida in 30 secondi)</h2>
+            <span style="font-size:11.5px;font-weight:700;background:#ECFDF5;color:#166534;padding:4px 10px;border-radius:999px;">⚡ Solo 3 campi richiesti</span>
+          </div>
 
           <div class="co-field">
             <label for="f-nome">Nome e Cognome (o Ragione Sociale) *</label>
@@ -376,21 +379,25 @@
             </div>
           </div>
 
-          <div class="co-field-row">
-            <div class="co-field">
-              <label for="f-cf">Codice Fiscale o P.IVA (opzionale)</label>
-              <input type="text" id="f-cf" placeholder="C.F. o Partita IVA">
+          <details style="margin-top:8px;background:var(--cream);border:1px dashed var(--border);border-radius:10px;padding:12px 14px;">
+            <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--navy);">➕ Dati Immobile e Fatturazione (Opzionali ora — puoi inserirli o modificarli dopo nell'App)</summary>
+            <div style="margin-top:12px;">
+              <div class="co-field-row">
+                <div class="co-field">
+                  <label for="f-imm">Nome Appartamento (opzionale)</label>
+                  <input type="text" id="f-imm" placeholder="es. Appartamento Santo Spirito">
+                </div>
+                <div class="co-field">
+                  <label for="f-cf">Codice Fiscale o P.IVA (opzionale)</label>
+                  <input type="text" id="f-cf" placeholder="C.F. o Partita IVA">
+                </div>
+              </div>
+              <div class="co-field" style="margin-bottom:0;">
+                <label for="f-addr">Indirizzo dell'appartamento a Firenze (opzionale)</label>
+                <input type="text" id="f-addr" placeholder="es. Via Maggio 18, Firenze">
+              </div>
             </div>
-            <div class="co-field">
-              <label for="f-imm">Nome Appartamento *</label>
-              <input type="text" id="f-imm" placeholder="es. Appartamento Santo Spirito" required>
-            </div>
-          </div>
-
-          <div class="co-field">
-            <label for="f-addr">Indirizzo dell'appartamento *</label>
-            <input type="text" id="f-addr" placeholder="es. Via Maggio 18, Firenze" required>
-          </div>
+          </details>
         </div>
 
         <!-- STEP 3: METODO DI PAGAMENTO (STRIPE CARTA OPPURE BONIFICO BLUE ARROYO SRL) -->
@@ -524,6 +531,17 @@
           if (el) el.value = decodeURIComponent(val);
         }
       });
+
+      if (params.get('extra10') === '1') {
+        var chk = document.getElementById('chk-extra-revenue');
+        if (chk) {
+          chk.checked = true;
+          toggleExtraRevenue();
+        }
+      }
+      if (params.get('metodo') === 'bonifico') {
+        selectPaymentMethod('bonifico');
+      }
     });
 
     function selectBillingCycle(cycle) {

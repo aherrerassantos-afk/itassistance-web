@@ -239,33 +239,26 @@
       </div>
     </section>
 
-    <!-- MODULO DATI DOCUMENTO OSPITE -->
+    <!-- MODULO DATI DOCUMENTO OSPITE (OTTIMIZZATO: SOLO 5 CAMPI ESSENZIALI) -->
     <section class="card">
-      <h2 id="lbl-form-title" style="font-family:var(--serif);font-size:21px;color:var(--navy);margin-bottom:14px;">
-        Dati Documento Ospite Principale
-      </h2>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+        <h2 id="lbl-form-title" style="font-family:var(--serif);font-size:21px;color:var(--navy);margin:0;">
+          Dati Documento Ospite Principale
+        </h2>
+        <span style="font-size:11.5px;font-weight:700;background:#ECFDF5;color:#166534;padding:4px 10px;border-radius:999px;">⚡ Compilazione rapida 30 secondi</span>
+      </div>
+
+      <!-- 1-Click Country Presets -->
+      <div style="margin-bottom:14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+        <span style="font-size:11.5px;font-weight:700;color:var(--text-muted);">⚡ Paese / Country (1 Clic):</span>
+        <button type="button" onclick="setGuestCountryPreset('ITALIA','IDENT')" style="padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;font-weight:700;cursor:pointer;">🇮🇹 Italia</button>
+        <button type="button" onclick="setGuestCountryPreset('STATI UNITI','PASOR')" style="padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;font-weight:700;cursor:pointer;">🇺🇸 USA</button>
+        <button type="button" onclick="setGuestCountryPreset('REGNO UNITO','PASOR')" style="padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;font-weight:700;cursor:pointer;">🇬🇧 UK</button>
+        <button type="button" onclick="setGuestCountryPreset('FRANCIA','IDENT')" style="padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;font-weight:700;cursor:pointer;">🇫🇷 France</button>
+        <button type="button" onclick="setGuestCountryPreset('GERMANIA','IDENT')" style="padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;font-weight:700;cursor:pointer;">🇩🇪 Germany</button>
+      </div>
 
       <div class="form-grid">
-        <div class="field">
-          <label id="lbl-f-tipo" for="g-tipo">Tipo Ospite *</label>
-          <select id="g-tipo">
-            <option value="17" id="opt-family">Capofamiglia / Ospite Principale</option>
-            <option value="16" id="opt-single">Ospite Singolo</option>
-            <option value="18" id="opt-group">Capogruppo</option>
-          </select>
-        </div>
-        <div class="field">
-          <label id="lbl-f-pax" for="g-pax">Numero Totale Ospiti *</label>
-          <input type="number" id="g-pax" value="2" min="1" max="12"/>
-        </div>
-        <div class="field">
-          <label id="lbl-f-arrivo" for="g-arrivo">Data di Check-in *</label>
-          <input type="date" id="g-arrivo"/>
-        </div>
-        <div class="field">
-          <label id="lbl-f-giorni" for="g-giorni">Numero di Notti *</label>
-          <input type="number" id="g-giorni" value="3" min="1" max="30"/>
-        </div>
         <div class="field">
           <label id="lbl-f-nome" for="g-nome">Nome (come sul documento) *</label>
           <input type="text" id="g-nome" placeholder="es. Jean Luc"/>
@@ -275,37 +268,63 @@
           <input type="text" id="g-cognome" placeholder="es. Martin"/>
         </div>
         <div class="field">
-          <label id="lbl-f-sesso" for="g-sesso">Sesso *</label>
-          <select id="g-sesso">
-            <option value="M">M</option>
-            <option value="F">F</option>
-          </select>
+          <label id="lbl-f-docnum" for="g-docnum">Numero Documento / Passaporto *</label>
+          <input type="text" id="g-docnum" placeholder="es. 22CF89102"/>
         </div>
         <div class="field">
           <label id="lbl-f-nascita" for="g-nascita">Data di Nascita *</label>
           <input type="date" id="g-nascita" value="1986-04-18"/>
         </div>
-        <div class="field">
-          <label id="lbl-f-citt" for="g-citt">Cittadinanza e Stato di Nascita *</label>
-          <input type="text" id="g-citt" value="FRANCIA" placeholder="es. ITALIA / FRANCE / USA"/>
-        </div>
-        <div class="field">
-          <label id="lbl-f-doctipo" for="g-doctipo">Tipo di Documento *</label>
-          <select id="g-doctipo">
-            <option value="PASOR">Passaporto (PASOR)</option>
-            <option value="IDENT">Carta d'Identità UE (IDENT)</option>
-            <option value="PATEN">Patente di Guida (PATEN)</option>
-          </select>
-        </div>
-        <div class="field">
-          <label id="lbl-f-docnum" for="g-docnum">Numero Documento *</label>
-          <input type="text" id="g-docnum" placeholder="es. 22CF89102"/>
-        </div>
-        <div class="field">
-          <label id="lbl-f-docluogo" for="g-docluogo">Luogo / Stato di Rilascio *</label>
-          <input type="text" id="g-docluogo" value="FRANCIA" placeholder="es. FRANCIA o FIRENZE"/>
+        <div class="field" style="grid-column:1 / -1;">
+          <label id="lbl-f-citt" for="g-citt">Cittadinanza e Paese di Rilascio *</label>
+          <input type="text" id="g-citt" value="FRANCIA" placeholder="es. ITALIA / FRANCE / USA" oninput="document.getElementById('g-docluogo').value=this.value"/>
         </div>
       </div>
+
+      <details style="margin-top:12px;background:var(--bg);border:1px dashed var(--border);border-radius:10px;padding:10px 14px;">
+        <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--navy);">➕ Dettagli Soggiorno e Tipo Documento (Già preimpostati automaticamente — clicca per modificare)</summary>
+        <div class="form-grid" style="margin-top:12px;">
+          <div class="field">
+            <label id="lbl-f-doctipo" for="g-doctipo">Tipo di Documento</label>
+            <select id="g-doctipo">
+              <option value="PASOR">Passaporto (PASOR)</option>
+              <option value="IDENT">Carta d'Identità UE (IDENT)</option>
+              <option value="PATEN">Patente di Guida (PATEN)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label id="lbl-f-sesso" for="g-sesso">Sesso</label>
+            <select id="g-sesso">
+              <option value="M">M</option>
+              <option value="F">F</option>
+            </select>
+          </div>
+          <div class="field">
+            <label id="lbl-f-tipo" for="g-tipo">Tipo Ospite</label>
+            <select id="g-tipo">
+              <option value="17" id="opt-family">Capofamiglia / Ospite Principale</option>
+              <option value="16" id="opt-single">Ospite Singolo</option>
+              <option value="18" id="opt-group">Capogruppo</option>
+            </select>
+          </div>
+          <div class="field">
+            <label id="lbl-f-pax" for="g-pax">Numero Totale Ospiti</label>
+            <input type="number" id="g-pax" value="2" min="1" max="12"/>
+          </div>
+          <div class="field">
+            <label id="lbl-f-arrivo" for="g-arrivo">Data di Check-in</label>
+            <input type="date" id="g-arrivo"/>
+          </div>
+          <div class="field">
+            <label id="lbl-f-giorni" for="g-giorni">Numero di Notti</label>
+            <input type="number" id="g-giorni" value="3" min="1" max="30"/>
+          </div>
+          <div class="field" style="grid-column:1 / -1;">
+            <label id="lbl-f-docluogo" for="g-docluogo">Luogo / Stato di Rilascio Documento</label>
+            <input type="text" id="g-docluogo" value="FRANCIA" placeholder="es. FRANCIA o FIRENZE"/>
+          </div>
+        </div>
+      </details>
 
       <div style="margin-top:16px;font-size:12px;color:var(--text-muted);" id="lbl-privacy">
         🔒 I tuoi dati vengono trattati esclusivamente per l'adempimento di legge previsto dall'art. 109 TULPS (Portale Alloggiati Web della Polizia di Stato) e non vengono ceduti a terzi per fini commerciali.
@@ -425,6 +444,15 @@
       document.getElementById('lbl-ok-desc').textContent = t.okDesc;
       document.getElementById('lbl-btn-pdf').textContent = t.btnPdf;
       document.getElementById('lbl-footer-support').textContent = t.footerSupport;
+    }
+
+    function setGuestCountryPreset(countryName, docType) {
+      var cEl = document.getElementById('g-citt');
+      var lEl = document.getElementById('g-docluogo');
+      var dEl = document.getElementById('g-doctipo');
+      if (cEl) cEl.value = countryName;
+      if (lEl) lEl.value = countryName;
+      if (dEl && docType) dEl.value = docType;
     }
 
     async function submitGuestSelfCheckin() {

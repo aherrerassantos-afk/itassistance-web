@@ -184,29 +184,35 @@
 
   <main class="wrap">
     <div class="login-card">
-      <span class="badge">🔐 Accesso Area Proprietario · Cloud Sync</span>
+      <span class="badge">🔐 Accesso Area Proprietario · 1 Clic</span>
       <h1>Entra nel tuo appartamento</h1>
       <p class="sub">
-        Inserisci il tuo <strong>Codice Appartamento</strong> (es. <code>ITA-FIRENZE-01</code> ricevuto all'attivazione) e la tua email per aprire la tua Area Proprietario sincronizzata.
+        Accedi in <strong>1 solo clic</strong> con la sessione del tuo immobile oppure inserisci il tuo <strong>Codice Appartamento o Email</strong>.
       </p>
 
-      <div class="field">
-        <label for="lg-code">Codice Appartamento Personale *</label>
-        <input type="text" id="lg-code" value="ITA-FIRENZE-01" placeholder="es. ITA-4829 o ITA-FIRENZE-01"/>
-      </div>
+      <button type="button" class="btn btn-gold" onclick="doOwnerLogin()" style="margin-bottom:14px;box-shadow:0 6px 18px rgba(201,168,76,0.28);">
+        ⚡ Entra Subito in 1 Clic (<span id="quick-code-label">ITA-FIRENZE-01</span>) →
+      </button>
 
       <div class="field">
-        <label for="lg-email">Email Proprietario *</label>
-        <input type="email" id="lg-email" value="proprietario@itadreamteam.com" placeholder="la-tua-email@esempio.it"/>
+        <label for="lg-code">Codice Appartamento o Email Proprietario *</label>
+        <input type="text" id="lg-code" value="ITA-FIRENZE-01" placeholder="es. ITA-FIRENZE-01 oppure la-tua-email@esempio.it"/>
       </div>
 
-      <div class="field">
-        <label for="lg-apt">Nome Immobile (opzionale)</label>
-        <input type="text" id="lg-apt" placeholder="es. Appartamento Santo Spirito"/>
-      </div>
+      <details style="margin-bottom:14px;background:var(--cream);border:1px dashed var(--border);border-radius:8px;padding:8px 12px;">
+        <summary style="cursor:pointer;font-size:12px;font-weight:700;color:var(--text-muted);">➕ Specifica Email o Nome Immobile diverso (Opzionale)</summary>
+        <div class="field" style="margin-top:10px;">
+          <label for="lg-email">Email Proprietario (opzionale)</label>
+          <input type="email" id="lg-email" value="proprietario@itadreamteam.com" placeholder="la-tua-email@esempio.it"/>
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label for="lg-apt">Nome Immobile (opzionale)</label>
+          <input type="text" id="lg-apt" placeholder="es. Appartamento Santo Spirito"/>
+        </div>
+      </details>
 
-      <button type="button" class="btn btn-gold" onclick="doOwnerLogin()">
-        📱 Entra nell'Area Proprietario (10 min/giorno) →
+      <button type="button" class="btn btn-outline" onclick="doOwnerLogin()">
+        📱 Accedi con il Codice / Email inserito →
       </button>
 
       <div class="divider">oppure esplora o attiva</div>
@@ -227,19 +233,25 @@
     document.addEventListener('DOMContentLoaded', function () {
       if (window.ITACloudSync && typeof ITACloudSync.getOwnerSession === 'function') {
         var s = ITACloudSync.getOwnerSession();
-        if (s && s.ownerCode) document.getElementById('lg-code').value = s.ownerCode;
+        if (s && s.ownerCode) {
+          document.getElementById('lg-code').value = s.ownerCode;
+          var lbl = document.getElementById('quick-code-label');
+          if (lbl) lbl.textContent = s.ownerCode;
+        }
         if (s && s.email) document.getElementById('lg-email').value = s.email;
         if (s && s.apartmentName) document.getElementById('lg-apt').value = s.apartmentName;
       }
     });
 
     function doOwnerLogin() {
-      var code = (document.getElementById('lg-code').value || 'ITA-FIRENZE-01').trim().toUpperCase();
-      var email = (document.getElementById('lg-email').value || '').trim();
+      var rawInput = (document.getElementById('lg-code').value || 'ITA-FIRENZE-01').trim();
+      var isEmailInput = rawInput.indexOf('@') !== -1;
+      var code = isEmailInput ? 'ITA-FIRENZE-01' : rawInput.toUpperCase();
+      var email = isEmailInput ? rawInput : ((document.getElementById('lg-email').value || 'proprietario@itadreamteam.com').trim());
       var apt = (document.getElementById('lg-apt').value || '').trim();
 
-      if (!code || !email) {
-        alert('Inserisci Codice Appartamento ed Email.');
+      if (!rawInput) {
+        alert('Inserisci Codice Appartamento oppure Email.');
         return;
       }
 

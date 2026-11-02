@@ -497,39 +497,44 @@
         </div>
       </div>
 
-      <h2 style="font-family:var(--serif);font-size:22px;color:var(--navy);margin-bottom:6px;">Accedi alla Console Amministrativa</h2>
-      <p style="font-size:13px;color:var(--text-muted);">Seleziona il profilo amministrativo con cui operare o inserisci le credenziali:</p>
+      <h2 style="font-family:var(--serif);font-size:22px;color:var(--navy);margin-bottom:6px;">Accedi in 1 Clic in base al tuo Ruolo</h2>
+      <p style="font-size:13px;color:var(--text-muted);">Clicca direttamente sul tuo ruolo per aprire solo gli strumenti e gli input del tuo reparto (zero campi superflui):</p>
 
       <div class="role-preset-grid">
-        <button type="button" class="role-preset-btn selected" id="preset-superadmin" onclick="selectLoginPreset('superadmin')">
-          <strong>👑 Super Admin</strong>
-          <span>Accesso totale (Partners, HR, Fornitori, Fatturazione)</span>
+        <button type="button" class="role-preset-btn selected" id="preset-superadmin" onclick="selectLoginPreset('superadmin');performAdminLogin();">
+          <strong>👑 1. Super Admin (1 Clic)</strong>
+          <span>Regia Totale, Broadcast 08:00, Backup &amp; SEO/GEO</span>
         </button>
-        <button type="button" class="role-preset-btn" id="preset-billing" onclick="selectLoginPreset('billing')">
-          <strong>🧾 Admin Fatturazione</strong>
-          <span>Fatture SDI, Piani 99€/1.188€, Extra +10%, Rimborsi 14gg</span>
+        <button type="button" class="role-preset-btn" id="preset-billing" onclick="selectLoginPreset('billing');performAdminLogin();">
+          <strong>🧾 2. Admin Fatturazione (1 Clic)</strong>
+          <span>Fatture 1-Clic, Piani 99€/1.188€, +10%, Rimborsi 14gg</span>
         </button>
-        <button type="button" class="role-preset-btn" id="preset-hr" onclick="selectLoginPreset('hr')">
-          <strong>👥 HR &amp; Team Manager</strong>
-          <span>Personale Firenze, Turni 09–23, Contratti e Buste Paga</span>
+        <button type="button" class="role-preset-btn" id="preset-hr" onclick="selectLoginPreset('hr');performAdminLogin();">
+          <strong>🛠️ 3. Team Operativo Firenze (1 Clic)</strong>
+          <span>Turni 09–23, Check-in 20€, Manutenzione 30€, Push Compiti</span>
         </button>
-        <button type="button" class="role-preset-btn" id="preset-partners" onclick="selectLoginPreset('partners')">
-          <strong>🤝 Partners &amp; Fornitori</strong>
-          <span>Partner commerciali, Ditte Pulizie, Manutentori FI</span>
+        <button type="button" class="role-preset-btn" id="preset-partners" onclick="selectLoginPreset('partners');performAdminLogin();">
+          <strong>🤝 4. Vendite, CRM Lead &amp; Partner (1 Clic)</strong>
+          <span>Conversione Lead 1-Clic, Commercialisti &amp; Fornitori</span>
         </button>
       </div>
 
-      <div class="field" style="margin-bottom:12px;">
-        <label for="login-email">Email Account</label>
-        <input type="email" id="login-email" value="superadmin@itadreamteam.com"/>
-      </div>
-      <div class="field" style="margin-bottom:18px;">
-        <label for="login-pin">Codice PIN / Password Amministratore</label>
-        <input type="password" id="login-pin" value="2026" placeholder="PIN predefinito: 2026"/>
-      </div>
+      <details style="margin-bottom:14px;font-size:12px;color:var(--text-muted);">
+        <summary style="cursor:pointer;font-weight:600;color:var(--navy);">🔑 Accesso manuale con Email e PIN (opzionale)</summary>
+        <div style="margin-top:10px;">
+          <div class="field" style="margin-bottom:10px;">
+            <label for="login-email">Email Account</label>
+            <input type="email" id="login-email" value="superadmin@itadreamteam.com"/>
+          </div>
+          <div class="field" style="margin-bottom:10px;">
+            <label for="login-pin">Codice PIN Amministratore</label>
+            <input type="password" id="login-pin" value="2026" placeholder="PIN predefinito: 2026"/>
+          </div>
+        </div>
+      </details>
 
       <button type="button" class="btn btn-gold" style="width:100%;padding:13px;" onclick="performAdminLogin()">
-        🔐 Entra nella Console →
+        🔐 Entra subito nella Console →
       </button>
       <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted);">
         <a href="/app.html" style="text-decoration:underline;">Vai all'Area Proprietario (App)</a> · <a href="/" style="text-decoration:underline;">Torna al sito pubblico</a>
@@ -706,6 +711,20 @@
               </p>
             </div>
             <button type="button" class="btn btn-gold btn-sm" onclick="adminBroadcastMorningReport()">🚀 Avvia Broadcast Report 08:00 (Cloud n8n)</button>
+          </div>
+
+          <!-- BARRA RAPIDA 1-CLIC: RISOLVI PROBLEMA & INVIA COMPITO SENZA DIGITARE -->
+          <div style="margin-bottom:14px;padding:12px;background:#fff;border:1.5px solid var(--border);border-radius:10px;">
+            <div style="font-size:11.5px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">
+              ⚡ Piatto Input Rapidi Team Operativo (1 Clic = Invia subito al Proprietario senza digitare):
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary btn-sm" onclick="quickDispatchPreset('🛂 Urgente: Invia Schedina Alloggiati Web (Scadenza 24h/6h)','Documenti ospite pronti nella sezione Alloggiati Web. Trasmetti ora sul portale Polizia di Stato.','alloggiati')">🛂 1. Sollecito Alloggiati (24h/6h)</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="quickDispatchPreset('🔑 Check-in di Persona Eseguito a Firenze (20 €)','Ospiti accolti e identificati de visu dal nostro incaricato a Firenze. Chiavi consegnate regolarmente.','operativo')">🔑 2. Conferma Check-in 20€</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="quickDispatchPreset('🔧 Intervento Manutenzione Rapida Firenze (30 €) Completato','Intervento tecnico eseguito in appartamento. Ricevuta disponibile nella sezione Fornitori & Spese.','fornitori')">🔧 3. Manutenzione 30€ Eseguita</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="quickDispatchPreset('🏛️ Promemoria Tassa di Soggiorno Comune di Firenze (Scadenza Giorno 16)','Conteggio mensile notti-ospite (max 7 notti) pronto per l\'invio telematico entro il giorno 16.','fiscale')">🏛️ 4. Scadenza Tassa Soggiorno (16)</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="quickDispatchPreset('📊 Chiusura Mensile ISTAT / Ross1000 Firenze (Scadenza Giorno 5)','Prospetto Arrivi e Presenze pronto in PDF (ricordati di chiudere anche se a Movimento Zero).','fiscale')">📊 5. Scadenza ISTAT Ross1000 (5)</button>
+            </div>
           </div>
 
           <div class="form-grid-3">
@@ -986,28 +1005,15 @@ P.IVA: 07480210488</div>
           </div>
 
           <div class="form-box" id="form-new-partner">
-            <h4 style="margin-bottom:10px;font-size:14px;color:var(--navy);">Nuovo Partner o Proprietario Direzionale</h4>
+            <h4 style="margin-bottom:10px;font-size:14px;color:var(--navy);">⚡ Registrazione Rapida Partner o Proprietario (Solo 1 campo obbligatorio)</h4>
             <div class="form-grid-3">
               <div class="field">
                 <label>Nome / Ragione Sociale *</label>
-                <input type="text" id="pt-name" placeholder="es. Studio Associato Bianchi FI"/>
+                <input type="text" id="pt-name" placeholder="es. Mario Rossi / Studio Bianchi FI"/>
               </div>
               <div class="field">
-                <label>Tipologia Partner</label>
-                <select id="pt-type">
-                  <option value="Studio Commercialista Partner">Studio Commercialista Partner</option>
-                  <option value="Agenzia Immobiliare Segnalatrice">Agenzia Immobiliare Segnalatrice</option>
-                  <option value="Proprietario Multi-Immobile">Proprietario Multi-Immobile</option>
-                  <option value="Host Ambassador Firenze">Host Ambassador Firenze</option>
-                </select>
-              </div>
-              <div class="field">
-                <label>Email &amp; Telefono *</label>
+                <label>WhatsApp o Email (Opzionale)</label>
                 <input type="text" id="pt-contact" placeholder="info@studiobianchi.it · +39 348..."/>
-              </div>
-              <div class="field">
-                <label>Appartamenti Attivi su Firenze</label>
-                <input type="number" id="pt-apts" value="3" min="1"/>
               </div>
               <div class="field">
                 <label>Piano / Accordo Fee</label>
@@ -1018,13 +1024,31 @@ P.IVA: 07480210488</div>
                   <option value="Fee Segnalazione Partner 15%">Fee Segnalazione Partner 15%</option>
                 </select>
               </div>
-              <div class="field">
-                <label>P.IVA / Codice Fiscale</label>
-                <input type="text" id="pt-vat" placeholder="IT01234567890"/>
-              </div>
             </div>
+            <details style="margin-top:10px;background:#fff;border:1px dashed var(--border);border-radius:8px;padding:8px 12px;">
+              <summary style="cursor:pointer;font-size:12px;font-weight:700;color:var(--text-muted);">➕ Dettagli Fiscali, Tipologia e N° Immobili (Opzionali — default preimpostati)</summary>
+              <div class="form-grid-3" style="margin-top:10px;">
+                <div class="field">
+                  <label>Tipologia Partner</label>
+                  <select id="pt-type">
+                    <option value="Proprietario Multi-Immobile">Proprietario Affitto Breve Firenze</option>
+                    <option value="Studio Commercialista Partner">Studio Commercialista Partner</option>
+                    <option value="Agenzia Immobiliare Segnalatrice">Agenzia Immobiliare Segnalatrice</option>
+                    <option value="Host Ambassador Firenze">Host Ambassador Firenze</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Appartamenti Attivi su Firenze</label>
+                  <input type="number" id="pt-apts" value="1" min="1"/>
+                </div>
+                <div class="field">
+                  <label>P.IVA / Codice Fiscale (Opzionale)</label>
+                  <input type="text" id="pt-vat" placeholder="Inseribile anche in seguito"/>
+                </div>
+              </div>
+            </details>
             <div style="margin-top:12px;display:flex;gap:8px;">
-              <button type="button" class="btn btn-gold btn-sm" onclick="addPartner()">Salva Partner</button>
+              <button type="button" class="btn btn-gold btn-sm" onclick="addPartner()">⚡ Salva in 1 Clic</button>
               <button type="button" class="btn btn-outline btn-sm" onclick="toggleForm('form-new-partner')">Annulla</button>
             </div>
           </div>
@@ -1246,15 +1270,19 @@ P.IVA: 07480210488</div>
 
           <!-- Form Nuova Fattura -->
           <div class="form-box" id="form-new-invoice">
-            <h4 style="margin-bottom:10px;font-size:14px;color:var(--navy);">Emetti Nuova Fattura Attiva (IVA 22% inclusa)</h4>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);">
+              <h4 style="margin:0;font-size:14px;color:var(--navy);">⚡ Emetti Fattura Rapida (IVA 22% inclusa)</h4>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <span style="font-size:11.5px;font-weight:700;color:var(--gold-dark);">⚡ Auto-Compila da Cliente Attivo:</span>
+                <select id="inv-quick-client" onchange="prefillInvoiceFromPartner(this.value)" style="padding:6px 10px;border-radius:7px;border:1px solid var(--gold);font-size:12px;font-weight:600;background:#fff;">
+                  <option value="">— Seleziona Cliente/Partner per compilare in 1 clic —</option>
+                </select>
+              </div>
+            </div>
             <div class="form-grid-3">
               <div class="field">
                 <label>Cliente / Proprietario *</label>
                 <input type="text" id="inv-client" placeholder="es. Mario Rossi (App. Santo Spirito)"/>
-              </div>
-              <div class="field">
-                <label>C.F. / Partita IVA Cliente *</label>
-                <input type="text" id="inv-cf" placeholder="RSSMRA80A01D612X"/>
               </div>
               <div class="field">
                 <label>Causale / Piano Fatturato *</label>
@@ -1269,6 +1297,10 @@ P.IVA: 07480210488</div>
               <div class="field">
                 <label>Totale Documento (€ IVA 22% inclusa) *</label>
                 <input type="number" id="inv-total" value="99" min="1" step="0.5"/>
+              </div>
+              <div class="field">
+                <label>C.F. / Partita IVA (Opzionale ora)</label>
+                <input type="text" id="inv-cf" placeholder="Opzionale (inseribile anche dopo)"/>
               </div>
               <div class="field">
                 <label>Metodo di Pagamento</label>
@@ -1286,7 +1318,7 @@ P.IVA: 07480210488</div>
               </div>
             </div>
             <div style="margin-top:12px;display:flex;gap:8px;">
-              <button type="button" class="btn btn-gold btn-sm" onclick="createInvoice()">Genera e Registra Fattura</button>
+              <button type="button" class="btn btn-gold btn-sm" onclick="createInvoice()">⚡ Genera Fattura in 1 Clic</button>
               <button type="button" class="btn btn-outline btn-sm" onclick="toggleForm('form-new-invoice')">Annulla</button>
             </div>
           </div>
@@ -1740,6 +1772,13 @@ P.IVA: 07480210488</div>
       document.getElementById('login-screen').classList.remove('hidden');
     }
 
+    var ROLE_ALLOWED_TABS = {
+      superadmin: ['overview', 'partners', 'hr', 'fornitori', 'fatturazione', 'accounts'],
+      billing: ['fatturazione', 'fornitori', 'partners', 'overview'],
+      hr: ['overview', 'hr', 'fornitori'],
+      partners: ['partners', 'overview', 'fatturazione']
+    };
+
     function switchActiveRole(roleKey) {
       var prof = ROLE_PROFILES[roleKey] || ROLE_PROFILES.superadmin;
       admState.currentRole = roleKey;
@@ -1751,8 +1790,16 @@ P.IVA: 07480210488</div>
       document.getElementById('side-user-email').textContent = prof.email;
       document.getElementById('quick-role-switch').value = roleKey;
 
+      var allowed = ROLE_ALLOWED_TABS[roleKey] || ROLE_ALLOWED_TABS.superadmin;
+      document.querySelectorAll('.side-btn, .mob-admin-btn').forEach(function (btn) {
+        var tab = btn.getAttribute('data-tab');
+        if (!tab) return;
+        var isRelevant = allowed.indexOf(tab) !== -1;
+        btn.style.opacity = isRelevant ? '1' : '0.42';
+      });
+
       switchAdminTab(prof.defaultTab);
-      showToast('Vista attiva: ' + prof.badge);
+      showToast('Vista attiva ottimizzata per ruolo: ' + prof.badge);
     }
 
     function switchAdminTab(tabId) {
@@ -1877,6 +1924,16 @@ P.IVA: 07480210488</div>
       document.getElementById('ov-invoices').textContent = fmtEur(paidInvoicesTotal);
       document.getElementById('ov-mrr').textContent = fmtEur(totalApts * 99 + 1677);
 
+      // Popola selettore 1-clic Fattura da Partner/Cliente attivo
+      var invQuickSel = document.getElementById('inv-quick-client');
+      if (invQuickSel) {
+        var qHtml = '<option value="">— Seleziona Cliente/Partner per compilare in 1 clic —</option>';
+        admState.partners.forEach(function (p) {
+          qHtml += '<option value="' + p.id + '">' + p.name + ' (' + p.plan + ')</option>';
+        });
+        invQuickSel.innerHTML = qHtml;
+      }
+
       // 6. Diagnosis Leads Table
       var leadsBody = document.getElementById('tbody-diagnosis-leads');
       if (leadsBody && window.ITACloudSync && typeof ITACloudSync.getDiagnosisLeads === 'function') {
@@ -1895,7 +1952,7 @@ P.IVA: 07480210488</div>
             '<td>' +
               '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
                 '<a href="https://wa.me/' + cleanPh + '?text=' + encodeURIComponent(waText) + '" target="_blank" class="btn btn-green btn-sm">💬 WhatsApp</a>' +
-                '<button type="button" class="btn btn-outline btn-sm" onclick="convertLeadToPartner(\'' + (ld.name || '').replace(/'/g, '') + '\', \'' + (ld.email || '') + ' · ' + (ld.phone || '') + '\', ' + Boolean(ld.addon10Interest) + ')">+ Converti in Cliente</button>' +
+                '<button type="button" class="btn btn-gold btn-sm" onclick="convertLeadToPartner(\'' + (ld.name || '').replace(/'/g, '') + '\', \'' + (ld.email || '') + ' · ' + (ld.phone || '') + '\', ' + Boolean(ld.addon10Interest) + ')">⚡ 1-Clic: Attiva Cliente + Fattura</button>' +
               '</div>' +
             '</td>' +
           '</tr>';
@@ -1905,8 +1962,9 @@ P.IVA: 07480210488</div>
     }
 
     function convertLeadToPartner(name, contact, addon10) {
+      var newPartnerId = 'p_lead_' + Date.now();
       admState.partners.unshift({
-        id: 'p_lead_' + Date.now(),
+        id: newPartnerId,
         name: name,
         type: 'Proprietario Convertito da Diagnosi',
         contact: contact,
@@ -1915,9 +1973,42 @@ P.IVA: 07480210488</div>
         plan: addon10 ? '99 €/mese + Extra +10% Revenue & Adempimenti' : '99 €/mese Base (Zero Commissioni)',
         active: true
       });
+      var nextNum = 101 + admState.invoices.length;
+      var invAmt = addon10 ? 399 : 99;
+      var invDesc = addon10 ? 'Canone Mensile 99€ + Extra +10% Revenue & Adempimenti' : 'Canone Mensile App itassistance (IVA incl.)';
+      admState.invoices.unshift({
+        id: 'FATT-2026-' + nextNum,
+        date: new Date().toLocaleDateString('it-IT'),
+        client: name,
+        cf: '—',
+        desc: invDesc,
+        total: invAmt,
+        method: 'Stripe (Carta / Apple Pay)',
+        status: 'In attesa'
+      });
       saveAdminState();
       renderAdminAll();
-      showToast('✓ Lead "' + name + '" convertito in Proprietario Attivo!');
+      showToast('✓ 1-Clic completato: "' + name + '" attivato tra i Clienti + Bozza Fattura FATT-2026-' + nextNum + ' (' + invAmt + ' €) pronta!');
+    }
+
+    function prefillInvoiceFromPartner(partnerId) {
+      if (!partnerId) return;
+      var p = admState.partners.find(function (x) { return x.id === partnerId; });
+      if (!p) return;
+      document.getElementById('inv-client').value = p.name;
+      document.getElementById('inv-cf').value = (p.vat && p.vat !== '—') ? p.vat : '';
+      var descSel = document.getElementById('inv-desc');
+      if (p.plan && p.plan.indexOf('+10%') !== -1) {
+        descSel.selectedIndex = 2;
+        document.getElementById('inv-total').value = 399;
+      } else if (p.plan && p.plan.indexOf('1.188') !== -1) {
+        descSel.selectedIndex = 1;
+        document.getElementById('inv-total').value = 1188;
+      } else {
+        descSel.selectedIndex = 0;
+        document.getElementById('inv-total').value = 99 * (p.apts || 1);
+      }
+      showToast('✓ Dati fattura compilati in 1 clic per ' + p.name);
     }
 
     // Actions: Partners
@@ -2195,6 +2286,16 @@ P.IVA: 07480210488</div>
           '<span class="badge badge-ok">' + l.webhookStatus + '</span>' +
         '</div>';
       }).join('');
+    }
+
+    function quickDispatchPreset(title, desc, tab) {
+      var tEl = document.getElementById('adm-push-title');
+      var dEl = document.getElementById('adm-push-desc');
+      var bEl = document.getElementById('adm-push-tab');
+      if (tEl) tEl.value = title;
+      if (dEl) dEl.value = desc;
+      if (bEl && tab) bEl.value = tab;
+      sendTaskToOwnerApp();
     }
 
     function sendTaskToOwnerApp() {

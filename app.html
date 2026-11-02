@@ -738,6 +738,34 @@
           </div>
         </div>
 
+        <!-- ═══ PIATTO INPUT RAPIDI PROPRIETARIO: DAL PROBLEMA ALLA SOLUZIONE IN 1 CLIC ═══ -->
+        <div class="panel-card" style="background:linear-gradient(135deg,#0F2342 0%,#1A3560 100%);color:#fff;border:1.5px solid var(--gold);padding:18px 20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+            <div>
+              <span style="display:inline-block;background:rgba(201,168,76,0.22);color:var(--gold);font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">⚡ Zero Digitazione · Dal Problema alla Soluzione in 1 Clic</span>
+              <div style="font-size:16px;font-weight:700;color:#fff;">Quale situazione vuoi risolvere adesso sul tuo appartamento?</div>
+            </div>
+            <span style="font-size:12px;color:rgba(255,255,255,0.75);">Team Firenze attivo 09:00–23:00</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;">
+            <button type="button" class="btn btn-gold btn-sm" style="justify-content:flex-start;text-align:left;padding:10px 12px;" onclick="generateQuickGuestMessage('pre_arrival');sendQuickGuestMessageWhatsApp();">
+              🛂 1. Ospite in arrivo → Invia Link Documenti (1 clic)
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" style="background:rgba(255,255,255,0.1);color:#fff;border-color:rgba(255,255,255,0.25);justify-content:flex-start;text-align:left;padding:10px 12px;" onclick="requestFlorenceService('Check-in di persona a Firenze (20 € a intervento)')">
+              🔑 2. Non puoi esserci → Chiama Check-in 20 € (1 clic)
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" style="background:rgba(255,255,255,0.1);color:#fff;border-color:rgba(255,255,255,0.25);justify-content:flex-start;text-align:left;padding:10px 12px;" onclick="requestFlorenceService('Manutenzione ordinaria a Firenze (30 € a intervento)')">
+              🔧 3. Guasto in casa → Chiama Tecnico 30 € (1 clic)
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" style="background:rgba(255,255,255,0.1);color:#fff;border-color:rgba(255,255,255,0.25);justify-content:flex-start;text-align:left;padding:10px 12px;" onclick="generateQuickGuestMessage('checkout_eve');sendQuickGuestMessageWhatsApp();">
+              🧳 4. Check-out domani → Invia Regole 10:00 &amp; SMN (1 clic)
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" style="background:rgba(255,255,255,0.1);color:#fff;border-color:rgba(255,255,255,0.25);justify-content:flex-start;text-align:left;padding:10px 12px;" onclick="exportCommercialistaCSV()">
+              📊 5. Commercialista → Scarica CSV Spese/Incassi (1 clic)
+            </button>
+          </div>
+        </div>
+
         <!-- Lista Passi del Giorno (8:00 -> 8:10) -->
         <div class="panel-card">
           <div class="panel-head">
@@ -851,41 +879,49 @@
             </div>
           </div>
 
-          <!-- Box Nuova Prenotazione -->
+          <!-- Box Nuova Prenotazione (OTTIMIZZATO: SOLO 2 CAMPI ESSENZIALI) -->
           <div id="new-booking-box" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px;">
-            <h4 style="font-size:14px;color:var(--navy);margin-bottom:10px;">Aggiungi Prenotazione</h4>
-            <div class="form-grid-3">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+              <h4 style="font-size:14px;color:var(--navy);margin:0;">⚡ Aggiungi Prenotazione Rapida (Solo 2 campi richiesti)</h4>
+              <span style="font-size:11.5px;color:var(--green);font-weight:700;">Default automatico: Check-in Oggi · 3 Notti · 2 Ospiti · Airbnb</span>
+            </div>
+            <div class="form-grid">
               <div class="field">
                 <label>Nome Ospite Principale *</label>
                 <input type="text" id="bk-guest" placeholder="es. Sophie Laurent"/>
-              </div>
-              <div class="field">
-                <label>Portale *</label>
-                <select id="bk-channel">
-                  <option value="Airbnb">Airbnb</option>
-                  <option value="Booking.com">Booking.com</option>
-                  <option value="Diretta">Prenotazione Diretta</option>
-                </select>
-              </div>
-              <div class="field">
-                <label>Numero Ospiti *</label>
-                <input type="number" id="bk-guests" value="2" min="1" max="12"/>
-              </div>
-              <div class="field">
-                <label>Data Check-in *</label>
-                <input type="date" id="bk-in"/>
-              </div>
-              <div class="field">
-                <label>Data Check-out *</label>
-                <input type="date" id="bk-out"/>
               </div>
               <div class="field">
                 <label>Incasso Lordo Soggiorno (€) *</label>
                 <input type="number" id="bk-amount" placeholder="es. 680" min="0" step="10"/>
               </div>
             </div>
+            <details style="margin-top:10px;background:#fff;border:1px dashed var(--border);border-radius:8px;padding:8px 12px;">
+              <summary style="cursor:pointer;font-size:12px;font-weight:700;color:var(--text-muted);">➕ Modifica Date Check-in/Check-out, Portale o N° Ospiti (Opzionale)</summary>
+              <div class="form-grid-3" style="margin-top:10px;">
+                <div class="field">
+                  <label>Portale</label>
+                  <select id="bk-channel">
+                    <option value="Airbnb">Airbnb</option>
+                    <option value="Booking.com">Booking.com</option>
+                    <option value="Diretta">Prenotazione Diretta</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Numero Ospiti</label>
+                  <input type="number" id="bk-guests" value="2" min="1" max="12"/>
+                </div>
+                <div class="field">
+                  <label>Data Check-in</label>
+                  <input type="date" id="bk-in"/>
+                </div>
+                <div class="field">
+                  <label>Data Check-out</label>
+                  <input type="date" id="bk-out"/>
+                </div>
+              </div>
+            </details>
             <div style="margin-top:12px;display:flex;gap:8px;">
-              <button type="button" class="btn btn-primary btn-sm" onclick="addBooking()">Salva prenotazione</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="addBooking()">⚡ Salva Prenotazione in 1 Clic</button>
               <button type="button" class="btn btn-outline btn-sm" onclick="toggleBox('new-booking-box')">Annulla</button>
             </div>
           </div>
@@ -2001,12 +2037,14 @@
       var guest = (document.getElementById('bk-guest').value || '').trim();
       var channel = document.getElementById('bk-channel').value;
       var guests = parseInt(document.getElementById('bk-guests').value, 10) || 2;
-      var checkin = document.getElementById('bk-in').value;
-      var checkout = document.getElementById('bk-out').value;
+      var todayObj = new Date();
+      var plus3Obj = new Date(Date.now() + 3 * 86400000);
+      var checkin = document.getElementById('bk-in').value || todayObj.toISOString().slice(0, 10);
+      var checkout = document.getElementById('bk-out').value || plus3Obj.toISOString().slice(0, 10);
       var amount = parseFloat(document.getElementById('bk-amount').value) || 0;
 
-      if (!guest || !checkin || !checkout || !amount) {
-        alert('Compila nome ospite, date di check-in/check-out e incasso lordo.');
+      if (!guest || !amount) {
+        alert('Inserisci almeno Nome Ospite e Incasso Lordo (€).');
         return;
       }
       var d1 = new Date(checkin);
