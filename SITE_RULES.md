@@ -8,9 +8,10 @@
   - *Regola sul dato "75%":* non pubblicare percentuali ("il 75% dei proprietari...") a meno che non sia accompagnato da una fonte pubblica citabile.
 - **Promessa centrale:** Il lavoro del proprietario diventa di circa **10 minuti al giorno**. L'app gestisce l'appartamento in autonomia e invia ogni giorno un report con le cose da fare per essere in regola (Alloggiati Web Polizia di Stato, pagamento fornitori, tassa di soggiorno, comunicazioni obbligatorie).
 - **Prezzo e Garanzia:**
-  - **99 € al mese** (IVA inclusa), fisso per appartamento. Zero commissioni sulle prenotazioni.
+  - **99 € al mese** (IVA inclusa), fisso per appartamento. Zero commissioni sulle prenotazioni nel piano base dell'app.
   - Pagamento a scelta del proprietario: **mese per mese** oppure **tutto l'anno anticipato** (`1.188 € / anno` IVA inclusa), senza differenze di prezzo e con disdetta libera senza penali.
   - **Garanzia 14 giorni Soddisfatto o Rimborsato:** il bottone "Prova l'app" porta al pagamento (`checkout.html`); se entro 14 giorni il proprietario non è soddisfatto e disdice, riceve il rimborso integrale del 100%.
+  - **Extra opzionale (+10%) — Revenue Management & Adempimenti di Legge:** se il proprietario vuole delegare anche il Revenue Management (ottimizzazione dinamica tariffe e soggiorni minimi) e l'esecuzione operativa degli adempimenti di legge (Alloggiati Web, tassa di soggiorno, ISTAT), può attivare l'extra opzionale pari al **+10%**.
 - **Tre pilastri (da ripetere in tutto il sito):**
   1. **CONTROLLO** — Resti tu il proprietario, decidi tu e incassi tu sul tuo conto.
   2. **SEMPLICITÀ** — 10 minuti al giorno, guidato passo passo.

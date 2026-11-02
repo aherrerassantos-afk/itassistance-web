@@ -6,7 +6,8 @@
 - **Prodotto:** `itassistance` è un'app che gestisce l'appartamento in affitto breve e guida il proprietario in tutta la parte operativa, fiscale e amministrativa.
 - **Per chi:** proprietari che NON hanno un property manager e vogliono tenere sotto mano il proprio appartamento senza pagare il 18–25% di commissione.
 - **Promessa:** il lavoro del proprietario diventa di circa **10 minuti al giorno**. Ogni mattina alle 08:00 l'app invia il report del giorno con le cose da fare per essere in regola (Alloggiati Web Polizia di Stato, tassa di soggiorno, comunicazioni obbligatorie, pagamento fornitori).
-- **Prezzo:** **99 € al mese (IVA inclusa)**, fisso per appartamento. Zero commissioni sulle prenotazioni.
+- **Prezzo:** **99 € al mese (IVA inclusa)**, fisso per appartamento. Zero commissioni sulle prenotazioni nel piano base.
+- **Extra opzionale (+10%):** disponibile come aggiunta opzionale se il cliente desidera delegare anche il **Revenue Management e gli adempimenti di legge**.
 - **Pagamento e Garanzia:** pagabile mese per mese (99 €/mese) oppure annuale anticipato (1.188 €/anno IVA inclusa), senza vincoli e con disdetta libera. **Garanzia 14 giorni Soddisfatto o Rimborsato** (rimborso 100% se disdici entro 14 giorni).
 - **Tre Pilastri:** **CONTROLLO** · **SEMPLICITÀ** · **RISPARMIO**.
 

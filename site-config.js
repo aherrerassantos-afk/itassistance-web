@@ -48,23 +48,36 @@
 
     extras: {
       availableCity: 'Firenze',
-      note: 'Servizi operativi opzionali a richiesta su Firenze (separati dal canone dell’app, paghi solo se e quando li richiedi):',
+      revenueAndLegalAddon: {
+        id: 'revenue_adempimenti_10',
+        name: 'Extra Revenue Management & Adempimenti di Legge',
+        ratePct: 10,
+        rateFormatted: '+10%',
+        description: 'Opzionale: se oltre all’app vuoi delegare a noi anche l’ottimizzazione dinamica dei prezzi (Revenue Management) e la compilazione/gestione operativa degli adempimenti di legge (Alloggiati Web, flussi ISTAT/Ross1000, dichiarazioni imposta di soggiorno).'
+      },
+      note: 'Servizi extra opzionali a richiesta (separati dal canone base dell’app da 99 €/mese, attivabili solo se li desideri):',
       items: [
         {
+          id: 'revenue_adempimenti',
+          name: 'Revenue Management + Gestione completa Adempimenti di Legge',
+          priceEur: null,
+          priceFormatted: '+10% (extra opzionale su richiesta)'
+        },
+        {
           id: 'checkin',
-          name: 'Accoglienza e check-in di persona',
+          name: 'Accoglienza e check-in di persona (Firenze)',
           priceEur: 20,
           priceFormatted: '20 € (IVA inclusa) a intervento'
         },
         {
           id: 'maintenance',
-          name: 'Intervento di piccola manutenzione ordinaria',
+          name: 'Intervento di piccola manutenzione ordinaria (Firenze)',
           priceEur: 30,
           priceFormatted: '30 € (IVA inclusa) a intervento'
         },
         {
           id: 'cleaning',
-          name: 'Pulizie e cambio biancheria con fornitori certificati',
+          name: 'Pulizie e cambio biancheria con fornitori certificati (Firenze)',
           priceEur: null,
           priceFormatted: 'Su preventivo in base alla metratura'
         }
