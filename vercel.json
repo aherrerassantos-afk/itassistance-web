@@ -1,6 +1,7 @@
 {
   "trailingSlash": false,
   "redirects": [
+    { "source": "/istat-ross1000-firenze", "destination": "/istat-ross1000-flussi-turistici-affitti-brevi-firenze.html", "permanent": true },
     { "source": "/dotazioni-sicurezza-firenze", "destination": "/dotazioni-sicurezza-estintori-rilevatori-affitti-brevi-firenze.html", "permanent": true },
     { "source": "/check-out-firenze", "destination": "/check-out-deposito-bagagli-recensioni-affitti-brevi-firenze.html", "permanent": true },
     { "source": "/modello-contratto-turistico", "destination": "/contratto-locazione-turistica-affitto-breve-modello.html", "permanent": true },

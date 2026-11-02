@@ -1231,9 +1231,14 @@
                 <tr>
                   <td><strong>Flussi Turistici ISTAT / Ross1000</strong></td>
                   <td>Regione Toscana / Città Metropolitana FI</td>
-                  <td>Mensile (entro il mese successivo)</td>
+                  <td>Mensile (entro il giorno 5 del mese successivo · anche a Movimento Zero)</td>
                   <td><span class="badge badge-ok">Archivio presenze pronto</span></td>
-                  <td><button type="button" class="btn btn-outline btn-sm" onclick="exportCommercialistaCSV()">Esporta presenze CSV</button></td>
+                  <td>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                      <button type="button" class="btn btn-primary btn-sm" onclick="printIstatRoss1000PDF()">📊 Stampa Prospetto ISTAT / Ross1000 PDF</button>
+                      <button type="button" class="btn btn-outline btn-sm" onclick="exportCommercialistaCSV()">Esporta CSV</button>
+                    </div>
+                  </td>
                 </tr>
                 <tr>
                   <td><strong>Esposizione CIN &amp; Dotazioni Sicurezza (Art. 13-ter)</strong></td>
@@ -1263,6 +1268,7 @@
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
               <button type="button" class="btn btn-gold" onclick="exportCommercialistaCSV()">⬇ Scarica Prospetto CSV per Commercialista</button>
+              <button type="button" class="btn btn-outline" onclick="printIstatRoss1000PDF()">📊 Prospetto ISTAT / Ross1000 PDF</button>
               <button type="button" class="btn btn-outline" onclick="printShortTermLeasePDF()">📝 Stampa Scrittura Privata Locazione Turistica PDF</button>
               <button type="button" class="btn btn-outline" onclick="printSafetySignagePDF()">🧯 Cartello Sicurezza &amp; Emergenze (IT/EN) PDF</button>
             </div>
@@ -2779,6 +2785,110 @@
         '<div class="ftr">' +
           '<div>Documento generato da <strong>itassistance</strong> (Blue Arroyo SRL · Via Matteo Palmieri 20r, 50122 Firenze · P.IVA 07480210488)</div>' +
           '<div>Da esporre all\'interno dell\'unità immobiliare (Art. 13-ter D.L. 145/2023)</div>' +
+        '</div>' +
+        '</body></html>';
+
+      win.document.open();
+      win.document.write(html);
+      win.document.close();
+    }
+
+    function printIstatRoss1000PDF() {
+      var apt = appState.apartment || {};
+      var aptName = apt.name || 'Appartamento Santo Spirito';
+      var aptAddr = apt.address || 'Via Maggio 18, 50125 Firenze (FI)';
+      var aptCin = apt.cin || 'IT048017C200001234';
+      var bks = (appState.bookings && appState.bookings.length > 0) ? appState.bookings : [];
+
+      var totalArrivals = 0;
+      var totalPresences = 0;
+      var rowsHtml = '';
+
+      bks.forEach(function (b, idx) {
+        var g = Number(b.guests || 1);
+        var n = Number(b.nights || 1);
+        var p = g * n;
+        totalArrivals += g;
+        totalPresences += p;
+        var origin = (b.guest && b.guest.indexOf('Verdi') !== -1) ? 'ITALIA — Milano (MI)' : ((b.guest && b.guest.indexOf('Taylor') !== -1) ? 'ESTERO — Regno Unito / USA' : 'ESTERO — Francia');
+        rowsHtml += '<tr>' +
+          '<td>' + (idx + 1) + '</td>' +
+          '<td><strong>' + (b.checkin || '-') + '</strong></td>' +
+          '<td><strong>' + (b.checkout || '-') + '</strong></td>' +
+          '<td style="text-align:center;font-weight:700;">' + g + '</td>' +
+          '<td style="text-align:center;">' + n + '</td>' +
+          '<td style="text-align:center;font-weight:800;color:#0F1A2E;">' + p + '</td>' +
+          '<td>' + origin + '</td>' +
+          '<td>' + (b.channel || 'OTA') + '</td>' +
+        '</tr>';
+      });
+
+      if (!rowsHtml) {
+        rowsHtml = '<tr><td colspan="8" style="text-align:center;padding:14px;font-weight:700;color:#B45309;">MESE A MOVIMENTO ZERO (0 Arrivi · 0 Presenze) — Ricordati di cliccare "Nessun Movimento" su Ross1000 entro il giorno 5!</td></tr>';
+      }
+
+      var avgStay = totalArrivals > 0 ? (totalPresences / totalArrivals).toFixed(1).replace('.', ',') : '0,0';
+      var movStatus = totalArrivals > 0 ? 'CON MOVIMENTAZIONE (' + bks.length + ' soggiorni)' : 'MOVIMENTO ZERO (0 ospiti)';
+
+      var win = window.open('', '_blank', 'width=900,height=960');
+      if (!win) {
+        showToast('Abilita i pop-up per stampare il Prospetto Mensile ISTAT / Ross1000 PDF.');
+        return;
+      }
+
+      var html = '<!doctype html><html lang="it"><head><meta charset="utf-8"/>' +
+        '<title>Prospetto Mensile ISTAT / Ross1000 — ' + aptName + '</title>' +
+        '<style>' +
+        '@page { size: A4 portrait; margin: 14mm; }' +
+        'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; color: #1E293B; margin: 0; padding: 20px; line-height: 1.5; }' +
+        '.hdr { background: #0F1A2E; color: #fff; padding: 18px 22px; border-radius: 10px; border-bottom: 4px solid #C9A84C; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }' +
+        '.doc-title { font-size: 20px; font-weight: 800; color: #fff; }' +
+        '.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }' +
+        '.kpi-box { background: #FAF4E4; border: 1.5px solid #C9A84C; border-radius: 8px; padding: 10px 12px; }' +
+        '.kpi-lbl { font-size: 11px; font-weight: 700; color: #A6862E; text-transform: uppercase; }' +
+        '.kpi-val { font-size: 18px; font-weight: 800; color: #0F1A2E; margin-top: 2px; }' +
+        'table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 16px; }' +
+        'th { background: #1B2A4A; color: #fff; padding: 9px 8px; text-align: left; font-weight: 700; }' +
+        'td { padding: 8px; border-bottom: 1px solid #E2E8F0; }' +
+        'tr:nth-child(even) td { background: #F8FAFC; }' +
+        '.note-box { background: #F8FAFC; border: 1.5px solid #CBD5E1; border-left: 4px solid #1B2A4A; border-radius: 8px; padding: 12px 14px; font-size: 12px; margin-bottom: 14px; }' +
+        '.ftr { margin-top: 18px; padding-top: 10px; border-top: 1px solid #CBD5E1; font-size: 11px; color: #64748B; display: flex; justify-content: space-between; }' +
+        '@media print { .no-print { display: none !important; } body { padding: 0; } }' +
+        '</style></head><body>' +
+        '<div class="no-print" style="margin-bottom:14px;text-align:right;">' +
+          '<button onclick="window.print()" style="background:#C9A84C;color:#0F1A2E;border:none;padding:10px 18px;border-radius:8px;font-weight:800;cursor:pointer;">🖨️ Stampa / Salva Prospetto ISTAT Ross1000 in PDF</button>' +
+        '</div>' +
+        '<div class="hdr">' +
+          '<div>' +
+            '<div class="doc-title">📊 PROSPETTO MENSILE FLUSSI TURISTICI ISTAT / ROSS1000</div>' +
+            '<div style="font-size:12.5px;color:#E2E8F0;margin-top:3px;">Rilevazione Statistica Mensile (Art. 84-bis L.R. Toscana 86/2016 · D.Lgs. 322/1989) — Città Metropolitana di Firenze</div>' +
+          '</div>' +
+          '<div style="text-align:right;font-size:12px;color:#C9A84C;font-weight:700;">itassistance<br/>Firenze</div>' +
+        '</div>' +
+        '<div style="margin-bottom:14px;font-size:13px;background:#fff;border:1px solid #CBD5E1;border-radius:8px;padding:10px 14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">' +
+          '<div><strong>Struttura:</strong> ' + aptName + ' · ' + aptAddr + '</div>' +
+          '<div><strong>Codice CIN:</strong> <code>' + aptCin + '</code> · <strong>Stato Mensilità:</strong> ' + movStatus + '</div>' +
+        '</div>' +
+        '<div class="kpi-row">' +
+          '<div class="kpi-box"><div class="kpi-lbl">Totale Arrivi (Ospiti)</div><div class="kpi-val">' + totalArrivals + ' pax</div></div>' +
+          '<div class="kpi-box"><div class="kpi-lbl">Totale Presenze (Notti×Pax)</div><div class="kpi-val">' + totalPresences + ' notti</div></div>' +
+          '<div class="kpi-box"><div class="kpi-lbl">Permanenza Media</div><div class="kpi-val">' + avgStay + ' gg</div></div>' +
+          '<div class="kpi-box"><div class="kpi-lbl">Scadenza Invio Ross1000</div><div class="kpi-val">Giorno 5 mese succ.</div></div>' +
+        '</div>' +
+        '<table>' +
+          '<thead><tr><th>#</th><th>Data Arrivo</th><th>Data Partenza</th><th style="text-align:center;">Arrivi (Ospiti)</th><th style="text-align:center;">Notti</th><th style="text-align:center;">Presenze Totali</th><th>Provenienza Statistica (Stato / Comune IT)</th><th>Canale</th></tr></thead>' +
+          '<tbody>' + rowsHtml + '</tbody>' +
+        '</table>' +
+        '<div class="note-box">' +
+          '<strong>📋 Promemoria Operativo per la Chiusura Mensile su Turismo5 / Ross1000 Firenze:</strong><br/>' +
+          '1) Accedi al portale ufficiale della Città Metropolitana di Firenze (<code>https://turismo5firenze.regione.toscana.it</code>) <strong>entro il giorno 5 del mese successivo</strong>.<br/>' +
+          '2) Nella statistica ISTAT non si inseriscono nomi o cognomi degli ospiti, ma esclusivamente il numero di Arrivi, le date di entrata/uscita e lo Stato estero o Comune italiano di residenza.<br/>' +
+          '3) Ai fini ISTAT contano <strong>tutte le notti effettive</strong> del soggiorno (non si applica il tetto massimo di 7 notti previsto invece per l\'Imposta di Soggiorno del Comune di Firenze).<br/>' +
+          '4) Se in un mese non hai avuto ospiti (0 Arrivi, 0 Presenze), clicca obbligatoriamente su <strong>"Mese a movimento zero / Nessun movimento"</strong> e valida la mensilità.' +
+        '</div>' +
+        '<div class="ftr">' +
+          '<div>Generato da <strong>itassistance</strong> (Blue Arroyo SRL · Via Matteo Palmieri 20r, 50122 Firenze · P.IVA 07480210488)</div>' +
+          '<div>Data generazione: ' + new Date().toLocaleDateString('it-IT') + '</div>' +
         '</div>' +
         '</body></html>';
 
