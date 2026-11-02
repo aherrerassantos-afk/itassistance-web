@@ -99,3 +99,38 @@ Dove **itassistance si differenzia** (da far emergere):
 - [ ] La barra fissa non copre il pulsante "Istruzioni Check-in PDF".
 - [ ] Link WhatsApp e `contratto.html` funzionano.
 - [ ] Ogni nuovo blocco di primo livello della home ha `ita-d` (PC) oppure sta dentro `.ita-m` (telefono).
+
+---
+
+## 6. COMANDO "falla app mobile" — Regole Vista Utente da Telefono ("App Mobile")
+
+Quando l'utente richiede **"falla app mobile"** per la visualizzazione da smartphone del sito/app, applicare **SEMPRE** le seguenti regole di design e architettura:
+
+### 1. Denominazione ufficiale
+- Questa modalità/modifica si chiama **"App Mobile"** (o "Vista App Mobile").
+
+### 2. I 5 Principi di Design Mobile (dalle linee guida visive & schema a Z)
+1. **Allineamento a Sinistra (Left-aligned) categorico**:
+   - Mai paragrafi o blocchi descrittivi centrati su smartphone. L'allineamento a sinistra rispetta la fisiologia della lettura, crea una linea guida chiara e rende la lettura fluida, riposante ed elegante.
+2. **Schema a Z & Punti di ancoraggio visivi**:
+   - Sul telefono l'utente non legge parola per parola: salta da un punto all'altro cercando appigli immediati.
+   - Usare punti di ancoraggio forti:
+     - Numeri grandi per i prezzi (es. `€99`, `€55`).
+     - Badge evidenti (es. `★ IL PIÙ SCELTO · ALL-INCLUSIVE`).
+     - Elenchi puntati con la parola chiave in grassetto a inizio riga (es. `✓ Check-in: INCLUSI (0€)`).
+3. **Semplicità e Contrasto (Cosa fa scappare: troppi font e poco contrasto)**:
+   - Massimo 2 font coerenti (`Playfair Display` per titoli d'impatto, `Inter` per testi e numeri).
+   - Contrasto netto e leggibile: testo scuro su fondo chiaro, elementi importanti in oro `#C9A84C` o nero profondo `#111111`. Mai scritte microscopiche o grigie sbiadite.
+4. **Call to Action (CTA) & Pulsanti 100% entro lo Schermo**:
+   - **MAI bottoni che escono lateralmente o vengono tagliati dal viewport**.
+   - Tutti i pulsanti su mobile devono avere `width: 100%` o `flex: 1` con `box-sizing: border-box`.
+   - Altezza minima del touch target: **48px** per facilitare il clic naturale con il pollice.
+   - Barra fissa in basso (`.m-sticky`) sempre accessibile con azioni chiare (WhatsApp / Attiva).
+5. **Zero Scroll Orizzontale**:
+   - Nessun elemento deve forzare lo scrolling laterale: `document.documentElement.scrollWidth === window.innerWidth` garantito al 100% a 375px e 414px.
+
+### 3. Offerta Commerciale Mobile
+- Inserire sempre in evidenza il **Pacco Unico All-Inclusive 99€/mese**:
+  - Tutti i servizi operativi inclusi a costo zero (check-in 0€, piccola manutenzione 0€, customer care 24/7, gestione messaggi).
+  - Pagamento mese per mese da parte del proprietario, senza vincoli pluriennali né commissioni.
+  - Confronto diretto con il Piano Base a consumo (55€/mese).

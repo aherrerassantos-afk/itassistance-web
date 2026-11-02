@@ -389,7 +389,8 @@
     <h2>Contratto accettato</h2>
     <p>Ti abbiamo inviato una copia via e-mail. Il servizio si attiva dopo il sopralluogo e la consegna delle chiavi.</p>
     <div class="receipt" id="receipt"></div>
-    <button class="btn" id="copy">Copia riepilogo</button>
+    <a href="checkout.html" class="btn" id="btn-to-stripe" style="background:#C9A84C;color:#111;margin-top:14px;display:block;text-align:center;text-decoration:none;font-weight:700;">Attiva Abbonamento con Carta (Stripe) &rarr;</a>
+    <button class="btn" id="copy" style="margin-top:8px;">Copia riepilogo</button>
     <button class="btn ghost" id="print">Stampa o salva in PDF</button>
   </div>
 </div>
@@ -460,6 +461,12 @@
     }).join('');
     summary=rows.map(function(r){return r[0]+': '+(r[1]||'—')}).join('\n')+
       '\nAccettazione contratto e approvazione specifica clausole artt. 1341–1342 c.c.: SÌ';
+    
+    var stripeBtn = document.getElementById('btn-to-stripe');
+    if (stripeBtn) {
+      stripeBtn.href = 'checkout.html?piano=all-inclusive&nome=' + encodeURIComponent(nome) + '&email=' + encodeURIComponent(email) + '&tel=' + encodeURIComponent(tel) + '&cf=' + encodeURIComponent(cf) + '&imm=' + encodeURIComponent(imm);
+    }
+
     done.classList.add('on');
 
     /* ── Invio Email ── */

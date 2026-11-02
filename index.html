@@ -569,6 +569,68 @@
     .pricing-note p { font-size: 13px; color: rgba(0,0,0,.55); line-height: 1.8; font-weight: 300; }
     .pricing-note strong { color: var(--navy); font-weight: 500; }
 
+    /* Dual Pricing Plans */
+    .pricing-plans-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px;
+    }
+    @media(max-width: 880px) {
+      .pricing-plans-grid { grid-template-columns: 1fr; }
+    }
+    .pricing-plan-card {
+      background: var(--beige); border: 1px solid var(--hair); padding: 48px 40px;
+      position: relative; display: flex; flex-direction: column; justify-content: space-between;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .pricing-plan-card.featured {
+      border: 2px solid var(--gold); background: #FAF9F6;
+      box-shadow: 0 12px 36px rgba(201,168,76,.12);
+    }
+    .pricing-plan-badge {
+      position: absolute; top: -13px; left: 32px; background: var(--navy); color: #fff;
+      font-size: 8.5px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 5px 12px; border: 1px solid var(--gold);
+    }
+    .pricing-plan-tag {
+      font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); font-weight: 600;
+      margin-bottom: 8px; display: block;
+    }
+    .pricing-plan-title {
+      font-family: var(--serif); font-size: 26px; color: var(--navy); margin-bottom: 12px; line-height: 1.15;
+    }
+    .pricing-plan-price-wrap {
+      display: flex; align-items: baseline; gap: 8px; margin: 18px 0 6px;
+    }
+    .pricing-plan-num {
+      font-family: var(--serif); font-size: 56px; font-weight: 400; line-height: 1; color: var(--navy);
+    }
+    .pricing-plan-unit {
+      font-size: 10.5px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(0,0,0,.5);
+    }
+    .pricing-plan-sub {
+      font-family: var(--serif); font-style: italic; font-size: 13.5px; color: rgba(0,0,0,.55); margin-bottom: 8px;
+    }
+    .pricing-plan-features {
+      list-style: none; margin: 24px 0 10px; border-top: 1px solid var(--hair); padding-top: 12px;
+    }
+    .pricing-plan-features li {
+      font-size: 12.5px; color: rgba(0,0,0,.7); padding: 9px 0;
+      border-bottom: 0.5px solid var(--hair2); display: flex; gap: 10px; align-items: flex-start; line-height: 1.5;
+    }
+    .pricing-plan-features li strong { color: var(--navy); }
+    .pricing-plan-features li::before {
+      content: '✓'; color: var(--gold); font-weight: bold; flex-shrink: 0;
+    }
+    .pricing-plan-features li.dim {
+      color: rgba(0,0,0,.45);
+    }
+    .pricing-plan-features li.dim::before {
+      content: '—'; color: rgba(0,0,0,.3);
+    }
+    .pricing-plan-cta {
+      margin-top: 24px; display: block; width: 100%; text-align: center; box-sizing: border-box;
+    }
+
+
     /* ─────────────────────────────────────────────────────────
        CTA / CONTATTI
     ───────────────────────────────────────────────────────── */
@@ -1047,7 +1109,7 @@
     <div class="m-eyebrow">itassistance · Firenze</div>
     <h1>La rete di property manager che <em>risponde per te.</em></h1>
     <p>In itassistance gestiamo appartamenti turistici con tre specialità: <strong>front desk per i tuoi ospiti</strong>, <strong>revenue management</strong> e <strong>fornitori certificati sotto contratto d'appalto</strong>.</p>
-    <div class="m-pills"><span>Front desk</span><span>Revenue management</span><span>Fornitori certificati</span><span>€55/mese</span></div>
+    <div class="m-pills"><span>Front desk</span><span>Revenue management</span><span>Fornitori certificati</span><span>Pacco Unico 99€/m</span></div>
     <a class="m-btn m-btn--dark" href="https://wa.me/393510380392?text=Ciao%20itassistance%2C%20vorrei%20un%20sopralluogo%20gratuito">Sopralluogo gratuito</a>
     <a class="m-btn m-btn--line" href="contratto.html">Entra nella rete itassistance</a>
   </section>
@@ -1098,16 +1160,38 @@
   </section>
 
   <section>
-    <div class="m-eyebrow">Il piano partner itassistance</div>
-    <h2>Un canone fisso. <em>Zero commissioni.</em></h2>
-    <div class="m-price">€55</div>
-    <p class="m-small">al mese · per struttura · disdetta mensile</p>
-    <ul class="m-list">
-      <li><strong>Incluso:</strong> customer care ospiti, reperibilità serale 18–23, guest card digitale, report settimanale.</li>
-      <li><strong>A consumo:</strong> check-in in persona €20 + IVA · manutenzione €30 + IVA.</li>
-      <li><strong>Su preventivo:</strong> revenue management, pulizie e biancheria dei fornitori certificati.</li>
-      <li><strong>Mai:</strong> costo di attivazione, commissioni sulle prenotazioni, penali di uscita.</li>
-    </ul>
+    <div class="m-eyebrow">I Piani Partner itassistance</div>
+    <h2>Scegli il tuo piano. <em>Zero commissioni.</em></h2>
+    
+    <div class="m-card" style="border: 2px solid var(--gold); margin-bottom: 24px; background: #FAF9F6;">
+      <div style="font-size: 8.5px; font-weight: 700; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px;">★ Consigliato · Tutto Incluso</div>
+      <div class="m-num">PACCO UNICO ALL-INCLUSIVE</div>
+      <div class="m-price" style="margin-top: 8px;">€99</div>
+      <p class="m-small">al mese · per struttura · pagamento mese per mese</p>
+      <ul class="m-list" style="margin-top: 14px;">
+        <li><strong>TUTTI I SERVIZI INCLUSI A COSTO ZERO:</strong></li>
+        <li>✓ <strong>Check-in in persona: INCLUSI (0€)</strong> senza costi extra.</li>
+        <li>✓ <strong>Piccola manutenzione: INCLUSA (0€)</strong> ordinaria rapida.</li>
+        <li>✓ <strong>Customer care ospiti 24/7</strong> dedicato (chat e telefono).</li>
+        <li>✓ <strong>Gestione messaggi</strong> Airbnb e Booking (IT + EN).</li>
+        <li>✓ <strong>Welcome Kit &amp; Amenities</strong> incluse per ogni ospite.</li>
+        <li>✓ <strong>Pagamento mese per mese</strong> da parte del proprietario.</li>
+        <li>✓ <strong>Zero commissioni</strong> sul fatturato, disdetta libera.</li>
+      </ul>
+      <a class="m-btn m-btn--dark" style="margin-top: 16px; width: 100%; text-align: center; display: block;" href="checkout.html?piano=all-inclusive">Attiva Pacco Unico — €99/mese</a>
+    </div>
+
+    <div class="m-card">
+      <div class="m-num">PIANO BASE A CONSUMO</div>
+      <div class="m-price" style="margin-top: 8px;">€55</div>
+      <p class="m-small">al mese · per struttura · disdetta mensile</p>
+      <ul class="m-list" style="margin-top: 14px;">
+        <li><strong>Incluso:</strong> customer care ospiti 24/7, gestione messaggi portali, amenities esclusive, report settimanale.</li>
+        <li><strong>A consumo:</strong> check-in in persona €20 + IVA · manutenzione ordinaria €30 + IVA.</li>
+        <li><strong>Zero commissioni</strong> sulle prenotazioni, nessun costo di attivazione.</li>
+      </ul>
+      <a class="m-btn m-btn--line" style="margin-top: 16px; width: 100%; text-align: center; display: block;" href="checkout.html?piano=base">Attiva Piano Base — €55/mese</a>
+    </div>
   </section>
 
   <section>
@@ -1593,54 +1677,71 @@
 
 <section class="ita-d" id="pricing">
   <div class="sec-header">
-    <span class="sec-rubric">§ 5 — Il Piano Partner</span>
-    <span class="sec-num">Un prezzo. Tutto incluso.</span>
+    <span class="sec-rubric">§ 5 — I Piani Partner</span>
+    <span class="sec-num">Tariffe Chiare &amp; Flessibili</span>
   </div>
-  <h2 class="art-title" style="margin-bottom:8px">Un prezzo.<br/><em>Tutto incluso.</em></h2>
-  <p class="art-subtitle" style="margin-bottom:40px">Nessuna sorpresa. Nessun costo nascosto.</p>
+  <h2 class="art-title" style="margin-bottom:8px">Due piani trasparenti.<br/><em>Nessuna sorpresa.</em></h2>
+  <p class="art-subtitle" style="margin-bottom:32px">Scegli tra la formula flessibile a consumo o il <strong>Pacco Unico All-Inclusive a 99€/mese</strong> con tutti i servizi inclusi a costo zero.</p>
   <div class="art-rule"></div>
 
-  <div class="pricing-feature">
-    <div class="pricing-big">€55</div>
-    <div class="pricing-period">al mese · per struttura</div>
-    <div class="pricing-sub">Nessun costo di attivazione · Sopralluogo gratuito · Disdetta mensile</div>
+  <div class="pricing-plans-grid">
+    <!-- PIANO 1: BASE -->
+    <div class="pricing-plan-card">
+      <div>
+        <div class="pricing-plan-header">
+          <span class="pricing-plan-tag">Formula Flessibile</span>
+          <h3 class="pricing-plan-title">Piano Base</h3>
+          <p class="pricing-plan-sub">Ideale se ricevi pochi arrivi o preferisci pagare solo le uscite effettive.</p>
+          <div class="pricing-plan-price-wrap">
+            <span class="pricing-plan-num">€55</span>
+            <span class="pricing-plan-unit">/ mese · per immobile + IVA</span>
+          </div>
+        </div>
+        <ul class="pricing-plan-features">
+          <li><strong>Customer care ospiti 24/7</strong> (chat e linea dedicata)</li>
+          <li><strong>Gestione messaggi portali</strong> (Airbnb &amp; Booking in IT ed EN)</li>
+          <li><strong>Amenities esclusive &amp; Guest Card</strong> digitale per ogni ospite</li>
+          <li><strong>Report settimanale al proprietario</strong> con aggiornamenti completi</li>
+          <li class="dim">Check-in in persona a consumo: €20 + IVA / cad</li>
+          <li class="dim">Piccola manutenzione a consumo: €30 + IVA / h</li>
+          <li><strong>Zero commissioni sul fatturato</strong> delle prenotazioni</li>
+          <li><strong>Disdetta mensile libera</strong> senza penali</li>
+        </ul>
+      </div>
+      <a href="checkout.html?piano=base" class="btn-navy pricing-plan-cta">Attiva Piano Base (€55/mese)</a>
+    </div>
+
+    <!-- PIANO 2: PACCO UNICO (FEATURED) -->
+    <div class="pricing-plan-card featured">
+      <div class="pricing-plan-badge">★ IL PIÙ SCELTO · ALL-INCLUSIVE</div>
+      <div>
+        <div class="pricing-plan-header">
+          <span class="pricing-plan-tag">Pacco Unico Tutto Incluso</span>
+          <h3 class="pricing-plan-title">Pacco Unico 99€</h3>
+          <p class="pricing-plan-sub">Tutti i servizi inclusi a costo zero. Il proprietario paga mese per mese.</p>
+          <div class="pricing-plan-price-wrap">
+            <span class="pricing-plan-num">€99</span>
+            <span class="pricing-plan-unit">/ mese · per immobile + IVA</span>
+          </div>
+        </div>
+        <ul class="pricing-plan-features">
+          <li><strong>Check-in in presenza: INCLUSI A COSTO ZERO (0€)</strong></li>
+          <li><strong>Piccola manutenzione ordinaria: INCLUSA A COSTO ZERO (0€)</strong></li>
+          <li><strong>Customer care ospiti 24/7</strong> con risposta prioritaria entro 15 minuti</li>
+          <li><strong>Gestione messaggi Airbnb &amp; Booking</strong> (supporto bilingue IT + EN)</li>
+          <li><strong>Welcome Kit &amp; Amenities itassistance</strong> sempre fornite</li>
+          <li><strong>Report settimanale dettagliato</strong> per il proprietario</li>
+          <li><strong>Pagamento mese per mese da parte del proprietario</strong></li>
+          <li><strong>Nessun vincolo a lungo termine</strong> · Disdetta mese a mese libera</li>
+          <li><strong>Zero commissioni sul fatturato</strong> (trattieni il 100% dei tuoi incassi)</li>
+        </ul>
+      </div>
+      <a href="checkout.html?piano=all-inclusive" class="btn-navy pricing-plan-cta" style="background:#111;border:1px solid var(--gold);color:#fff;">Attiva Pacco Unico (€99/mese)</a>
+    </div>
   </div>
 
-  <div class="pricing-cols">
-    <div class="pricing-col">
-      <div class="pricing-col-title">Nel canone include</div>
-      <ul class="pricing-col-list">
-        <li>Reperibilità serale (18–23)</li>
-        <li>Customer care ospiti 24/7</li>
-        <li>Report settimanale al partner</li>
-        <li>Amenities esclusive itassistance</li>
-        <li>Guest Card digitale per ogni ospite</li>
-      </ul>
-    </div>
-    <div class="pricing-col">
-      <div class="pricing-col-title">Servizi a consumo</div>
-      <ul class="pricing-col-list">
-        <li>Check-in in persona — €20 + IVA</li>
-        <li>Manutenzione base — €30 + IVA</li>
-        <li>Interventi urgenti — su preventivo</li>
-        <li>Forniture e materiali — a costo reale</li>
-      </ul>
-    </div>
-    <div class="pricing-col">
-      <div class="pricing-col-title">Cosa non paghi mai</div>
-      <ul class="pricing-col-list">
-        <li>Attivazione del servizio</li>
-        <li>Sopralluogo iniziale</li>
-        <li>Commissioni sulle prenotazioni</li>
-        <li>Penali di uscita</li>
-        <li>Costi nascosti di alcun tipo</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="pricing-note">
-    <p>Il canone di <strong>€55/mese</strong> è fisso indipendentemente dal numero di check-in o chiamate.
-    I servizi a consumo vengono fatturati separatamente solo quando utilizzati.
+  <div class="pricing-note" style="margin-top:24px;">
+    <p>Con il <strong>Pacco Unico All-Inclusive da 99€/mese</strong> il proprietario ha la massima serenità economica: nessun conteggio dei singoli check-in né costi di uscita per la manutenzione ordinaria. Si paga mese per mese, senza alcun vincolo pluriennale o penale.
     <strong>Massima trasparenza. Zero sorprese.</strong></p>
   </div>
 </section>
@@ -1795,89 +1896,146 @@ function sendHeroForm() {
 </script>
 
 <!-- ==============================================
-     CHECK-IN PDF GENERATOR
+     CHECK-IN PDF GENERATOR (pdfmake Vector Engine)
      ============================================== -->
 <style>
   .checkin-trigger {
     position: fixed; bottom: 28px; left: 28px; z-index: 700;
     background: var(--gold, #D4AF37); color: #111;
-    border: none; border-radius: 2px; cursor: pointer;
-    font-family: var(--sans, sans-serif); font-size: 10px; font-weight: 600;
+    border: none; border-radius: 3px; cursor: pointer;
+    font-family: var(--sans, sans-serif); font-size: 10px; font-weight: 700;
     letter-spacing: 1.5px; text-transform: uppercase;
-    padding: 14px 20px; box-shadow: 0 4px 24px rgba(0,0,0,.25);
-    transition: opacity .2s, transform .2s;
+    padding: 13px 22px; box-shadow: 0 4px 20px rgba(0,0,0,.28);
+    transition: opacity .2s, transform .2s, box-shadow .2s;
+    display: inline-flex; align-items: center; gap: 8px;
   }
-  .checkin-trigger:hover { opacity: .9; transform: translateY(-2px); }
+  .checkin-trigger:hover {
+    opacity: .95; transform: translateY(-2px);
+    box-shadow: 0 6px 26px rgba(212,175,55,.45);
+  }
 
   .checkin-modal {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(17,17,17,0.95); z-index: 9000;
+    background: rgba(17,17,17,0.94); z-index: 9000;
     display: none; align-items: center; justify-content: center;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(6px);
   }
   .checkin-modal.show { display: flex; }
   
   .checkin-content {
-    background: #fff; width: 100%; max-width: 500px;
-    border-radius: 4px; padding: 32px; position: relative;
+    background: #fff; width: 92%; max-width: 520px;
+    border-radius: 4px; padding: 32px 28px; position: relative;
     font-family: var(--sans, sans-serif); max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 20px 48px rgba(0,0,0,0.45);
   }
   
   .checkin-close {
-    position: absolute; top: 20px; right: 20px;
-    background: none; border: none; font-size: 24px; cursor: pointer; color: #111;
+    position: absolute; top: 16px; right: 18px;
+    background: none; border: none; font-size: 26px; cursor: pointer; color: #777;
+    line-height: 1; transition: color .2s;
   }
+  .checkin-close:hover { color: #111; }
   
   .step-container { display: none; }
-  .step-container.active { display: block; animation: fadeIn 0.3s; }
-  @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
+  .step-container.active { display: block; animation: ciFadeIn 0.25s ease-out; }
+  @keyframes ciFadeIn { from {opacity: 0; transform: translateY(8px);} to {opacity: 1; transform: translateY(0);} }
 
-  .checkin-content h2 { margin-top: 0; margin-bottom: 24px; font-family: var(--serif, serif); font-size: 24px; }
+  .checkin-content h2 {
+    margin-top: 0; margin-bottom: 20px;
+    font-family: var(--serif, serif); font-size: 23px; font-weight: 600; color: #111;
+  }
   .checkin-field { margin-bottom: 16px; }
-  .checkin-field label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; margin-bottom: 6px; }
-  .checkin-field input, .checkin-field textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 2px; font-family: inherit; box-sizing: border-box; }
+  .checkin-field label {
+    display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    color: #555; margin-bottom: 6px; font-weight: 600;
+  }
+  .checkin-field input, .checkin-field textarea {
+    width: 100%; padding: 11px 13px; border: 1px solid #dcdcdc; border-radius: 3px;
+    font-family: inherit; font-size: 13.5px; box-sizing: border-box; color: #222;
+    transition: border-color .2s;
+  }
+  .checkin-field input:focus, .checkin-field textarea:focus {
+    outline: none; border-color: #C9A84C;
+  }
+  .checkin-field small { font-size: 11px; color: #888; display: block; margin-top: 4px; }
   
-  .checkin-nav { display: flex; justify-content: space-between; margin-top: 24px; }
-  .checkin-btn { background: #111; color: #fff; border: none; padding: 12px 24px; cursor: pointer; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
-  .checkin-btn.outline { background: transparent; color: #111; border: 1px solid #111; }
+  .checkin-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 26px; }
+  .checkin-btn {
+    background: #111; color: #fff; border: none; border-radius: 2px;
+    padding: 12px 24px; cursor: pointer; text-transform: uppercase;
+    font-size: 10px; font-weight: 600; letter-spacing: 1px; transition: background .2s, opacity .2s;
+  }
+  .checkin-btn:hover { background: #2a2a2a; }
+  .checkin-btn.gold { background: #C9A84C; color: #111; }
+  .checkin-btn.gold:hover { background: #b8973b; }
+  .checkin-btn.outline { background: transparent; color: #444; border: 1px solid #ccc; }
+  .checkin-btn.outline:hover { background: #f5f5f5; color: #111; }
 
-  /* PDF Template (hidden) */
-  #pdf-template { display: none; background: #f8f8f8; color: #111; font-family: 'Inter', sans-serif; padding: 40px; width: 700px; }
-  .pdf-header { text-align: left; margin-bottom: 30px; border-bottom: 2px solid #111; padding-bottom: 20px; }
-  .pdf-logo { font-size: 32px; font-weight: bold; margin-bottom: 10px; font-family: 'Playfair Display', serif;}
-  .pdf-logo em { color: #D4AF37; font-style: normal; }
-  .pdf-subtitle { font-size: 14px; color: #555; }
-  .pdf-title { font-size: 24px; font-weight: bold; margin-bottom: 20px; }
-  .pdf-section { margin-bottom: 25px; }
-  .pdf-section h3 { font-size: 16px; color: #D4AF37; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-  .pdf-section p { font-size: 14px; line-height: 1.6; margin: 0 0 10px 0; }
-  .pdf-section strong { font-weight: 600; }
-  .pdf-footer { margin-top: 40px; font-size: 12px; color: #888; text-align: center; border-top: 1px solid #ddd; padding-top: 20px; }
+  .ci-status-box {
+    display: none; margin-top: 18px; padding: 12px 14px; border-radius: 4px;
+    font-size: 12px; line-height: 1.5;
+  }
+  .ci-status-box.loading {
+    display: block; background: #F3F4F6; color: #374151; border: 1px solid #E5E7EB;
+  }
+  .ci-status-box.success {
+    display: block; background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;
+  }
+  .ci-status-box.error {
+    display: block; background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA;
+  }
+
+  .ci-spinner {
+    display: inline-block; width: 12px; height: 12px; border: 2px solid rgba(0,0,0,0.2);
+    border-top-color: currentColor; border-radius: 50%;
+    animation: ci-spin 0.6s linear infinite; margin-right: 6px; vertical-align: middle;
+  }
+  @keyframes ci-spin { to { transform: rotate(360deg); } }
 </style>
 
-<button class="checkin-trigger" onclick="openCheckinModal()">Istruzioni Check-in PDF</button>
+<button class="checkin-trigger" onclick="openCheckinModal()" aria-label="Genera Istruzioni Check-in PDF">
+  <span>📄</span> Istruzioni Check-in PDF
+</button>
 
-<div id="checkin-modal" class="checkin-modal">
+<div id="checkin-modal" class="checkin-modal" role="dialog" aria-modal="true" aria-labelledby="ci-title">
   <div class="checkin-content">
-    <button class="checkin-close" onclick="closeCheckinModal()">&times;</button>
+    <button class="checkin-close" onclick="closeCheckinModal()" aria-label="Chiudi finestra">&times;</button>
     
     <div id="step-1" class="step-container active">
-      <h2>1. Dati Base</h2>
-      <div class="checkin-field"><label>Nome Appartamento</label><input type="text" id="ci-apt" placeholder="es. Appartamento Ponte Vecchio"></div>
-      <div class="checkin-field"><label>Indirizzo Esatto</label><input type="text" id="ci-addr" placeholder="es. Borgo San Jacopo 25 blu"></div>
-                  <div class="checkin-nav">
+      <h2 id="ci-title">1. Dati Struttura</h2>
+      <div class="checkin-field">
+        <label>Nome Appartamento</label>
+        <input type="text" id="ci-apt" placeholder="es. Ponte Vecchio Luxury Suite" value="Appartamento Ponte Vecchio">
+      </div>
+      <div class="checkin-field">
+        <label>Indirizzo Esatto a Firenze</label>
+        <input type="text" id="ci-addr" placeholder="es. Borgo San Jacopo 25 blu" value="Borgo San Jacopo 25 blu">
+        <small>Include via e numero civico (specifica blu/nero o rosso).</small>
+      </div>
+      <div class="checkin-nav">
         <div></div>
         <button class="checkin-btn" onclick="nextStep(2)">Avanti &rarr;</button>
       </div>
     </div>
 
     <div id="step-2" class="step-container">
-      <h2>2. Logistica & Accesso</h2>
-      <div class="checkin-field"><label>Codice Portone</label><input type="text" id="ci-code" placeholder="es. 113 (o lascia vuoto)"></div>
-      <div class="checkin-field"><label>Piano</label><input type="text" id="ci-floor" placeholder="es. Primo piano"></div>
-      <div class="checkin-field"><label>Ascensore</label><input type="text" id="ci-elevator" placeholder="es. Non è presente l'ascensore"></div>
-      <div class="checkin-field"><label>ZTL (Zona a Traffico Limitato)</label>
-        <input type="text" id="ci-ztl" value="Il tuo appartamento si trova in ZTL. / Your apartment is in a Restricted Traffic Zone.">
+      <h2>2. Logistica &amp; Accesso</h2>
+      <div class="checkin-field">
+        <label>Codice Portone / Cassetta Chiavi</label>
+        <input type="text" id="ci-code" placeholder="es. 113 o codice tastierino (oppure lascia vuoto)">
+      </div>
+      <div class="checkin-field">
+        <label>Piano Appartamento</label>
+        <input type="text" id="ci-floor" placeholder="es. Primo piano (interno 4)" value="Primo piano">
+      </div>
+      <div class="checkin-field">
+        <label>Ascensore</label>
+        <input type="text" id="ci-elevator" placeholder="es. Presente / Non presente" value="Non presente">
+      </div>
+      <div class="checkin-field">
+        <label>ZTL (Zona a Traffico Limitato Firenze)</label>
+        <input type="text" id="ci-ztl" value="L'appartamento è in area ZTL (accesso veicoli autorizzati). / The apartment is inside Florence ZTL (restricted traffic zone).">
+        <small>Formato: Indicazioni IT / Indicazioni EN</small>
       </div>
       <div class="checkin-nav">
         <button class="checkin-btn outline" onclick="nextStep(1)">&larr; Indietro</button>
@@ -1886,9 +2044,15 @@ function sendHeroForm() {
     </div>
 
     <div id="step-3" class="step-container">
-      <h2>3. Dati WiFi</h2>
-      <div class="checkin-field"><label>Rete WiFi</label><input type="text" id="ci-wifi" placeholder="es. Itassistance_Guest"></div>
-      <div class="checkin-field"><label>Password WiFi</label><input type="text" id="ci-pass" placeholder="es. Firenze2026"></div>
+      <h2>3. Connessione Wi-Fi</h2>
+      <div class="checkin-field">
+        <label>Nome Rete Wi-Fi (SSID)</label>
+        <input type="text" id="ci-wifi" placeholder="es. itassistance_Guest_PonteVecchio" value="itassistance_Guest">
+      </div>
+      <div class="checkin-field">
+        <label>Password Wi-Fi</label>
+        <input type="text" id="ci-pass" placeholder="es. Firenze2026!" value="Firenze2026">
+      </div>
       <div class="checkin-nav">
         <button class="checkin-btn outline" onclick="nextStep(2)">&larr; Indietro</button>
         <button class="checkin-btn" onclick="nextStep(4)">Avanti &rarr;</button>
@@ -1896,212 +2060,853 @@ function sendHeroForm() {
     </div>
 
     <div id="step-4" class="step-container">
-      <h2>4. Regole & Checkout</h2>
-      <div class="checkin-field"><label>Istruzioni Spazzatura</label>
+      <h2>4. Regole &amp; Checkout</h2>
+      <div class="checkin-field">
+        <label>Istruzioni Rifiuti &amp; Raccolta Differenziata</label>
         <textarea id="ci-trash" rows="3">I cassonetti si trovano in fondo alla via. Separa carta, plastica/metallo, vetro e organico.
-The bins are at the end of the street. Please separate paper, plastic/metal, glass, and organic waste.</textarea>
+The bins are located at the end of the street. Please separate paper, plastic/metal, glass, and organic waste.</textarea>
+        <small>Riga 1 = Italiano · Riga 2 = English</small>
       </div>
-      <div class="checkin-field"><label>Istruzioni Checkout</label>
-        <textarea id="ci-checkout" rows="3">Il checkout è alle ore 10:00. Lascia le chiavi sul tavolo.
-Checkout is at 10:00 AM. Please leave the keys on the table.</textarea>
+      <div class="checkin-field">
+        <label>Istruzioni Checkout &amp; Chiavi</label>
+        <textarea id="ci-checkout" rows="3">Il checkout è alle ore 10:00. Lascia le chiavi sul tavolo dell'ingresso.
+Checkout is at 10:00 AM. Please leave the keys on the entrance table.</textarea>
+        <small>Riga 1 = Italiano · Riga 2 = English</small>
       </div>
+
+      <div id="ci-status-msg" class="ci-status-box"></div>
+
       <div class="checkin-nav">
         <button class="checkin-btn outline" onclick="nextStep(3)">&larr; Indietro</button>
-        <button class="checkin-btn" onclick="generatePDF()">Genera PDF &darr;</button>
+        <button id="ci-btn-generate" class="checkin-btn gold" onclick="generatePDF()">Crea PDF &amp; Condividi &darr;</button>
       </div>
     </div>
   </div>
 </div>
 
-<div id="pdf-template-wrapper" style="position: absolute; left: -9999px; top: -9999px; width: 800px; background: white;">
-  
-  <div id="pdf-template">
-    <!-- ITALIAN PAGE -->
-    <div class="pdf-page">
-      <div class="pdf-header">
-        <img src="https://www.itadreamteam.com/brand/logo.png" alt="itassistance Dream Team" style="height: 60px; margin-bottom: 10px;">
-      </div>
-      <div class="pdf-title">Istruzioni Check-in 🇮🇹</div>
-      
-      <div class="pdf-section">
-        <p>Benvenuto in <strong><span class="p-apt"></span></strong>!</p>
-      </div>
-      <div class="pdf-section">
-        <h3>📍 Indirizzo e Accesso</h3>
-        <p><strong>Indirizzo:</strong> <span class="p-addr"></span></p>
-        <p><small><em>N.B. I numeri rossi a Firenze indicano attività commerciali, per le abitazioni civili seguire la numerazione blu.</em></small></p>
-        <p><strong>Codice Portone:</strong> <span class="p-code">N/A</span></p>
-        <p><strong>Piano:</strong> <span class="p-floor"></span> (<span class="p-elevator"></span>)</p>
-        <p><span class="p-ztl-it"></span></p>
-      </div>
-      <div class="pdf-section">
-        <h3>📶 Servizi</h3>
-        <p><strong>Rete WiFi:</strong> <span class="p-wifi"></span></p>
-        <p><strong>Password:</strong> <span class="p-pass"></span></p>
-      </div>
-      <div class="pdf-section">
-        <h3>🛒 Dintorni</h3>
-        <p><strong>Supermercato:</strong> <span class="p-super-it"></span></p>
-        <p><strong>Parcheggio:</strong> <span class="p-park-it"></span></p>
-      </div>
-      <div class="pdf-section">
-        <h3>♻️ Regole e Checkout</h3>
-        <p><strong>Rifiuti:</strong> <span class="p-trash-it"></span></p>
-        <p><strong>Checkout:</strong> <span class="p-checkout-it"></span></p>
-      </div>
-      <div class="pdf-footer">
-        Per qualsiasi necessità, il nostro Customer Care è disponibile 24/7 al numero <strong>+39 0550517452</strong> o +39 351 038 0392.
-      </div>
-    </div>
+<!-- pdfmake 0.2.10 Vector PDF Engine (No DOM screenshots / Pure Vector Graphics) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.js"></script>
 
-    <div class="html2pdf__page-break"></div>
-
-    <!-- ENGLISH PAGE -->
-    <div class="pdf-page">
-      <div class="pdf-header">
-        <img src="https://www.itadreamteam.com/brand/logo.png" alt="itassistance Dream Team" style="height: 60px; margin-bottom: 10px;">
-      </div>
-      <div class="pdf-title">Check-in Instructions 🇬🇧🇺🇸</div>
-      
-      <div class="pdf-section">
-        <p>Welcome to <strong><span class="p-apt"></span></strong>!</p>
-      </div>
-      <div class="pdf-section">
-        <h3>📍 Address & Access</h3>
-        <p><strong>Address:</strong> <span class="p-addr"></span></p>
-        <p><small><em>Note: Red street numbers in Florence are for commercial businesses; for residential buildings, follow the blue numbers.</em></small></p>
-        <p><strong>Building Code:</strong> <span class="p-code">N/A</span></p>
-        <p><strong>Floor:</strong> <span class="p-floor"></span> (<span class="p-elevator"></span>)</p>
-        <p><span class="p-ztl-en"></span></p>
-      </div>
-      <div class="pdf-section">
-        <h3>📶 Amenities</h3>
-        <p><strong>Network:</strong> <span class="p-wifi"></span></p>
-        <p><strong>Password:</strong> <span class="p-pass"></span></p>
-      </div>
-      <div class="pdf-section">
-        <h3>🛒 Neighborhood</h3>
-        <p><strong>Supermarket:</strong> <span class="p-super-en"></span></p>
-        <p><strong>Parking:</strong> <span class="p-park-en"></span></p>
-      </div>
-      <div class="pdf-section">
-        <h3>♻️ Rules & Checkout</h3>
-        <p><strong>Trash:</strong> <span class="p-trash-en"></span></p>
-        <p><strong>Checkout:</strong> <span class="p-checkout-en"></span></p>
-      </div>
-      <div class="pdf-footer">
-        For any assistance, our Customer Care is available 24/7 at <strong>+39 0550517452</strong> or +39 351 038 0392.
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-  function openCheckinModal() { document.getElementById('checkin-modal').classList.add('show'); }
-  function closeCheckinModal() { document.getElementById('checkin-modal').classList.remove('show'); }
-  
-  function nextStep(step) {
-    document.querySelectorAll('.step-container').forEach(el => el.classList.remove('active'));
-    document.getElementById('step-' + step).classList.add('active');
+/* ────────────────────────────────────────────────────────
+   CHECK-IN PDF GENERATOR (itassistance Dream Team)
+   Pipeline vettoriale in 8 passi con pdfmake 0.2.10
+   Supporto Mobile Share (iOS / Android) + Download Desktop
+──────────────────────────────────────────────────────── */
+
+var _isGeneratingCheckinPdf = false;
+var _checkinLogoCache = null;
+
+function openCheckinModal() {
+  var modal = document.getElementById('checkin-modal');
+  if (modal) {
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
   }
+}
 
-  async function generatePDF() {
-    var generateBtn = document.querySelector('.checkin-btn[onclick="generatePDF()"]');
-    var originalBtnText = generateBtn.textContent;
-    generateBtn.textContent = "Ricerca Dintorni...";
-    generateBtn.disabled = true;
+function closeCheckinModal() {
+  var modal = document.getElementById('checkin-modal');
+  if (modal) {
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+}
 
-    function setAll(cls, val) {
-      document.querySelectorAll('.' + cls).forEach(el => el.textContent = val);
-    }
-
-        setAll('p-apt', document.getElementById('ci-apt').value);
-        var addr = document.getElementById('ci-addr').value;
-    setAll('p-addr', addr);
-    setAll('p-code', document.getElementById('ci-code').value || 'Non necessario');
-    setAll('p-floor', document.getElementById('ci-floor').value);
-    setAll('p-elevator', document.getElementById('ci-elevator').value);
-    setAll('p-wifi', document.getElementById('ci-wifi').value);
-    setAll('p-pass', document.getElementById('ci-pass').value);
-
-    var ztl = document.getElementById('ci-ztl').value;
-    var trash = document.getElementById('ci-trash').value;
-    var checkout = document.getElementById('ci-checkout').value;
-    
-    setAll('p-ztl-it', ztl.split('/')[0] || ztl);
-    setAll('p-ztl-en', ztl.split('/')[1] || ztl);
-    setAll('p-trash-it', trash.split('\n')[0] || trash);
-    setAll('p-trash-en', trash.split('\n')[1] || trash);
-    setAll('p-checkout-it', checkout.split('\n')[0] || checkout);
-    setAll('p-checkout-en', checkout.split('\n')[1] || checkout);
-
-    try {
-      var geoRes = await fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(addr + ' Firenze, Italy'));
-      var geoData = await geoRes.json();
-      if(geoData.length > 0) {
-        var lat = geoData[0].lat;
-        var lon = geoData[0].lon;
-        
-        var query = '[out:json];(node["shop"="supermarket"](around:800,'+lat+','+lon+');node["amenity"="parking"](around:800,'+lat+','+lon+'););out 5;';
-        var overpassRes = await fetch('https://overpass-api.de/api/interpreter', {
-          method: 'POST', body: query
-        });
-        var overpassData = await overpassRes.json();
-        
-        var supermarkets = overpassData.elements.filter(e => e.tags && e.tags.shop === 'supermarket');
-        var parkings = overpassData.elements.filter(e => e.tags && e.tags.amenity === 'parking');
-        
-        if (supermarkets.length > 0) {
-          var s = supermarkets[0].tags;
-          var super_str = (s.name || 'Supermercato Locale') + (s['addr:street'] ? ', ' + s['addr:street'] : '') + (s.opening_hours ? ' (Orari: ' + s.opening_hours + ')' : '');
-          setAll('p-super-it', super_str);
-          setAll('p-super-en', super_str.replace('Orari', 'Hours'));
-        } else {
-          setAll('p-super-it', 'Nessun supermercato mappato nelle immediate vicinanze.');
-          setAll('p-super-en', 'No supermarket mapped nearby.');
-        }
-        
-        if (parkings.length > 0) {
-          var p = parkings[0].tags;
-          var park_str = (p.name || 'Parcheggio Locale') + (p['addr:street'] ? ', ' + p['addr:street'] : '');
-          setAll('p-park-it', park_str);
-          setAll('p-park-en', park_str);
-        } else {
-          setAll('p-park-it', 'Nessun parcheggio mappato nelle immediate vicinanze.');
-          setAll('p-park-en', 'No parking mapped nearby.');
-        }
-      } else {
-         setAll('p-super-it', 'Indirizzo non trovato su mappa.');
-         setAll('p-super-en', 'Address not found on map.');
-         setAll('p-park-it', 'Indirizzo non trovato su mappa.');
-         setAll('p-park-en', 'Address not found on map.');
-      }
-    } catch(err) {
-       console.error(err);
-       setAll('p-super-it', 'Errore nella ricerca automatica dei servizi.');
-       setAll('p-super-en', 'Error searching amenities.');
-       setAll('p-park-it', 'Errore nella ricerca automatica dei parcheggi.');
-       setAll('p-park-en', 'Error searching parking.');
-    }
-
-    var element = document.getElementById('pdf-template');
-    
-    var opt = {
-      margin:       10,
-      filename:     'Istruzioni_Checkin_' + (document.getElementById('ci-apt').value || 'Appartamento').replace(/\s/g,'_') + '.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    html2pdf().set(opt).from(element).save().then(() => {
-      generateBtn.textContent = originalBtnText;
-      generateBtn.disabled = false;
-      closeCheckinModal();
+// Chiudi cliccando fuori o con Escape
+document.addEventListener('DOMContentLoaded', function() {
+  var modal = document.getElementById('checkin-modal');
+  if (modal) {
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) closeCheckinModal();
     });
   }
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeCheckinModal();
+});
+
+function nextStep(step) {
+  document.querySelectorAll('.step-container').forEach(function(el) {
+    el.classList.remove('active');
+  });
+  var target = document.getElementById('step-' + step);
+  if (target) target.classList.add('active');
+}
+
+// 1. FORMATTAZIONE & HELPERS
+function _pdfTxt(val, fallback) {
+  if (fallback === undefined) fallback = '—';
+  if (val === null || val === undefined) return fallback;
+  var s = String(val).trim();
+  return s.length > 0 ? s : fallback;
+}
+
+function _pdfNowIT() {
+  try {
+    return new Intl.DateTimeFormat('it-IT', {
+      day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'Europe/Rome'
+    }).format(new Date());
+  } catch (e) {
+    var d = new Date();
+    return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear();
+  }
+}
+
+function _pdfNowEN() {
+  try {
+    return new Intl.DateTimeFormat('en-US', {
+      month: 'short', day: '2-digit', year: 'numeric'
+    }).format(new Date());
+  } catch (e) {
+    var d = new Date();
+    return 'Nov ' + String(d.getDate()).padStart(2, '0') + ', ' + d.getFullYear();
+  }
+}
+
+function _pdfFileStamp() {
+  var now = new Date();
+  var y = now.getFullYear();
+  var m = String(now.getMonth() + 1).padStart(2, '0');
+  var d = String(now.getDate()).padStart(2, '0');
+  var h = String(now.getHours()).padStart(2, '0');
+  var min = String(now.getMinutes()).padStart(2, '0');
+  return y + '-' + m + '-' + d + '_' + h + min;
+}
+
+// 2. LOGO LOADER (Base64 con cache e fallback)
+async function loadLogoAsBase64() {
+  if (_checkinLogoCache) return _checkinLogoCache;
+
+  var candidatePaths = ['/brand/logo.png', '/logo.png', 'brand/logo.png', 'logo.png'];
+  for (var i = 0; i < candidatePaths.length; i++) {
+    try {
+      var res = await fetch(candidatePaths[i]);
+      if (res.ok) {
+        var blob = await res.blob();
+        var dataUrl = await new Promise(function(resolve) {
+          var reader = new FileReader();
+          reader.onloadend = function() { resolve(reader.result); };
+          reader.onerror = function() { resolve(null); };
+          reader.readAsDataURL(blob);
+        });
+        if (dataUrl && dataUrl.startsWith('data:image/')) {
+          _checkinLogoCache = dataUrl;
+          return _checkinLogoCache;
+        }
+      }
+    } catch (e) {}
+  }
+  return null;
+}
+
+// 3. RICERCA DINTORNI (Nominatim OSM + Overpass API con Timeout)
+async function fetchNeighborhoodData(addr) {
+  var result = {
+    super_it: 'Disponibili nelle immediate vicinanze (consulta Google Maps o Customer Care).',
+    super_en: 'Available nearby (check Google Maps or ask our 24/7 Customer Care).',
+    park_it: 'Parcheggi su strisce blu o garage privati nelle vicinanze.',
+    park_en: 'Street parking (blue lines) or private parking garages nearby.',
+    lat: null,
+    lon: null
+  };
+
+  if (!addr || !addr.trim()) return result;
+
+  try {
+    var cleanAddr = addr.trim().replace(/blu|nero|rosso|r$/gi, '').trim();
+    var query = encodeURIComponent(cleanAddr + ' Firenze, Italy');
+
+    var controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+    var tId = controller ? setTimeout(function() { controller.abort(); }, 4000) : null;
+
+    var geoRes = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + query, {
+      signal: controller ? controller.signal : undefined,
+      headers: { 'Accept': 'application/json' }
+    });
+    if (tId) clearTimeout(tId);
+
+    if (geoRes.ok) {
+      var geoData = await geoRes.json();
+      if (geoData && geoData.length > 0) {
+        var lat = geoData[0].lat;
+        var lon = geoData[0].lon;
+        result.lat = lat;
+        result.lon = lon;
+
+        var overpassQuery = '[out:json][timeout:5];(node["shop"="supermarket"](around:800,' + lat + ',' + lon + ');node["amenity"="parking"](around:800,' + lat + ',' + lon + '););out 4;';
+        
+        var opController = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+        var opTId = opController ? setTimeout(function() { opController.abort(); }, 4500) : null;
+
+        var opRes = await fetch('https://overpass-api.de/api/interpreter', {
+          method: 'POST',
+          body: overpassQuery,
+          signal: opController ? opController.signal : undefined
+        });
+        if (opTId) clearTimeout(opTId);
+
+        if (opRes.ok) {
+          var opData = await opRes.json();
+          if (opData && opData.elements) {
+            var supermarkets = opData.elements.filter(function(e) { return e.tags && e.tags.shop === 'supermarket'; });
+            var parkings = opData.elements.filter(function(e) { return e.tags && e.tags.amenity === 'parking'; });
+
+            if (supermarkets.length > 0) {
+              var s = supermarkets[0].tags;
+              var sName = s.name || 'Supermercato di quartiere';
+              var sStreet = s['addr:street'] ? ' (' + s['addr:street'] + (s['addr:housenumber'] ? ' ' + s['addr:housenumber'] : '') + ')' : '';
+              var sHours = s.opening_hours ? ' · Orari: ' + s.opening_hours : '';
+              result.super_it = sName + sStreet + sHours;
+              result.super_en = sName + sStreet + (sHours ? sHours.replace('Orari', 'Hours') : '');
+            }
+
+            if (parkings.length > 0) {
+              var p = parkings[0].tags;
+              var pName = p.name || 'Parcheggio convenzionato / pubblico';
+              var pStreet = p['addr:street'] ? ' (' + p['addr:street'] + ')' : '';
+              result.park_it = pName + pStreet;
+              result.park_en = pName + pStreet;
+            }
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Geocoding/Overpass warning:', err);
+  }
+
+  return result;
+}
+
+// 4. BUILD REPORT MODEL (Funzione pura)
+function buildCheckinModel(inputs, geoData) {
+  var rawZtl = inputs.ztl || '';
+  var ztlParts = rawZtl.split('/');
+  var ztl_it = _pdfTxt(ztlParts[0], 'Zona a Traffico Limitato (ZTL): prestare attenzione ai varchi telematici.');
+  var ztl_en = _pdfTxt(ztlParts[1] || ztlParts[0], 'Restricted Traffic Zone (ZTL): access by unauthorized vehicles is prohibited.');
+
+  var rawTrash = inputs.trash || '';
+  var trashLines = rawTrash.split('\n').filter(Boolean);
+  var trash_it = _pdfTxt(trashLines[0] || rawTrash, 'Separare organico, plastica, carta e vetro nei cassonetti su strada.');
+  var trash_en = _pdfTxt(trashLines[1] || trashLines[0] || rawTrash, 'Please separate organic, plastic, paper and glass in the street bins.');
+
+  var rawCheckout = inputs.checkout || '';
+  var checkoutLines = rawCheckout.split('\n').filter(Boolean);
+  var checkout_it = _pdfTxt(checkoutLines[0] || rawCheckout, 'Il checkout è entro le ore 10:00. Lasciare le chiavi sul tavolo.');
+  var checkout_en = _pdfTxt(checkoutLines[1] || checkoutLines[0] || rawCheckout, 'Check-out is by 10:00 AM. Please leave the keys on the table.');
+
+  return {
+    apt: _pdfTxt(inputs.apt, 'Appartamento Firenze'),
+    addr: _pdfTxt(inputs.addr, 'Firenze, Centro Storico'),
+    code: _pdfTxt(inputs.code, 'Non necessario / Chiave fisica'),
+    floor: _pdfTxt(inputs.floor, 'Piano terra / Standard'),
+    elevator: _pdfTxt(inputs.elevator, 'Non presente'),
+    ztl_it: ztl_it,
+    ztl_en: ztl_en,
+    wifi: _pdfTxt(inputs.wifi, 'itassistance_Guest'),
+    pass: _pdfTxt(inputs.pass, 'Disponibile su modem router'),
+    super_it: geoData.super_it,
+    super_en: geoData.super_en,
+    park_it: geoData.park_it,
+    park_en: geoData.park_en,
+    trash_it: trash_it,
+    trash_en: trash_en,
+    checkout_it: checkout_it,
+    checkout_en: checkout_en,
+    phone1: '+39 055 051 7452',
+    phone2: '+39 351 038 0392',
+    email: 'info@itadreamteam.com',
+    dateIT: _pdfNowIT(),
+    dateEN: _pdfNowEN()
+  };
+}
+
+// 5. BUILD DOC DEFINITION (SOLO DATI / GRAFICA LUXURY ITASSISTANCE)
+function buildCheckinDocDefinition(model, logoBase64) {
+  var gold = '#C9A84C';
+  var dark = '#111111';
+  var grayBg = '#FAFAFA';
+  var grayBorder = '#E5E7EB';
+
+  function createHeaderBlock(isEnglish) {
+    var subtitle = isEnglish ? 'FLORENCE · GUEST EXPERIENCE' : 'FIRENZE · GUEST EXPERIENCE';
+    var dateText = (isEnglish ? 'Date: ' : 'Data: ') + (isEnglish ? model.dateEN : model.dateIT);
+
+    var logoElement = logoBase64
+      ? { image: logoBase64, fit: [140, 36], alignment: 'left' }
+      : {
+          text: [
+            { text: 'it', fontSize: 20, bold: true, color: '#FFFFFF' },
+            { text: '.', fontSize: 20, bold: true, color: gold },
+            { text: 'assistance', fontSize: 20, bold: true, color: '#FFFFFF' },
+            { text: '  DREAM TEAM', fontSize: 8.5, color: gold, characterSpacing: 1.5 }
+          ],
+          margin: [0, 4, 0, 0]
+        };
+
+    return [
+      {
+        table: {
+          widths: ['*'],
+          body: [
+            [
+              {
+                fillColor: dark,
+                border: [false, false, false, false],
+                margin: [16, 12, 16, 12],
+                columns: [
+                  logoElement,
+                  {
+                    stack: [
+                      { text: subtitle, fontSize: 8.5, bold: true, color: gold, alignment: 'right', characterSpacing: 1.5 },
+                      { text: dateText, fontSize: 8, color: '#9CA3AF', alignment: 'right', margin: [0, 3, 0, 0] }
+                    ]
+                  }
+                ]
+              }
+            ]
+          ]
+        },
+        layout: 'noBorders',
+        margin: [0, 0, 0, 0]
+      },
+      {
+        canvas: [
+          { type: 'rect', x: 0, y: 0, w: 523, h: 3, color: gold }
+        ],
+        margin: [0, 0, 0, 14]
+      }
+    ];
+  }
+
+  function createCard(icon, title, items) {
+    return {
+      table: {
+        widths: ['*'],
+        body: [
+          [
+            {
+              fillColor: grayBg,
+              border: [true, true, true, true],
+              margin: [12, 10, 12, 10],
+              stack: [
+                {
+                  columns: [
+                    { text: icon, width: 18, fontSize: 11 },
+                    { text: title.toUpperCase(), fontSize: 9.5, bold: true, color: dark, characterSpacing: 0.8 }
+                  ],
+                  margin: [0, 0, 0, 6]
+                },
+                {
+                  canvas: [
+                    { type: 'line', x1: 0, y1: 0, x2: 226, y2: 0, lineWidth: 0.75, lineColor: grayBorder }
+                  ],
+                  margin: [0, 0, 0, 8]
+                },
+                { stack: items }
+              ]
+            }
+          ]
+        ]
+      },
+      layout: {
+        hLineWidth: function() { return 0.75; },
+        vLineWidth: function() { return 0.75; },
+        hLineColor: function() { return grayBorder; },
+        vLineColor: function() { return grayBorder; }
+      },
+      margin: [0, 0, 0, 12]
+    };
+  }
+
+  function createCustomerCareBanner(isEnglish) {
+    var title = isEnglish ? '24/7 GUEST CUSTOMER CARE · itassistance' : 'ASSISTENZA CLIENTI itassistance 24/7';
+    var sub = isEnglish
+      ? 'We are available for any assistance during your stay in Florence.'
+      : 'Siamo a tua completa disposizione per ogni necessità durante il tuo soggiorno.';
+
+    return {
+      table: {
+        widths: ['*'],
+        body: [
+          [
+            {
+              fillColor: dark,
+              border: [false, false, false, false],
+              margin: [16, 10, 16, 10],
+              columns: [
+                {
+                  width: '*',
+                  stack: [
+                    { text: title, fontSize: 8.5, bold: true, color: gold, characterSpacing: 1 },
+                    { text: sub, fontSize: 7.5, color: '#D1D5DB', margin: [0, 2, 0, 0] }
+                  ]
+                },
+                {
+                  width: 'auto',
+                  stack: [
+                    { text: '📞 ' + model.phone1 + '  |  📱 WhatsApp: ' + model.phone2, fontSize: 8, bold: true, color: '#FFFFFF', alignment: 'right' },
+                    { text: '✉️ ' + model.email, fontSize: 8, color: gold, alignment: 'right', margin: [0, 2, 0, 0] }
+                  ]
+                }
+              ]
+            }
+          ]
+        ]
+      },
+      layout: 'noBorders',
+      margin: [0, 4, 0, 0]
+    };
+  }
+
+  var mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(model.addr + ' Firenze');
+
+  // PAGINA 1: ITALIANO
+  var page1 = [
+    createHeaderBlock(false),
+    {
+      columns: [
+        {
+          stack: [
+            { text: 'ISTRUZIONI CHECK-IN & SOGGIORNO', fontSize: 16, bold: true, color: dark, letterSpacing: -0.5 },
+            { text: model.apt, fontSize: 13, bold: true, color: gold, margin: [0, 2, 0, 4] },
+            { text: 'Benvenuto a Firenze! Di seguito trovi tutti i dati essenziali per accedere e vivere il tuo soggiorno.', fontSize: 8.5, color: '#555555', italics: true }
+          ]
+        }
+      ],
+      margin: [0, 0, 0, 12]
+    },
+    {
+      columns: [
+        // Colonna Sinistra
+        {
+          width: '*',
+          stack: [
+            createCard('📍', 'Indirizzo e Accesso', [
+              { text: [{ text: 'Indirizzo: ', bold: true, fontSize: 9, color: dark }, { text: model.addr, fontSize: 9, color: '#1F2937' }], margin: [0, 0, 0, 4] },
+              { text: '📍 Apri posizione esatta su Google Maps ➔', link: mapsUrl, color: '#B45309', fontSize: 8, bold: true, margin: [0, 0, 0, 5] },
+              { text: 'N.B. A Firenze i civici rossi (es. 25r) indicano negozi; per le case seguire la numerazione blu/nera.', fontSize: 7.5, color: '#6B7280', italics: true, margin: [0, 0, 0, 6] },
+              {
+                table: {
+                  widths: ['*'],
+                  body: [[{
+                    fillColor: '#F3F4F6',
+                    border: [true, true, true, true],
+                    margin: [6, 4, 6, 4],
+                    text: [
+                      { text: 'Codice Portone: ', fontSize: 8, bold: true, color: '#374151' },
+                      { text: model.code, fontSize: 9, bold: true, color: dark }
+                    ]
+                  }]]
+                },
+                layout: { hLineWidth: function() { return 0.5; }, vLineWidth: function() { return 0.5; }, hLineColor: function() { return '#D1D5DB'; }, vLineColor: function() { return '#D1D5DB'; } },
+                margin: [0, 0, 0, 6]
+              },
+              { text: [{ text: 'Piano: ', bold: true, fontSize: 8.5 }, { text: model.floor + '   ·   ' }, { text: 'Ascensore: ', bold: true, fontSize: 8.5 }, { text: model.elevator }], fontSize: 8.5, margin: [0, 0, 0, 6] },
+              {
+                table: {
+                  widths: ['*'],
+                  body: [[{
+                    fillColor: '#FEF3C7',
+                    border: [true, true, true, true],
+                    margin: [6, 4, 6, 4],
+                    text: [
+                      { text: '⚠️ ZTL Firenze: ', fontSize: 7.5, bold: true, color: '#92400E' },
+                      { text: model.ztl_it, fontSize: 7.5, color: '#78350F' }
+                    ]
+                  }]]
+                },
+                layout: { hLineWidth: function() { return 0.5; }, vLineWidth: function() { return 0.5; }, hLineColor: function() { return '#FCD34D'; }, vLineColor: function() { return '#FCD34D'; } },
+                margin: [0, 0, 0, 0]
+              }
+            ]),
+            createCard('📶', 'Wi-Fi & Connessione', [
+              {
+                table: {
+                  widths: ['*'],
+                  body: [[{
+                    fillColor: '#F3F4F6',
+                    border: [true, true, true, true],
+                    margin: [6, 4, 6, 4],
+                    text: [
+                      { text: 'Rete: ', fontSize: 8, bold: true, color: '#374151' },
+                      { text: model.wifi, fontSize: 9, bold: true, color: dark }
+                    ]
+                  }]]
+                },
+                layout: { hLineWidth: function() { return 0.5; }, vLineWidth: function() { return 0.5; }, hLineColor: function() { return '#D1D5DB'; }, vLineColor: function() { return '#D1D5DB'; } },
+                margin: [0, 0, 0, 5]
+              },
+              {
+                table: {
+                  widths: ['*'],
+                  body: [[{
+                    fillColor: '#F3F4F6',
+                    border: [true, true, true, true],
+                    margin: [6, 4, 6, 4],
+                    text: [
+                      { text: 'Password: ', fontSize: 8, bold: true, color: '#374151' },
+                      { text: model.pass, fontSize: 9, bold: true, color: dark }
+                    ]
+                  }]]
+                },
+                layout: { hLineWidth: function() { return 0.5; }, vLineWidth: function() { return 0.5; }, hLineColor: function() { return '#D1D5DB'; }, vLineColor: function() { return '#D1D5DB'; } },
+                margin: [0, 0, 0, 5]
+              },
+              { text: '💡 Per qualsiasi anomalia di segnale contattare il Customer Care.', fontSize: 7.5, color: '#6B7280', italics: true }
+            ])
+          ]
+        },
+        { width: 14, text: '' },
+        // Colonna Destra
+        {
+          width: '*',
+          stack: [
+            createCard('🛒', 'Dintorni & Servizi Utili', [
+              { text: [{ text: '🛒 Supermercato:
+', bold: true, fontSize: 8.5, color: dark }, { text: model.super_it, fontSize: 8, color: '#374151' }], margin: [0, 0, 0, 6] },
+              { text: [{ text: '🚗 Parcheggio:
+', bold: true, fontSize: 8.5, color: dark }, { text: model.park_it, fontSize: 8, color: '#374151' }], margin: [0, 0, 0, 6] },
+              { text: [{ text: '🚨 Numero Unico Emergenze: ', bold: true, fontSize: 8, color: '#DC2626' }, { text: '112 (Polizia / Ambulanza)', fontSize: 8, color: '#374151' }] }
+            ]),
+            createCard('♻️', 'Raccolta Rifiuti & Checkout', [
+              { text: [{ text: '♻️ Gestione Rifiuti:
+', bold: true, fontSize: 8.5, color: dark }, { text: model.trash_it, fontSize: 8, color: '#374151' }], margin: [0, 0, 0, 6] },
+              { text: [{ text: '🗝️ Orario & Istruzioni Checkout:
+', bold: true, fontSize: 8.5, color: dark }, { text: model.checkout_it, fontSize: 8, color: '#374151' }], margin: [0, 0, 0, 6] },
+              { text: '🔇 Ore di riposo condominiale: dalle 22:00 alle 08:00.', fontSize: 7.5, color: '#6B7280', italics: true }
+            ])
+          ]
+        }
+      ]
+    },
+    createCustomerCareBanner(false)
+  ];
+
+  // PAGINA 2: ENGLISH
+  var page2 = [
+    { text: '', pageBreak: 'before' },
+    createHeaderBlock(true),
+    {
+      columns: [
+        {
+          stack: [
+            { text: 'CHECK-IN & STAY INSTRUCTIONS', fontSize: 16, bold: true, color: dark, letterSpacing: -0.5 },
+            { text: model.apt, fontSize: 13, bold: true, color: gold, margin: [0, 2, 0, 4] },
+            { text: 'Welcome to Florence! Below you will find essential information for your arrival and comfortable stay.', fontSize: 8.5, color: '#555555', italics: true }
+          ]
+        }
+      ],
+      margin: [0, 0, 0, 12]
+    },
+    {
+      columns: [
+        // Left Column EN
+        {
+          width: '*',
+          stack: [
+            createCard('📍', 'Address & Access', [
+              { text: [{ text: 'Address: ', bold: true, fontSize: 9, color: dark }, { text: model.addr, fontSize: 9, color: '#1F2937' }], margin: [0, 0, 0, 4] },
+              { text: '📍 Open exact location in Google Maps ➔', link: mapsUrl, color: '#B45309', fontSize: 8, bold: true, margin: [0, 0, 0, 5] },
+              { text: 'Note: Red street numbers in Florence are for shops; for residential buildings, follow blue/black numbers.', fontSize: 7.5, color: '#6B7280', italics: true, margin: [0, 0, 0, 6] },
+              {
+                table: {
+                  widths: ['*'],
+                  body: [[{
+                    fillColor: '#F3F4F6',
+                    border: [true, true, true, true],
+                    margin: [6, 4, 6, 4],
+                    text: [
+                      { text: 'Door Code / Keybox: ', fontSize: 8, bold: true, color: '#374151' },
+                      { text: model.code, fontSize: 9, bold: true, color: dark }
+                    ]
+                  }]]
+                },
+                layout: { hLineWidth: function() { return 0.5; }, vLineWidth: function() { return 0.5; }, hLineColor: function() { return '#D1D5DB'; }, vLineColor: function() { return '#D1D5DB'; } },
+                margin: [0, 0, 0, 6]
+              },
+              { text: [{ text: 'Floor: ', bold: true, fontSize: 8.5 }, { text: model.floor + '   ·   ' }, { text: 'Elevator: ', bold: true, fontSize: 8.5 }, { text: model.elevator }], fontSize: 8.5, margin: [0, 0, 0, 6] },
+              {
+                table: {
+                  widths: ['*'],
+                  body: [[{
+                    fillColor: '#FEF3C7',
+                    border: [true, true, true, true],
+                    margin: [6, 4, 6, 4],
+                    text: [
+                      { text: '⚠️ Florence ZTL Area: ', fontSize: 7.5, bold: true, color: '#92400E' },
+                      { text: model.ztl_en, fontSize: 7.5, color: '#78350F' }
+                    ]
+                  }]]
+                },
+                layout: { hLineWidth: function() { return 0.5; }, vLineWidth: function() { return 0.5; }, hLineColor: function() { return '#FCD34D'; }, vLineColor: function() { return '#FCD34D'; } },
+                margin: [0, 0, 0, 0]
+              }
+            ]),
+            createCard('📶', 'Wi-Fi & Connectivity', [
+              {
+                table: {
+                  widths: ['*'],
+                  body: [[{
+                    fillColor: '#F3F4F6',
+                    border: [true, true, true, true],
+                    margin: [6, 4, 6, 4],
+                    text: [
+                      { text: 'Network (SSID): ', fontSize: 8, bold: true, color: '#374151' },
+                      { text: model.wifi, fontSize: 9, bold: true, color: dark }
+                    ]
+                  }]]
+                },
+                layout: { hLineWidth: function() { return 0.5; }, vLineWidth: function() { return 0.5; }, hLineColor: function() { return '#D1D5DB'; }, vLineColor: function() { return '#D1D5DB'; } },
+                margin: [0, 0, 0, 5]
+              },
+              {
+                table: {
+                  widths: ['*'],
+                  body: [[{
+                    fillColor: '#F3F4F6',
+                    border: [true, true, true, true],
+                    margin: [6, 4, 6, 4],
+                    text: [
+                      { text: 'Password: ', fontSize: 8, bold: true, color: '#374151' },
+                      { text: model.pass, fontSize: 9, bold: true, color: dark }
+                    ]
+                  }]]
+                },
+                layout: { hLineWidth: function() { return 0.5; }, vLineWidth: function() { return 0.5; }, hLineColor: function() { return '#D1D5DB'; }, vLineColor: function() { return '#D1D5DB'; } },
+                margin: [0, 0, 0, 5]
+              },
+              { text: '💡 In case of connection problems, please contact Customer Care.', fontSize: 7.5, color: '#6B7280', italics: true }
+            ])
+          ]
+        },
+        { width: 14, text: '' },
+        // Right Column EN
+        {
+          width: '*',
+          stack: [
+            createCard('🛒', 'Neighborhood & Essentials', [
+              { text: [{ text: '🛒 Nearest Supermarket:
+', bold: true, fontSize: 8.5, color: dark }, { text: model.super_en, fontSize: 8, color: '#374151' }], margin: [0, 0, 0, 6] },
+              { text: [{ text: '🚗 Recommended Parking:
+', bold: true, fontSize: 8.5, color: dark }, { text: model.park_en, fontSize: 8, color: '#374151' }], margin: [0, 0, 0, 6] },
+              { text: [{ text: '🚨 European Emergency Number: ', bold: true, fontSize: 8, color: '#DC2626' }, { text: '112 (Police / Medical)', fontSize: 8, color: '#374151' }] }
+            ]),
+            createCard('♻️', 'House Rules & Checkout', [
+              { text: [{ text: '♻️ Waste & Recycling:
+', bold: true, fontSize: 8.5, color: dark }, { text: model.trash_en, fontSize: 8, color: '#374151' }], margin: [0, 0, 0, 6] },
+              { text: [{ text: '🗝️ Checkout Time & Keys:
+', bold: true, fontSize: 8.5, color: dark }, { text: model.checkout_en, fontSize: 8, color: '#374151' }], margin: [0, 0, 0, 6] },
+              { text: '🔇 Quiet building hours: 10:00 PM to 08:00 AM.', fontSize: 7.5, color: '#6B7280', italics: true }
+            ])
+          ]
+        }
+      ]
+    },
+    createCustomerCareBanner(true)
+  ];
+
+  return {
+    pageSize: 'A4',
+    pageOrientation: 'portrait',
+    pageMargins: [36, 36, 36, 36],
+    content: page1.concat(page2),
+    footer: function(currentPage, pageCount) {
+      return {
+        columns: [
+          { text: 'itassistance Dream Team · Blue Arroyo srl · Firenze', fontSize: 7.5, color: '#888888', margin: [36, 0, 0, 0] },
+          { text: 'Pagina ' + currentPage + ' di ' + pageCount, alignment: 'right', fontSize: 7.5, color: '#888888', margin: [0, 0, 36, 0] }
+        ]
+      };
+    },
+    defaultStyle: {
+      font: 'Roboto',
+      color: '#1F2937'
+    }
+  };
+}
+
+// 6. PDF GENERATION (Promise-wrapped con callback fallback)
+function createPdfBlob(docDef) {
+  return new Promise(function(resolve, reject) {
+    try {
+      if (typeof pdfMake === 'undefined') {
+        return reject(new Error('Libreria pdfMake non caricata. Verifica la connessione internet.'));
+      }
+      var pdfDoc = pdfMake.createPdf(docDef);
+      var settled = false;
+
+      // Metodo callback
+      pdfDoc.getBlob(function(blob) {
+        if (!settled) {
+          settled = true;
+          if (blob) resolve(blob);
+          else reject(new Error('pdfMake non ha restituito un Blob valido.'));
+        }
+      });
+
+      // Timeout di sicurezza
+      setTimeout(function() {
+        if (!settled) {
+          settled = true;
+          reject(new Error('Timeout durante la creazione del PDF.'));
+        }
+      }, 15000);
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
+// 7. VALIDATE PDF BLOB
+async function validatePdfBlob(blob) {
+  if (!blob || blob.size < 1500) {
+    throw new Error('Dimensione file non valida (< 1500 byte).');
+  }
+  var slice = blob.slice(0, 5);
+  var buf = await slice.arrayBuffer();
+  var bytes = new Uint8Array(buf);
+  var header = String.fromCharCode.apply(null, bytes);
+  if (header !== '%PDF-') {
+    throw new Error('Header PDF non valido: ' + header);
+  }
+  return true;
+}
+
+// 8. DOWNLOAD & MOBILE SHARE
+async function downloadOrSharePdf(blob, filename) {
+  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
+  
+  if (isMobile && navigator.canShare && typeof File !== 'undefined') {
+    try {
+      var file = new File([blob], filename, { type: 'application/pdf' });
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          title: 'Istruzioni Check-in',
+          text: 'Documento istruzioni check-in per il soggiorno.',
+          files: [file]
+        });
+        return { shared: true };
+      }
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        return { shared: true, aborted: true };
+      }
+      console.warn('Share API non riuscita, passaggio al download:', err);
+    }
+  }
+
+  // Fallback Download standard
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() {
+    if (a.parentNode) a.parentNode.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 8000);
+  return { downloaded: true };
+}
+
+// PIPELINE PRINCIPALE (Innescata dal click)
+async function generatePDF() {
+  if (_isGeneratingCheckinPdf) return;
+
+  var generateBtn = document.getElementById('ci-btn-generate');
+  var statusMsg = document.getElementById('ci-status-msg');
+  var originalBtnText = generateBtn ? generateBtn.innerHTML : 'Crea PDF &amp; Condividi &darr;';
+
+  _isGeneratingCheckinPdf = true;
+
+  if (generateBtn) {
+    generateBtn.disabled = true;
+    generateBtn.style.opacity = '0.75';
+    generateBtn.innerHTML = '<span class="ci-spinner"></span> Ricerca servizi...';
+  }
+
+  if (statusMsg) {
+    statusMsg.className = 'ci-status-box loading';
+    statusMsg.innerHTML = '🔍 <strong>1/3</strong> Ricerca supermercati e parcheggi nelle vicinanze...';
+  }
+
+  try {
+    var inputs = {
+      apt: document.getElementById('ci-apt').value,
+      addr: document.getElementById('ci-addr').value,
+      code: document.getElementById('ci-code').value,
+      floor: document.getElementById('ci-floor').value,
+      elevator: document.getElementById('ci-elevator').value,
+      ztl: document.getElementById('ci-ztl').value,
+      wifi: document.getElementById('ci-wifi').value,
+      pass: document.getElementById('ci-pass').value,
+      trash: document.getElementById('ci-trash').value,
+      checkout: document.getElementById('ci-checkout').value
+    };
+
+    // Step A: Ricerca Geografica
+    var geoData = await fetchNeighborhoodData(inputs.addr);
+
+    if (generateBtn) {
+      generateBtn.innerHTML = '<span class="ci-spinner"></span> Creazione PDF...';
+    }
+    if (statusMsg) {
+      statusMsg.innerHTML = '📄 <strong>2/3</strong> Generazione PDF vettoriale alta risoluzione (IT + EN)...';
+    }
+
+    // Step B: Caricamento Logo
+    var logoBase64 = await loadLogoAsBase64();
+
+    // Step C: Modello Dati
+    var model = buildCheckinModel(inputs, geoData);
+
+    // Step D: Document Definition
+    var docDef = buildCheckinDocDefinition(model, logoBase64);
+
+    // Step E: Creazione Blob
+    var blob = await createPdfBlob(docDef);
+
+    // Step F: Validazione
+    await validatePdfBlob(blob);
+
+    if (statusMsg) {
+      statusMsg.className = 'ci-status-box success';
+      statusMsg.innerHTML = '✅ <strong>3/3</strong> PDF generato con successo! Apertura download / condivisione...';
+    }
+
+    // Step G: Nome file e download/share
+    var safeApt = (inputs.apt || 'Appartamento').trim().replace(/[^a-zA-Z0-9_À-ſ]+/g, '_');
+    var filename = 'Istruzioni_Checkin_' + safeApt + '_' + _pdfFileStamp() + '.pdf';
+
+    await downloadOrSharePdf(blob, filename);
+
+    setTimeout(function() {
+      closeCheckinModal();
+      if (statusMsg) {
+        statusMsg.className = 'ci-status-box';
+        statusMsg.style.display = 'none';
+      }
+    }, 1800);
+
+  } catch (err) {
+    console.error('Errore generazione Check-in PDF:', err);
+    if (statusMsg) {
+      statusMsg.className = 'ci-status-box error';
+      statusMsg.innerHTML = '❌ <strong>Errore:</strong> ' + (err.message || 'Si è verificato un problema nella generazione.');
+    }
+    alert('Errore nella creazione del PDF: ' + (err.message || err));
+  } finally {
+    _isGeneratingCheckinPdf = false;
+    if (generateBtn) {
+      generateBtn.disabled = false;
+      generateBtn.style.opacity = '1';
+      generateBtn.innerHTML = originalBtnText;
+    }
+  }
+}
 </script>
 
 </body>

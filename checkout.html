@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attivazione Servizio & Abbonamento | itassistance Dream Team</title>
+<meta name="description" content="Attiva il tuo piano itassistance per affitti brevi a Firenze. Abbonamento mensile cancellabile in qualsiasi momento, pagamento sicuro con carta tramite Stripe.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://www.itadreamteam.com/checkout.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #111111;
+    --navy-card: #1c1c1c;
+    --gold: #C9A84C;
+    --gold-hover: #b8973b;
+    --bg-light: #F9FAFB;
+    --border: #E5E7EB;
+    --text-dark: #1F2937;
+    --text-muted: #6B7280;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+  }
+  body {
+    background: #FAFAFA;
+    color: var(--text-dark);
+    font-family: var(--sans);
+    line-height: 1.6;
+    padding-bottom: 60px;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { text-decoration: none; color: inherit; }
+
+  /* NAV */
+  .co-nav {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .co-brand {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--navy);
+  }
+  .co-brand span { color: var(--gold); }
+  .co-secure-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #059669;
+    font-weight: 600;
+    background: #ECFDF5;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid #A7F3D0;
+  }
+
+  /* CONTAINER */
+  .co-container {
+    max-width: 980px;
+    margin: 40px auto 0;
+    padding: 0 20px;
+  }
+
+  .co-header {
+    text-align: left;
+    margin-bottom: 32px;
+  }
+  .co-eyebrow {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+    display: block;
+  }
+  .co-title {
+    font-family: var(--serif);
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .co-sub {
+    font-size: 14.5px;
+    color: var(--text-muted);
+    max-width: 600px;
+  }
+
+  /* GRID */
+  .co-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 32px;
+    align-items: start;
+  }
+  @media(max-width: 860px) {
+    .co-grid { grid-template-columns: 1fr; }
+  }
+
+  /* CARD WRAPPER */
+  .co-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    margin-bottom: 24px;
+  }
+  .co-card-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    color: var(--navy);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* PLAN SELECTOR */
+  .plan-option {
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: all .2s;
+    position: relative;
+    background: #fff;
+  }
+  .plan-option:hover {
+    border-color: #cbd5e1;
+  }
+  .plan-option.selected {
+    border-color: var(--gold);
+    background: #FFFDF8;
+    box-shadow: 0 4px 16px rgba(201,168,76,0.12);
+  }
+  .plan-tag-rec {
+    position: absolute;
+    top: -10px;
+    right: 18px;
+    background: var(--navy);
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+  }
+  .plan-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .plan-radio-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--navy);
+  }
+  .plan-radio-circle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .plan-option.selected .plan-radio-circle {
+    border-color: var(--gold);
+  }
+  .plan-option.selected .plan-radio-circle::after {
+    content: '';
+    width: 9px;
+    height: 9px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+  .plan-price-tag {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .plan-desc {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-left: 28px;
+    line-height: 1.5;
+  }
+  .plan-benefits {
+    margin-top: 12px;
+    margin-left: 28px;
+    list-style: none;
+  }
+  .plan-benefits li {
+    font-size: 12px;
+    color: #374151;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .plan-benefits li strong { color: var(--navy); }
+  .plan-benefits li::before {
+    content: '✓';
+    color: var(--gold);
+    font-weight: bold;
+  }
+
+  /* FORM FIELDS */
+  .co-field {
+    margin-bottom: 16px;
+  }
+  .co-field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #4B5563;
+    margin-bottom: 6px;
+  }
+  .co-field input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #D1D5DB;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    color: #111;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .co-field input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+  }
+  .co-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media(max-width: 520px) {
+    .co-field-row { grid-template-columns: 1fr; }
+  }
+
+  /* ORDER SUMMARY (RIGHT COLUMN) */
+  .order-summary-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+    position: sticky;
+    top: 24px;
+  }
+  .os-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    color: var(--navy);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+  }
+  .os-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13.5px;
+    padding: 8px 0;
+    color: #4B5563;
+  }
+  .os-row.total {
+    border-top: 1.5px solid var(--navy);
+    padding-top: 14px;
+    margin-top: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .os-total-num {
+    font-size: 26px;
+    color: var(--navy);
+    font-family: var(--serif);
+  }
+  .os-cancel-guarantee {
+    background: #F3F4F6;
+    border-radius: 6px;
+    padding: 14px;
+    margin: 20px 0;
+    font-size: 12px;
+    color: #374151;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.5;
+  }
+  .os-cancel-guarantee span.icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  /* STRIPE BUTTON */
+  .btn-stripe-pay {
+    background: var(--navy);
+    color: #fff;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    width: 100%;
+    padding: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .2s, transform .2s, box-shadow .2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 52px;
+  }
+  .btn-stripe-pay:hover {
+    background: #222;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201,168,76,0.3);
+  }
+  .stripe-badges {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin-top: 14px;
+    font-size: 11px;
+    color: #6B7280;
+  }
+  .stripe-logo-text {
+    font-weight: 700;
+    color: #635BFF;
+  }
+
+  /* SPINNER */
+  .ci-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: ci-spin 0.6s linear infinite;
+  }
+  @keyframes ci-spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<nav class="co-nav">
+  <a href="https://www.itadreamteam.com/" class="co-brand">
+    it<span>.</span>assistance · Dream Team
+  </a>
+  <div class="co-secure-badge">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+    Checkout Sicuro Stripe SSL
+  </div>
+</nav>
+
+<div class="co-container">
+  <div class="co-header">
+    <span class="co-eyebrow">Attivazione Partner · Nessun Vincolo</span>
+    <h1 class="co-title">Attiva il tuo abbonamento.</h1>
+    <p class="co-sub">Scegli la tua formula, inserisci i dati della struttura e procedi al pagamento sicuro con carta tramite Stripe. Puoi disdire in qualsiasi momento con un clic.</p>
+  </div>
+
+  <div class="co-grid">
+    <!-- LEFT COLUMN: SELECTION & FORM -->
+    <div class="co-main">
+      
+      <!-- STEP 1: PLAN -->
+      <div class="co-card">
+        <h2 class="co-card-title">1. Scegli il tuo piano</h2>
+        
+        <!-- OPTION 1: PACCO UNICO (FEATURED) -->
+        <div class="plan-option selected" id="opt-all-inclusive" onclick="selectPlan('all-inclusive')">
+          <div class="plan-tag-rec">★ IL PIÙ SCELTO</div>
+          <div class="plan-head">
+            <div class="plan-radio-label">
+              <span class="plan-radio-circle"></span>
+              Pacco Unico All-Inclusive
+            </div>
+            <div class="plan-price-tag">€99 <small style="font-size:12px;font-weight:400;color:#666">/ mese</small></div>
+          </div>
+          <p class="plan-desc">Tutti i servizi operativi inclusi a costo zero. Pagamento mese per mese.</p>
+          <ul class="plan-benefits">
+            <li><strong>Check-in in presenza: INCLUSI (0€)</strong></li>
+            <li><strong>Piccola manutenzione ordinaria: INCLUSA (0€)</strong></li>
+            <li><strong>Customer care 24/7</strong> & gestione messaggi Airbnb/Booking</li>
+            <li><strong>Welcome Kit & Amenities</strong> per gli ospiti fornite</li>
+          </ul>
+        </div>
+
+        <!-- OPTION 2: BASE -->
+        <div class="plan-option" id="opt-base" onclick="selectPlan('base')">
+          <div class="plan-head">
+            <div class="plan-radio-label">
+              <span class="plan-radio-circle"></span>
+              Piano Base a Consumo
+            </div>
+            <div class="plan-price-tag">€55 <small style="font-size:12px;font-weight:400;color:#666">/ mese</small></div>
+          </div>
+          <p class="plan-desc">Customer care 24/7 e gestione messaggi. Check-in e manutenzione a consumo.</p>
+          <ul class="plan-benefits">
+            <li>Customer care ospiti 24/7 con risposta rapida</li>
+            <li>Gestione comunicazioni e messaggistica portali</li>
+            <li>Check-in in persona a consumo (€20/cad)</li>
+            <li>Manutenzione ordinaria a consumo (€30/h)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- STEP 2: DETAILS -->
+      <div class="co-card">
+        <h2 class="co-card-title">2. Dati del proprietario e immobile</h2>
+        
+        <div class="co-field">
+          <label>Nome e Cognome / Ragione Sociale *</label>
+          <input type="text" id="f-nome" placeholder="es. Mario Rossi (o Rossi Property Srl)" required>
+        </div>
+
+        <div class="co-field-row">
+          <div class="co-field">
+            <label>Email (per fatture e ricevute Stripe) *</label>
+            <input type="email" id="f-email" placeholder="mario.rossi@email.com" required>
+          </div>
+          <div class="co-field">
+            <label>Telefono / WhatsApp *</label>
+            <input type="tel" id="f-tel" placeholder="+39 340 1234567" required>
+          </div>
+        </div>
+
+        <div class="co-field-row">
+          <div class="co-field">
+            <label>Codice Fiscale o P.IVA *</label>
+            <input type="text" id="f-cf" placeholder="C.F. o Partita IVA" required>
+          </div>
+          <div class="co-field">
+            <label>Nome o Riferimento Immobile *</label>
+            <input type="text" id="f-imm" placeholder="es. Apt Ponte Vecchio Luxury" required>
+          </div>
+        </div>
+
+        <div class="co-field">
+          <label>Indirizzo Struttura a Firenze *</label>
+          <input type="text" id="f-addr" placeholder="es. Borgo San Jacopo 25 blu, Firenze" required>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: ORDER SUMMARY -->
+    <div class="co-sidebar">
+      <div class="order-summary-card">
+        <h3 class="os-title">Riepilogo Abbonamento</h3>
+
+        <div class="os-row">
+          <span>Piano Selezionato</span>
+          <strong id="sum-plan-name" style="color:var(--navy)">Pacco Unico All-Inclusive</strong>
+        </div>
+
+        <div class="os-row">
+          <span>Frequenza Addebito</span>
+          <span>Mensile ricorrente</span>
+        </div>
+
+        <div class="os-row">
+          <span>Quota Mensile (+ IVA)</span>
+          <span id="sum-subtotal">€ 99,00</span>
+        </div>
+
+        <div class="os-row">
+          <span>IVA di legge (22%)</span>
+          <span id="sum-vat">€ 21,78</span>
+        </div>
+
+        <div class="os-row total">
+          <span>Totale al Mese</span>
+          <div style="text-align:right">
+            <span class="os-total-num" id="sum-total">€ 120,78</span>
+            <div style="font-size:10px;font-weight:400;color:#666">IVA inclusa</div>
+          </div>
+        </div>
+
+        <div class="os-cancel-guarantee">
+          <span class="icon">🔄</span>
+          <div>
+            <strong>Cancellabile in qualsiasi momento:</strong> puoi mettere in pausa o cancellare l'addebito direttamente dal portale cliente Stripe con un semplice clic. Nessun vincolo né penali.
+          </div>
+        </div>
+
+        <button type="button" class="btn-stripe-pay" id="btn-pay" onclick="proceedToStripe()">
+          <span>Paga con Carta su Stripe ➔</span>
+        </button>
+
+        <div class="stripe-badges">
+          <span>Powered by <span class="stripe-logo-text">stripe</span></span>
+          <span>•</span>
+          <span>Visa · Mastercard · Amex · Apple Pay</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ────────────────────────────────────────────────────────
+   STRIPE FUNNEL LOGIC & CONFIGURATION
+──────────────────────────────────────────────────────── */
+
+// CONFIGURAZIONE STRIPE: Inserisci i tuoi Payment Links generati dalla Dashboard Stripe
+var STRIPE_LINKS = {
+  // Sostituisci questi URL con i Payment Links creati su Stripe (Modalità Live o Test)
+  'all-inclusive': 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=pacco_99',
+  'base': 'https://buy.stripe.com/test_6oE5kv47HaCb4qc4gg?client_reference_id=piano_55'
+};
+
+var currentPlan = 'all-inclusive';
+
+// Prendi il piano dalla query string (es. ?piano=base o ?piano=all-inclusive)
+document.addEventListener('DOMContentLoaded', function() {
+  var urlParams = new URLSearchParams(window.location.search);
+  var p = urlParams.get('piano');
+  if (p === 'base') {
+    selectPlan('base');
+  } else {
+    selectPlan('all-inclusive');
+  }
+
+  // Precompila eventuali dati passati dal contratto o form
+  ['nome', 'email', 'tel', 'cf', 'imm', 'addr'].forEach(function(k) {
+    var val = urlParams.get(k);
+    if (val) {
+      var el = document.getElementById('f-' + k);
+      if (el) el.value = decodeURIComponent(val);
+    }
+  });
+});
+
+function selectPlan(planKey) {
+  currentPlan = planKey;
+  
+  document.getElementById('opt-all-inclusive').classList.toggle('selected', planKey === 'all-inclusive');
+  document.getElementById('opt-base').classList.toggle('selected', planKey === 'base');
+
+  if (planKey === 'all-inclusive') {
+    document.getElementById('sum-plan-name').textContent = 'Pacco Unico All-Inclusive';
+    document.getElementById('sum-subtotal').textContent = '€ 99,00';
+    document.getElementById('sum-vat').textContent = '€ 21,78';
+    document.getElementById('sum-total').textContent = '€ 120,78';
+  } else {
+    document.getElementById('sum-plan-name').textContent = 'Piano Base a Consumo';
+    document.getElementById('sum-subtotal').textContent = '€ 55,00';
+    document.getElementById('sum-vat').textContent = '€ 12,10';
+    document.getElementById('sum-total').textContent = '€ 67,10';
+  }
+}
+
+async function proceedToStripe() {
+  var nome = document.getElementById('f-nome').value.trim();
+  var email = document.getElementById('f-email').value.trim();
+  var tel = document.getElementById('f-tel').value.trim();
+  var cf = document.getElementById('f-cf').value.trim();
+  var imm = document.getElementById('f-imm').value.trim();
+  var addr = document.getElementById('f-addr').value.trim();
+
+  if (!nome || !email || !tel) {
+    alert('Per favore compila almeno Nome, Email e Telefono prima di procedere al pagamento.');
+    return;
+  }
+
+  var btn = document.getElementById('btn-pay');
+  var origText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="ci-spinner"></span> Reindirizzamento su Stripe...';
+
+  // Salvataggio Lead automatico (webhook n8n) prima del redirect per prevenire carrelli abbandonati
+  try {
+    fetch('https://aherreras.app.n8n.cloud/webhook/leads/itassistance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        azienda: 'ITASSISTANCE',
+        nome: nome,
+        email: email,
+        telefono: tel,
+        cf: cf,
+        immobile: imm,
+        indirizzo: addr,
+        piano: currentPlan,
+        totale: currentPlan === 'all-inclusive' ? '99€+IVA' : '55€+IVA',
+        fonte: 'Funnel Checkout Stripe'
+      })
+    }).catch(function(){});
+  } catch(e) {}
+
+  // Costruisci il link Stripe con parametri precompilati
+  var targetUrl = STRIPE_LINKS[currentPlan] || STRIPE_LINKS['all-inclusive'];
+  var sep = targetUrl.indexOf('?') !== -1 ? '&' : '?';
+  var finalUrl = targetUrl + sep + 'prefilled_email=' + encodeURIComponent(email) +
+                 '&client_reference_id=' + encodeURIComponent(currentPlan + '_' + (imm || 'apt').replace(/\s+/g,'_'));
+
+  setTimeout(function() {
+    window.location.href = finalUrl;
+  }, 400);
+}
+</script>
+
+</body>
+</html>

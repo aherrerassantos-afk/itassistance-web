@@ -7,6 +7,7 @@
     { "source": "/gestione-ospiti-firenze.html", "destination": "/gestione-ospiti-firenze", "permanent": true },
     { "source": "/assistenza-airbnb-centro-storico-firenze.html", "destination": "/assistenza-airbnb-centro-storico-firenze", "permanent": true },
     { "source": "/assistenza-airbnb-toscana.html", "destination": "/assistenza-airbnb-toscana", "permanent": true },
-    { "source": "/contratto.html", "destination": "/contratto", "permanent": true }
+    { "source": "/contratto.html", "destination": "/contratto", "permanent": true },
+    { "source": "/checkout.html", "destination": "/checkout", "permanent": true }
   ]
 }
