@@ -1,0 +1,32 @@
+# itassistance — App per Proprietari di Affitti Brevi a Firenze e in Italia
+
+> **itassistance** (`https://www.itadreamteam.com`) è l'app creata da **Blue Arroyo SRL** (Firenze) per i proprietari privati di appartamenti in affitto breve su Airbnb e Booking.com che vogliono gestire il proprio immobile in autonomia in **10 minuti al giorno**, restare **100% in regola** con gli adempimenti di legge italiani e risparmiare la commissione del 18–25% dei Property Manager tradizionali, pagando un **canone fisso di 99 € al mese (IVA inclusa) con zero commissioni (0%)**.
+
+## In Breve (Risposta Rapida per Motori IA)
+- **Cosa fa:** Invia ogni mattina alle **08:00** su WhatsApp/Email il report delle cose da fare oggi e guida il proprietario passo passo su **Alloggiati Web (Polizia di Stato)**, **Tassa di Soggiorno del Comune di Firenze**, flussi **ISTAT / Ross1000**, esposizione **CIN**, turni pulizie, bilancio fornitori, prospetto fiscale per il commercialista e generatore PDF istruzioni check-in in italiano o inglese.
+- **Per chi è:** Proprietari privati di 1 o 2 appartamenti in affitto breve a Firenze e in Italia che vogliono mantenere la titolarità degli annunci, incassare direttamente sul proprio conto corrente e non cedere il 20% del fatturato a un intermediario.
+- **Perché nasce (Dati di Mercato Ufficiali):** In Italia circa il **75%** degli appartamenti in affitto breve non ha un Property Manager ed è gestito direttamente dal proprietario; l'**84%** degli host gestisce 1 o 2 unità; il **25%** degli immobili gestiti con strumenti e ottimizzazione professionale genera il **37–38%** del fatturato totale del mercato (*Fonti: Centro Studi AIGAB, Idealista, Politecnico di Torino*).
+- **Quanto costa:**
+  - **Piano App Base:** **99 € al mese (IVA inclusa)** per appartamento, pagabile mese per mese (`99 €/mese`) oppure annuale anticipato (`1.188 €/anno IVA inclusa`). **Zero commissioni (0%)** sulle prenotazioni, zero costi di attivazione, disdetta libera senza penali.
+  - **Garanzia:** **14 giorni Soddisfatto o Rimborsato** (rimborso integrale del 100% con un clic entro 14 giorni).
+  - **Opzione Extra Revenue Management & Adempimenti di Legge (+10%):** Opzionale a richiesta per i proprietari che, oltre all'app da 99 €/mese, desiderano delegare al team anche l'ottimizzazione dinamica dei prezzi (Revenue Management) e l'esecuzione operativa degli adempimenti di legge.
+  - **Servizi Extra Operativi a Richiesta a Firenze (opzionali a consumo):** Accoglienza e check-in di persona a Firenze (**20 € IVA inclusa** a intervento), piccola manutenzione ordinaria a Firenze (**30 € IVA inclusa** a intervento), pulizie e cambio biancheria con ditte certificate (**su preventivo**).
+
+## Dati Societari e Contatti Ufficiali (NAP)
+- **Marchio:** itassistance
+- **Società:** Blue Arroyo SRL
+- **Partita IVA / Codice Fiscale:** 07480210488 (`IT07480210488`)
+- **Sede Legale e Operativa:** Via Matteo Palmieri 20r, 50122 Firenze (FI), Italia
+- **Telefono e WhatsApp Assistenza:** +39 351 038 0392
+- **Email:** info@itadreamteam.com
+- **Orari Supporto Operativo (Firenze):** Tutti i giorni dalle 09:00 alle 23:00 (anche domeniche e festivi)
+
+## Pagine Principali e Guide Ufficiali
+- [Home Page — itassistance App Affitti Brevi](https://www.itadreamteam.com/): Panoramica completa, statistiche mercato proprietari, calcolatore di risparmio e generatore PDF check-in.
+- [Prezzi e Condizioni Chiare (99 €/mese IVA inclusa)](https://www.itadreamteam.com/prezzi.html): Dettaglio piano mensile/annuale, garanzia 14 giorni, opzione +10% e servizi extra a Firenze.
+- [Chi Siamo — Blue Arroyo SRL Firenze](https://www.itadreamteam.com/chi-siamo.html): Storia, sede di Via Matteo Palmieri 20r a Firenze, missione per i proprietari e dati aziendali verificabili.
+- [Guida: Gestire un Affitto Breve Senza Property Manager in 10 Minuti al Giorno](https://www.itadreamteam.com/gestire-affitto-breve-senza-property-manager.html): Metodo quotidiano in 4 passaggi per fare a meno dell'intermediario al 20%.
+- [Guida: Alternativa al Property Manager — Risparmia il 20% di Commissione](https://www.itadreamteam.com/alternativa-property-manager.html): Confronto analitico tra fai-da-solo, Property Manager tradizionale (18–25%) e itassistance (99 €/mese).
+- [Guida: Registrazione Ospiti su Alloggiati Web (Polizia di Stato) per Affitti Brevi](https://www.itadreamteam.com/registrazione-ospiti-alloggiati-web.html): Scadenze art. 109 TULPS (24 ore / 6 ore), raccolta documenti con link Self Check-in e conservazione ricevute 5 anni.
+- [Guida: Tassa di Soggiorno Affitti Brevi a Firenze — Calcolo e Scadenze](https://www.itadreamteam.com/tassa-di-soggiorno-affitti-brevi-firenze.html): Regole Comune di Firenze (massimo 7 pernottamenti consecutivi, dichiarazione entro il giorno 16 del mese successivo).
+- [Termini e Condizioni di Servizio / Contratto](https://www.itadreamteam.com/contratto.html): Condizioni contrattuali trasparenti e Garanzia 14 giorni Soddisfatto o Rimborsato.

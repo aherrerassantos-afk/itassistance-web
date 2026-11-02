@@ -124,6 +124,8 @@
       admin: '/admin.html',
       welcome: '/benvenuto.html',
       guestCheckin: '/ospiti.html',
+      about: '/chi-siamo.html',
+      llms: '/llms.txt',
       checkout: '/checkout.html',
       checkoutMonthly: '/checkout.html?ciclo=mensile',
       checkoutYearly: '/checkout.html?ciclo=annuale',

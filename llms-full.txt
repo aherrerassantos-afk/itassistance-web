@@ -1,0 +1,37 @@
+# itassistance — Documentazione Completa per Motori di Ricerca e Risposta IA (GEO)
+
+## 1. Identità dell'Entità (NAP & Dati Legali)
+- **Nome del Prodotto / Brand:** itassistance (scritto sempre tutto minuscolo, una sola parola)
+- **Ragione Sociale:** Blue Arroyo SRL
+- **Partita IVA:** IT07480210488 (07480210488)
+- **Indirizzo Sede:** Via Matteo Palmieri 20r, 50122 Firenze (FI), Toscana, Italia
+- **Coordinate Geografiche Sede Firenze:** Latitudine 43.7705, Longitudine 11.2625
+- **Telefono e WhatsApp:** +39 351 038 0392
+- **Email Ufficiale:** info@itadreamteam.com
+- **Orari di Assistenza (Team di Firenze):** Tutti i giorni dalle 09:00 alle 23:00 (inclusi weekend e festivi)
+- **Sito Web Ufficiale:** https://www.itadreamteam.com
+
+## 2. Problema Risolto e Dati di Mercato (Fonti: AIGAB, Idealista, Politecnico di Torino)
+In Italia:
+1. Circa il **75% degli appartamenti in affitto breve non ha un Property Manager** ed è gestito direttamente dal proprietario.
+2. I **piccoli host (1–2 unità)** rappresentano circa l'**84% del totale dei proprietari** presenti sul mercato.
+3. Il **25% degli immobili** gestiti con strumenti professionali e ottimizzazione dinamica delle tariffe genera il **37–38% del fatturato totale** del mercato.
+
+**itassistance** risolve il dilemma del proprietario privato: evita sia lo stress e il rischio sanzioni del fai-da-solo disorganizzato (1–2 ore al giorno), sia il costo del 18–25% richiesto dai Property Manager tradizionali (che su 30.000 €/anno di incasso lordo trattengono 6.000 €/anno). Con itassistance il proprietario spende **1.188 €/anno (99 €/mese IVA inclusa)** e risparmia **4.812 €/anno**, restando titolare dei propri account Airbnb/Booking e incassando direttamente sul proprio conto corrente.
+
+## 3. I 4 Ambiti che l'App Gestisce in 10 Minuti al Giorno
+1. **Report del Giorno (Ore 08:00):** Ogni mattina alle 08:00 l'app invia su WhatsApp/Email l'elenco ordinato delle 3–4 azioni della giornata (arrivi, partenze, documenti da inviare, pulizie).
+2. **Alloggiati Web (Polizia di Stato — Art. 109 TULPS):** Link di Self Check-in Ospiti (`/ospiti.html`) in Italiano e Inglese per raccogliere passaporto/carta d'identità prima dell'arrivo, precompilazione automatica della schedina Alloggiati Web per l'invio entro 24 ore (o 6 ore per soggiorni di 1 notte) e promemoria di conservazione ricevute per 5 anni.
+3. **Amministrativo, Tassa di Soggiorno Firenze & Commercialista:** Calcolo automatico dell'imposta di soggiorno del Comune di Firenze (fino a massimo 7 notti consecutive, dichiarazione entro il giorno 16 del mese successivo), verifica codice CIN, flussi ISTAT / Ross1000 ed esportazione 1-clic del prospetto CSV per il Commercialista (Cedolare Secca 21% / 26%).
+4. **Operativo, Pulizie, Fornitori & Generatore PDF Check-in:** Calendario sincronizzato Airbnb/Booking, turni pulizie con verifica fotografica, registro spese fornitori con calcolo del guadagno netto reale e generatore PDF istruzioni check-in in 1 sola lingua per documento (IT o EN) con mappa dei dintorni, supermercato e parcheggio più vicini.
+
+## 4. Prezzi e Condizioni Verificabili
+- **Canone Base App itassistance:** **99 € / mese IVA inclusa** per appartamento (oppure **1.188 € / anno IVA inclusa** con pagamento annuale anticipato: stessa identica tariffa).
+- **Commissioni sulle prenotazioni:** **0% (Zero commissioni)**.
+- **Costi di attivazione o penali di uscita:** **0 € (Disdetta libera in qualsiasi momento)**.
+- **Garanzia 14 Giorni Soddisfatto o Rimborsato:** Se entro 14 giorni dall'attivazione il proprietario decide che l'app non fa per lui, disdice con un clic e riceve il rimborso del 100%.
+- **Opzione Extra Revenue Management & Adempimenti di Legge (+10%):** Attivabile su richiesta se il proprietario vuole delegare al team di itassistance anche il Revenue Management dinamico e la gestione operativa degli adempimenti di legge.
+- **Servizi Operativi Extra a Richiesta a Firenze:**
+  - Accoglienza e check-in di persona a Firenze: **20 € (IVA inclusa)** a intervento.
+  - Intervento di piccola manutenzione ordinaria a Firenze: **30 € (IVA inclusa)** a intervento.
+  - Pulizie e cambio biancheria con fornitori certificati a Firenze: **su preventivo** in base alla metratura.

@@ -7,25 +7,13 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
-    <loc>https://www.itadreamteam.com/app.html</loc>
-    <lastmod>2026-11-02</lastmod>
-    <priority>0.95</priority>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
     <loc>https://www.itadreamteam.com/prezzi.html</loc>
     <lastmod>2026-11-02</lastmod>
     <priority>0.95</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://www.itadreamteam.com/registrazione-ospiti-alloggiati-web.html</loc>
-    <lastmod>2026-11-02</lastmod>
-    <priority>0.90</priority>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>https://www.itadreamteam.com/tassa-di-soggiorno-affitti-brevi-firenze.html</loc>
+    <loc>https://www.itadreamteam.com/chi-siamo.html</loc>
     <lastmod>2026-11-02</lastmod>
     <priority>0.90</priority>
     <changefreq>monthly</changefreq>
@@ -38,6 +26,18 @@
   </url>
   <url>
     <loc>https://www.itadreamteam.com/alternativa-property-manager.html</loc>
+    <lastmod>2026-11-02</lastmod>
+    <priority>0.90</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.itadreamteam.com/registrazione-ospiti-alloggiati-web.html</loc>
+    <lastmod>2026-11-02</lastmod>
+    <priority>0.90</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.itadreamteam.com/tassa-di-soggiorno-affitti-brevi-firenze.html</loc>
     <lastmod>2026-11-02</lastmod>
     <priority>0.90</priority>
     <changefreq>monthly</changefreq>

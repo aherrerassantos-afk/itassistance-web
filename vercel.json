@@ -1,6 +1,7 @@
 {
   "trailingSlash": false,
   "redirects": [
+    { "source": "/chi-siamo", "destination": "/chi-siamo.html", "permanent": true },
     { "source": "/login", "destination": "/login.html", "permanent": true },
     { "source": "/ospiti", "destination": "/ospiti.html", "permanent": true },
     { "source": "/checkin", "destination": "/ospiti.html", "permanent": true },

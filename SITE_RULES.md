@@ -59,3 +59,34 @@
 Dopo **OGNI deploy** in produzione, la risposta all'utente deve SEMPRE concludersi con un blocco strutturato **"🧭 Visione & Prossimo Passo Consigliato"** che contiene:
 1. **Check dello stato attuale (Cosa è fatto e live):** sintesi rapida dei blocchi chiusi rispetto alla visione complessiva di `itassistance`.
 2. **Proposta del passaggio successivo più efficace:** suggerire proattivamente 2–3 opzioni concrete ordinate per impatto sul business (es. collegamento database reale Supabase / autenticazione utenti, automazione invio report mattutino ore 08:00 via WhatsApp/Email con n8n, link Stripe live definitivi per i piani `99 €` / `1.188 €` / `+10%`, o ottimizzazione conversione) per guidare la decisione sul prossimo step.
+
+---
+
+## 8. REGOLA PERMANENTE — VISIBILITÀ ORGANICA: SEO + POSIZIONAMENTO SULLE IA (GEO)
+
+### Obiettivo
+`itassistance` (`https://www.itadreamteam.com`, Blue Arroyo SRL, Firenze) deve essere trovato e citato in modo organico su:
+1. Motori di ricerca classici: Google, Bing, Google Maps / Bing Places (Firenze).
+2. Motori di risposta basati su IA: ChatGPT Search, Perplexity, Google AI Overviews / Gemini, Microsoft Copilot, Claude.
+
+### Regole Tecniche e Contenutistiche Obbligatorie a ogni Modifica e Deploy
+1. **Indicizzazione & Sitemap:**
+   - Ogni pagina pubblica di marketing/guida deve avere `<meta name="robots" content="index, follow">`, `<link rel="canonical">`, un solo `<h1>`, `<title>` e `<meta name="description">` unici, ed essere inclusa in `/sitemap.xml`.
+   - Le pagine applicative private (`/admin.html`, `/benvenuto.html`, `/login.html`) devono avere `noindex` e non comparire in `/sitemap.xml`.
+   - Zero pagine 404, zero redirect a catena, tutto in HTTPS.
+2. **Contenuto nell'HTML statico (Senza dipendenza da JS):**
+   - Prezzi (`99 €/mese IVA inclusa`, `1.188 €/anno`, opzione `+10% Revenue & Adempimenti`, extra a Firenze `20 €` check-in e `30 €` manutenzione), statistiche (`75%` senza PM, `84%` piccoli host, `37–38%` ricavi — Fonti: AIGAB, Idealista, Politecnico di Torino), contatti e FAQ devono essere scritti direttamente nell'HTML sorgente affinché i crawler IA che non eseguono JS li leggano integralmente.
+3. **Accesso Crawler IA (`/robots.txt` e `/llms.txt`):**
+   - `/robots.txt` deve sempre consentire esplicitamente i crawler di ricerca, citazione e addestramento IA (`Googlebot`, `Bingbot`, `OAI-SearchBot`, `ChatGPT-User`, `GPTBot`, `PerplexityBot`, `Claude-SearchBot`, `Claude-User`, `ClaudeBot`, `Google-Extended`, `Applebot`, `Applebot-Extended`, `CCBot`).
+   - `/llms.txt` (e `/llms-full.txt`) devono essere mantenuti aggiornati con la sintesi ufficiale di `itassistance` e i link alle pagine chiave.
+4. **Struttura "Risposta Prima" (Answer-First) e Citabilità:**
+   - Ogni pagina di servizio o guida deve aprirsi con un blocco di 2–3 frasi che risponde subito alla domanda del proprietario (cosa facciamo, per chi, dove, a che prezzo esatto), seguito da fatti verificabili, data di ultimo aggiornamento visibile, autore (`itassistance · Blue Arroyo SRL`) e sezione FAQ reale.
+5. **Dati Strutturati (Schema.org JSON-LD) e Coerenza NAP:**
+   - Mantenere JSON-LD validi (`Organization`, `LocalBusiness`, `SoftwareApplication`, `FAQPage`, `Article`, `BreadcrumbList`).
+   - Nome, indirizzo e telefono (NAP) identici ovunque: `itassistance` (prodotto di `Blue Arroyo SRL`, P.IVA `07480210488`), `Via Matteo Palmieri 20r, 50122 Firenze (FI)`, Tel/WhatsApp `+39 351 038 0392`, Email `info@itadreamteam.com`, Orari `09:00–23:00`.
+6. **Correttezza Assoluta:**
+   - Vietati keyword stuffing, testi nascosti, pagine duplicate prive di valore, recensioni false o promesse non verificabili.
+7. **Checklist Obbligatoria Post-Deploy (Sezione SEO/GEO):**
+   - Dopo ogni deploy verificare: (a) nuove pagine in `sitemap.xml` con title, description, H1, canonical e JSON-LD validi; (b) contenuto leggibile nell'HTML senza JS; (c) `robots.txt` e `llms.txt` accessibili; (d) dati aziendali identici a `site-config.js`.
+   - Nel riepilogo di ogni deploy riportare sempre la riga **`SEO/GEO: ok`** (oppure l'elenco dei problemi trovati e risolti).
+

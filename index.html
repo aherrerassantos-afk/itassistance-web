@@ -43,15 +43,18 @@
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Organization",
+        "@type": ["Organization", "LocalBusiness", "ProfessionalService"],
         "@id": "https://www.itadreamteam.com/#organization",
         "name": "itassistance",
         "legalName": "Blue Arroyo SRL",
         "url": "https://www.itadreamteam.com/",
         "logo": "https://www.itadreamteam.com/brand/logo.png",
+        "image": "https://www.itadreamteam.com/brand/logo.png",
         "email": "info@itadreamteam.com",
         "telephone": "+393510380392",
         "taxID": "07480210488",
+        "vatID": "IT07480210488",
+        "priceRange": "99€ / mese",
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Via Matteo Palmieri 20r",
@@ -60,6 +63,23 @@
           "addressRegion": "FI",
           "addressCountry": "IT"
         },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 43.7705,
+          "longitude": 11.2625
+        },
+        "areaServed": [
+          { "@type": "City", "name": "Firenze" },
+          { "@type": "Country", "name": "Italia" }
+        ],
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+            "opens": "09:00",
+            "closes": "23:00"
+          }
+        ],
         "contactPoint": {
           "@type": "ContactPoint",
           "telephone": "+393510380392",
@@ -2075,11 +2095,13 @@
         <div>
           <div class="footer-title">Prodotto &amp; Condizioni</div>
           <ul class="footer-links">
+            <li><a href="/chi-siamo.html"><strong>🏛️ Chi Siamo — Blue Arroyo SRL Firenze</strong></a></li>
             <li><a href="/app.html"><strong>📱 Area Dedicata Proprietario (App)</strong></a></li>
             <li><a href="/admin.html">👑 Console Super Admin &amp; Fatturazione</a></li>
             <li><a href="/prezzi.html">Prezzo e confronto (99 €/mese IVA incl.)</a></li>
             <li><a href="/checkout.html">Prova l'app (14 gg Soddisfatto o Rimborsato)</a></li>
             <li><a href="/contratto.html">Termini di Servizio e Condizioni</a></li>
+            <li><a href="/llms.txt">Sintesi Dati Ufficiali per IA (llms.txt)</a></li>
             <li><a href="#checkin-pdf" onclick="openCheckinModal();return false;">Generatore PDF Istruzioni Check-in</a></li>
           </ul>
         </div>

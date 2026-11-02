@@ -16,11 +16,51 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "itassistance",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web, iOS, Android",
-    "offers": { "@type": "Offer", "price": "99.00", "priceCurrency": "EUR" }
+    "@graph": [
+      {
+        "@type": "Article",
+        "headline": "Tassa di soggiorno per affitti brevi a Firenze: scadenze e gestione semplice",
+        "datePublished": "2026-09-01",
+        "dateModified": "2026-11-02",
+        "author": { "@type": "Organization", "name": "itassistance · Blue Arroyo SRL", "url": "https://www.itadreamteam.com/chi-siamo.html" },
+        "publisher": { "@type": "Organization", "name": "itassistance", "logo": { "@type": "ImageObject", "url": "https://www.itadreamteam.com/brand/logo.png" } }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "itassistance",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web, iOS, Android",
+        "offers": { "@type": "Offer", "price": "99.00", "priceCurrency": "EUR" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.itadreamteam.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Tassa di Soggiorno Affitti Brevi Firenze", "item": "https://www.itadreamteam.com/tassa-di-soggiorno-affitti-brevi-firenze.html" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Come si calcola e quando si dichiara la tassa di soggiorno per affitti brevi a Firenze?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nel Comune di Firenze l'imposta di soggiorno per le locazioni turistiche si applica fino a un massimo di 7 pernottamenti consecutivi per ospite. La dichiarazione telematica mensile sul portale del Comune di Firenze va presentata entro il giorno 16 del mese successivo, distinguendo i pernottamenti già riscossi dai portali convenzionati (es. Airbnb) da quelli da versare."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Come aiuta itassistance con la tassa di soggiorno e i flussi ISTAT a Firenze?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "L'app itassistance (99 €/mese IVA inclusa, zero commissioni) calcola automaticamente le notti tassabili (max 7 notti), invia i promemoria prima della scadenza del giorno 16 del mese successivo per Comune di Firenze e Ross1000/ISTAT, ed esporta in un clic il prospetto CSV per il commercialista."
+            }
+          }
+        ]
+      }
+    ]
   }
   </script>
   <style>
@@ -60,6 +100,15 @@
     <div class="container">
       <span class="eyebrow">Guida Amministrativa · Comune di Firenze</span>
       <h1>Tassa di soggiorno per affitti brevi a Firenze: scadenze e gestione semplice.</h1>
+      <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:14px;">
+        📅 <strong>Ultimo aggiornamento:</strong> Novembre 2026 · <strong>Autore:</strong> Redazione Tecnica <a href="/chi-siamo.html" style="text-decoration:underline;">itassistance (Blue Arroyo SRL, Firenze)</a>
+      </div>
+      <div style="background:#FBF7EC;border-left:4px solid #C9A84C;border-radius:10px;padding:18px 20px;margin-bottom:18px;">
+        <strong style="color:var(--navy);display:block;margin-bottom:4px;">📌 In Breve (Risposta Rapida):</strong>
+        <p style="margin:0;color:var(--navy);font-size:15px;">
+          A Firenze l'imposta di soggiorno per gli affitti brevi si calcola fino a un <strong>massimo di 7 pernottamenti consecutivi</strong> per ospite e la dichiarazione telematica al Comune di Firenze va inviata <strong>entro il giorno 16 del mese successivo</strong> (insieme ai flussi statistici ISTAT / Ross1000). L'app <strong>itassistance</strong> (99 €/mese IVA incl.) aggiorna il conteggio a ogni prenotazione, ti avvisa alle 08:00 prima della scadenza e prepara il prospetto CSV per il tuo commercialista.
+        </p>
+      </div>
       <p>Anche quando i portali come Airbnb riscuotono l'imposta di soggiorno, il proprietario di un appartamento a Firenze resta tenuto alle dichiarazioni periodiche sul portale comunale e alle comunicazioni statistiche dei flussi turistici. Con <strong>itassistance</strong> hai il conteggio aggiornato giorno per giorno e ricevi i promemoria prima di ogni scadenza.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;">
         <a href="/checkout.html" class="btn btn-gold">Prova itassistance (99 €/mese IVA incl. · 14 gg rimborso)</a>

@@ -23,3 +23,7 @@
 - **Dopo ogni deploy**, presenta sempre:
   1. **Check di cosa è stato fatto** (allineamento con la visione `itassistance`).
   2. **Suggerimento del passaggio successivo più efficace** (nuove funzioni da implementare, integrazioni backend/automazioni, o miglioramenti ad alto impatto sul funnel) per mantenere una tabella di marcia chiara ed efficace.
+- **REGOLA PERMANENTE SEO + GEO (POSIZIONAMENTO MOTORI DI RICERCA E IA)**:
+  - Tutte le pagine pubbliche devono avere contenuto principale scritto nell'HTML statico (leggibile senza JS), struttura "Risposta Prima" in apertura, data di aggiornamento visibile, FAQ reali e Schema.org JSON-LD (`Organization`, `LocalBusiness`, `SoftwareApplication`, `Article`, `FAQPage`, `BreadcrumbList`).
+  - `robots.txt` consente esplicitamente i bot di ricerca e IA (`Googlebot`, `Bingbot`, `OAI-SearchBot`, `ChatGPT-User`, `GPTBot`, `PerplexityBot`, `Claude-SearchBot`, `Claude-User`, `ClaudeBot`, `Google-Extended`, `Applebot-Extended`, `CCBot`) e rimanda a `sitemap.xml` e `/llms.txt`.
+  - Dopo ogni deploy eseguire la checklist SEO/GEO e includere nel riepilogo la riga **`SEO/GEO: ok`** (o l'elenco dei problemi risolti).

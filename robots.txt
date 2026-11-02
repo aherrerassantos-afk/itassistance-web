@@ -1,5 +1,50 @@
+# robots.txt — itassistance (https://www.itadreamteam.com) — Blue Arroyo SRL, Firenze
+# Regola SEO + GEO: Accesso esplicito a Google, Bing e ai Crawler di Ricerca e Citazione delle IA
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 User-agent: *
 Allow: /
-Disallow: /contratto.html
+Disallow: /admin.html
+Disallow: /benvenuto.html
+Disallow: /login.html
 
 Sitemap: https://www.itadreamteam.com/sitemap.xml
+# Sintesi strutturata per Motori di Risposta IA (GEO): https://www.itadreamteam.com/llms.txt
