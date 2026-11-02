@@ -90,3 +90,41 @@ Dopo **OGNI deploy** in produzione, la risposta all'utente deve SEMPRE concluder
    - Dopo ogni deploy verificare: (a) nuove pagine in `sitemap.xml` con title, description, H1, canonical e JSON-LD validi; (b) contenuto leggibile nell'HTML senza JS; (c) `robots.txt` e `llms.txt` accessibili; (d) dati aziendali identici a `site-config.js`.
    - Nel riepilogo di ogni deploy riportare sempre la riga **`SEO/GEO: ok`** (oppure l'elenco dei problemi trovati e risolti).
 
+---
+
+## 9. REGOLA PERMANENTE — METODO E MATRICE DEL "PIANO DEGLI INPUT" (RUOLI INTERNI & ESTERNI)
+
+### Metodo Obbligatorio (5 Fasi in Ordine)
+1. **FASE 1 – CONTROLLA (Audit):** Misura per ogni ruolo e attività ricorrente: clic/tap, campi da compilare, schermate attraversate, tempo stimato, duplicati e blocchi.
+2. **FASE 2 – TOGLI (Meno è meglio):** Elimina/nascondi funzioni e tab non essenziali per il ruolo; rendi facoltativo tutto ciò che non serve subito; applica la regola **"OGNI DATO SI INSERISCE UNA SOLA VOLTA"** (CRM → Cliente → Fattura → Report App; Lavoro Field → App Proprietario → Saldo Fornitore → Fattura).
+3. **FASE 3 – OTTIMIZZA IL RIMANENTE:** Una "Home" per ruolo (vede per primo solo ciò che deve fare oggi), valori predefiniti intelligenti, scelte a chip/tap al posto del testo libero.
+4. **FASE 4 – VELOCIZZA:** Obiettivo misurabile di **almeno −50% di clic e di tempo** rispetto alla Fase 1 tramite azioni 1-tap, precompilazione da dati esistenti e passaggi automatici di stato.
+5. **FASE 5 – CREA (Solo ciò che manca davvero):** Aggiungere nuove funzioni solo se emerge un bisogno reale non risolto dalle Fasi 2–4, specificando ruolo, problema risolto, clic/tempo risparmiati e costo di sviluppo.
+
+### Matrice Ufficiale del Piano degli Input (Ruoli × Attività: Prima vs Dopo)
+
+#### A. Ruoli Interni (`Blue Arroyo SRL` / `itassistance` — `/admin.html`)
+
+| Ruolo Interno | Attività Ricorrente | Dispositivo | PRIMA (Clic / Campi / Tempo) | DOPO (Clic / Campi / Tempo) | Risparmio |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **👑 Direzione / Super Admin** | Accesso + Controllo KPI reali & Broadcast 08:00 | Mobile / Desktop | 4 clic · 2 campi · 45 sec | **1–2 tap · 0 campi · 10 sec** | **−62% clic · −77% tempo** |
+| **🛠️ Operativo / Field FI** | Chiusura Check-in (20 €) o Manutenzione (30 €) (`App` + `Fornitore` + `Fattura`) | Mobile (sul campo) | 10 clic · 5 campi · 3 schermate · 210 sec | **1 tap · 0 campi · 1 schermata · 5 sec** | **−90% clic · −97% tempo** |
+| **💬 Assistenza 09:00–23:00** | Invio link `/ospiti`, Wi-Fi/ZTL o Check-out SMN IT/EN su WhatsApp | Mobile / Desktop | 8 clic · 3 schermate · 90 sec | **1 tap · 0 campi · 1 schermata · 5 sec** | **−87% clic · −94% tempo** |
+| **🤝 Vendite (CRM & Partner)** | Conversione Lead → Cliente + Fattura + Codice Immobile + WhatsApp | Mobile / Desktop | 7 clic · 2 tab · 120 sec | **1 tap · 0 campi · 1 schermata · 10 sec** | **−85% clic · −91% tempo** |
+| **🧾 Amministrazione (`billing`)** | Emissione Fattura da Cliente attivo + Download PDF | Desktop | 7 clic · 6 campi · 50 sec | **2 clic · 1 selezione · 10 sec** | **−71% clic · −80% tempo** |
+| **🧾 Amministrazione (`billing`)** | Rimborso Garanzia 14 gg + Sospensione automatica Cliente | Desktop | 5 clic · 2 tab · 40 sec | **1 tap · 0 campi · 5 sec** | **−80% clic · −87% tempo** |
+| **👥 HR / 🧹 Fornitori** | Registrazione nuovo collaboratore o fornitore certificato Firenze | Desktop | 7 clic · 6 campi · 60 sec | **3 clic · 2 campi · 15 sec** | **−57% clic · −75% tempo** |
+
+#### B. Ruoli Esterni (`Prospect`, `Cliente Attivo`, `Ospite`, `Partner / Fornitore`)
+
+| Ruolo Esterno | Attività Ricorrente | Route / Dispositivo | PRIMA (Clic / Campi / Tempo) | DOPO (Clic / Campi / Tempo) | Risparmio |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **🔍 Prospect (Proprietario)** | Capisce problema → vede soluzione/guida → passa a Checkout precompilato | `/index.html` (Mobile / Desktop) | 6 clic · 3 campi · 90 sec | **2 tap · 1 recapito · 20 sec** | **−66% clic · −77% tempo** |
+| **💳 Prospect in Attivazione** | Attivazione Piano 99 €/mese (o 1.188 €/anno) con Garanzia 14 gg | `/checkout.html` (Mobile / Desktop) | 5 clic · 6 campi obbligatori · 90 sec | **2 tap · 3 campi essenziali · 30 sec** | **−60% clic · −50% campi · −66% tempo** |
+| **🏠 Cliente Attivo (Proprietario)** | Login + Risoluzione problema del giorno (Check-in 20€, Guasto 30€, Documenti, CSV) | `/login.html` → `/app.html` (Mobile) | 6 clic · 3 campi login · 75 sec | **1 tap login + 1 tap azione · 0 campi · 10 sec** | **−66% clic · −100% campi · −86% tempo** |
+| **🏠 Cliente Attivo (Proprietario)** | Inserimento nuova prenotazione o spesa fornitore standard | `/app.html` (Mobile / Desktop) | 5 clic · 6 campi prenotazione (3 spesa) · 60 sec | **1–2 tap · 2 campi prenotazione (0 spesa chip) · 12 sec** | **−60% clic · −80% tempo** |
+| **🏠 Cliente Attivo (Proprietario)** | Preparazione & Scarico Schedina Alloggiati Web precompilata da ospite | `/app.html#view-alloggiati` | 4 clic · 12 campi visibili · 60 sec | **1 tap (`⚡ Scarica .txt + Segna Inviata`) · 0 campi · 5 sec** | **−75% clic · −91% tempo** |
+| **🛂 Ospite Turistico (IT/EN)** | Self Check-in Documento (Art. 109 TULPS) + Download PDF Istruzioni | `/ospiti.html` (Mobile) | 5 tap · 12 campi · 90 sec | **2 tap (1 Chip Paese + Invio) · 5 campi · 30 sec** | **−60% clic · −58% campi · −66% tempo** |
+| **🤝 Partner / Fornitore Esterno** | Richiesta accreditamento Studio Commercialista / Agenzia / Fornitore FI | `/partner.html` (Desktop / Mobile) | 4 clic · 4 campi obbligatori · 60 sec | **2 tap (1 Chip Ruolo + Invio) · 2 campi · 20 sec** | **−50% clic · −50% campi · −66% tempo** |
+
+

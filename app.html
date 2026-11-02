@@ -1121,77 +1121,91 @@
             </div>
           </div>
 
-          <!-- Form Preparazione Schedina Alloggiati -->
+          <!-- Form Preparazione Schedina Alloggiati (OTTIMIZZATO: 1 DATO = 1 SOLA VOLTA DA /OSPITI.HTML + 1 CLIC FINALE) -->
           <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:18px;">
-            <h4 style="font-size:15px;color:var(--navy);margin-bottom:12px;">Compilazione Guidata Schedina Ospite</h4>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+              <div>
+                <h4 style="font-size:15px;color:var(--navy);margin:0;">⚡ Schedina Ospite Precompilata (1 Dato = 1 Sola Volta da /ospiti.html)</h4>
+                <span style="font-size:12px;color:var(--text-muted);">I dati inviati dall'ospite su <code>/ospiti.html</code> precompilano automaticamente tutti i campi qui sotto.</span>
+              </div>
+              <button type="button" class="btn btn-gold btn-sm" onclick="oneClickCompleteAlloggiati()">
+                ⚡ 1-Clic: Scarica Tracciato .TXT + Segna Inviato in Questura
+              </button>
+            </div>
+
             <div class="form-grid-3">
               <div class="field">
                 <label>Prenotazione Collegata</label>
                 <select id="aw-booking-select" onchange="prefillAlloggiatiFromBooking()"></select>
               </div>
               <div class="field">
-                <label>Tipo Alloggiato *</label>
-                <select id="aw-tipo">
-                  <option value="16">Ospite Singolo (cod. 16)</option>
-                  <option value="17" selected>Capofamiglia (cod. 17)</option>
-                  <option value="18">Capogruppo (cod. 18)</option>
-                  <option value="19">Familiare (cod. 19)</option>
-                  <option value="20">Membro Gruppo (cod. 20)</option>
-                </select>
-              </div>
-              <div class="field">
-                <label>Data Arrivo *</label>
-                <input type="date" id="aw-arrivo"/>
-              </div>
-              <div class="field">
-                <label>Giorni di Permanenza (max 30) *</label>
-                <input type="number" id="aw-giorni" value="3" min="1" max="30"/>
-              </div>
-              <div class="field">
-                <label>Cognome *</label>
+                <label>Cognome Ospite *</label>
                 <input type="text" id="aw-cognome" value="MARTIN" placeholder="es. MARTIN"/>
               </div>
               <div class="field">
-                <label>Nome *</label>
+                <label>Nome Ospite *</label>
                 <input type="text" id="aw-nome" value="JEAN LUC" placeholder="es. JEAN LUC"/>
               </div>
               <div class="field">
-                <label>Sesso *</label>
-                <select id="aw-sesso">
-                  <option value="M">M — Maschile</option>
-                  <option value="F">F — Femminile</option>
-                </select>
+                <label>Numero Documento / Passaporto *</label>
+                <input type="text" id="aw-doc-num" value="21AB94812" placeholder="es. YA1234567"/>
+              </div>
+              <div class="field">
+                <label>Stato di Nascita e Cittadinanza *</label>
+                <input type="text" id="aw-cittadinanza" value="FRANCIA" placeholder="es. ITALIA / FRANCIA / STATI UNITI" oninput="document.getElementById('aw-doc-luogo').value=this.value"/>
               </div>
               <div class="field">
                 <label>Data di Nascita *</label>
                 <input type="date" id="aw-nascita" value="1984-05-14"/>
               </div>
-              <div class="field">
-                <label>Stato di Nascita e Cittadinanza *</label>
-                <input type="text" id="aw-cittadinanza" value="FRANCIA" placeholder="es. ITALIA / FRANCIA / STATI UNITI"/>
-              </div>
-              <div class="field">
-                <label>Tipo Documento (richiesto per Capofamiglia/Singolo) *</label>
-                <select id="aw-doc-tipo">
-                  <option value="PASOR">Passaporto Ordinario (PASOR)</option>
-                  <option value="IDENT">Carta d'Identità (IDENT)</option>
-                  <option value="PATEN">Patente di Guida (PATEN)</option>
-                </select>
-              </div>
-              <div class="field">
-                <label>Numero Documento *</label>
-                <input type="text" id="aw-doc-num" value="21AB94812" placeholder="es. YA1234567"/>
-              </div>
-              <div class="field">
-                <label>Stato / Comune di Rilascio *</label>
-                <input type="text" id="aw-doc-luogo" value="FRANCIA" placeholder="es. FRANCIA o FIRENZE (FI)"/>
-              </div>
             </div>
 
-            <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
-              <button type="button" class="btn btn-primary" onclick="generateAlloggiatiSummary()">📋 Prepara Dati e Controlla Conformità</button>
-              <button type="button" class="btn btn-outline" onclick="downloadAlloggiatiTxt()">⬇ Scarica File Schedina (.txt)</button>
-              <button type="button" class="btn btn-green" onclick="markAlloggiatiSent()">✓ Segna Schedina Inviata in Questura</button>
+            <details style="margin-top:10px;background:#fff;border:1px dashed var(--border);border-radius:8px;padding:8px 12px;">
+              <summary style="cursor:pointer;font-size:12px;font-weight:700;color:var(--text-muted);">➕ Dettagli Soggiorno e Tipo Documento (Già preimpostati dalla prenotazione — clicca per modificare)</summary>
+              <div class="form-grid-3" style="margin-top:10px;">
+                <div class="field">
+                  <label>Tipo Alloggiato</label>
+                  <select id="aw-tipo">
+                    <option value="16">Ospite Singolo (cod. 16)</option>
+                    <option value="17" selected>Capofamiglia (cod. 17)</option>
+                    <option value="18">Capogruppo (cod. 18)</option>
+                    <option value="19">Familiare (cod. 19)</option>
+                    <option value="20">Membro Gruppo (cod. 20)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Data Arrivo</label>
+                  <input type="date" id="aw-arrivo"/>
+                </div>
+                <div class="field">
+                  <label>Giorni di Permanenza (max 30)</label>
+                  <input type="number" id="aw-giorni" value="3" min="1" max="30"/>
+                </div>
+                <div class="field">
+                  <label>Sesso</label>
+                  <select id="aw-sesso">
+                    <option value="M">M — Maschile</option>
+                    <option value="F">F — Femminile</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Tipo Documento</label>
+                  <select id="aw-doc-tipo">
+                    <option value="PASOR">Passaporto Ordinario (PASOR)</option>
+                    <option value="IDENT">Carta d'Identità (IDENT)</option>
+                    <option value="PATEN">Patente di Guida (PATEN)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Stato / Comune di Rilascio</label>
+                  <input type="text" id="aw-doc-luogo" value="FRANCIA" placeholder="es. FRANCIA o FIRENZE (FI)"/>
+                </div>
+              </div>
+            </details>
+
+            <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-gold" onclick="oneClickCompleteAlloggiati()">⚡ 1-Clic: Scarica Schedina (.txt) + Segna Inviata</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="generateAlloggiatiSummary()">👁️ Anteprima Controllo Dati</button>
             </div>
 
             <div id="aw-output-box" style="display:none;margin-top:16px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px;font-family:monospace;font-size:12.5px;white-space:pre-wrap;"></div>
@@ -1326,8 +1340,11 @@
               <p style="font-size:13px;color:var(--text-muted);">Tieni sotto controllo pulizie, biancheria, manutenzioni e guarda il tuo utile netto reale.</p>
             </div>
             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-              <span class="badge badge-soon">Pagamento diretto fornitori in 1 tap: In arrivo</span>
-              <button type="button" class="btn btn-primary btn-sm" onclick="toggleBox('new-expense-box')">+ Registra Spesa Fornitore</button>
+              <button type="button" class="btn btn-gold btn-sm" onclick="quickAddStandardExpense('Elena Pulizie Firenze — Pulizia e cambio biancheria','Pulizie & Biancheria',45)">⚡ + Pulizia 45 € (1 Tap)</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="quickAddStandardExpense('Lavanderia Firenze — Kit Matrimoniale Completo','Pulizie & Biancheria',22)">⚡ + Biancheria 22 € (1 Tap)</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="quickAddStandardExpense('itassistance Firenze — Check-in di Persona','Check-in Presenziale',20)">⚡ + Check-in 20 € (1 Tap)</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="quickAddStandardExpense('itassistance Firenze — Manutenzione Ordinaria','Manutenzione',30)">⚡ + Manutenzione 30 € (1 Tap)</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="toggleBox('new-expense-box')">+ Altra Spesa</button>
             </div>
           </div>
 
@@ -2310,6 +2327,26 @@
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
       showToast('✓ File riepilogo schedina scaricato.');
+    }
+
+    function oneClickCompleteAlloggiati() {
+      downloadAlloggiatiTxt();
+      markAlloggiatiSent();
+    }
+
+    function quickAddStandardExpense(title, cat, amount) {
+      var today = new Date().toLocaleDateString('it-IT');
+      appState.expenses.unshift({
+        id: 'e_' + Date.now(),
+        date: today,
+        title: title,
+        category: cat,
+        amount: amount,
+        paid: false
+      });
+      saveState();
+      renderAll();
+      showToast('✓ Spesa standard (' + amount + ' €) registrata in 1 tap!');
     }
 
     function markAlloggiatiSent() {

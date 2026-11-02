@@ -530,12 +530,11 @@
             <label for="login-pin">Codice PIN Amministratore</label>
             <input type="password" id="login-pin" value="2026" placeholder="PIN predefinito: 2026"/>
           </div>
+          <button type="button" class="btn btn-gold btn-sm" style="width:100%;padding:11px;" onclick="performAdminLogin()">
+            🔐 Entra con Email e PIN →
+          </button>
         </div>
       </details>
-
-      <button type="button" class="btn btn-gold" style="width:100%;padding:13px;" onclick="performAdminLogin()">
-        🔐 Entra subito nella Console →
-      </button>
       <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted);">
         <a href="/app.html" style="text-decoration:underline;">Vai all'Area Proprietario (App)</a> · <a href="/" style="text-decoration:underline;">Torna al sito pubblico</a>
       </div>
@@ -608,6 +607,9 @@
           <span class="pill-cnt" id="cnt-accounts">4</span>
         </button>
       </nav>
+      <button type="button" id="btn-toggle-all-tabs" onclick="toggleShowAllAdminTabs()" style="width:100%;margin-top:8px;padding:7px 10px;border-radius:8px;border:1px dashed var(--border);background:#fff;color:var(--text-muted);font-size:11.5px;font-weight:600;cursor:pointer;">
+        👁️ Mostra tutti i reparti
+      </button>
 
       <div style="margin-top:16px;padding:12px;border-radius:10px;background:var(--gold-light);border:1px solid rgba(201,168,76,0.4);font-size:11.5px;color:var(--navy);">
         <strong>Dati Fiscali Emittente</strong><br/>
@@ -660,127 +662,128 @@
           </div>
         </div>
 
-        <!-- Sintesi Operativa Rapida -->
-        <div class="panel-card">
-          <div class="panel-head">
-            <div class="panel-title">⚡ Accesso Rapido ai 4 Reparti Direzionali</div>
-          </div>
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;">
-            <div style="border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;justify-content:space-between;align-items:center;">
-              <div>
-                <strong style="font-size:15px;color:var(--navy);">🤝 Reparto Partners &amp; Proprietari</strong>
-                <p style="font-size:12.5px;color:var(--text-muted);">Gestisci segnalatori, fee partner, proprietari a 99 €/mese e deleghe +10%.</p>
-              </div>
-              <button type="button" class="btn btn-primary btn-sm" onclick="switchAdminTab('partners')">Apri Partners →</button>
-            </div>
-            <div style="border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;justify-content:space-between;align-items:center;">
-              <div>
-                <strong style="font-size:15px;color:var(--navy);">👥 Reparto HR &amp; Personale Firenze</strong>
-                <p style="font-size:12.5px;color:var(--text-muted);">Contratti, turni 09:00–23:00, operatori check-in e buste paga/compensi.</p>
-              </div>
-              <button type="button" class="btn btn-primary btn-sm" onclick="switchAdminTab('hr')">Apri HR →</button>
-            </div>
-            <div style="border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;justify-content:space-between;align-items:center;">
-              <div>
-                <strong style="font-size:15px;color:var(--navy);">🧹 Reparto Fornitori &amp; Manutenzione</strong>
-                <p style="font-size:12.5px;color:var(--text-muted);">Imprese pulizie, lavanderie, tecnici a Firenze (20€ check-in / 30€ manutenzione).</p>
-              </div>
-              <button type="button" class="btn btn-primary btn-sm" onclick="switchAdminTab('fornitori')">Apri Fornitori →</button>
-            </div>
-            <div style="border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;justify-content:space-between;align-items:center;">
-              <div>
-                <strong style="font-size:15px;color:var(--navy);">🧾 Admin Fatturazione &amp; Rimborsi 14gg</strong>
-                <p style="font-size:12.5px;color:var(--text-muted);">Emissione fatture PDF Blue Arroyo SRL, incassi Stripe e note di credito.</p>
-              </div>
-              <button type="button" class="btn btn-gold btn-sm" onclick="switchAdminTab('fatturazione')">Apri Fatturazione →</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══ CENTRALE AUTOMAZIONE REPORT 08:00 & PUSH IN TEMPO REALE AI PROPRIETARI ═══ -->
+        <!-- ═══ CENTRALE OPERATIVA, FIELD FIRENZE (20€/30€) & ASSISTENZA 09:00–23:00 ═══ -->
         <div class="panel-card" style="border:1.5px solid var(--gold);background:linear-gradient(180deg, #FFFFFF 0%, #FBF7EC 100%);">
           <div class="panel-head">
             <div>
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
                 <span class="badge badge-ok">🟢 Cloud Sync Attivo (Supabase + n8n)</span>
-                <span class="badge badge-gold">AUTOMAZIONE REPORT 08:00</span>
+                <span class="badge badge-gold">HOME OPERATIVA &amp; ASSISTENZA FIRENZE (09:00–23:00)</span>
               </div>
-              <div class="panel-title">🕗 Centrale Invio Report Mattutino (08:00) &amp; Push Compiti all'App Proprietario</div>
+              <div class="panel-title">🕗 Azioni del Giorno (1 Tap): Broadcast 08:00, Chiusura Lavori Field &amp; Risposte Ospiti</div>
               <p style="font-size:13px;color:var(--text-muted);">
-                Invia in tempo reale un'azione o una scadenza direttamente nel Report del Giorno dell'Area Proprietario (<a href="/app.html" style="text-decoration:underline;font-weight:600;">/app.html</a>) oppure avvia il broadcast mattutino delle 08:00 via Cloud n8n.
+                Ogni bottone aggiorna automaticamente tutti i reparti collegati (Report Proprietario <a href="/app.html" style="text-decoration:underline;font-weight:600;">/app.html</a>, Bilancio Spese, Saldo Fornitore e Bozza Fattura) secondo la regola <strong>«1 Dato = 1 Sola Volta»</strong>.
               </p>
             </div>
             <button type="button" class="btn btn-gold btn-sm" onclick="adminBroadcastMorningReport()">🚀 Avvia Broadcast Report 08:00 (Cloud n8n)</button>
           </div>
 
-          <!-- BARRA RAPIDA 1-CLIC: RISOLVI PROBLEMA & INVIA COMPITO SENZA DIGITARE -->
-          <div style="margin-bottom:14px;padding:12px;background:#fff;border:1.5px solid var(--border);border-radius:10px;">
+          <!-- 1. CHIUSURA UNIFICATA INTERVENTI FIELD FIRENZE (1 TAP = APP + FORNITORE + FATTURA) -->
+          <div style="margin-bottom:12px;padding:12px;background:#fff;border:1.5px solid var(--gold);border-radius:10px;">
             <div style="font-size:11.5px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">
-              ⚡ Piatto Input Rapidi Team Operativo (1 Clic = Invia subito al Proprietario senza digitare):
+              🛠️ 1. Chiusura Lavori sul Campo a Firenze (1 Tap = Notifica App + Spesa Proprietario + Saldo Fornitore + Fattura):
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
-              <button type="button" class="btn btn-primary btn-sm" onclick="quickDispatchPreset('🛂 Urgente: Invia Schedina Alloggiati Web (Scadenza 24h/6h)','Documenti ospite pronti nella sezione Alloggiati Web. Trasmetti ora sul portale Polizia di Stato.','alloggiati')">🛂 1. Sollecito Alloggiati (24h/6h)</button>
-              <button type="button" class="btn btn-outline btn-sm" onclick="quickDispatchPreset('🔑 Check-in di Persona Eseguito a Firenze (20 €)','Ospiti accolti e identificati de visu dal nostro incaricato a Firenze. Chiavi consegnate regolarmente.','operativo')">🔑 2. Conferma Check-in 20€</button>
-              <button type="button" class="btn btn-outline btn-sm" onclick="quickDispatchPreset('🔧 Intervento Manutenzione Rapida Firenze (30 €) Completato','Intervento tecnico eseguito in appartamento. Ricevuta disponibile nella sezione Fornitori & Spese.','fornitori')">🔧 3. Manutenzione 30€ Eseguita</button>
-              <button type="button" class="btn btn-outline btn-sm" onclick="quickDispatchPreset('🏛️ Promemoria Tassa di Soggiorno Comune di Firenze (Scadenza Giorno 16)','Conteggio mensile notti-ospite (max 7 notti) pronto per l\'invio telematico entro il giorno 16.','fiscale')">🏛️ 4. Scadenza Tassa Soggiorno (16)</button>
-              <button type="button" class="btn btn-outline btn-sm" onclick="quickDispatchPreset('📊 Chiusura Mensile ISTAT / Ross1000 Firenze (Scadenza Giorno 5)','Prospetto Arrivi e Presenze pronto in PDF (ricordati di chiudere anche se a Movimento Zero).','fiscale')">📊 5. Scadenza ISTAT Ross1000 (5)</button>
+              <button type="button" class="btn btn-gold btn-sm" onclick="completeFieldInterventionOneTap('checkin20')">
+                ✅ Chiudi Check-in Presenziale 20 € (1 Tap Completo)
+              </button>
+              <button type="button" class="btn btn-gold btn-sm" onclick="completeFieldInterventionOneTap('maint30')">
+                ✅ Chiudi Manutenzione Rapida 30 € (1 Tap Completo)
+              </button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="completeFieldInterventionOneTap('clean45')">
+                🧹 Conferma Pulizia + 4 Foto WhatsApp (45 €)
+              </button>
             </div>
           </div>
 
-          <div class="form-grid-3">
-            <div class="field">
-              <label for="adm-push-title">Titolo Compito / Avviso per il Proprietario *</label>
-              <input type="text" id="adm-push-title" placeholder="es. Verifica ricevuta Alloggiati Web ospite Martin"/>
+          <!-- 2. PUSH AVVISI NORMATIVI AL PROPRIETARIO (1 TAP SENZA DIGITARE) -->
+          <div style="margin-bottom:12px;padding:12px;background:#fff;border:1.5px solid var(--border);border-radius:10px;">
+            <div style="font-size:11.5px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">
+              🔔 2. Avvisi &amp; Scadenze al Report del Proprietario (1 Tap senza digitare):
             </div>
-            <div class="field">
-              <label for="adm-push-desc">Dettaglio Operativo</label>
-              <input type="text" id="adm-push-desc" placeholder="es. Scadenza entro le ore 14:00 sul portale Polizia di Stato"/>
-            </div>
-            <div class="field">
-              <label for="adm-push-tab">Sezione App Collegata</label>
-              <select id="adm-push-tab">
-                <option value="alloggiati">🛂 3. Alloggiati Web</option>
-                <option value="operativo">🏠 2. Operativo &amp; PDF Check-in</option>
-                <option value="fiscale">🏛️ 4. Tassa di Soggiorno &amp; Fiscale</option>
-                <option value="fornitori">💳 5. Fornitori &amp; Spese</option>
-              </select>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary btn-sm" onclick="quickDispatchPreset('🛂 Urgente: Invia Schedina Alloggiati Web (Scadenza 24h/6h)','Documenti ospite pronti nella sezione Alloggiati Web. Trasmetti ora sul portale Polizia di Stato.','alloggiati')">🛂 Sollecito Alloggiati (24h/6h)</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="quickDispatchPreset('🏛️ Promemoria Tassa di Soggiorno Comune di Firenze (Scadenza Giorno 16)','Conteggio mensile notti-ospite (max 7 notti) pronto per l\'invio telematico entro il giorno 16.','fiscale')">🏛️ Scadenza Tassa Soggiorno (16)</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="quickDispatchPreset('📊 Chiusura Mensile ISTAT / Ross1000 Firenze (Scadenza Giorno 5)','Prospetto Arrivi e Presenze pronto in PDF (ricordati di chiudere anche se a Movimento Zero).','fiscale')">📊 Scadenza ISTAT Ross1000 (5)</button>
             </div>
           </div>
 
-          <div style="margin-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-            <button type="button" class="btn btn-primary btn-sm" onclick="sendTaskToOwnerApp()">🔔 Invia Compito in Tempo Reale all'App Proprietario</button>
-            <span id="adm-push-status" style="font-size:12.5px;font-weight:700;color:var(--green);"></span>
+          <!-- 3. ASSISTENZA OSPITI & PROPRIETARI 09:00-23:00 (RISPOSTE WHATSAPP BILINGUI IT/EN IN 1 TAP) -->
+          <div style="margin-bottom:12px;padding:12px;background:#fff;border:1.5px solid var(--border);border-radius:10px;">
+            <div style="font-size:11.5px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">
+              💬 3. Assistenza Rapida Ospiti &amp; Proprietari 09:00–23:00 (1 Tap WhatsApp Bilingue IT/EN):
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-green btn-sm" onclick="sendSupportQuickWhatsApp('guest_link')">📲 Invia Link Documenti /ospiti (IT/EN)</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="sendSupportQuickWhatsApp('wifi_access')">📶 Invia Wi-Fi, Keybox &amp; ZTL (IT/EN)</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="sendSupportQuickWhatsApp('checkout_smn')">🧳 Invia Regole Check-out 10:00 &amp; Bagagli SMN (IT/EN)</button>
+            </div>
           </div>
+
+          <span id="adm-push-status" style="display:block;font-size:12.5px;font-weight:700;color:var(--green);margin-bottom:8px;"></span>
+
+          <!-- CASSETTO OPZIONALE: AVVISO PERSONALIZZATO A TESTO LIBERO -->
+          <details style="background:#fff;border:1px dashed var(--border);border-radius:8px;padding:8px 12px;">
+            <summary style="cursor:pointer;font-size:12px;font-weight:700;color:var(--text-muted);">➕ Scrivi avviso personalizzato a testo libero per il Proprietario (Opzionale)</summary>
+            <div class="form-grid-3" style="margin-top:10px;">
+              <div class="field">
+                <label for="adm-push-title">Titolo Compito / Avviso *</label>
+                <input type="text" id="adm-push-title" placeholder="es. Verifica ricevuta Alloggiati Web ospite Martin"/>
+              </div>
+              <div class="field">
+                <label for="adm-push-desc">Dettaglio Operativo (opzionale)</label>
+                <input type="text" id="adm-push-desc" placeholder="es. Scadenza entro le ore 14:00"/>
+              </div>
+              <div class="field">
+                <label for="adm-push-tab">Sezione App Collegata</label>
+                <select id="adm-push-tab">
+                  <option value="alloggiati">🛂 3. Alloggiati Web</option>
+                  <option value="operativo">🏠 2. Operativo &amp; PDF Check-in</option>
+                  <option value="fiscale">🏛️ 4. Tassa di Soggiorno &amp; Fiscale</option>
+                  <option value="fornitori">💳 5. Fornitori &amp; Spese</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-top:10px;">
+              <button type="button" class="btn btn-primary btn-sm" onclick="sendTaskToOwnerApp()">🔔 Invia Compito Personalizzato</button>
+            </div>
+          </details>
 
           <!-- Log ultimi report 08:00 inviati -->
-          <div style="margin-top:16px;padding-top:12px;border-top:1px dashed var(--border);">
-            <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:8px;">📋 Ultimi Report Giornalieri delle 08:00 Inviati (Cloud Log):</div>
+          <div style="margin-top:14px;padding-top:10px;border-top:1px dashed var(--border);">
+            <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:6px;">📋 Ultimi Report &amp; Azioni Sincronizzate (Cloud Log):</div>
             <div id="adm-report-logs" style="font-size:12.5px;color:var(--text-muted);">Nessun invio registrato in questa sessione. Clicca "Avvia Broadcast Report 08:00" per testare.</div>
           </div>
         </div>
 
-        <!-- PANNELLO CONTROLLO SEO + GEO (MOTORI DI RICERCA & IA) -->
-        <div class="panel-card">
-          <div class="panel-head">
-            <div>
-              <div class="panel-title">🌐 Stato Visibilità Organica SEO + GEO (Google, Bing, ChatGPT, Perplexity, Gemini, Copilot)</div>
-              <p style="font-size:13px;color:var(--text-muted);">
-                Monitoraggio permanente secondo <code>SITE_RULES.md §8</code>: 13 pagine pubbliche indicizzate, <code>/llms.txt</code> attivo, Schema.org <code>LocalBusiness + SoftwareApplication + FAQPage</code> e protocollo <strong>IndexNow</strong>.
-              </p>
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;">
-              <a href="/llms.txt" target="_blank" class="btn btn-outline btn-sm">📄 Vedi /llms.txt</a>
-              <a href="/sitemap.xml" target="_blank" class="btn btn-outline btn-sm">🗺️ Vedi Sitemap (27 URL)</a>
-              <button type="button" class="btn btn-gold btn-sm" onclick="pingIndexNowAllUrls()">🚀 Notifica IndexNow (Bing / ChatGPT)</button>
-            </div>
-          </div>
-          <div id="adm-indexnow-status" style="display:none;margin-bottom:12px;padding:10px 14px;background:var(--green-bg);color:var(--green);border-radius:8px;font-size:13px;font-weight:700;"></div>
-          <div class="table-wrap">
-            <table class="adm-table">
-              <thead>
-                <tr>
-                  <th>Query / Domanda Mensile Target (Proprietari Firenze &amp; Italia)</th>
-                  <th>Pagina Pilastro Associata</th>
+        <!-- PANNELLO CONTROLLO SEO + GEO E CONFIGURAZIONE (CHIUSO IN DETAILS PER ZERO-SCROLL QUOTIDIANO) -->
+        <div class="panel-card" id="adm-seo-config-card">
+          <details>
+            <summary style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-weight:800;color:var(--navy);font-size:15px;">
+              <span>🌐 Monitoraggio Mensile SEO + GEO (27 URL, 22 Query Target, IndexNow) &amp; Credenziali Live — Clicca per aprire</span>
+              <span class="badge badge-ok">✓ 27 Pagine Indicizzate · Zero Errori</span>
+            </summary>
+            <div style="margin-top:16px;">
+              <div class="panel-head">
+                <div>
+                  <div class="panel-title">🌐 Stato Visibilità Organica SEO + GEO (Google, Bing, ChatGPT, Perplexity, Gemini, Copilot)</div>
+                  <p style="font-size:13px;color:var(--text-muted);">
+                    Monitoraggio permanente secondo <code>SITE_RULES.md §8</code>: 27 pagine pubbliche indicizzate, <code>/llms.txt</code> attivo, Schema.org <code>LocalBusiness + SoftwareApplication + FAQPage</code> e protocollo <strong>IndexNow</strong>.
+                  </p>
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <a href="/llms.txt" target="_blank" class="btn btn-outline btn-sm">📄 Vedi /llms.txt</a>
+                  <a href="/sitemap.xml" target="_blank" class="btn btn-outline btn-sm">🗺️ Vedi Sitemap (27 URL)</a>
+                  <button type="button" class="btn btn-gold btn-sm" onclick="pingIndexNowAllUrls()">🚀 Notifica IndexNow (Bing / ChatGPT)</button>
+                </div>
+              </div>
+              <div id="adm-indexnow-status" style="display:none;margin-bottom:12px;padding:10px 14px;background:var(--green-bg);color:var(--green);border-radius:8px;font-size:13px;font-weight:700;"></div>
+              <div class="table-wrap">
+                <table class="adm-table">
+                  <thead>
+                    <tr>
+                      <th>Query / Domanda Mensile Target (Proprietari Firenze &amp; Italia)</th>
+                      <th>Pagina Pilastro Associata</th>
                   <th>Test Live Motori IA &amp; Search (Monitoraggio Mensile)</th>
                   <th>Stato SEO/GEO</th>
                 </tr>
@@ -988,13 +991,47 @@ P.IVA: 07480210488</div>
               </div>
             </div>
           </details>
+            </div>
+          </details>
         </div>
       </section>
 
       <!-- ══════════════════════════════════════════════════
-           2. GESTIONE PARTNERS & PROPRIETARI AFFILIATI
+           2. GESTIONE VENDITE, LEAD CRM & PARTNERS
       ══════════════════════════════════════════════════ -->
       <section class="adm-view" id="adm-partners">
+        <!-- IN CIMA PER IL RUOLO VENDITE: LEAD DA CONTATTARE E ATTIVARE IN 1 CLIC -->
+        <div class="panel-card" style="border:1.5px solid var(--gold);background:linear-gradient(180deg, #FFFFFF 0%, #FBF7EC 100%);">
+          <div class="panel-head">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span class="badge badge-gold">PRIORITÀ VENDITE OGGI</span>
+                <span class="badge badge-ok">1 Dato = 1 Sola Volta (CRM → Cliente → Fattura → App)</span>
+              </div>
+              <div class="panel-title">🎯 Lead "Diagnosi Risparmio &amp; Conformità Firenze" da Attivare in 1 Clic</div>
+              <p style="font-size:13px;color:var(--text-muted);">
+                Proprietari che hanno già inserito i dati nel Calcolatore di <code>itadreamteam.com</code>. Clicca <strong>«⚡ 1-Clic: Attiva + Fattura + WhatsApp»</strong> per creare automaticamente Cliente, Fattura e Codice Appartamento senza ridigitare nulla.
+              </p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Proprietario</th>
+                  <th>Recapiti</th>
+                  <th>Fatturato Stimato</th>
+                  <th>Risparmio vs PM</th>
+                  <th>Extra +10%</th>
+                  <th>Azioni Rapide Vendite (1 Clic)</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-diagnosis-leads"></tbody>
+            </table>
+          </div>
+        </div>
+
         <div class="panel-card">
           <div class="panel-head">
             <div>
@@ -1070,35 +1107,6 @@ P.IVA: 07480210488</div>
             </table>
           </div>
         </div>
-
-        <!-- CRM Lead Diagnosi Risparmio (dal Calcolatore di index.html) -->
-        <div class="panel-card">
-          <div class="panel-head">
-            <div>
-              <div class="panel-title">🎯 Lead "Diagnosi Risparmio &amp; Conformità Firenze" (Proprietari dal Sito Web)</div>
-              <p style="font-size:13px;color:var(--text-muted);">
-                Proprietari che hanno calcolato il proprio risparmio rispetto al Property Manager su <code>itadreamteam.com</code> e richiesto il prospetto su WhatsApp/Email.
-              </p>
-            </div>
-            <span class="badge badge-gold">Funnel Acquisizione Attivo</span>
-          </div>
-          <div class="table-wrap">
-            <table class="adm-table">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Proprietario</th>
-                  <th>Recapiti</th>
-                  <th>Fatturato Stimato</th>
-                  <th>Risparmio vs PM</th>
-                  <th>Extra +10%</th>
-                  <th>Azioni Commerciali</th>
-                </tr>
-              </thead>
-              <tbody id="tbody-diagnosis-leads"></tbody>
-            </table>
-          </div>
-        </div>
       </section>
 
       <!-- ══════════════════════════════════════════════════
@@ -1109,52 +1117,57 @@ P.IVA: 07480210488</div>
           <div class="panel-head">
             <div>
               <div class="panel-title">👥 Gestione HR, Dipendenti, Collaboratori &amp; Turni Firenze (09:00 – 23:00)</div>
-              <p style="font-size:13px;color:var(--text-muted);">Anagrafica personale, contratti, turni di copertura su Firenze, interventi check-in eseguiti e stato liquidazione compensi.</p>
+              <p style="font-size:13px;color:var(--text-muted);">Anagrafica personale, turni di copertura su Firenze, interventi check-in eseguiti e stato liquidazione compensi.</p>
             </div>
             <button type="button" class="btn btn-primary btn-sm" onclick="toggleForm('form-new-hr')">+ Inserisci Risorsa HR</button>
           </div>
 
           <div class="form-box" id="form-new-hr">
-            <h4 style="margin-bottom:10px;font-size:14px;color:var(--navy);">Nuovo Dipendente / Collaboratore HR</h4>
-            <div class="form-grid-3">
+            <h4 style="margin-bottom:10px;font-size:14px;color:var(--navy);">⚡ Nuovo Membro Team Firenze (Solo 2 campi richiesti — Turno e Compenso automatici)</h4>
+            <div class="form-grid">
               <div class="field">
                 <label>Nome e Cognome *</label>
                 <input type="text" id="hr-name" placeholder="es. Lorenzo Neri"/>
               </div>
               <div class="field">
                 <label>Ruolo Operativo *</label>
-                <select id="hr-role">
-                  <option value="Operatore Accoglienza & Check-in (Firenze)">Operatore Accoglienza &amp; Check-in (Firenze)</option>
-                  <option value="Specialista Alloggiati Web & Adempimenti">Specialista Alloggiati Web &amp; Adempimenti</option>
-                  <option value="Revenue Manager (+10% Extra)">Revenue Manager (+10% Extra)</option>
-                  <option value="Supporto Proprietari (Turno 09:00–23:00)">Supporto Proprietari (Turno 09:00–23:00)</option>
-                  <option value="Tecnico Manutenzione Rapida FI">Tecnico Manutenzione Rapida FI</option>
+                <select id="hr-role" onchange="autoFillHrDefaults()">
+                  <option value="Operatore Accoglienza & Check-in (Firenze)" data-shift="Mattina 09:00 – 16:30" data-sal="1650">Operatore Accoglienza &amp; Check-in (Firenze)</option>
+                  <option value="Specialista Alloggiati Web & Adempimenti" data-shift="09:30 – 17:30" data-sal="1850">Specialista Alloggiati Web &amp; Adempimenti (+10%)</option>
+                  <option value="Revenue Manager (+10% Extra)" data-shift="10:00 – 18:30" data-sal="2100">Revenue Manager (+10% Extra)</option>
+                  <option value="Supporto Proprietari (Turno 09:00–23:00)" data-shift="Sera 16:00 – 23:00" data-sal="1500">Supporto Proprietari (Turno 09:00–23:00)</option>
+                  <option value="Tecnico Manutenzione Rapida FI" data-shift="Reperibilità 09:00 – 21:00" data-sal="1200">Tecnico Manutenzione Rapida FI (30€)</option>
                 </select>
-              </div>
-              <div class="field">
-                <label>Inquadramento Contrattuale</label>
-                <select id="hr-contract">
-                  <option value="Tempo Indeterminato Full-Time">Tempo Indeterminato Full-Time</option>
-                  <option value="Part-Time Turnista">Part-Time Turnista</option>
-                  <option value="Collaboratore P.IVA">Collaboratore P.IVA</option>
-                  <option value="Contratto a Chiamata">Contratto a Chiamata</option>
-                </select>
-              </div>
-              <div class="field">
-                <label>Turno Assegnato (Firenze)</label>
-                <input type="text" id="hr-shift" value="Mattina 09:00 – 16:00"/>
-              </div>
-              <div class="field">
-                <label>Compenso Mensile Lordo (€) *</label>
-                <input type="number" id="hr-salary" value="1650" min="100" step="50"/>
-              </div>
-              <div class="field">
-                <label>Telefono &amp; Email</label>
-                <input type="text" id="hr-phone" placeholder="+39 333... · lorenzo@itadreamteam.com"/>
               </div>
             </div>
+            <details style="margin-top:10px;background:#fff;border:1px dashed var(--border);border-radius:8px;padding:8px 12px;">
+              <summary style="cursor:pointer;font-size:12px;font-weight:700;color:var(--text-muted);">➕ Contratto, Turno, Compenso e Contatti (Facoltativi — già preimpostati in base al ruolo)</summary>
+              <div class="form-grid-3" style="margin-top:10px;">
+                <div class="field">
+                  <label>Inquadramento Contrattuale</label>
+                  <select id="hr-contract">
+                    <option value="Tempo Indeterminato Full-Time">Tempo Indeterminato Full-Time</option>
+                    <option value="Part-Time Turnista">Part-Time Turnista</option>
+                    <option value="Collaboratore P.IVA">Collaboratore P.IVA</option>
+                    <option value="Contratto a Chiamata">Contratto a Chiamata</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Turno Assegnato (Firenze)</label>
+                  <input type="text" id="hr-shift" value="Mattina 09:00 – 16:30"/>
+                </div>
+                <div class="field">
+                  <label>Compenso Mensile Lordo (€)</label>
+                  <input type="number" id="hr-salary" value="1650" min="100" step="50"/>
+                </div>
+                <div class="field" style="grid-column:1 / -1;">
+                  <label>Telefono &amp; Email (Opzionale)</label>
+                  <input type="text" id="hr-phone" placeholder="+39 333... · lorenzo@itadreamteam.com"/>
+                </div>
+              </div>
+            </details>
             <div style="margin-top:12px;display:flex;gap:8px;">
-              <button type="button" class="btn btn-gold btn-sm" onclick="addHrMember()">Salva Risorsa HR</button>
+              <button type="button" class="btn btn-gold btn-sm" onclick="addHrMember()">⚡ Salva Risorsa in 1 Clic</button>
               <button type="button" class="btn btn-outline btn-sm" onclick="toggleForm('form-new-hr')">Annulla</button>
             </div>
           </div>
@@ -1168,7 +1181,7 @@ P.IVA: 07480210488</div>
                   <th>Contratto</th>
                   <th>Turno Presidio (09–23)</th>
                   <th>Compenso Mensile</th>
-                  <th>Stato Busta Paga / Compenso</th>
+                  <th>Stato Compenso</th>
                   <th>Azioni</th>
                 </tr>
               </thead>
@@ -1192,41 +1205,46 @@ P.IVA: 07480210488</div>
           </div>
 
           <div class="form-box" id="form-new-supplier">
-            <h4 style="margin-bottom:10px;font-size:14px;color:var(--navy);">Nuovo Fornitore Operativo (Firenze)</h4>
-            <div class="form-grid-3">
+            <h4 style="margin-bottom:10px;font-size:14px;color:var(--navy);">⚡ Nuovo Fornitore Operativo Firenze (Solo 2 campi richiesti — Tariffa automatica)</h4>
+            <div class="form-grid">
               <div class="field">
                 <label>Ragione Sociale Fornitore *</label>
                 <input type="text" id="sup-name" placeholder="es. Toscoclean SRL"/>
               </div>
               <div class="field">
-                <label>Categoria Servizio</label>
-                <select id="sup-cat">
-                  <option value="Pulizie & Sanificazione Appartamenti">Pulizie &amp; Sanificazione Appartamenti</option>
-                  <option value="Lavanderia & Noleggio Biancheria">Lavanderia &amp; Noleggio Biancheria</option>
-                  <option value="Manutenzione Idraulica / Elettrica (30€)">Manutenzione Idraulica / Elettrica (30€)</option>
-                  <option value="Accoglienza Check-in Presenziale (20€)">Accoglienza Check-in Presenziale (20€)</option>
-                  <option value="Fornitura Kit Cortesia">Fornitura Kit Cortesia</option>
+                <label>Categoria Servizio *</label>
+                <select id="sup-cat" onchange="autoFillSupplierDefaults()">
+                  <option value="Pulizie & Sanificazione Appartamenti" data-rate="45 € a cambio ospite" data-amt="45">Pulizie &amp; Sanificazione Appartamenti (45 €)</option>
+                  <option value="Lavanderia & Noleggio Biancheria" data-rate="11 € a kit matrimoniale" data-amt="65">Lavanderia &amp; Noleggio Biancheria (11 €/kit)</option>
+                  <option value="Manutenzione Idraulica / Elettrica (30€)" data-rate="30 € uscita rapida Firenze" data-amt="30">Manutenzione Idraulica / Elettrica (30 €)</option>
+                  <option value="Accoglienza Check-in Presenziale (20€)" data-rate="20 € ad accoglienza di persona" data-amt="20">Accoglienza Check-in Presenziale (20 €)</option>
+                  <option value="Fornitura Kit Cortesia" data-rate="50 € fornitura mensile kit" data-amt="50">Fornitura Kit Cortesia</option>
                 </select>
               </div>
-              <div class="field">
-                <label>P.IVA e IBAN</label>
-                <input type="text" id="sup-vat" placeholder="P.IVA 06543210481 · IT60X..."/>
-              </div>
-              <div class="field">
-                <label>Tariffa / Accordo Quadro</label>
-                <input type="text" id="sup-rate" placeholder="es. 45 € a turnover / 30 € uscita"/>
-              </div>
-              <div class="field">
-                <label>Saldo Fatture Passive Mese (€) *</label>
-                <input type="number" id="sup-amount" value="450" min="0" step="10"/>
-              </div>
-              <div class="field">
-                <label>Referente &amp; WhatsApp</label>
-                <input type="text" id="sup-contact" placeholder="Elena · +39 347..."/>
-              </div>
             </div>
+            <details style="margin-top:10px;background:#fff;border:1px dashed var(--border);border-radius:8px;padding:8px 12px;">
+              <summary style="cursor:pointer;font-size:12px;font-weight:700;color:var(--text-muted);">➕ P.IVA, IBAN, Listino e Contatti (Facoltativi ora — inseribili al saldo fattura)</summary>
+              <div class="form-grid-3" style="margin-top:10px;">
+                <div class="field">
+                  <label>Tariffa / Accordo Quadro</label>
+                  <input type="text" id="sup-rate" value="45 € a cambio ospite" placeholder="es. 45 € a turnover / 30 € uscita"/>
+                </div>
+                <div class="field">
+                  <label>Saldo Fatture Passive Mese (€)</label>
+                  <input type="number" id="sup-amount" value="45" min="0" step="5"/>
+                </div>
+                <div class="field">
+                  <label>Referente &amp; WhatsApp (Opzionale)</label>
+                  <input type="text" id="sup-contact" placeholder="Elena · +39 347..."/>
+                </div>
+                <div class="field" style="grid-column:1 / -1;">
+                  <label>P.IVA e IBAN (Opzionale)</label>
+                  <input type="text" id="sup-vat" placeholder="P.IVA 06543210481 · IT60X..."/>
+                </div>
+              </div>
+            </details>
             <div style="margin-top:12px;display:flex;gap:8px;">
-              <button type="button" class="btn btn-gold btn-sm" onclick="addSupplier()">Salva Fornitore</button>
+              <button type="button" class="btn btn-gold btn-sm" onclick="addSupplier()">⚡ Salva Fornitore in 1 Clic</button>
               <button type="button" class="btn btn-outline btn-sm" onclick="toggleForm('form-new-supplier')">Annulla</button>
             </div>
           </div>
@@ -1317,8 +1335,9 @@ P.IVA: 07480210488</div>
                 </select>
               </div>
             </div>
-            <div style="margin-top:12px;display:flex;gap:8px;">
-              <button type="button" class="btn btn-gold btn-sm" onclick="createInvoice()">⚡ Genera Fattura in 1 Clic</button>
+            <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-gold btn-sm" onclick="createInvoice(true)">⚡ Emetti &amp; Scarica PDF in 1 Clic</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="createInvoice(false)">✓ Solo Registra</button>
               <button type="button" class="btn btn-outline btn-sm" onclick="toggleForm('form-new-invoice')">Annulla</button>
             </div>
           </div>
@@ -1449,14 +1468,14 @@ P.IVA: 07480210488</div>
         defaultTab: 'fatturazione'
       },
       hr: {
-        badge: '👥 HR & TEAM MANAGER',
-        name: 'Responsabile HR Firenze',
+        badge: '🛠️ OPERATIVO & ASSISTENZA FI',
+        name: 'Team Operativo & Assistenza Firenze (09–23)',
         email: 'hr@itadreamteam.com',
-        defaultTab: 'hr'
+        defaultTab: 'overview'
       },
       partners: {
-        badge: '🤝 PARTNERS & FORNITORI',
-        name: 'Responsabile Rete & Fornitori',
+        badge: '🤝 VENDITE, CRM & PARTNERS',
+        name: 'Team Vendite, Lead & Partner',
         email: 'fornitori@itadreamteam.com',
         defaultTab: 'partners'
       }
@@ -1774,14 +1793,46 @@ P.IVA: 07480210488</div>
 
     var ROLE_ALLOWED_TABS = {
       superadmin: ['overview', 'partners', 'hr', 'fornitori', 'fatturazione', 'accounts'],
-      billing: ['fatturazione', 'fornitori', 'partners', 'overview'],
-      hr: ['overview', 'hr', 'fornitori'],
-      partners: ['partners', 'overview', 'fatturazione']
+      billing: ['fatturazione', 'fornitori', 'hr', 'partners'],
+      hr: ['overview', 'fornitori', 'hr'],
+      partners: ['partners', 'fatturazione', 'overview']
     };
+
+    var showAllTabsOverride = false;
+
+    function toggleShowAllAdminTabs() {
+      showAllTabsOverride = !showAllTabsOverride;
+      var btn = document.getElementById('btn-toggle-all-tabs');
+      if (btn) {
+        btn.textContent = showAllTabsOverride ? '🔒 Nascondi reparti non essenziali' : '👁️ Mostra tutti i reparti';
+      }
+      applyRoleVisibilityFilter(admState.currentRole || 'superadmin');
+    }
+
+    function applyRoleVisibilityFilter(roleKey) {
+      var allowed = ROLE_ALLOWED_TABS[roleKey] || ROLE_ALLOWED_TABS.superadmin;
+      document.querySelectorAll('.side-btn, .mob-admin-btn').forEach(function (btn) {
+        var tab = btn.getAttribute('data-tab');
+        if (!tab) return;
+        var isRelevant = showAllTabsOverride || roleKey === 'superadmin' || allowed.indexOf(tab) !== -1;
+        btn.style.display = isRelevant ? '' : 'none';
+        btn.style.opacity = '1';
+      });
+      var seoCard = document.getElementById('adm-seo-config-card');
+      if (seoCard) {
+        seoCard.style.display = (roleKey === 'superadmin' || showAllTabsOverride) ? '' : 'none';
+      }
+    }
 
     function switchActiveRole(roleKey) {
       var prof = ROLE_PROFILES[roleKey] || ROLE_PROFILES.superadmin;
       admState.currentRole = roleKey;
+      showAllTabsOverride = false;
+      var btnToggle = document.getElementById('btn-toggle-all-tabs');
+      if (btnToggle) {
+        btnToggle.style.display = (roleKey === 'superadmin') ? 'none' : 'block';
+        btnToggle.textContent = '👁️ Mostra tutti i reparti';
+      }
       saveAdminState();
 
       document.getElementById('top-role-badge').textContent = prof.badge;
@@ -1790,16 +1841,10 @@ P.IVA: 07480210488</div>
       document.getElementById('side-user-email').textContent = prof.email;
       document.getElementById('quick-role-switch').value = roleKey;
 
-      var allowed = ROLE_ALLOWED_TABS[roleKey] || ROLE_ALLOWED_TABS.superadmin;
-      document.querySelectorAll('.side-btn, .mob-admin-btn').forEach(function (btn) {
-        var tab = btn.getAttribute('data-tab');
-        if (!tab) return;
-        var isRelevant = allowed.indexOf(tab) !== -1;
-        btn.style.opacity = isRelevant ? '1' : '0.42';
-      });
-
+      applyRoleVisibilityFilter(roleKey);
+      renderAdminAll();
       switchAdminTab(prof.defaultTab);
-      showToast('Vista attiva ottimizzata per ruolo: ' + prof.badge);
+      showToast('Home Ruolo attiva: ' + prof.badge);
     }
 
     function switchAdminTab(tabId) {
@@ -1896,7 +1941,8 @@ P.IVA: 07480210488</div>
           '<td>' +
             '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
               '<button type="button" class="btn btn-primary btn-sm" onclick="downloadInvoicePDF(\'' + inv.id + '\')">📄 PDF</button>' +
-              (inv.status === 'In attesa' ? '<button type="button" class="btn btn-green btn-sm" onclick="markInvoicePaid(\'' + inv.id + '\')">✓ Incassa</button>' : '') +
+              '<button type="button" class="btn btn-green btn-sm" onclick="sendInvoiceWhatsApp(\'' + inv.id + '\')">📲 WA</button>' +
+              (inv.status === 'In attesa' ? '<button type="button" class="btn btn-gold btn-sm" onclick="markInvoicePaid(\'' + inv.id + '\')">✓ Incassa</button>' : '') +
               (inv.status === 'Pagata' ? '<button type="button" class="btn btn-outline btn-sm" onclick="refundInvoice14Days(\'' + inv.id + '\')" title="Applica Garanzia 14 giorni Soddisfatto o Rimborsato">↺ Rimborso 14gg</button>' : '') +
             '</div>' +
           '</td>' +
@@ -1918,11 +1964,18 @@ P.IVA: 07480210488</div>
       });
       document.getElementById('tbody-accounts').innerHTML = accHtml;
 
-      // Update Top Overview KPIs
+      // Update Top Overview KPIs (Calcolo MRR Reale dai Partner Attivi — Zero numeri fissi)
+      var realMrr = 0;
+      admState.partners.forEach(function (p) {
+        if (!p.active) return;
+        var aptCount = Number(p.apts || 1);
+        var hasExtra10 = p.plan && p.plan.indexOf('+10%') !== -1;
+        realMrr += (aptCount * 99) + (hasExtra10 ? (aptCount * 150) : 0);
+      });
       document.getElementById('ov-partners').textContent = admState.partners.length + ' Partner (' + totalApts + ' imm.)';
       document.getElementById('ov-hr').textContent = admState.hr.length + ' Risorse';
       document.getElementById('ov-invoices').textContent = fmtEur(paidInvoicesTotal);
-      document.getElementById('ov-mrr').textContent = fmtEur(totalApts * 99 + 1677);
+      document.getElementById('ov-mrr').textContent = fmtEur(realMrr);
 
       // Popola selettore 1-clic Fattura da Partner/Cliente attivo
       var invQuickSel = document.getElementById('inv-quick-client');
@@ -1951,8 +2004,8 @@ P.IVA: 07480210488</div>
             '<td>' + (ld.addon10Interest ? '<span class="badge badge-gold">Interessato +10%</span>' : '<span class="badge badge-blue">Solo Piano 99€</span>') + '</td>' +
             '<td>' +
               '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
-                '<a href="https://wa.me/' + cleanPh + '?text=' + encodeURIComponent(waText) + '" target="_blank" class="btn btn-green btn-sm">💬 WhatsApp</a>' +
-                '<button type="button" class="btn btn-gold btn-sm" onclick="convertLeadToPartner(\'' + (ld.name || '').replace(/'/g, '') + '\', \'' + (ld.email || '') + ' · ' + (ld.phone || '') + '\', ' + Boolean(ld.addon10Interest) + ')">⚡ 1-Clic: Attiva Cliente + Fattura</button>' +
+                '<a href="https://wa.me/' + cleanPh + '?text=' + encodeURIComponent(waText) + '" target="_blank" class="btn btn-green btn-sm">💬 Follow-up WA</a>' +
+                '<button type="button" class="btn btn-gold btn-sm" onclick="convertLeadToPartner(\'' + (ld.name || '').replace(/'/g, '') + '\', \'' + (ld.email || '') + ' · ' + (ld.phone || '') + '\', ' + Boolean(ld.addon10Interest) + ', \'' + cleanPh + '\')">⚡ 1-Clic: Attiva + Fattura + Invia Accesso WA</button>' +
               '</div>' +
             '</td>' +
           '</tr>';
@@ -1961,11 +2014,12 @@ P.IVA: 07480210488</div>
       }
     }
 
-    function convertLeadToPartner(name, contact, addon10) {
+    function convertLeadToPartner(name, contact, addon10, cleanPhone) {
       var newPartnerId = 'p_lead_' + Date.now();
+      var ownerCode = 'ITA-' + Math.floor(1000 + Math.random() * 9000);
       admState.partners.unshift({
         id: newPartnerId,
-        name: name,
+        name: name + ' (' + ownerCode + ')',
         type: 'Proprietario Convertito da Diagnosi',
         contact: contact,
         vat: '—',
@@ -1974,21 +2028,129 @@ P.IVA: 07480210488</div>
         active: true
       });
       var nextNum = 101 + admState.invoices.length;
+      var invId = 'FATT-2026-' + nextNum;
       var invAmt = addon10 ? 399 : 99;
       var invDesc = addon10 ? 'Canone Mensile 99€ + Extra +10% Revenue & Adempimenti' : 'Canone Mensile App itassistance (IVA incl.)';
       admState.invoices.unshift({
-        id: 'FATT-2026-' + nextNum,
+        id: invId,
         date: new Date().toLocaleDateString('it-IT'),
         client: name,
         cf: '—',
         desc: invDesc,
         total: invAmt,
-        method: 'Stripe (Carta / Apple Pay)',
+        method: 'Stripe / Bonifico Blue Arroyo SRL',
         status: 'In attesa'
       });
       saveAdminState();
       renderAdminAll();
-      showToast('✓ 1-Clic completato: "' + name + '" attivato tra i Clienti + Bozza Fattura FATT-2026-' + nextNum + ' (' + invAmt + ' €) pronta!');
+      showToast('✓ 1-Clic: Cliente "' + name + '" (' + ownerCode + ') + Fattura ' + invId + ' (' + invAmt + ' €) creati!');
+      if (cleanPhone && cleanPhone.length >= 8) {
+        var welcomeWa = 'Benvenuto in itassistance, ' + name + '! Il tuo appartamento è attivo (Garanzia 14 giorni Soddisfatto o Rimborsato). Codice Immobile: ' + ownerCode + ' · Fattura: ' + invId + '. Entra subito nella tua Area Proprietario in 1 clic: https://www.itadreamteam.com/app.html?code=' + ownerCode;
+        window.open('https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(welcomeWa), '_blank');
+      }
+    }
+
+    // 1 Dato = 1 Sola Volta: Chiusura Intervento sul Campo a Firenze (App Proprietario + Spesa + Fornitore + Fattura)
+    function completeFieldInterventionOneTap(type) {
+      var isCheckin = (type === 'checkin20');
+      var isMaint = (type === 'maint30');
+      var amt = isCheckin ? 20 : (isMaint ? 30 : 45);
+      var title = isCheckin
+        ? '🔑 Check-in di Persona Eseguito a Firenze (20 €)'
+        : (isMaint ? '🔧 Intervento Manutenzione Rapida Firenze Eseguito (30 €)' : '🧹 Pulizia e Cambio Biancheria Verificata con 4 Foto (45 €)');
+      var desc = isCheckin
+        ? 'Ospiti accolti de visu dal nostro incaricato a Firenze. Chiavi consegnate e spesa registrata.'
+        : (isMaint ? 'Intervento tecnico eseguito in appartamento a Firenze. Ricevuta registrata in Fornitori & Spese.' : 'Appartamento pronto per il check-in delle 15:00. 4 foto inviate su WhatsApp.');
+      var tab = isCheckin ? 'operativo' : 'fornitori';
+
+      // 1. Invia notifica al Report del Proprietario (/app.html)
+      if (window.ITACloudSync && typeof ITACloudSync.pushTaskFromAdminToOwner === 'function') {
+        ITACloudSync.pushTaskFromAdminToOwner(title, desc, tab);
+      }
+
+      // 2. Aggiunge automaticamente la spesa nel bilancio del proprietario (/app.html)
+      try {
+        var rawOwner = localStorage.getItem('itassistance_owner_app_v1');
+        var ownerState = rawOwner ? JSON.parse(rawOwner) : null;
+        if (ownerState && ownerState.expenses) {
+          ownerState.expenses.unshift({
+            id: 'e_field_' + Date.now(),
+            date: new Date().toLocaleDateString('it-IT'),
+            title: title,
+            category: isCheckin ? 'Check-in Presenziale' : (isMaint ? 'Manutenzione Firenze' : 'Pulizie & Biancheria'),
+            amount: amt,
+            paid: false
+          });
+          localStorage.setItem('itassistance_owner_app_v1', JSON.stringify(ownerState));
+        }
+      } catch (e) {}
+
+      // 3. Aggiorna automaticamente il saldo del Fornitore corrispondente in admState.suppliers
+      var targetSupId = isCheckin ? 's4' : (isMaint ? 's3' : 's1');
+      admState.suppliers.forEach(function (s) {
+        if (s.id === targetSupId) {
+          s.amount = Number(s.amount || 0) + amt;
+          s.paid = false;
+        }
+      });
+
+      // 4. Se è un servizio extra itassistance (20€ Check-in o 30€ Manutenzione), genera già la fattura in admState.invoices
+      if (isCheckin || isMaint) {
+        var nextNum = 101 + admState.invoices.length;
+        admState.invoices.unshift({
+          id: 'FATT-2026-' + nextNum,
+          date: new Date().toLocaleDateString('it-IT'),
+          client: 'Appartamento Santo Spirito (Via Maggio 18)',
+          cf: 'RSSMRA80A01D612X',
+          desc: isCheckin ? 'Intervento Extra Check-in di persona Firenze (20,00 € IVA incl.)' : 'Intervento Extra Manutenzione ordinaria Firenze (30,00 € IVA incl.)',
+          total: amt,
+          method: 'Stripe / Addebito Mensile',
+          status: 'In attesa'
+        });
+      }
+
+      saveAdminState();
+      renderAdminAll();
+      var stEl = document.getElementById('adm-push-status');
+      if (stEl) {
+        stEl.textContent = '✓ 1-Tap Completato: ' + title + ' → Aggiornati App Proprietario, Bilancio Spese, Saldo Fornitore e Fattura!';
+      }
+      showToast('✓ Lavoro chiuso in 1 tap (App + Fornitore + Fattura aggiornati)!');
+    }
+
+    // Risposte rapide Assistenza Ospiti & Proprietari 09:00-23:00 (Bilingui IT/EN senza uscire da /admin.html)
+    function sendSupportQuickWhatsApp(kind) {
+      var msg = '';
+      if (kind === 'guest_link') {
+        msg = '🇮🇹 Ciao! Per completare il check-in obbligatorio (Art. 109 TULPS) in 30 secondi e sbloccare il PDF con Wi-Fi e codici di accesso, compila questo link sicuro: https://www.itadreamteam.com/ospiti.html\n\n🇬🇧 Hello! To complete the mandatory 30-second ID registration (Art. 109 TULPS) and unlock your Check-in PDF with Wi-Fi and access codes, please use this secure link: https://www.itadreamteam.com/ospiti.html';
+      } else if (kind === 'wifi_access') {
+        msg = '🇮🇹 Assistenza itassistance Firenze (09:00–23:00): Wi-Fi "Fibra-SantoSpirito" (Password: Firenze2026!) · Ricorda che a Firenze i numeri civici NERI/BLU sono per le abitazioni, mentre i ROSSI sono negozi.\n\n🇬🇧 itassistance Florence Support (09:00 AM–11:00 PM): Wi-Fi "Fibra-SantoSpirito" (Password: Firenze2026!) · Please note that in Florence BLACK/BLUE street numbers are residential entrances, while RED numbers are shops.';
+      } else {
+        msg = '🇮🇹 Promemoria Check-out entro le ore 10:00: lascia le chiavi sul tavolo interno, spegni A/C e luci e chiudi la porta dietro di te. Deposito bagagli disponibile a Santa Maria Novella (Kipoint Binario 16, 06:00–23:00).\n\n🇬🇧 Check-out Reminder by 10:00 AM: please leave keys on the dining table inside, turn off A/C and lights, and pull the door shut. Luggage storage is available at Santa Maria Novella Station (Kipoint Platform 16, 6:00 AM–11:00 PM).';
+      }
+      window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+    }
+
+    function autoFillHrDefaults() {
+      var sel = document.getElementById('hr-role');
+      if (!sel) return;
+      var opt = sel.options[sel.selectedIndex];
+      if (!opt) return;
+      var sh = opt.getAttribute('data-shift');
+      var sal = opt.getAttribute('data-sal');
+      if (sh && document.getElementById('hr-shift')) document.getElementById('hr-shift').value = sh;
+      if (sal && document.getElementById('hr-salary')) document.getElementById('hr-salary').value = sal;
+    }
+
+    function autoFillSupplierDefaults() {
+      var sel = document.getElementById('sup-cat');
+      if (!sel) return;
+      var opt = sel.options[sel.selectedIndex];
+      if (!opt) return;
+      var rate = opt.getAttribute('data-rate');
+      var amt = opt.getAttribute('data-amt');
+      if (rate && document.getElementById('sup-rate')) document.getElementById('sup-rate').value = rate;
+      if (amt && document.getElementById('sup-amount')) document.getElementById('sup-amount').value = amt;
     }
 
     function prefillInvoiceFromPartner(partnerId) {
@@ -2115,17 +2277,18 @@ P.IVA: 07480210488</div>
       if (amt) document.getElementById('inv-total').value = amt;
     }
 
-    function createInvoice() {
+    function createInvoice(autoDownloadPdf) {
       var client = (document.getElementById('inv-client').value || '').trim();
       var cf = (document.getElementById('inv-cf').value || '').trim();
       var desc = document.getElementById('inv-desc').value;
       var total = parseFloat(document.getElementById('inv-total').value) || 99;
       var method = document.getElementById('inv-method').value;
       var status = document.getElementById('inv-status').value;
-      if (!client) { alert('Inserisci il nome del cliente / proprietario.'); return; }
+      if (!client) { alert('Seleziona un cliente dal menu rapido o inserisci il nome.'); return; }
       var nextNum = 101 + admState.invoices.length;
+      var newInvId = 'FATT-2026-' + nextNum;
       admState.invoices.unshift({
-        id: 'FATT-2026-' + nextNum,
+        id: newInvId,
         date: new Date().toLocaleDateString('it-IT'),
         client: client,
         cf: cf || '—',
@@ -2137,7 +2300,22 @@ P.IVA: 07480210488</div>
       saveAdminState();
       renderAdminAll();
       toggleForm('form-new-invoice');
-      showToast('✓ Fattura FATT-2026-' + nextNum + ' emessa con successo.');
+      showToast('✓ Fattura ' + newInvId + ' emessa con successo.');
+      if (autoDownloadPdf) {
+        downloadInvoicePDF(newInvId);
+      }
+    }
+
+    function sendInvoiceWhatsApp(invId) {
+      var inv = admState.invoices.find(function (x) { return x.id === invId; });
+      if (!inv) return;
+      var msg = '🧾 *Riepilogo Fattura / Ricevuta itassistance — Blue Arroyo SRL (P.IVA 07480210488)*\n' +
+        '• Documento: *' + inv.id + '* del ' + inv.date + '\n' +
+        '• Cliente: *' + inv.client + '*\n' +
+        '• Causale: ' + inv.desc + '\n' +
+        '• Totale IVA 22% inclusa: *' + fmtEur(inv.total) + '*\n' +
+        '• Stato: *' + inv.status + '* (Garanzia 14 giorni Soddisfatto o Rimborsato inclusa).';
+      window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
     }
 
     function markInvoicePaid(invId) {
@@ -2148,10 +2326,23 @@ P.IVA: 07480210488</div>
     }
 
     function refundInvoice14Days(invId) {
-      admState.invoices.forEach(function (i) { if (i.id === invId) i.status = 'Rimborsata 14gg'; });
+      var refundedClientName = '';
+      admState.invoices.forEach(function (i) {
+        if (i.id === invId) {
+          i.status = 'Rimborsata 14gg';
+          refundedClientName = (i.client || '').toLowerCase();
+        }
+      });
+      if (refundedClientName) {
+        admState.partners.forEach(function (p) {
+          if (p.name && p.name.toLowerCase().indexOf(refundedClientName.split(' ')[0]) !== -1) {
+            p.active = false;
+          }
+        });
+      }
       saveAdminState();
       renderAdminAll();
-      showToast('✓ Rimborso 100% (Garanzia 14 giorni Soddisfatto o Rimborsato) eseguito per ' + invId);
+      showToast('✓ Rimborso 100% (14gg) eseguito per ' + invId + ' e stato Cliente aggiornato automaticamente.');
     }
 
     function downloadInvoicePDF(invId) {

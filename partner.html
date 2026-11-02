@@ -137,34 +137,52 @@
       </div>
 
       <div class="card" id="candidatura-partner" style="border:2px solid var(--gold);margin-top:28px;">
-        <h2 style="margin-top:0;">Richiedi l'accreditamento Partner a Firenze</h2>
-        <p style="font-size:14.5px;">Compila i dati del tuo Studio o Agenzia: la richiesta viene registrata direttamente nella Console Partner di <strong>Blue Arroyo SRL</strong> e il nostro referente di Firenze ti contatterà in giornata.</p>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;">
+          <h2 style="margin:0;">Richiedi l'accreditamento Partner o Fornitore a Firenze</h2>
+          <span style="font-size:11.5px;font-weight:700;background:#ECFDF5;color:#166534;padding:4px 10px;border-radius:999px;">⚡ Solo 2 campi richiesti</span>
+        </div>
+        <p style="font-size:14.5px;margin-bottom:14px;">Scegli il tuo profilo in 1 clic e inserisci solo Nome e Contatto: la richiesta viene registrata subito nella Console di <strong>Blue Arroyo SRL</strong>.</p>
+
+        <!-- Scelta Ruolo Partner/Fornitore a Chip/Tap (1 Clic) -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+          <button type="button" class="btn btn-gold" style="padding:8px 14px;font-size:12.5px;" onclick="document.getElementById('p-tipo').value='Studio Commercialista Partner'">⚖️ Studio Commercialista</button>
+          <button type="button" class="btn btn-outline" style="padding:8px 14px;font-size:12.5px;" onclick="document.getElementById('p-tipo').value='Agenzia Immobiliare Segnalatrice'">🏠 Agenzia Immobiliare</button>
+          <button type="button" class="btn btn-outline" style="padding:8px 14px;font-size:12.5px;" onclick="document.getElementById('p-tipo').value='Fornitore Operativo Firenze'">🧹 Fornitore Pulizie / Tecnico FI</button>
+          <button type="button" class="btn btn-outline" style="padding:8px 14px;font-size:12.5px;" onclick="document.getElementById('p-tipo').value='Host Ambassador Firenze'">🌟 Host Ambassador</button>
+        </div>
 
         <div class="grid-2">
           <div class="field">
-            <label for="p-studio">Nome Studio / Agenzia / Professionista *</label>
+            <label for="p-studio">Nome Studio / Agenzia / Impresa *</label>
             <input type="text" id="p-studio" placeholder="es. Studio Commercialista Associato Rossi">
           </div>
           <div class="field">
-            <label for="p-tipo">Categoria Partner *</label>
-            <select id="p-tipo">
-              <option value="Studio Commercialista Partner">Studio Commercialista / Consulente Fiscale</option>
-              <option value="Agenzia Immobiliare Segnalatrice">Agenzia Immobiliare / Property Finder</option>
-              <option value="Host Ambassador Firenze">Host Ambassador / Gestore Locale</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="p-email">Email Professionale *</label>
-            <input type="email" id="p-email" placeholder="segreteria@studiorossi.it">
-          </div>
-          <div class="field">
-            <label for="p-tel">Telefono / WhatsApp *</label>
-            <input type="tel" id="p-tel" placeholder="+39 055 / +39 348...">
+            <label for="p-tel">Telefono / WhatsApp (o Email) *</label>
+            <input type="text" id="p-tel" placeholder="+39 055 / +39 348... oppure email@studio.it">
           </div>
         </div>
 
+        <details style="margin-bottom:14px;background:var(--cream);border:1px dashed var(--border);border-radius:10px;padding:10px 14px;">
+          <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--navy);">➕ Categoria e Email aggiuntiva (Facoltativi — già preimpostati)</summary>
+          <div class="grid-2" style="margin-top:10px;">
+            <div class="field" style="margin-bottom:0;">
+              <label for="p-tipo">Categoria Partner</label>
+              <select id="p-tipo">
+                <option value="Studio Commercialista Partner">Studio Commercialista / Consulente Fiscale</option>
+                <option value="Agenzia Immobiliare Segnalatrice">Agenzia Immobiliare / Property Finder</option>
+                <option value="Fornitore Operativo Firenze">Fornitore Pulizie / Biancheria / Manutenzione FI</option>
+                <option value="Host Ambassador Firenze">Host Ambassador / Gestore Locale</option>
+              </select>
+            </div>
+            <div class="field" style="margin-bottom:0;">
+              <label for="p-email">Email Professionale (opzionale)</label>
+              <input type="email" id="p-email" placeholder="segreteria@studiorossi.it">
+            </div>
+          </div>
+        </details>
+
         <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px;">
-          <button type="button" class="btn btn-gold" onclick="submitPartnerApplication()">🤝 Invia Richiesta Accreditamento Partner →</button>
+          <button type="button" class="btn btn-gold" onclick="submitPartnerApplication()">⚡ Accreditati in 1 Clic →</button>
           <button type="button" class="btn btn-outline" onclick="printPartnerBrochurePDF()">📄 Scarica Scheda Convenzione PDF (Carta Intestata Blue Arroyo SRL)</button>
           <span id="p-status" style="font-size:13.5px;font-weight:700;color:var(--green);"></span>
         </div>
@@ -186,8 +204,8 @@
       var email = (document.getElementById('p-email').value || '').trim();
       var tel = (document.getElementById('p-tel').value || '').trim();
 
-      if (!studio || !email || !tel) {
-        alert('Inserisci Nome Studio/Agenzia, Email e Telefono.');
+      if (!studio || (!tel && !email)) {
+        alert('Inserisci Nome Studio/Impresa e almeno un recapito (WhatsApp o Email).');
         return;
       }
 
