@@ -46,6 +46,16 @@
       pmCommissionRangeLabel: '18–25%'
     },
 
+    marketStats: {
+      directOwnersPct: '75%',
+      directOwnersLabel: 'Circa il 75% degli appartamenti in affitto breve in Italia non ha un property manager ed è gestito direttamente dal proprietario.',
+      smallHostsPct: '84%',
+      smallHostsLabel: 'I piccoli host (1–2 unità) rappresentano circa l’84% del totale dei proprietari presenti sul mercato.',
+      proRevenueSharePct: '37–38%',
+      proRevenueShareLabel: 'Chi utilizza strumenti professionali e ottimizzazione dinamica delle tariffe (pur essendo il 25% degli immobili) genera il 37–38% del fatturato totale del mercato.',
+      sourcesCitation: 'Fonti: Centro Studi AIGAB (Associazione Italiana Gestori Affitti Brevi), Idealista e Politecnico di Torino.'
+    },
+
     extras: {
       availableCity: 'Firenze',
       revenueAndLegalAddon: {

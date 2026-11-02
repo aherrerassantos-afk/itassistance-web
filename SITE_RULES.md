@@ -5,7 +5,10 @@
 ## 1. Posizionamento e Modello di Business
 - **Prodotto:** `itassistance` è un'app che gestisce l'appartamento in affitto breve e guida il proprietario in tutta la parte operativa, fiscale e amministrativa.
 - **Target:** Proprietari che NON hanno un property manager e vogliono tenere sotto mano il proprio appartamento senza pagare commissioni (18–25%).
-  - *Regola sul dato "75%":* non pubblicare percentuali ("il 75% dei proprietari...") a meno che non sia accompagnato da una fonte pubblica citabile.
+  - *Dati di mercato ufficiali e fonti citabili obbligatorie:*
+    - **~75% degli appartamenti in affitto breve in Italia non ha un property manager** ed è gestito direttamente dal proprietario (*Fonte: Centro Studi AIGAB – Associazione Italiana Gestori Affitti Brevi / Idealista*).
+    - **L'84% dei proprietari presenti sul mercato è un piccolo host (1–2 unità)** (*Fonte: Centro Studi AIGAB*).
+    - **Il 25% di immobili gestiti con strumenti professionali e ottimizzazione delle tariffe genera il 37–38% del fatturato totale del mercato** (*Fonte: Politecnico di Torino / Centro Studi AIGAB*). Questo spiega perché `itassistance` dà al singolo proprietario sia l'app a **99 €/mese** sia l'opzione **Extra +10% (Revenue Management & Adempimenti di Legge)**.
 - **Promessa centrale:** Il lavoro del proprietario diventa di circa **10 minuti al giorno**. L'app gestisce l'appartamento in autonomia e invia ogni giorno un report con le cose da fare per essere in regola (Alloggiati Web Polizia di Stato, pagamento fornitori, tassa di soggiorno, comunicazioni obbligatorie).
 - **Prezzo e Garanzia:**
   - **99 € al mese** (IVA inclusa), fisso per appartamento. Zero commissioni sulle prenotazioni nel piano base dell'app.
