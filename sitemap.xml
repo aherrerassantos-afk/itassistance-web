@@ -115,6 +115,12 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://www.itadreamteam.com/guide-affitti-brevi-firenze.html</loc>
+    <lastmod>2026-11-02</lastmod>
+    <priority>0.95</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://www.itadreamteam.com/contratto.html</loc>
     <lastmod>2026-11-02</lastmod>
     <priority>0.70</priority>

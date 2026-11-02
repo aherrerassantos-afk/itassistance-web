@@ -1,6 +1,7 @@
 {
   "trailingSlash": false,
   "redirects": [
+    { "source": "/guide", "destination": "/guide-affitti-brevi-firenze.html", "permanent": true },
     { "source": "/revenue-firenze", "destination": "/revenue-management-prezzi-affitti-brevi-firenze.html", "permanent": true },
     { "source": "/pulizie-firenze", "destination": "/pulizie-e-manutenzione-affitti-brevi-firenze.html", "permanent": true },
     { "source": "/modello-checkin-pdf", "destination": "/regole-casa-e-istruzioni-check-in-pdf-affitti-brevi.html", "permanent": true },

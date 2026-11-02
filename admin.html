@@ -751,7 +751,7 @@
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
               <a href="/llms.txt" target="_blank" class="btn btn-outline btn-sm">📄 Vedi /llms.txt</a>
-              <a href="/sitemap.xml" target="_blank" class="btn btn-outline btn-sm">🗺️ Vedi Sitemap (20 URL)</a>
+              <a href="/sitemap.xml" target="_blank" class="btn btn-outline btn-sm">🗺️ Vedi Sitemap (21 URL)</a>
               <button type="button" class="btn btn-gold btn-sm" onclick="pingIndexNowAllUrls()">🚀 Notifica IndexNow (Bing / ChatGPT)</button>
             </div>
           </div>
@@ -857,6 +857,12 @@
                   <td><a href="https://www.perplexity.ai/search?q=revenue+management+e+prezzi+dinamici+affitti+brevi+firenze+pitti+uomo+alta+stagione" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:700;">🔍 Perplexity</a> · <a href="https://www.google.com/search?q=revenue+management+prezzi+affitti+brevi+firenze+itassistance" target="_blank" rel="noopener" style="text-decoration:underline;">Google</a></td>
                   <td><span class="badge badge-ok">✓ Dati AIGAB + Tabella Eventi</span></td>
                 </tr>
+                <tr>
+                  <td><strong>16. Hub Centrale Tutte le 14 Guide Affitti Brevi Firenze</strong></td>
+                  <td><a href="/guide-affitti-brevi-firenze.html" target="_blank" style="text-decoration:underline;">/guide-affitti-brevi-firenze.html</a></td>
+                  <td><a href="https://www.perplexity.ai/search?q=guide+complete+affitti+brevi+firenze+cin+alloggiati+tassa+soggiorno+itassistance" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:700;">🔍 Perplexity</a> · <a href="https://www.google.com/search?q=guide+affitti+brevi+firenze+itassistance" target="_blank" rel="noopener" style="text-decoration:underline;">Google</a></td>
+                  <td><span class="badge badge-ok">✓ CollectionPage + ItemList</span></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -916,9 +922,14 @@ P.IVA: 07480210488</div>
                   <input type="text" id="cfg-n8n-url" placeholder="https://aherreras.app.n8n.cloud/webhook/leads/itassistance" />
                 </div>
               </div>
-              <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+              <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center;">
                 <button type="button" class="btn btn-gold btn-sm" onclick="saveLiveConfigOverrides()">💾 Salva Credenziali Live</button>
                 <button type="button" class="btn btn-outline btn-sm" onclick="resetLiveConfigOverrides()">↺ Ripristina Default</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="exportFullSystemBackupJSON()">📥 Scarica Backup Completo Sistema (.JSON)</button>
+                <label class="btn btn-outline btn-sm" style="margin:0;cursor:pointer;">
+                  📤 Ripristina da Backup (.JSON)
+                  <input type="file" accept=".json" style="display:none;" onchange="importFullSystemBackupJSON(event)" />
+                </label>
               </div>
             </div>
           </details>
@@ -2183,7 +2194,7 @@ P.IVA: 07480210488</div>
       var st = document.getElementById('adm-indexnow-status');
       if (st) {
         st.style.display = 'block';
-        st.textContent = 'Invio notifica IndexNow per le 20 URL pubbliche a Bing / ChatGPT Search / Copilot...';
+        st.textContent = 'Invio notifica IndexNow per le 21 URL pubbliche a Bing / ChatGPT Search / Copilot...';
       }
       var urls = [
         'https://www.itadreamteam.com/',
@@ -2191,6 +2202,7 @@ P.IVA: 07480210488</div>
         'https://www.itadreamteam.com/prezzi.html',
         'https://www.itadreamteam.com/chi-siamo.html',
         'https://www.itadreamteam.com/partner.html',
+        'https://www.itadreamteam.com/guide-affitti-brevi-firenze.html',
         'https://www.itadreamteam.com/faq-affitti-brevi-firenze.html',
         'https://www.itadreamteam.com/calcola-risparmio.html',
         'https://www.itadreamteam.com/affitti-brevi-centro-storico-firenze-quartieri.html',
@@ -2220,9 +2232,46 @@ P.IVA: 07480210488</div>
         });
       } catch (e) {}
       if (st) {
-        st.textContent = '✓ Ping IndexNow completato per 20 URL pubbliche (' + new Date().toLocaleTimeString('it-IT') + ') · SEO/GEO: ok';
+        st.textContent = '✓ Ping IndexNow completato per 21 URL pubbliche (' + new Date().toLocaleTimeString('it-IT') + ') · SEO/GEO: ok';
       }
-      showToast('✓ Notifica IndexNow inviata per tutte le 20 pagine pubbliche!');
+      showToast('✓ Notifica IndexNow inviata per tutte le 21 pagine pubbliche!');
+    }
+
+    function exportFullSystemBackupJSON() {
+      var backup = {
+        exportedAt: new Date().toISOString(),
+        brand: 'itassistance — Blue Arroyo SRL (Firenze)',
+        itassistance_superadmin_v1: localStorage.getItem('itassistance_superadmin_v1'),
+        itassistance_owner_app_v2: localStorage.getItem('itassistance_owner_app_v2'),
+        ita_leads_diagnosis_v1: localStorage.getItem('ita_leads_diagnosis_v1'),
+        ita_report_logs_v1: localStorage.getItem('ita_report_logs_v1'),
+        ita_live_config_overrides_v1: localStorage.getItem('ita_live_config_overrides_v1')
+      };
+      var blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json;charset=utf-8;' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'backup-itassistance-' + new Date().toISOString().slice(0, 10) + '.json';
+      a.click();
+      showToast('✓ Backup completo JSON scaricato con successo!');
+    }
+
+    function importFullSystemBackupJSON(ev) {
+      var file = ev.target && ev.target.files && ev.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          var data = JSON.parse(e.target.result);
+          ['itassistance_superadmin_v1', 'itassistance_owner_app_v2', 'ita_leads_diagnosis_v1', 'ita_report_logs_v1', 'ita_live_config_overrides_v1'].forEach(function (k) {
+            if (data[k]) localStorage.setItem(k, data[k]);
+          });
+          showToast('✓ Backup ripristinato con successo! Ricaricamento...');
+          setTimeout(function () { window.location.reload(); }, 800);
+        } catch (err) {
+          showToast('Errore nel file di backup JSON.');
+        }
+      };
+      reader.readAsText(file);
     }
 
     function loadLiveConfigForm() {
