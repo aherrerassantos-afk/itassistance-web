@@ -914,7 +914,10 @@
               <div class="panel-title">🧹 Coordinamento Turni di Pulizia e Biancheria</div>
               <p style="font-size:13px;color:var(--text-muted);">Ogni check-out genera automaticamente il turno di pulizia collegato al cambio ospite.</p>
             </div>
-            <button type="button" class="btn btn-outline btn-sm" onclick="printCleaningChecklistPDF()">📄 Stampa Checklist Operativa &amp; Fotografica PDF</button>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-outline btn-sm" onclick="printCleaningChecklistPDF()">📄 Stampa Checklist Operativa &amp; Fotografica PDF</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="printDamageReportPDF()">🛡️ Stampa Verbale Danni / AirCover PDF</button>
+            </div>
           </div>
           <div class="table-wrap">
             <table class="app-table">
@@ -2032,6 +2035,38 @@
         '<li>☐ Verifica presenza e integrità <strong>Estintore portatile</strong> e <strong>Rilevatore Gas / Monossido</strong></li>' +
         '<li>☐ Controllo funzionamento Wi-Fi (<code>' + (apt.wifi || '-') + '</code>) e chiusura finestre/luci</li>' +
         '<li>☐ <strong>Invio 4 foto su WhatsApp entro le 14:30:</strong> 1) Letto pronto · 2) Bagno · 3) Cucina · 4) Chiavi/Portone</li></ul></div>' +
+        '<script>setTimeout(function(){window.print();},350);<\/script></body></html>';
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
+    }
+
+    function printDamageReportPDF() {
+      var apt = appState.apartment || {};
+      var w = window.open('', '_blank');
+      if (!w) return;
+      var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Verbale Constatazione Danni Check-out — ' + (apt.name || 'Appartamento') + '</title>' +
+        '<style>body{font-family:Arial,sans-serif;color:#1F2937;padding:32px;max-width:780px;margin:0 auto;line-height:1.55;}' +
+        '.hdr{display:flex;justify-content:space-between;border-bottom:3px solid #0F2342;padding-bottom:14px;margin-bottom:20px;}' +
+        '.title{font-size:19px;font-weight:800;color:#0F2342;}' +
+        '.box{background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:10px;padding:14px 18px;margin-bottom:14px;font-size:13.5px;}' +
+        '</style></head><body>' +
+        '<div class="hdr"><div><div class="title">🛡️ VERBALE CONSTATAZIONE DANNI AL CHECK-OUT (AIRCOVER / BOOKING)</div>' +
+        '<div style="font-size:13px;color:#52525B;">Immobile: <strong>' + (apt.name || 'Residenza') + '</strong> · Indirizzo: ' + (apt.address || 'Firenze') + ' · CIN: <strong>' + (apt.cin || '-') + '</strong></div></div>' +
+        '<div style="text-align:right;font-size:12px;">Data Ispezione: <strong>' + new Date().toLocaleDateString('it-IT') + '</strong><br>Ora: <strong>' + new Date().toLocaleTimeString('it-IT') + '</strong></div></div>' +
+        '<div class="box"><strong>1. Dati Soggiorno &amp; Portale (Da allegare su Airbnb AirCover / Booking Partner Hub)</strong><br>' +
+        'Ospite uscente: ________________________________________ · Portale: ☐ Airbnb ☐ Booking.com ☐ Diretto<br>' +
+        'Data Check-out: ____/____/2026 (ore 10:00) · Ispezione effettuata PRIMA del check-in successivo: <strong>SÌ ✓</strong></div>' +
+        '<div class="box"><strong>2. Descrizione Analitica del Danno Riscontrato / Oggetto Mancante</strong><br><br>' +
+        '____________________________________________________________________________________________________<br><br>' +
+        '____________________________________________________________________________________________________</div>' +
+        '<div class="box"><strong>3. Documentazione Fotografica e Intervento di Ripristino</strong><br>' +
+        '☐ 4 Fotografie datate scattate durante il turno di verifica (10:00–14:30) allegate alla presente<br>' +
+        '☐ Intervento di piccola manutenzione ordinaria a Firenze (30 € IVA incl. — Blue Arroyo SRL, Via Matteo Palmieri 20r, P.IVA 07480210488)<br>' +
+        'Importo complessivo richiesto a rimborso: <strong>€ _______________</strong></div>' +
+        '<div style="margin-top:28px;display:flex;justify-content:space-between;font-size:13px;">' +
+        '<div>Firma Addetto Verifica / Pulizie: ___________________________</div>' +
+        '<div>Firma Proprietario / Host: ___________________________</div></div>' +
         '<script>setTimeout(function(){window.print();},350);<\/script></body></html>';
       w.document.open();
       w.document.write(html);
