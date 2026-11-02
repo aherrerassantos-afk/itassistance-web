@@ -143,20 +143,31 @@ Obiettivo finale per i membri e i Property Manager di `itassistance`: un sistema
 
 ---
 
-## 11. REGOLA PERMANENTE — ARCHITETTURA DELLE 4 AZIENDE DEL GRUPPO BLUE ARROYO (ORDINE 1 → 2 → 3 → 4, CLIENTI DEDICATI E 3 GENERAL DIRECTORS PER AZIENDA)
+## 11. REGOLA PERMANENTE — IL CICLO VIRTUOSO DEL GRUPPO BLUE ARROYO (1 → 2 → 3 → 4) E I 12 GENERAL DIRECTORS
 
-Il **Gruppo Blue Arroyo** è strutturato in **4 Aziende autonome ma sinergiche**, ordinate secondo la sequenza `1 → 2 → 3 → 4`.
-Ogni azienda ha:
-- **1 Cliente Ideale ben distinto** (così non si sovrappongono mai commercialmente e crescono in autonomia risolvendo il problema specifico del proprio cliente);
-- **3 General Directors dedicati (`1. DG Operatività`, `2. DG Amministrazione`, `3. DG Vendite`)**;
-- **Ponti automatici di aiuto reciproco** con le altre aziende del gruppo secondo la regola *"1 Dato = 1 Sola Volta"*:
+Ogni General Director ha il suo cruscotto, i suoi numeri e i suoi obiettivi autonomi, ma **tutto il valore rimane all'interno del Gruppo Blue Arroyo** secondo il **Ciclo Virtuoso in 4 Azioni**:
 
-| Ordine & Azienda del Gruppo | 🎯 Cliente Ideale | Problema Specifico che Risolve in Autonomia | 👥 I 3 General Directors (Governance Interna) | 🤝 Come Aiuta le Altre Aziende del Gruppo |
+```
+1. TOSCAN COSTRUZIONI crea il bene (Cliente: Investitori)
+   └─► Consegna un appartamento nuovo, cablato e collaudato che non ha bisogno di riparazioni per anni.
+        │
+2. itassistance lo protegge (Cliente: Property Manager)
+   └─► Lo rende immediatamente conforme alla legge (Questura e Comune) e ne ottimizza le tariffe dinamiche.
+        │
+3. BLUE ARROYO CLEANING lo allestisce (Cliente: Property Manager)
+   └─► Lo trasforma in una suite d'albergo con biancheria a 60°C, kit biologici e spugne sigillate a costo zero per il PM.
+        │
+4. SMARTBOOKINGS lo riempie di turisti (Cliente: Turisti / Ospiti)
+   └─► Vende le notti senza regalare il 20% alle multinazionali OTA, restituisce 15€ (15%) di cashback all'ospite e bonifica l'85% al proprietario.
+```
+
+| Azienda del Gruppo | 🎯 Cliente | 🛠️ 1. General Director Operatività | 🧾 2. General Director Amministrazione | 🤝 3. General Director Vendite |
 | :--- | :--- | :--- | :--- | :--- |
-| **1️⃣ `Toscan Costruzioni`** | **Investitori Immobiliari** | Trasforma e ristruttura l'immobile in struttura ricettiva "Chiavi in Mano" a prezzo fisso in **5 SAL garantiti (`15+25+25+25+10%`)**, con `/stato-cantiere`, Report del Venerdì, Polizza CAR/RC, DURC, DM 37/08, APE, Agibilità e self check-in cablato. | • **DG Operatività:** Cantieri, 5 SAL & Collaudi<br/>• **DG Amministrazione:** Contratti Appalto, DURC, CAR & SAL<br/>• **DG Vendite:** Acquisizione Investitori & Studi Fattibilità | Il giorno del collaudo passa l'immobile certificato ai PM che usano **`2. itassistance`** e fornisce la squadra tecnica per le manutenzioni rapide (`30 €`) sugli alloggi attivi. |
-| **2️⃣ `itassistance`** (`itadreamteam.com`) | **Property Manager (PM)** *(e Proprietari-Gestori)* | Dà ai PM il **Sistema Operativo + Channel Manager con Revenue Management Autonomo + Adempimenti di Legge** (Alloggiati Web 24h, ISTAT Ross1000, Tassa Soggiorno FI, 6 PDF, Report 08:00) a `99 €/mese` (0% comm.) o `+10% Revenue & Adempimenti`, con pochi minuti di lavoro a settimana. | • **DG Operatività:** Assistenza 09–23, Adempimenti & Revenue Manager<br/>• **DG Amministrazione:** Fatturazione 99€/+10%, Rimborsi 14gg & SDI<br/>• **DG Vendite:** Acquisizione PM, Commercialisti & Agenzie | Riceve gli immobili da **`1. Toscan Costruzioni`**, passa in automatico i turni di pulizia dei PM a **`3. Blue Arroyo Cleaning Co.`** e sincronizza disponibilità e tariffe scontate (`-8%`) verso **`4. Smarts Bookings`**. |
-| **3️⃣ `Blue Arroyo Cleaning Co.`** (`PBA`) | **Property Manager (PM)** *(che gestiscono per conto dei proprietari)* | Risolve al PM l'incubo delle pulizie e della logistica in ZTL a Firenze tramite **3 Hub fisici in ZTL**: **100% turnover chiusi entro le 15:00**, biancheria igienizzata a **60°C**, **Forniture Bagno/Cucina gratuite (`232 €/mese` di risparmio)**, sigillo WC e **Dossier 4 Foto Certificato SHA-256** (zero rimborsi forzati OTA) con Fattura Unica SDI in 1 clic. | • **DG Operatività:** 3 Hub ZTL, Squadre Cleaners, Biancheria 60°C & Foto SHA-256<br/>• **DG Amministrazione:** Fattura Unica SDI B2B & Magazzino Kit Gratuiti<br/>• **DG Vendite:** Acquisizione e Fidelizzazione B2B dei PM | Garantisce a **`2. itassistance`** il certificato SHA-256 in tempo reale, consegna a **`4. Smarts Bookings`** alloggi immacolati entro le 15:00 e segnala guasti strutturali a **`1. Toscan Costruzioni`**. |
-| **4️⃣ `Smarts Bookings`** (`smarstbookings.com`) | **I Turisti / Viaggiatori** | Offre al turista il **prezzo più basso garantito** (senza i ricarichi delle grandi OTA), il **15% di Cashback reale** sul conto 48h dopo il soggiorno e un'**esperienza a mani libere da casa a casa (valigie gestite dal Runner)**, garantendo al contempo ai PM il **Payout dell'85% entro le ore 12:00 del check-out**. | • **DG Operatività:** Runner Valigie Casa-a-Casa, Concierge & Esperienze Turisti<br/>• **DG Amministrazione:** Riaccredito 15% Cashback (48h) & Payout 85% (h 12:00)<br/>• **DG Vendite:** Acquisizione e Fidelizzazione Turisti Diretti | Porta prenotazioni dirette a **0% commissioni OTA** dentro il Channel Manager di **`2. itassistance`**, genera volumi costanti di turnover per **`3. Blue Arroyo Cleaning Co.`** e massimizza la rendita per gli investitori di **`1. Toscan Costruzioni`**. |
+| **1. Toscan Costruzioni** *(Crea il bene)* | **Investitori** | Cantieri, 5 SAL (`15+25+25+25+10%`), collaudi e cablaggio self check-in | Contratti d'appalto a prezzo fisso, DURC, Polizze CAR e fatturazione SAL | Acquisizione investitori immobiliari e studi di fattibilità |
+| **2. itassistance** *(Lo protegge)* | **Property Manager** | Alloggiati Web (24h), ISTAT Ross1000, Tassa Soggiorno, Channel Manager e schedine | Piani `99 €/m` (`0%`) e `+10%`, rimborsi 14gg e fatturazione elettronica SDI | Onboarding e mandati tecnologici per Property Manager, Commercialisti e Agenzie |
+| **3. Blue Arroyo Cleaning** *(Lo allestisce)* | **Property Manager** | Cleaners, turni chiusi entro le 15:00, 4 foto danni SHA-256 e 3 hub logistici ZTL | Consuntivi mensili, Fattura unica SDI 1-clic, pagamenti HR e magazzino kit gratuiti (`232 €/m` risparmio) | Contratti turnover B2B per pacchetti di alloggi dei PM |
+| **4. SmartsBookings.com** *(Lo riempie di turisti)* | **Turisti / Ospiti** | Guida mobile, Runner bagagli casa-a-casa e Concierge 7/7 | Custodia 15%, Payout 85% entro le 12:00 del check-out e Cashback 15% (15€) in 48h | Campagne Grand Tour, acquisizione turisti diretti e SEO/GEO in 5 lingue |
+
 
 
 
