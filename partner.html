@@ -165,6 +165,7 @@
 
         <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px;">
           <button type="button" class="btn btn-gold" onclick="submitPartnerApplication()">🤝 Invia Richiesta Accreditamento Partner →</button>
+          <button type="button" class="btn btn-outline" onclick="printPartnerBrochurePDF()">📄 Scarica Scheda Convenzione PDF (Carta Intestata Blue Arroyo SRL)</button>
           <span id="p-status" style="font-size:13.5px;font-weight:700;color:var(--green);"></span>
         </div>
       </div>
@@ -236,6 +237,43 @@
       statusEl.textContent = '✓ Richiesta registrata! Apertura canale diretto WhatsApp Direzione Partner...';
       var msg = 'Buongiorno Direzione itassistance (Blue Arroyo SRL), siamo ' + studio + ' (' + tipo + ', ' + email + '). Vorremmo attivare la collaborazione Partner per i nostri clienti proprietari a Firenze.';
       window.open('https://wa.me/393510380392?text=' + encodeURIComponent(msg), '_blank');
+    }
+
+    function printPartnerBrochurePDF() {
+      var studio = (document.getElementById('p-studio').value || '').trim() || 'Studio Commercialista / Agenzia Partner — Firenze';
+      var w = window.open('', '_blank');
+      if (!w) return;
+      var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Convenzione Partner itassistance — ' + studio + '</title>' +
+        '<style>body{font-family:Arial,sans-serif;color:#1F2937;padding:36px;max-width:800px;margin:0 auto;line-height:1.55;}' +
+        '.hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #0F2342;padding-bottom:16px;margin-bottom:24px;}' +
+        '.brand{font-size:24px;font-weight:800;color:#0F2342;}' +
+        '.sub{font-size:12px;color:#52525B;}' +
+        '.doc-title{font-size:20px;font-weight:800;color:#0F2342;margin:0 0 12px;}' +
+        '.box{background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:10px;padding:16px 20px;margin-bottom:16px;}' +
+        'table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px;}' +
+        'th,td{border:1px solid #E2E8F0;padding:10px 12px;text-align:left;}' +
+        'th{background:#0F2342;color:#fff;}' +
+        '.ftr{margin-top:28px;padding-top:14px;border-top:1px solid #E2E8F0;font-size:12px;color:#52525B;display:flex;justify-content:space-between;}' +
+        '</style></head><body>' +
+        '<div class="hdr"><div><div class="brand">itassistance</div><div class="sub">Prodotto di <strong>Blue Arroyo SRL</strong> · Via Matteo Palmieri 20r, 50122 Firenze (FI)<br>P.IVA / C.F. 07480210488 · Tel/WhatsApp: +39 351 038 0392 · info@itadreamteam.com</div></div>' +
+        '<div style="text-align:right;font-size:12px;"><strong>SCHEDA CONVENZIONE PARTNER</strong><br>Firenze, ' + new Date().toLocaleDateString('it-IT') + '<br>Destinatario: <strong>' + studio + '</strong></div></div>' +
+        '<div class="doc-title">Convenzione per Studi Commercialisti, Consulenti Fiscali e Agenzie Immobiliari a Firenze</div>' +
+        '<p><strong>itassistance</strong> supporta i vostri clienti proprietari di 1–3 appartamenti in affitto breve a Firenze e in Italia con un\'applicazione guidata che ordina l\'operatività quotidiana in 10 minuti al giorno e consegna allo Studio un prospetto fiscale già riconciliato.</p>' +
+        '<div class="box"><strong>Vantaggi immediati per lo Studio Professionale:</strong><ul>' +
+        '<li><strong>Esportazione CSV 1-clic per Dichiarazione dei Redditi:</strong> incassi lordi, commissioni portali (Airbnb/Booking), ritenute fiscali del 21% già operate e distinzione Cedolare Secca 21% (1° immobile) e 26% (dal 2° immobile).</li>' +
+        '<li><strong>Conformità normativa continua del cliente:</strong> invio guidato Alloggiati Web entro 24h/6h (con link Self Check-in Ospiti IT/EN), calcolo Tassa di Soggiorno del Comune di Firenze (scadenza giorno 16) e verifica CIN / ISTAT Ross1000.</li>' +
+        '<li><strong>Fee ricorrente Partner (15%) o Sconto riservato ai clienti dello Studio:</strong> tracciamento trasparente nella Console Partner dedicata.</li></ul></div>' +
+        '<table><thead><tr><th>Servizio / Piano per il Proprietario</th><th>Tariffa Ufficiale Chiara</th><th>Condizioni</th></tr></thead><tbody>' +
+        '<tr><td><strong>Piano App itassistance Base</strong></td><td><strong>99 € / mese IVA inclusa</strong> (1.188 €/anno)</td><td><strong>0% commissioni</strong> · Garanzia 14 gg Soddisfatto o Rimborsato</td></tr>' +
+        '<tr><td><strong>Extra Revenue Management &amp; Adempimenti</strong></td><td><strong>+10%</strong> (opzionale a richiesta)</td><td>Delega prezzi dinamici + esecuzione operativa adempimenti</td></tr>' +
+        '<tr><td><strong>Servizio Check-in di Persona a Firenze</strong></td><td><strong>20 € IVA inclusa</strong> a intervento</td><td>Soluzione legale allo stop keybox e riconoscimento de visu</td></tr>' +
+        '<tr><td><strong>Piccola Manutenzione Ordinaria a Firenze</strong></td><td><strong>30 € IVA inclusa</strong> a intervento</td><td>Intervento rapido dal team di Via Matteo Palmieri 20r</td></tr>' +
+        '</tbody></table>' +
+        '<div class="ftr"><div>Blue Arroyo SRL · Via Matteo Palmieri 20r, 50122 Firenze (FI) · P.IVA 07480210488</div><div>https://www.itadreamteam.com/partner.html</div></div>' +
+        '<script>setTimeout(function(){window.print();},350);<\/script></body></html>';
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
     }
   </script>
 </body>
