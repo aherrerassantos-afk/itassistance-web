@@ -536,6 +536,14 @@
       .hero-pillars { grid-template-columns: 1fr; }
       .hero-ctas .btn { width: 100%; }
     }
+    .hero-owner-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 640px) {
+      .hero-owner-stats-grid { grid-template-columns: 1fr; }
+    }
 
     /* ── b) IL PROBLEMA ── */
     .problem-box {
@@ -1369,17 +1377,42 @@
     <section class="hero" id="home">
       <div class="container hero-grid">
         <div>
-          <div class="hero-badge">📱 App per proprietari di affitti brevi · Firenze</div>
+          <div class="hero-badge">📊 Dati AIGAB / Idealista: il 75% degli affitti brevi non ha un Property Manager</div>
           <h1>Il tuo appartamento, sotto controllo. In 10 minuti al giorno.</h1>
           <p class="hero-lead">
-            <strong>itassistance</strong> è l'app che gestisce il tuo affitto breve e ti dice ogni giorno cosa fare per essere in regola. <strong><span data-site-config="pricing.monthlyFormatted">99 €</span> al mese</strong> (<span data-site-config="pricing.vatLabel">IVA inclusa</span>). Zero commissioni.
+            In Italia <strong>3 proprietari su 4 (75%) gestiscono da soli il proprio appartamento</strong> e l'<strong>84% ha 1 o 2 unità</strong>. <strong>itassistance</strong> è l'app creata per i proprietari: gestisce il tuo affitto breve e ti dice ogni giorno cosa fare per essere in regola. <strong><span data-site-config="pricing.monthlyFormatted">99 €</span> al mese</strong> (<span data-site-config="pricing.vatLabel">IVA inclusa</span>). Zero commissioni.
           </p>
+
+          <!-- Box Hero: Perché ci rivolgiamo ai proprietari (Fonti AIGAB, Idealista, Politecnico di Torino) -->
+          <div style="background:var(--navy);color:#fff;border:1.5px solid var(--gold);border-radius:12px;padding:16px 18px;margin-bottom:24px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.3px;color:var(--gold);margin-bottom:10px;">
+              🎯 Perché ci rivolgiamo direttamente ai proprietari (Fonti: Centro Studi AIGAB · Idealista · Politecnico di Torino)
+            </div>
+            <div class="hero-owner-stats-grid">
+              <div style="background:rgba(255,255,255,0.06);padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);">
+                <div style="font-family:var(--serif);font-size:24px;font-weight:700;color:var(--gold);line-height:1.1;">~75%</div>
+                <div style="font-size:12px;font-weight:700;color:#fff;margin-top:2px;">Senza Property Manager</div>
+                <div style="font-size:11.5px;color:rgba(255,255,255,0.75);line-height:1.35;margin-top:2px;">Gestione diretta del proprietario per non cedere il 18–25%.</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.06);padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);">
+                <div style="font-family:var(--serif);font-size:24px;font-weight:700;color:var(--gold);line-height:1.1;">84%</div>
+                <div style="font-size:12px;font-weight:700;color:#fff;margin-top:2px;">Piccoli Host (1–2 unità)</div>
+                <div style="font-size:11.5px;color:rgba(255,255,255,0.75);line-height:1.35;margin-top:2px;">Proprietari privati che vogliono controllo semplice dal telefono.</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.06);padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);">
+                <div style="font-family:var(--serif);font-size:24px;font-weight:700;color:var(--gold);line-height:1.1;">37–38%</div>
+                <div style="font-size:12px;font-weight:700;color:#fff;margin-top:2px;">Fatturato con metodo</div>
+                <div style="font-size:11.5px;color:rgba(255,255,255,0.75);line-height:1.35;margin-top:2px;">Chi ottimizza prezzi e gestione (25% immobili) fa il 38% dei ricavi.</div>
+              </div>
+            </div>
+          </div>
+
           <div class="hero-ctas">
             <a href="/checkout.html" class="btn btn-gold" onclick="trackSiteEvent('click_prova_app',{location:'hero'})">Prova l'app — 14 gg Soddisfatto o Rimborsato</a>
             <a href="#giornata" class="btn btn-outline" onclick="trackSiteEvent('play_how_it_works',{location:'hero'})">▶ Guarda come funziona (2 min)</a>
           </div>
           <div class="hero-guarantee-note">
-            🛡️ Paghi mese per mese o tutto l'anno anticipato, non cambia nulla. Se non ti piace entro 14 giorni, disdici e ti rimborsiamo il 100%.
+            🛡️ Paghi mese per mese o tutto l'anno anticipato, non cambia nulla (+10% opzionale se vuoi anche Revenue Management e adempimenti di legge). Se non ti piace entro 14 giorni, disdici e ti rimborsiamo il 100%.
           </div>
 
           <div class="hero-pillars">
@@ -1478,33 +1511,6 @@
               <div class="road-tag">Strada 3 · L'app itassistance</div>
               <h3>Tieni il 100% degli incassi in 10 minuti al giorno</h3>
               <p>L'app organizza l'operatività e ti manda ogni mattina la lista esatta delle cose da fare per essere in regola. Paghi solo <strong>99 € al mese IVA inclusa</strong>.</p>
-            </div>
-          </div>
-
-          <!-- Dati ufficiali di mercato con fonti citabili (AIGAB, Idealista, Politecnico di Torino) -->
-          <div style="margin-top:24px;padding:22px;background:rgba(255,255,255,0.05);border:1px solid rgba(201,168,76,0.35);border-radius:12px;">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;color:var(--gold);margin-bottom:14px;">
-              📊 Perché ci rivolgiamo direttamente ai proprietari · Dati del mercato italiano
-            </div>
-            <div class="problem-roads" style="gap:16px;">
-              <div style="background:rgba(255,255,255,0.04);padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);">
-                <div style="font-family:var(--serif);font-size:32px;font-weight:700;color:var(--gold);line-height:1;">~75%</div>
-                <div style="font-size:14px;font-weight:700;color:#fff;margin:6px 0 4px;">Non ha un Property Manager</div>
-                <p style="font-size:13px;color:rgba(255,255,255,0.75);">In Italia circa il 75% degli appartamenti in affitto breve è gestito direttamente dal proprietario, senza intermediari.</p>
-              </div>
-              <div style="background:rgba(255,255,255,0.04);padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);">
-                <div style="font-family:var(--serif);font-size:32px;font-weight:700;color:var(--gold);line-height:1;">84%</div>
-                <div style="font-size:14px;font-weight:700;color:#fff;margin:6px 0 4px;">Piccoli proprietari (1–2 unità)</div>
-                <p style="font-size:13px;color:rgba(255,255,255,0.75);">L'84% degli host privati possiede 1 o 2 immobili: vuole tenere sotto mano casa propria senza cedere il 20% di commissione.</p>
-              </div>
-              <div style="background:rgba(255,255,255,0.04);padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);">
-                <div style="font-family:var(--serif);font-size:32px;font-weight:700;color:var(--gold);line-height:1;">37–38%</div>
-                <div style="font-size:14px;font-weight:700;color:#fff;margin:6px 0 4px;">Il peso degli strumenti professionali</div>
-                <p style="font-size:13px;color:rgba(255,255,255,0.75);">Il 25% di immobili gestiti con metodo e tariffe ottimizzate genera il 37–38% dei ricavi del mercato. Con <strong>itassistance</strong> porti gli stessi strumenti sul tuo appartamento (e con l'extra opzionale <strong>+10%</strong> anche il Revenue Management).</p>
-              </div>
-            </div>
-            <div style="font-size:11.5px;color:rgba(255,255,255,0.6);margin-top:12px;">
-              <em>Fonti dei dati di settore: Centro Studi AIGAB (Associazione Italiana Gestori Affitti Brevi), Idealista e Politecnico di Torino.</em>
             </div>
           </div>
         </div>
