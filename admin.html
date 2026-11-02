@@ -751,7 +751,7 @@
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
               <a href="/llms.txt" target="_blank" class="btn btn-outline btn-sm">📄 Vedi /llms.txt</a>
-              <a href="/sitemap.xml" target="_blank" class="btn btn-outline btn-sm">🗺️ Vedi Sitemap (15 URL)</a>
+              <a href="/sitemap.xml" target="_blank" class="btn btn-outline btn-sm">🗺️ Vedi Sitemap (16 URL)</a>
               <button type="button" class="btn btn-gold btn-sm" onclick="pingIndexNowAllUrls()">🚀 Notifica IndexNow (Bing / ChatGPT)</button>
             </div>
           </div>
@@ -827,9 +827,44 @@
                   <td><a href="https://www.perplexity.ai/search?q=quanto+si+risparmia+gestendo+affitto+breve+senza+property+manager+20%25+firenze" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:700;">🔍 Perplexity</a> · <a href="https://www.google.com/search?q=calcola+risparmio+property+manager+affitti+brevi+firenze+itassistance" target="_blank" rel="noopener" style="text-decoration:underline;">Google</a></td>
                   <td><span class="badge badge-ok">✓ WebApplication + Lead</span></td>
                 </tr>
+                <tr>
+                  <td><strong>11. Affitti Brevi per Quartiere a Firenze (Keybox, ZTL, Alia)</strong></td>
+                  <td><a href="/affitti-brevi-centro-storico-firenze-quartieri.html" target="_blank" style="text-decoration:underline;">/affitti-brevi-centro-storico-firenze-quartieri.html</a></td>
+                  <td><a href="https://www.perplexity.ai/search?q=regole+affitti+brevi+centro+storico+firenze+divieto+keybox+check-in+20+euro" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:700;">🔍 Perplexity</a> · <a href="https://www.google.com/search?q=affitti+brevi+centro+storico+firenze+quartieri+itassistance" target="_blank" rel="noopener" style="text-decoration:underline;">Google</a></td>
+                  <td><span class="badge badge-ok">✓ 5 Quartieri + LocalBusiness</span></td>
+                </tr>
               </tbody>
             </table>
           </div>
+
+          <!-- KIT COPIA-INCOLLA GOOGLE BUSINESS PROFILE / BING PLACES / SEARCH CONSOLE -->
+          <details style="margin-top:16px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;">
+            <summary style="cursor:pointer;font-weight:800;color:var(--navy);font-size:14px;">📍 Kit Operativo Copia-Incolla: Google Business Profile (Maps), Bing Places &amp; Search Console (Via Matteo Palmieri 20r, Firenze)</summary>
+            <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;font-size:13px;">
+              <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px;">
+                <strong style="color:var(--navy);display:block;margin-bottom:6px;">1. Dati NAP Ufficiali (Identici Ovunque)</strong>
+                <div id="gbp-nap-text" style="color:var(--text-muted);line-height:1.5;margin-bottom:8px;">Nome: itassistance — Blue Arroyo SRL
+Categoria: Software aziendale / Servizi per affitti brevi
+Indirizzo: Via Matteo Palmieri 20r, 50122 Firenze (FI)
+Telefono/WhatsApp: +39 351 038 0392
+Sito Web: https://www.itadreamteam.com
+Orari: Lunedì–Domenica 09:00–23:00
+P.IVA: 07480210488</div>
+                <button type="button" class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('gbp-nap-text').innerText);showToast('✓ NAP copiato negli appunti!')">📋 Copia NAP Ufficiale</button>
+              </div>
+              <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px;">
+                <strong style="color:var(--navy);display:block;margin-bottom:6px;">2. Descrizione Google Business / Bing Places (750 car.)</strong>
+                <div id="gbp-desc-text" style="color:var(--text-muted);line-height:1.5;margin-bottom:8px;">itassistance (Blue Arroyo SRL, Via Matteo Palmieri 20r, Firenze) è l'app per i proprietari di appartamenti in affitto breve a Firenze e in Italia che vogliono gestire il proprio immobile in 10 minuti al giorno senza cedere il 20% a un Property Manager. Canone fisso di 99 € al mese IVA inclusa, zero commissioni (0%) e garanzia 14 giorni Soddisfatto o Rimborsato. Include report mattutino alle 08:00, compilazione guidata Alloggiati Web, calcolo Tassa di Soggiorno Firenze, ISTAT Ross1000, turni pulizie, prospetto Commercialista e PDF Check-in IT/EN. Su Firenze sono attivi a richiesta: check-in di persona (20 € IVA incl.), piccola manutenzione (30 € IVA incl.) e opzione Extra Revenue Management &amp; Adempimenti (+10%).</div>
+                <button type="button" class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('gbp-desc-text').innerText);showToast('✓ Descrizione Google Maps copiata!')">📋 Copia Descrizione 750 car.</button>
+              </div>
+              <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px;">
+                <strong style="color:var(--navy);display:block;margin-bottom:6px;">3. Sitemap per Search Console &amp; Bing Webmaster</strong>
+                <div id="gbp-sitemap-text" style="color:var(--text-muted);line-height:1.5;margin-bottom:8px;">https://www.itadreamteam.com/sitemap.xml</div>
+                <button type="button" class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText('https://www.itadreamteam.com/sitemap.xml');showToast('✓ URL Sitemap (16 pagine) copiato!')">📋 Copia URL Sitemap (16 URL)</button>
+                <div style="margin-top:8px;font-size:12px;color:var(--text-muted);">Invia su <strong>Google Search Console</strong> e <strong>Bing Webmaster Tools</strong> (che alimenta ChatGPT Search e Copilot).</div>
+              </div>
+            </div>
+          </details>
         </div>
       </section>
 
@@ -2091,7 +2126,7 @@
       var st = document.getElementById('adm-indexnow-status');
       if (st) {
         st.style.display = 'block';
-        st.textContent = 'Invio notifica IndexNow per le 15 URL pubbliche a Bing / ChatGPT Search / Copilot...';
+        st.textContent = 'Invio notifica IndexNow per le 16 URL pubbliche a Bing / ChatGPT Search / Copilot...';
       }
       var urls = [
         'https://www.itadreamteam.com/',
@@ -2101,6 +2136,7 @@
         'https://www.itadreamteam.com/partner.html',
         'https://www.itadreamteam.com/faq-affitti-brevi-firenze.html',
         'https://www.itadreamteam.com/calcola-risparmio.html',
+        'https://www.itadreamteam.com/affitti-brevi-centro-storico-firenze-quartieri.html',
         'https://www.itadreamteam.com/gestire-affitto-breve-senza-property-manager.html',
         'https://www.itadreamteam.com/alternativa-property-manager.html',
         'https://www.itadreamteam.com/registrazione-ospiti-alloggiati-web.html',
@@ -2123,9 +2159,9 @@
         });
       } catch (e) {}
       if (st) {
-        st.textContent = '✓ Ping IndexNow completato per 15 URL pubbliche (' + new Date().toLocaleTimeString('it-IT') + ') · SEO/GEO: ok';
+        st.textContent = '✓ Ping IndexNow completato per 16 URL pubbliche (' + new Date().toLocaleTimeString('it-IT') + ') · SEO/GEO: ok';
       }
-      showToast('✓ Notifica IndexNow inviata per tutte le 15 pagine pubbliche!');
+      showToast('✓ Notifica IndexNow inviata per tutte le 16 pagine pubbliche!');
     }
 
     document.addEventListener('DOMContentLoaded', function () {

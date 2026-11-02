@@ -1,6 +1,7 @@
 {
   "trailingSlash": false,
   "redirects": [
+    { "source": "/quartieri-firenze", "destination": "/affitti-brevi-centro-storico-firenze-quartieri.html", "permanent": true },
     { "source": "/faq-firenze", "destination": "/faq-affitti-brevi-firenze.html", "permanent": true },
     { "source": "/calcola-risparmio", "destination": "/calcola-risparmio.html", "permanent": true },
     { "source": "/servizi-firenze", "destination": "/servizi-check-in-e-manutenzione-firenze.html", "permanent": true },

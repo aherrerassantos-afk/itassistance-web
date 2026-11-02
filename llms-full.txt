@@ -35,3 +35,10 @@ In Italia:
   - Accoglienza e check-in di persona a Firenze: **20 € (IVA inclusa)** a intervento.
   - Intervento di piccola manutenzione ordinaria a Firenze: **30 € (IVA inclusa)** a intervento.
   - Pulizie e cambio biancheria con fornitori certificati a Firenze: **su preventivo** in base alla metratura.
+
+## 5. Copertura Quartieri di Firenze (Sede Operativa Via Matteo Palmieri 20r)
+- **Santa Croce & Sant'Ambrogio:** Sede operativa di Blue Arroyo SRL in Via Matteo Palmieri 20r, 50122 Firenze (FI).
+- **Centro Storico UNESCO (Duomo, Signoria, Repubblica):** Gestione avvisi ZTL nel PDF Check-in IT/EN e accoglienza de visu a 20 € (alternativa legale al divieto keybox su strada).
+- **Oltrarno (Santo Spirito, San Frediano, San Niccolò):** Supporto operativo 09:00–23:00 e interventi di piccola manutenzione a 30 € in palazzi storici.
+- **Santa Maria Novella & San Lorenzo:** Alert automatico nel Report delle 08:00 per i soggiorni di 1 sola notte che richiedono l'invio su Alloggiati Web entro 6 ore dall'arrivo.
+- **Campo di Marte, Gavinana, Isolotto & Rifredi/Careggi:** Gestione parcheggi fuori ZTL, tramvia T1/T2 ed esenzioni Tassa di Soggiorno del Comune di Firenze.
