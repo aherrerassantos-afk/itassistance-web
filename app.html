@@ -1001,6 +1001,35 @@
             <span id="ci-status-msg" style="font-size:13px;font-weight:600;"></span>
           </div>
         </div>
+
+        <!-- Generatore 1-Click Messaggi Rapidi Ospite Bilingue (IT / EN) -->
+        <div class="panel-card" id="quick-guest-msg-section">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">💬 Generatore Messaggi Rapidi Ospite Bilingue (IT + EN · WhatsApp / Airbnb / Booking)</div>
+              <p style="font-size:13px;color:var(--text-muted);">Genera in 1 clic i 4 messaggi chiave pre-compilati con nome ospite, date, CIN, Wi-Fi, Tassa di Soggiorno (5,50 €/notte) e istruzioni Check-out ore 10:00 + Deposito Bagagli SMN.</p>
+            </div>
+            <a href="/check-out-deposito-bagagli-recensioni-affitti-brevi-firenze.html" target="_blank" class="btn btn-outline btn-sm">📘 Guida Check-out &amp; Bagagli →</a>
+          </div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="generateQuickGuestMessage('pre_arrival')">📲 1. Pre-Arrivo &amp; Documenti (-48h)</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="generateQuickGuestMessage('checkin_day')">🔑 2. Giorno Check-in &amp; Wi-Fi</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="generateQuickGuestMessage('checkout_eve')">🧳 3. Promemoria Check-out 10:00 &amp; Bagagli SMN</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="generateQuickGuestMessage('post_stay')">⭐ 4. Ringraziamento Post-Partenza</button>
+          </div>
+
+          <div class="field" style="margin-bottom:12px;">
+            <label for="qgm-textarea">Testo Messaggio Bilingue (Italiano + English) pronto da copiare o inviare su WhatsApp</label>
+            <textarea id="qgm-textarea" rows="9" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;font-family:monospace;font-size:12.5px;line-height:1.5;color:var(--navy);background:#F8FAFC;" placeholder="Clicca uno dei 4 pulsanti qui sopra per generare il messaggio pre-compilato con i dati del tuo appartamento e della prenotazione attiva..."></textarea>
+          </div>
+
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <button type="button" class="btn btn-gold btn-sm" onclick="copyQuickGuestMessage()">📋 Copia Testo Messaggio</button>
+            <button type="button" class="btn btn-green btn-sm" onclick="sendQuickGuestMessageWhatsApp()">💬 Apri e Invia su WhatsApp</button>
+            <span id="qgm-status" style="font-size:12.5px;font-weight:700;color:var(--green);"></span>
+          </div>
+        </div>
       </section>
 
       <!-- ════════════════════════════════════════════════════════════════
@@ -2565,8 +2594,102 @@
       }
     }
 
+    function generateQuickGuestMessage(type) {
+      var apt = appState.apartment || {};
+      var bk = (appState.bookings && appState.bookings.length > 0) ? appState.bookings[0] : {};
+      var guestName = bk.guest || 'Ospite / Guest';
+      var aptName = apt.name || 'Appartamento Santo Spirito';
+      var aptAddr = apt.address || 'Via Maggio 18, 50125 Firenze';
+      var aptCin = apt.cin || 'IT048017C200001234';
+      var aptFloor = apt.floor || 'Secondo piano';
+      var aptWifi = apt.wifi || 'Fibra-SantoSpirito';
+      var aptPass = apt.pass || 'Firenze2026!';
+      var checkinDate = bk.checkin || '2026-11-02';
+      var checkoutDate = bk.checkout || '2026-11-06';
+      var guestsCount = Number(bk.guests || 2);
+      var nightsCount = Math.min(Number(bk.nights || 4), 7);
+      var taxTotal = (guestsCount * nightsCount * 5.5).toFixed(2).replace('.', ',');
+      var guestPortalUrl = 'https://itadreamteam.com/ospiti.html';
+
+      var msg = '';
+      if (type === 'pre_arrival') {
+        msg = '🇮🇹 Ciao ' + guestName + ', non vediamo l\'ora di accoglierti a Firenze presso ' + aptName + ' (' + aptAddr + ', CIN: ' + aptCin + ')!\n' +
+          'Per preparare al meglio il tuo arrivo del ' + checkinDate + ' (check-in dalle ore 15:00), ti chiediamo cortesemente:\n' +
+          '1) Di comunicarci il tuo orario previsto di arrivo a Firenze;\n' +
+          '2) Di compilare in 60 secondi i dati del documento d\'identità (obbligatori per legge — Art. 109 TULPS) al link sicuro: ' + guestPortalUrl + '\n' +
+          '⚠️ Nota ZTL Firenze: se arrivi in auto, fai attenzione ai varchi della Zona a Traffico Limitato del Centro Storico.\n\n' +
+          '🇬🇧 Dear ' + guestName + ', we look forward to welcoming you to Florence at ' + aptName + ' (' + aptAddr + ', CIN: ' + aptCin + ')!\n' +
+          'To prepare for your arrival on ' + checkinDate + ' (check-in from 3:00 PM), please kindly:\n' +
+          '1) Let us know your estimated arrival time in Florence;\n' +
+          '2) Complete the quick 60-second ID registration (required by Italian law — Art. 109 TULPS) at this secure link: ' + guestPortalUrl + '\n' +
+          '⚠️ Florence ZTL Note: if you are arriving by car, please pay attention to the Restricted Traffic Zone (ZTL) cameras.';
+      } else if (type === 'checkin_day') {
+        msg = '🇮🇹 Benvenuto a Firenze, ' + guestName + '!\n' +
+          'Ecco il riepilogo rapido per il tuo soggiorno presso ' + aptName + ':\n' +
+          '📍 Indirizzo: ' + aptAddr + ' (' + aptFloor + ')\n' +
+          '📶 Wi-Fi: Rete "' + aptWifi + '" · Password: "' + aptPass + '"\n' +
+          '🏛️ Tassa di Soggiorno Comune di Firenze: 5,50 € a persona/notte (max 7 notti) — Totale stimato soggiorno: ' + taxTotal + ' €.\n' +
+          '📞 Assistenza soggiorno Firenze (09:00–23:00): WhatsApp +39 351 038 0392.\n\n' +
+          '🇬🇧 Welcome to Florence, ' + guestName + '!\n' +
+          'Here is a quick summary for your stay at ' + aptName + ':\n' +
+          '📍 Address: ' + aptAddr + ' (' + aptFloor + ')\n' +
+          '📶 Wi-Fi: Network "' + aptWifi + '" · Password: "' + aptPass + '"\n' +
+          '🏛️ Florence City Tourist Tax: €5.50 per person/night (max 7 nights) — Estimated total: €' + taxTotal.replace(',', '.') + '.\n' +
+          '📞 Guest Support Florence (09:00 AM – 11:00 PM): WhatsApp +39 351 038 0392.';
+      } else if (type === 'post_stay') {
+        msg = '🇮🇹 Grazie di cuore per essere stato nostro ospite a Firenze presso ' + aptName + ', ' + guestName + '!\n' +
+          'Ti auguriamo un ottimo rientro. Se hai piacere di condividere una recensione sulla tua esperienza sul portale di prenotazione o di inviarci qualsiasi suggerimento diretto per migliorare ancora il nostro appartamento, te ne saremo davvero grati. A presto a Firenze!\n\n' +
+          '🇬🇧 Thank you so much for staying with us in Florence at ' + aptName + ', ' + guestName + '!\n' +
+          'We wish you a safe journey home. If you would like to share a review of your stay on the booking platform or send us any direct feedback to help us keep improving, we would truly appreciate it. We hope to welcome you back to Florence soon!';
+      } else {
+        msg = '🇮🇹 Buonasera ' + guestName + ', speriamo che il tuo soggiorno a Firenze presso ' + aptName + ' sia stato splendido!\n' +
+          'Ti ricordiamo le semplici istruzioni per il check-out di domani (' + checkoutDate + ') entro le ore 10:00:\n' +
+          '1) 🔑 Chiavi: lascia tutti i mazzi di chiavi sul tavolo all\'interno dell\'appartamento e tira la porta dietro di te;\n' +
+          '2) ❄️ Climatizzazione e luci: spegni aria condizionata/luci e chiudi le finestre;\n' +
+          '3) ♻️ Rifiuti: lascia i sacchetti chiusi negli appositi contenitori in cucina (non lasciare mai sacchetti in strada).\n' +
+          '🧳 Deposito Bagagli: poiché alle 10:00 entra la squadra di pulizie per i prossimi ospiti, se il tuo treno parte più tardi puoi utilizzare il Deposito Bagagli Kipoint dentro la Stazione Santa Maria Novella (Binario 16, 06:00–23:00) o i locker automatici in centro.\n\n' +
+          '🇬🇧 Good evening ' + guestName + ', we hope you had a wonderful stay in Florence at ' + aptName + '!\n' +
+          'Here is a quick reminder for tomorrow\'s check-out (' + checkoutDate + ') by 10:00 AM:\n' +
+          '1) 🔑 Keys: please leave all key sets on the dining table inside the apartment and pull the main door shut behind you;\n' +
+          '2) ❄️ A/C & lights: please switch off the A/C and lights and close the windows;\n' +
+          '3) ♻️ Waste: leave tied bags inside the kitchen bins (never leave trash bags on the street).\n' +
+          '🧳 Luggage Storage: as our cleaning team arrives at 10:00 AM, if you have a later train you can conveniently store your bags at Santa Maria Novella Station (Kipoint at Platform 16, 6:00 AM – 11:00 PM) or at nearby automated lockers.';
+      }
+
+      var ta = document.getElementById('qgm-textarea');
+      if (ta) ta.value = msg;
+      var st = document.getElementById('qgm-status');
+      if (st) st.textContent = '✓ Messaggio bilingue IT/EN generato per ' + guestName;
+    }
+
+    function copyQuickGuestMessage() {
+      var ta = document.getElementById('qgm-textarea');
+      if (!ta || !ta.value) {
+        generateQuickGuestMessage('checkout_eve');
+      }
+      var text = ta ? ta.value : '';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+          var st = document.getElementById('qgm-status');
+          if (st) st.textContent = '✓ Messaggio copiato negli appunti!';
+          showToast('✓ Messaggio bilingue IT/EN copiato negli appunti!');
+        });
+      }
+    }
+
+    function sendQuickGuestMessageWhatsApp() {
+      var ta = document.getElementById('qgm-textarea');
+      if (!ta || !ta.value) {
+        generateQuickGuestMessage('checkout_eve');
+      }
+      var text = ta ? ta.value : '';
+      var url = 'https://wa.me/?text=' + encodeURIComponent(text);
+      window.open(url, '_blank', 'noopener');
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
       populateCheckinFormFromState();
+      generateQuickGuestMessage('checkout_eve');
       if (appState.apartment) {
         if (appState.apartment.reportTime && document.getElementById('rep-time')) document.getElementById('rep-time').value = appState.apartment.reportTime;
         if (appState.apartment.reportChannel && document.getElementById('rep-channel')) document.getElementById('rep-channel').value = appState.apartment.reportChannel;
