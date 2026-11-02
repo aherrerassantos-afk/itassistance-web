@@ -1,6 +1,8 @@
 {
   "trailingSlash": false,
   "redirects": [
+    { "source": "/faq-firenze", "destination": "/faq-affitti-brevi-firenze.html", "permanent": true },
+    { "source": "/calcola-risparmio", "destination": "/calcola-risparmio.html", "permanent": true },
     { "source": "/servizi-firenze", "destination": "/servizi-check-in-e-manutenzione-firenze.html", "permanent": true },
     { "source": "/partner", "destination": "/partner.html", "permanent": true },
     { "source": "/cin-firenze", "destination": "/cin-e-obblighi-affitti-brevi-firenze.html", "permanent": true },

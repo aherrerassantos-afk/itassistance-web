@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calcolatore Risparmio Affitto Breve: Property Manager (20%) vs 99 €/mese | itassistance</title>
+  <meta name="description" content="Calcola in 10 secondi quanto risparmi sul tuo appartamento su Airbnb e Booking scegliendo il canone fisso di itassistance (99 €/mese IVA inclusa) invece del 18–25% di un Property Manager.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.itadreamteam.com/calcola-risparmio.html">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.itadreamteam.com/calcola-risparmio.html">
+  <meta property="og:title" content="Calcolatore Risparmio Affitto Breve: Property Manager vs itassistance (99 €/mese)">
+  <meta property="og:description" content="Su 30.000 €/anno risparmi 4.812 €/anno (oltre 14.400 € in 3 anni). Fai subito la simulazione sul tuo immobile.">
+  <meta property="og:image" content="https://www.itadreamteam.com/brand/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="/site-config.js"></script>
+  <script src="/cloud-sync.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Calcolatore Risparmio Affitti Brevi – itassistance",
+        "url": "https://www.itadreamteam.com/calcola-risparmio.html",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "All",
+        "provider": { "@id": "https://www.itadreamteam.com/#organization" },
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.itadreamteam.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Calcolatore Risparmio Affitto Breve", "item": "https://www.itadreamteam.com/calcola-risparmio.html" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Quanto si risparmia in 1 anno e in 3 anni con itassistance rispetto a un Property Manager al 20%?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Su un appartamento che genera 30.000 € lordi all'anno, un Property Manager al 20% trattiene 6.000 €/anno (18.000 € in 3 anni). Con itassistance paghi 1.188 €/anno IVA inclusa (99 €/mese), risparmiando 4.812 € ogni anno e 14.436 € in 3 anni."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --navy:#111111; --gold:#C9A84C; --gold-dark:#9E7E28; --gold-light:#FBF7EC; --bg:#FFFFFF; --bg-alt:#F7F7F5; --text:#1A1A1A; --text-muted:#52525B; --border:#E4E4E7; --green:#15803D; --green-bg:#DCFCE7; --serif:'Playfair Display',Georgia,serif; --sans:'Inter',sans-serif; }
+    body { font-family:var(--sans); color:var(--text); background:var(--bg); line-height:1.65; }
+    a { color:inherit; text-decoration:none; }
+    .container { max-width:980px; margin:0 auto; padding:0 20px; }
+    .navbar { border-bottom:1px solid var(--border); background:#fff; position:sticky; top:0; z-index:100; }
+    .navbar-inner { display:flex; justify-content:space-between; align-items:center; height:64px; }
+    .brand { display:inline-flex; align-items:center; gap:10px; font-weight:700; font-size:19px; color:var(--navy); }
+    .brand img { width:30px; height:30px; border-radius:6px; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; padding:13px 22px; border-radius:8px; font-weight:600; font-size:14px; min-height:48px; cursor:pointer; border:none; }
+    .btn-gold { background:var(--gold); color:var(--navy); font-weight:700; }
+    .btn-outline { border:1px solid var(--navy); color:var(--navy); background:#fff; }
+    section { padding:52px 0; border-bottom:1px solid var(--border); }
+    .eyebrow { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.8px; color:var(--gold-dark); margin-bottom:10px; display:block; }
+    h1 { font-family:var(--serif); font-size:clamp(30px,4.5vw,44px); line-height:1.12; margin-bottom:14px; color:var(--navy); }
+    .sim-box { background:#fff; border:2px solid var(--gold); border-radius:14px; padding:28px; box-shadow:0 16px 36px rgba(0,0,0,0.06); margin-top:20px; }
+    .sim-grid { display:grid; grid-template-columns:1.1fr 0.9fr; gap:28px; align-items:start; }
+    @media(max-width:780px) { .sim-grid { grid-template-columns:1fr; } }
+    .field { margin-bottom:16px; }
+    .field label { display:flex; justify-content:space-between; font-size:13.5px; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .field input[type="range"] { width:100%; accent-color:var(--navy); cursor:pointer; }
+    .field input[type="text"], .field input[type="tel"], .field input[type="email"], .field select { width:100%; padding:11px 13px; border:1px solid var(--border); border-radius:8px; font-size:14px; font-family:inherit; }
+    .res-panel { background:var(--navy); color:#fff; border-radius:12px; padding:24px; }
+    .res-row { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.12); font-size:14px; }
+    footer { background:#0B0B0E; color:#A1A1AA; padding:40px 0; font-size:13px; }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="/" class="brand"><img src="/brand/logo.png" alt="Logo itassistance"><span>itassistance</span></a>
+      <div style="display:flex;gap:10px;">
+        <a href="/" class="btn btn-outline" style="min-height:40px;padding:8px 14px;font-size:13px;">← Home</a>
+        <a href="/checkout.html" class="btn btn-gold" style="min-height:40px;padding:8px 16px;font-size:13px;">Prova l'app (14 gg rimborso)</a>
+      </div>
+    </div>
+  </header>
+
+  <section style="background:var(--bg-alt);">
+    <div class="container">
+      <span class="eyebrow">Simulatore Ufficiale Proprietari · Firenze &amp; Italia</span>
+      <h1>Calcola quanto risparmi sul tuo affitto breve con 99 €/mese invece del 20% di commissione.</h1>
+      <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:14px;">
+        📅 <strong>Ultimo aggiornamento:</strong> Novembre 2026 · <strong>Fonte dati:</strong> Centro Studi AIGAB, Idealista &amp; Politecnico di Torino (il 75% dei proprietari gestisce senza Property Manager; l'84% ha 1 o 2 appartamenti)
+      </div>
+
+      <div style="background:var(--gold-light);border-left:4px solid var(--gold);border-radius:10px;padding:16px 20px;">
+        <strong style="color:var(--navy);display:block;margin-bottom:4px;">📌 In Breve (Risposta Rapida):</strong>
+        <p style="margin:0;color:var(--navy);font-size:15px;">
+          Su un appartamento che incassa <strong>30.000 €/anno</strong>, un Property Manager al 20% trattiene <strong>6.000 €/anno (18.000 € in 3 anni)</strong>. Con l'app <strong>itassistance</strong> paghi <strong>99 € al mese IVA inclusa (1.188 €/anno)</strong> e tieni in tasca <strong>+4.812 € ogni anno (+14.436 € in 3 anni)</strong>, gestendo tutto in 10 minuti al giorno.
+        </p>
+      </div>
+
+      <div class="sim-box">
+        <div class="sim-grid">
+          <div>
+            <div class="field">
+              <label for="sim-rev">
+                <span>1. Incasso annuo lordo per appartamento:</span>
+                <strong id="sim-rev-val" style="color:var(--gold-dark);font-size:16px;">30.000 € / anno</strong>
+              </label>
+              <input type="range" id="sim-rev" min="10000" max="100000" step="2500" value="30000" oninput="runSim()">
+            </div>
+
+            <div class="field">
+              <label for="sim-apts"><span>2. Numero di appartamenti (84% degli host ne ha 1 o 2):</span></label>
+              <select id="sim-apts" onchange="runSim()">
+                <option value="1" selected>1 Appartamento (99 € / mese IVA incl.)</option>
+                <option value="2">2 Appartamenti (198 € / mese IVA incl.)</option>
+                <option value="3">3 Appartamenti (297 € / mese IVA incl.)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="sim-pm"><span>3. Commissione media richiesta dal Property Manager:</span></label>
+              <select id="sim-pm" onchange="runSim()">
+                <option value="18">18% sull'incasso lordo</option>
+                <option value="20" selected>20% sull'incasso lordo (Media Firenze)</option>
+                <option value="25">25% sull'incasso lordo (Full Management)</option>
+              </select>
+            </div>
+
+            <div style="padding:14px;background:var(--gold-light);border:1px solid var(--gold);border-radius:10px;margin-bottom:18px;">
+              <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:13.5px;color:var(--navy);">
+                <input type="checkbox" id="sim-addon10" onchange="runSim()" style="margin-top:4px;accent-color:var(--navy);">
+                <span><strong>Simula anche con Opzione Extra +10%</strong> (se oltre all'app vuoi delegare anche Revenue Management dinamico e adempimenti operativi)</span>
+              </label>
+            </div>
+
+            <div style="border-top:1px dashed var(--border);padding-top:16px;">
+              <strong style="font-size:14px;color:var(--navy);display:block;margin-bottom:8px;">📲 Inviati questo calcolo su WhatsApp + Checklist Obblighi Firenze:</strong>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+                <input type="text" id="sim-name" placeholder="Tuo Nome *">
+                <input type="tel" id="sim-phone" placeholder="Tuo WhatsApp *">
+              </div>
+              <button type="button" class="btn btn-outline" style="width:100%;" onclick="sendSimToWhatsApp()">📩 Ricevi Prospetto Risparmio su WhatsApp →</button>
+              <div id="sim-status" style="margin-top:6px;font-size:12.5px;font-weight:700;color:var(--green);"></div>
+            </div>
+          </div>
+
+          <div class="res-panel">
+            <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Risultato Simulazione</div>
+            <div class="res-row">
+              <span>Incasso Lordo Totale:</span>
+              <strong id="res-gross">30.000 € / anno</strong>
+            </div>
+            <div class="res-row">
+              <span>Costo Property Manager:</span>
+              <strong id="res-pm" style="color:#FCA5A5;">6.000 € / anno</strong>
+            </div>
+            <div class="res-row">
+              <span>Costo Totale itassistance:</span>
+              <strong id="res-ita" style="color:var(--gold);">1.188 € / anno</strong>
+            </div>
+            <div style="background:rgba(74,222,128,0.14);border:1.5px solid #4ADE80;border-radius:10px;padding:16px;margin:16px 0;">
+              <div style="font-size:12px;color:#DCFCE7;font-weight:600;">🏆 RISPARMIO NETTO IN 1 ANNO:</div>
+              <div id="res-save-1y" style="font-family:var(--serif);font-size:34px;font-weight:700;color:#4ADE80;line-height:1.15;margin-top:4px;">+4.812 € / anno</div>
+              <div id="res-save-3y" style="font-size:13px;color:#fff;margin-top:6px;font-weight:600;">Risparmio in 3 anni: +14.436 €</div>
+            </div>
+            <a href="/checkout.html" class="btn btn-gold" style="width:100%;">Attiva ora con 14 gg Soddisfatto o Rimborsato →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div>itassistance è un prodotto di Blue Arroyo SRL · P.IVA 07480210488 · Via Matteo Palmieri 20r, 50122 Firenze (FI)</div>
+      <div><a href="/" style="text-decoration:underline;">Home</a> · <a href="/faq-affitti-brevi-firenze.html" style="text-decoration:underline;">20 FAQ Firenze</a> · <a href="/prezzi.html" style="text-decoration:underline;">Prezzi</a></div>
+    </div>
+  </footer>
+
+  <script>
+    function fmt(n) {
+      return Math.round(n).toLocaleString('it-IT') + ' €';
+    }
+
+    function runSim() {
+      var revPerApt = parseFloat(document.getElementById('sim-rev').value) || 30000;
+      var apts = parseInt(document.getElementById('sim-apts').value, 10) || 1;
+      var pmPct = parseInt(document.getElementById('sim-pm').value, 10) || 20;
+      var addon10 = document.getElementById('sim-addon10').checked;
+
+      var totalGross = revPerApt * apts;
+      var pmCost = totalGross * (pmPct / 100);
+      var itaBase = 1188 * apts;
+      var itaTotal = addon10 ? (itaBase + totalGross * 0.10) : itaBase;
+      var save1y = Math.max(0, pmCost - itaTotal);
+      var save3y = save1y * 3;
+
+      document.getElementById('sim-rev-val').textContent = fmt(revPerApt) + ' / anno';
+      document.getElementById('res-gross').textContent = fmt(totalGross) + ' / anno';
+      document.getElementById('res-pm').textContent = fmt(pmCost) + ' / anno (' + pmPct + '%)';
+      document.getElementById('res-ita').textContent = fmt(itaTotal) + ' / anno' + (addon10 ? ' (con +10%)' : ' (0% comm.)');
+      document.getElementById('res-save-1y').textContent = '+' + fmt(save1y) + ' / anno';
+      document.getElementById('res-save-3y').textContent = 'Risparmio in 3 anni: +' + fmt(save3y);
+    }
+
+    async function sendSimToWhatsApp() {
+      var name = (document.getElementById('sim-name').value || '').trim();
+      var phone = (document.getElementById('sim-phone').value || '').trim();
+      if (!name || !phone) {
+        alert('Inserisci Nome e numero WhatsApp.');
+        return;
+      }
+      var revPerApt = parseFloat(document.getElementById('sim-rev').value) || 30000;
+      var apts = parseInt(document.getElementById('sim-apts').value, 10) || 1;
+      var pmPct = parseInt(document.getElementById('sim-pm').value, 10) || 20;
+      var addon10 = document.getElementById('sim-addon10').checked;
+      var totalGross = revPerApt * apts;
+
+      if (window.ITACloudSync && typeof ITACloudSync.saveSavingsDiagnosisLead === 'function') {
+        await ITACloudSync.saveSavingsDiagnosisLead({
+          name: name + ' (' + apts + ' imm.)',
+          phone: phone,
+          email: '',
+          annualRevenue: totalGross,
+          pmPct: pmPct,
+          addon10Interest: addon10
+        });
+      }
+
+      document.getElementById('sim-status').textContent = '✓ Simulazione salvata! Apertura WhatsApp...';
+      var save1Text = document.getElementById('res-save-1y').textContent;
+      var save3Text = document.getElementById('res-save-3y').textContent;
+      var msg = '📊 *SIMULAZIONE RISPARMIO AFFITTO BREVE — itassistance*\n' +
+        '👤 Proprietario: *' + name + '* (' + apts + ' imm.)\n' +
+        '💰 Incasso lordo: *' + fmt(totalGross) + '/anno*\n' +
+        '🏆 *Risparmio netto con itassistance: ' + save1Text + '* (' + save3Text + ')\n' +
+        '👉 Attiva con 14 giorni Soddisfatto o Rimborsato: https://www.itadreamteam.com/checkout.html';
+      window.open('https://wa.me/393510380392?text=' + encodeURIComponent(msg), '_blank');
+    }
+  </script>
+</body>
+</html>
