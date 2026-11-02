@@ -129,7 +129,14 @@
     },
 
     webhook: {
-      n8nLeadsUrl: 'https://aherreras.app.n8n.cloud/webhook/leads/itassistance'
+      n8nLeadsUrl: 'https://aherreras.app.n8n.cloud/webhook/leads/itassistance',
+      n8nDailyReportUrl: 'https://aherreras.app.n8n.cloud/webhook/leads/itassistance'
+    },
+
+    cloud: {
+      supabaseUrl: 'https://aunnoivzjeiyiczsxzbp.supabase.co',
+      supabaseAnonKey: 'sb_publishable_DWG41-bTiTEE-iSJEJr2qw_LBxAJCTb',
+      syncTable: 'preventivi'
     }
   };
 

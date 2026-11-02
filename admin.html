@@ -15,8 +15,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
 
-  <!-- Fonte Unica Dati -->
+  <!-- Fonte Unica Dati & Sincronizzazione Cloud -->
   <script src="/site-config.js"></script>
+  <script src="/cloud-sync.js"></script>
   <!-- Motore PDF per generazione Fatture / Proforma -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.min.js" defer></script>
@@ -688,6 +689,54 @@
               </div>
               <button type="button" class="btn btn-gold btn-sm" onclick="switchAdminTab('fatturazione')">Apri Fatturazione →</button>
             </div>
+          </div>
+        </div>
+
+        <!-- ═══ CENTRALE AUTOMAZIONE REPORT 08:00 & PUSH IN TEMPO REALE AI PROPRIETARI ═══ -->
+        <div class="panel-card" style="border:1.5px solid var(--gold);background:linear-gradient(180deg, #FFFFFF 0%, #FBF7EC 100%);">
+          <div class="panel-head">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span class="badge badge-ok">🟢 Cloud Sync Attivo (Supabase + n8n)</span>
+                <span class="badge badge-gold">AUTOMAZIONE REPORT 08:00</span>
+              </div>
+              <div class="panel-title">🕗 Centrale Invio Report Mattutino (08:00) &amp; Push Compiti all'App Proprietario</div>
+              <p style="font-size:13px;color:var(--text-muted);">
+                Invia in tempo reale un'azione o una scadenza direttamente nel Report del Giorno dell'Area Proprietario (<a href="/app.html" style="text-decoration:underline;font-weight:600;">/app.html</a>) oppure avvia il broadcast mattutino delle 08:00 via Cloud n8n.
+              </p>
+            </div>
+            <button type="button" class="btn btn-gold btn-sm" onclick="adminBroadcastMorningReport()">🚀 Avvia Broadcast Report 08:00 (Cloud n8n)</button>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="field">
+              <label for="adm-push-title">Titolo Compito / Avviso per il Proprietario *</label>
+              <input type="text" id="adm-push-title" placeholder="es. Verifica ricevuta Alloggiati Web ospite Martin"/>
+            </div>
+            <div class="field">
+              <label for="adm-push-desc">Dettaglio Operativo</label>
+              <input type="text" id="adm-push-desc" placeholder="es. Scadenza entro le ore 14:00 sul portale Polizia di Stato"/>
+            </div>
+            <div class="field">
+              <label for="adm-push-tab">Sezione App Collegata</label>
+              <select id="adm-push-tab">
+                <option value="alloggiati">🛂 3. Alloggiati Web</option>
+                <option value="operativo">🏠 2. Operativo &amp; PDF Check-in</option>
+                <option value="fiscale">🏛️ 4. Tassa di Soggiorno &amp; Fiscale</option>
+                <option value="fornitori">💳 5. Fornitori &amp; Spese</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="sendTaskToOwnerApp()">🔔 Invia Compito in Tempo Reale all'App Proprietario</button>
+            <span id="adm-push-status" style="font-size:12.5px;font-weight:700;color:var(--green);"></span>
+          </div>
+
+          <!-- Log ultimi report 08:00 inviati -->
+          <div style="margin-top:16px;padding-top:12px;border-top:1px dashed var(--border);">
+            <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:8px;">📋 Ultimi Report Giornalieri delle 08:00 Inviati (Cloud Log):</div>
+            <div id="adm-report-logs" style="font-size:12.5px;color:var(--text-muted);">Nessun invio registrato in questa sessione. Clicca "Avvia Broadcast Report 08:00" per testare.</div>
           </div>
         </div>
       </section>
@@ -1833,8 +1882,56 @@
       showToast('✓ Dati dimostrativi Super Admin ripristinati.');
     }
 
+    function renderReportLogsInAdmin() {
+      var box = document.getElementById('adm-report-logs');
+      if (!box || !window.ITACloudSync) return;
+      var logs = ITACloudSync.getReportLogs();
+      if (!logs || logs.length === 0) return;
+      box.innerHTML = logs.slice(0, 5).map(function (l) {
+        return '<div style="padding:6px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;">' +
+          '<span><strong>' + l.sentAt + '</strong> · ' + l.apartment + ' → ' + l.recipient + ' (' + l.pendingTasks + ' azioni)</span>' +
+          '<span class="badge badge-ok">' + l.webhookStatus + '</span>' +
+        '</div>';
+      }).join('');
+    }
+
+    function sendTaskToOwnerApp() {
+      var title = (document.getElementById('adm-push-title').value || '').trim();
+      var desc = (document.getElementById('adm-push-desc').value || '').trim();
+      var tab = document.getElementById('adm-push-tab').value;
+      if (!title) {
+        alert('Inserisci il titolo del compito da inviare al proprietario.');
+        return;
+      }
+      if (window.ITACloudSync && ITACloudSync.pushTaskFromAdminToOwner(title, desc, tab)) {
+        document.getElementById('adm-push-title').value = '';
+        document.getElementById('adm-push-desc').value = '';
+        document.getElementById('adm-push-status').textContent = '✓ Compito inviato in tempo reale a /app.html e sincronizzato su Supabase!';
+        showToast('✓ Compito inviato al Report del Giorno del Proprietario.');
+      }
+    }
+
+    async function adminBroadcastMorningReport() {
+      if (!window.ITACloudSync) return;
+      var ownerRaw = localStorage.getItem('itassistance_owner_app_v1');
+      var ownerState = ownerRaw ? JSON.parse(ownerRaw) : {
+        apartment: { name: 'Appartamento Santo Spirito', address: 'Via Maggio 18, Firenze', cin: 'IT048017C200001234', ownerEmail: 'proprietario@itadreamteam.com', ownerPhone: '+39 351 038 0392' },
+        tasks: [{ title: 'Controlla report del giorno e Alloggiati Web', desc: 'Verifica invii entro 24h', done: false }],
+        bookings: []
+      };
+      await ITACloudSync.dispatchDailyReport0800(ownerState, {});
+      renderReportLogsInAdmin();
+      showToast('✓ Broadcast Report delle 08:00 inviato via Cloud n8n + Supabase!');
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
       renderAdminAll();
+      renderReportLogsInAdmin();
+      if (window.ITACloudSync) {
+        ITACloudSync.onLiveSync(function () {
+          renderReportLogsInAdmin();
+        });
+      }
       var params = new URLSearchParams(window.location.search);
       var roleParam = params.get('role');
       if (roleParam && ROLE_PROFILES[roleParam]) {

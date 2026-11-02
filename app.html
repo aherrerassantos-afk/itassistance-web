@@ -16,8 +16,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
 
-  <!-- Fonte Unica Dati -->
+  <!-- Fonte Unica Dati & Sincronizzazione Cloud -->
   <script src="/site-config.js"></script>
+  <script src="/cloud-sync.js"></script>
   <!-- Motore PDF Vettoriale per il generatore istruzioni check-in -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.min.js" defer></script>
@@ -744,6 +745,66 @@
             <input type="text" id="new-task-input" placeholder="Aggiungi un promemoria operativo per il tuo appartamento..." style="flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;"/>
             <button type="button" class="btn btn-primary btn-sm" onclick="addCustomTask()">+ Aggiungi al report di oggi</button>
           </div>
+        </div>
+
+        <!-- ═══ AUTOMAZIONE REALE REPORT DELLE 08:00 (SUPABASE + N8N + WHATSAPP/EMAIL) ═══ -->
+        <div class="panel-card" style="border:1.5px solid var(--gold);background:linear-gradient(180deg, #FFFFFF 0%, #FBF7EC 100%);">
+          <div class="panel-head">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                <span class="badge badge-ok" id="cloud-sync-indicator">🟢 Cloud Sync Attivo (Supabase + n8n)</span>
+                <span class="badge badge-gold">AUTOMAZIONE ORE 08:00</span>
+              </div>
+              <div class="panel-title">🔔 Ricezione Automatica del Report Giornaliero delle 08:00</div>
+              <p style="font-size:13px;color:var(--text-muted);">
+                Ogni mattina ricevi sul tuo telefono il riepilogo con le cose da fare per essere in regola. Configura qui i tuoi recapiti o invia subito il report di oggi.
+              </p>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" onclick="previewDailyReport0800()">👁️ Anteprima Messaggio 08:00</button>
+          </div>
+
+          <div class="form-grid-3">
+            <div class="field">
+              <label for="rep-time">Orario Invio Automatico Mattutino</label>
+              <select id="rep-time" onchange="saveReportAutomationPrefs()">
+                <option value="07:30">07:30 · Mattina presto</option>
+                <option value="08:00" selected>08:00 · Orario consigliato itassistance</option>
+                <option value="08:30">08:30 · Mattina</option>
+                <option value="09:00">09:00 · Apertura giornata</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="rep-channel">Canale di Ricezione Preferito</label>
+              <select id="rep-channel" onchange="saveReportAutomationPrefs()">
+                <option value="whatsapp_email" selected>📲 WhatsApp + ✉️ Email</option>
+                <option value="whatsapp">📲 Solo WhatsApp</option>
+                <option value="email">✉️ Solo Email</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="rep-phone">Tuo Numero WhatsApp (per Report 08:00)</label>
+              <input type="tel" id="rep-phone" value="+39 351 038 0392" placeholder="+39 340..." onchange="saveReportAutomationPrefs()"/>
+            </div>
+            <div class="field" style="grid-column:1 / -1;">
+              <label for="rep-email">Tua Email Proprietario (per Report 08:00 e avvisi scadenze)</label>
+              <input type="email" id="rep-email" value="proprietario@itadreamteam.com" placeholder="tua@email.it" onchange="saveReportAutomationPrefs()"/>
+            </div>
+          </div>
+
+          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+            <button type="button" class="btn btn-gold" onclick="triggerMorningReportNow({openWhatsApp:false,openEmail:false})">
+              🚀 Invia Ora Report 08:00 via Cloud (n8n)
+            </button>
+            <button type="button" class="btn btn-primary" onclick="triggerMorningReportNow({openWhatsApp:true})">
+              📲 Ricevi Ora su WhatsApp
+            </button>
+            <button type="button" class="btn btn-outline" onclick="triggerMorningReportNow({openEmail:true})">
+              ✉️ Ricevi Ora via Email
+            </button>
+            <span id="rep-dispatch-status" style="font-size:12.5px;font-weight:700;color:var(--green);"></span>
+          </div>
+
+          <div id="rep-preview-box" style="display:none;margin-top:14px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px;font-size:12.5px;white-space:pre-wrap;color:var(--navy);"></div>
         </div>
       </section>
 
@@ -1533,7 +1594,43 @@
     function saveState() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+        if (window.ITACloudSync) {
+          ITACloudSync.syncSnapshotToSupabase('owner_app', appState);
+          ITACloudSync.broadcastStateChange('owner_state_saved', { apartment: appState.apartment.name });
+        }
       } catch (e) {}
+    }
+
+    function saveReportAutomationPrefs() {
+      var apt = appState.apartment;
+      apt.reportTime = document.getElementById('rep-time').value || '08:00';
+      apt.reportChannel = document.getElementById('rep-channel').value || 'whatsapp_email';
+      apt.ownerPhone = (document.getElementById('rep-phone').value || '').trim();
+      apt.ownerEmail = (document.getElementById('rep-email').value || '').trim();
+      saveState();
+      showToast('✓ Preferenze automazione Report 08:00 salvate nel Cloud.');
+    }
+
+    function previewDailyReport0800() {
+      if (!window.ITACloudSync) return;
+      var box = document.getElementById('rep-preview-box');
+      if (!box) return;
+      box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+      box.textContent = ITACloudSync.buildDailyReportMessage(appState);
+    }
+
+    async function triggerMorningReportNow(opts) {
+      saveReportAutomationPrefs();
+      if (!window.ITACloudSync) return;
+      var statusEl = document.getElementById('rep-dispatch-status');
+      if (statusEl) statusEl.textContent = 'Invio report in corso...';
+      var res = await ITACloudSync.dispatchDailyReport0800(appState, opts || {});
+      if (statusEl) {
+        statusEl.textContent = res.webhookOk
+          ? '✓ Report 08:00 inviato al Cloud n8n + Supabase (' + new Date().toLocaleTimeString('it-IT') + ')'
+          : '✓ Report 08:00 generato e sincronizzato (' + new Date().toLocaleTimeString('it-IT') + ')';
+      }
+      showToast('✓ Report del giorno delle 08:00 inviato!');
     }
 
     function showToast(msg) {
@@ -2263,8 +2360,24 @@
 
     document.addEventListener('DOMContentLoaded', function () {
       populateCheckinFormFromState();
+      if (appState.apartment) {
+        if (appState.apartment.reportTime && document.getElementById('rep-time')) document.getElementById('rep-time').value = appState.apartment.reportTime;
+        if (appState.apartment.reportChannel && document.getElementById('rep-channel')) document.getElementById('rep-channel').value = appState.apartment.reportChannel;
+        if (appState.apartment.ownerPhone && document.getElementById('rep-phone')) document.getElementById('rep-phone').value = appState.apartment.ownerPhone;
+        if (appState.apartment.ownerEmail && document.getElementById('rep-email')) document.getElementById('rep-email').value = appState.apartment.ownerEmail;
+      }
       renderAll();
       prefillAlloggiatiFromBooking();
+
+      if (window.ITACloudSync) {
+        ITACloudSync.onLiveSync(function (msg) {
+          appState = loadState();
+          renderAll();
+          if (msg && msg.type === 'admin_task_pushed') {
+            showToast('🔔 Nuovo compito ricevuto dal Team itassistance Firenze!');
+          }
+        });
+      }
 
       var params = new URLSearchParams(window.location.search);
       var tab = params.get('tab');
