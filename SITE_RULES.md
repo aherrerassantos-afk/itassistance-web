@@ -129,4 +129,17 @@ Dopo **OGNI deploy** in produzione, la risposta all'utente deve SEMPRE concluder
 | **🛂 Ospite Turistico (IT/EN)** | Self Check-in Documento (Art. 109 TULPS) + Download PDF Istruzioni | `/ospiti.html` (Mobile) | 5 tap · 12 campi · 90 sec | **2 tap (1 Chip Paese + Invio) · 5 campi · 30 sec** | **−60% clic · −58% campi · −66% tempo** |
 | **🤝 Partner / Fornitore Esterno** | Richiesta accreditamento Studio Commercialista / Agenzia / Fornitore FI | `/partner.html` (Desktop / Mobile) | 4 clic · 4 campi obbligatori · 60 sec | **2 tap (1 Chip Ruolo + Invio) · 2 campi · 20 sec** | **−50% clic · −50% campi · −66% tempo** |
 
+---
+
+## 10. REGOLA PERMANENTE — VISIONE E 4 PRINCIPI NON NEGOZIABILI DEL CHANNEL MANAGER & REVENUE MANAGEMENT AUTONOMO
+
+Obiettivo finale per i membri e i Property Manager di `itassistance`: un sistema di **Revenue Management Autonomo** che decide prezzi, soggiorni minimi e sblocco buchi orfani su tutti i portali collegati (1 o più portali) massimizzando il ricavo entro i limiti stabiliti dal proprietario, con un intervento umano di pochi minuti a settimana.
+
+### I 4 Principi Non Negoziabili (Sempre Applicati in Codice e Testi)
+1. **Promesse = Realtà:** Il sito e l'app dichiarano come attive solo le funzioni realmente operative oggi (`✅ Attivo Ora`: motore calcolo prezzi comportamentali e soggiorni minimi, blocco rigido anti-overbooking su calendario, compensazione commissioni OTA, approvazione settimanale in 1 tap con export listino CSV e sincronizzazione iCal). Ciò che non è ancora attivo (es. scrittura automatica H24 via API diretta sui server Airbnb/Booking/Vrbo senza CSV — `Livello L4`) deve essere sempre etichettato esplicitamente **`⏳ In arrivo`**.
+2. **Autonomia Guadagnata con i Dati (`L1` → `L2` → `L3` → `L4`):** Il sistema sale di livello di autonomia (`L1 Osservazione` → `L2 Co-Pilota 1-Tap Settimanale` → `L3 Autonomia entro Guardrail`) solo quando batte le decisioni umane/statiche in modo misurato e verificabile (`> +8%`).
+3. **Zero Overbooking, Zero Prezzi Fuori Controllo:** Ogni inserimento prenotazione verifica preventivamente le collisioni di date (`ITACloudSync.checkBookingOverlap`) bloccando doppie prenotazioni; ogni prezzo (calcolato o inserito a mano) è vincolato matematicamente (`clampPriceToGuardrails`) tra il `Floor Minimo` e il `Cap Massimo` decisi dal proprietario.
+4. **Meno Clic Possibili per i Membri:** L'interazione ordinaria del membro o del Property Manager si riduce a **1 solo tap a settimana** (`⚡ Approva Piano Settimanale & Scarica Listino CSV`).
+
+
 
