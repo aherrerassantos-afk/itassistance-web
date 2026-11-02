@@ -1,6 +1,7 @@
 {
   "trailingSlash": false,
   "redirects": [
+    { "source": "/sincronizza-calendari", "destination": "/sincronizzare-airbnb-booking-calendario-affitti-brevi.html", "permanent": true },
     { "source": "/quartieri-firenze", "destination": "/affitti-brevi-centro-storico-firenze-quartieri.html", "permanent": true },
     { "source": "/faq-firenze", "destination": "/faq-affitti-brevi-firenze.html", "permanent": true },
     { "source": "/calcola-risparmio", "destination": "/calcola-risparmio.html", "permanent": true },

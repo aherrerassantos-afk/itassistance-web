@@ -487,8 +487,8 @@
 
   <script>
     var STRIPE_LINKS = {
-      'mensile': 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_99_mensile',
-      'annuale': 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_1188_annuale'
+      'mensile': (window.SITE_CONFIG && window.SITE_CONFIG.payments && window.SITE_CONFIG.payments.stripeMonthlyUrl) || 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_99_mensile',
+      'annuale': (window.SITE_CONFIG && window.SITE_CONFIG.payments && window.SITE_CONFIG.payments.stripeYearlyUrl) || 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_1188_annuale'
     };
 
     var currentCycle = 'mensile';

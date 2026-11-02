@@ -751,7 +751,7 @@
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
               <a href="/llms.txt" target="_blank" class="btn btn-outline btn-sm">📄 Vedi /llms.txt</a>
-              <a href="/sitemap.xml" target="_blank" class="btn btn-outline btn-sm">🗺️ Vedi Sitemap (16 URL)</a>
+              <a href="/sitemap.xml" target="_blank" class="btn btn-outline btn-sm">🗺️ Vedi Sitemap (17 URL)</a>
               <button type="button" class="btn btn-gold btn-sm" onclick="pingIndexNowAllUrls()">🚀 Notifica IndexNow (Bing / ChatGPT)</button>
             </div>
           </div>
@@ -833,6 +833,12 @@
                   <td><a href="https://www.perplexity.ai/search?q=regole+affitti+brevi+centro+storico+firenze+divieto+keybox+check-in+20+euro" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:700;">🔍 Perplexity</a> · <a href="https://www.google.com/search?q=affitti+brevi+centro+storico+firenze+quartieri+itassistance" target="_blank" rel="noopener" style="text-decoration:underline;">Google</a></td>
                   <td><span class="badge badge-ok">✓ 5 Quartieri + LocalBusiness</span></td>
                 </tr>
+                <tr>
+                  <td><strong>12. Sincronizzare Airbnb e Booking.com (Zero Overbooking)</strong></td>
+                  <td><a href="/sincronizzare-airbnb-booking-calendario-affitti-brevi.html" target="_blank" style="text-decoration:underline;">/sincronizzare-airbnb-booking-calendario-affitti-brevi.html</a></td>
+                  <td><a href="https://www.perplexity.ai/search?q=come+sincronizzare+calendario+Airbnb+e+Booking+affitti+brevi+senza+property+manager" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:700;">🔍 Perplexity</a> · <a href="https://www.google.com/search?q=sincronizzare+airbnb+booking+calendario+affitti+brevi+itassistance" target="_blank" rel="noopener" style="text-decoration:underline;">Google</a></td>
+                  <td><span class="badge badge-ok">✓ HowTo + Tabella + FAQPage</span></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -858,10 +864,43 @@ P.IVA: 07480210488</div>
                 <button type="button" class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('gbp-desc-text').innerText);showToast('✓ Descrizione Google Maps copiata!')">📋 Copia Descrizione 750 car.</button>
               </div>
               <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px;">
-                <strong style="color:var(--navy);display:block;margin-bottom:6px;">3. Sitemap per Search Console &amp; Bing Webmaster</strong>
-                <div id="gbp-sitemap-text" style="color:var(--text-muted);line-height:1.5;margin-bottom:8px;">https://www.itadreamteam.com/sitemap.xml</div>
-                <button type="button" class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText('https://www.itadreamteam.com/sitemap.xml');showToast('✓ URL Sitemap (16 pagine) copiato!')">📋 Copia URL Sitemap (16 URL)</button>
-                <div style="margin-top:8px;font-size:12px;color:var(--text-muted);">Invia su <strong>Google Search Console</strong> e <strong>Bing Webmaster Tools</strong> (che alimenta ChatGPT Search e Copilot).</div>
+                <strong style="color:var(--navy);display:block;margin-bottom:6px;">3. Catalogo Servizi &amp; Primo Post Google Maps</strong>
+                <div id="gbp-services-text" style="color:var(--text-muted);line-height:1.5;margin-bottom:8px;">• App Gestione Affitti Brevi: 99 €/mese IVA incl. (0% commissioni, 14 gg Soddisfatto o Rimborsato)
+• Check-in di Persona a Firenze: 20 € IVA incl. a intervento
+• Piccola Manutenzione a Firenze: 30 € IVA incl. a intervento
+• Opzione Extra Revenue Management &amp; Adempimenti: +10%
+• Sitemap Ufficiale (17 URL): https://www.itadreamteam.com/sitemap.xml</div>
+                <button type="button" class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('gbp-services-text').innerText);showToast('✓ Catalogo Servizi e Sitemap copiati!')">📋 Copia Servizi &amp; Sitemap (17 URL)</button>
+              </div>
+            </div>
+          </details>
+
+          <!-- CONFIGURATORE CREDENZIALI LIVE SENZA CODICE (STRIPE, IBAN, SUPABASE, N8N) -->
+          <details style="margin-top:12px;background:#FFFDF7;border:1.5px solid var(--gold);border-radius:10px;padding:14px 18px;">
+            <summary style="cursor:pointer;font-weight:800;color:var(--navy);font-size:14px;">⚙️ Configuratore Credenziali Live Senza Codice (Stripe Payment Links, IBAN Blue Arroyo SRL, n8n &amp; Supabase)</summary>
+            <div style="margin-top:14px;">
+              <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:12px;">Aggiorna qui i link di pagamento Stripe, l'IBAN per il bonifico e il Webhook n8n: le modifiche vengono applicate istantaneamente su <code>/checkout.html</code>, <code>/app.html</code> e <code>/admin.html</code>.</p>
+              <div class="form-grid">
+                <div>
+                  <label>Stripe Link Mensile (99 €/mese IVA incl.)</label>
+                  <input type="text" id="cfg-stripe-monthly" placeholder="https://buy.stripe.com/..." />
+                </div>
+                <div>
+                  <label>Stripe Link Annuale (1.188 €/anno IVA incl.)</label>
+                  <input type="text" id="cfg-stripe-yearly" placeholder="https://buy.stripe.com/..." />
+                </div>
+                <div>
+                  <label>IBAN Bonifico Bancario (Blue Arroyo SRL)</label>
+                  <input type="text" id="cfg-bank-iban" placeholder="IT00X0000000000000000000000" />
+                </div>
+                <div>
+                  <label>Webhook n8n Cloud (Report 08:00 &amp; Leads)</label>
+                  <input type="text" id="cfg-n8n-url" placeholder="https://aherreras.app.n8n.cloud/webhook/leads/itassistance" />
+                </div>
+              </div>
+              <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+                <button type="button" class="btn btn-gold btn-sm" onclick="saveLiveConfigOverrides()">💾 Salva Credenziali Live</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="resetLiveConfigOverrides()">↺ Ripristina Default</button>
               </div>
             </div>
           </details>
@@ -2126,7 +2165,7 @@ P.IVA: 07480210488</div>
       var st = document.getElementById('adm-indexnow-status');
       if (st) {
         st.style.display = 'block';
-        st.textContent = 'Invio notifica IndexNow per le 16 URL pubbliche a Bing / ChatGPT Search / Copilot...';
+        st.textContent = 'Invio notifica IndexNow per le 17 URL pubbliche a Bing / ChatGPT Search / Copilot...';
       }
       var urls = [
         'https://www.itadreamteam.com/',
@@ -2137,6 +2176,7 @@ P.IVA: 07480210488</div>
         'https://www.itadreamteam.com/faq-affitti-brevi-firenze.html',
         'https://www.itadreamteam.com/calcola-risparmio.html',
         'https://www.itadreamteam.com/affitti-brevi-centro-storico-firenze-quartieri.html',
+        'https://www.itadreamteam.com/sincronizzare-airbnb-booking-calendario-affitti-brevi.html',
         'https://www.itadreamteam.com/gestire-affitto-breve-senza-property-manager.html',
         'https://www.itadreamteam.com/alternativa-property-manager.html',
         'https://www.itadreamteam.com/registrazione-ospiti-alloggiati-web.html',
@@ -2159,14 +2199,45 @@ P.IVA: 07480210488</div>
         });
       } catch (e) {}
       if (st) {
-        st.textContent = '✓ Ping IndexNow completato per 16 URL pubbliche (' + new Date().toLocaleTimeString('it-IT') + ') · SEO/GEO: ok';
+        st.textContent = '✓ Ping IndexNow completato per 17 URL pubbliche (' + new Date().toLocaleTimeString('it-IT') + ') · SEO/GEO: ok';
       }
-      showToast('✓ Notifica IndexNow inviata per tutte le 16 pagine pubbliche!');
+      showToast('✓ Notifica IndexNow inviata per tutte le 17 pagine pubbliche!');
+    }
+
+    function loadLiveConfigForm() {
+      var cfg = window.SITE_CONFIG || {};
+      var pay = cfg.payments || {};
+      var wh = cfg.webhook || {};
+      var sm = document.getElementById('cfg-stripe-monthly');
+      var sy = document.getElementById('cfg-stripe-yearly');
+      var ib = document.getElementById('cfg-bank-iban');
+      var n8 = document.getElementById('cfg-n8n-url');
+      if (sm) sm.value = pay.stripeMonthlyUrl || '';
+      if (sy) sy.value = pay.stripeYearlyUrl || '';
+      if (ib) ib.value = pay.bankIban || '';
+      if (n8) n8.value = wh.n8nLeadsUrl || '';
+    }
+
+    function saveLiveConfigOverrides() {
+      var ov = {
+        stripeMonthlyUrl: (document.getElementById('cfg-stripe-monthly').value || '').trim(),
+        stripeYearlyUrl: (document.getElementById('cfg-stripe-yearly').value || '').trim(),
+        bankIban: (document.getElementById('cfg-bank-iban').value || '').trim(),
+        n8nLeadsUrl: (document.getElementById('cfg-n8n-url').value || '').trim()
+      };
+      localStorage.setItem('ita_live_config_overrides_v1', JSON.stringify(ov));
+      showToast('✓ Credenziali Live salvate e attive su Checkout e App!');
+    }
+
+    function resetLiveConfigOverrides() {
+      localStorage.removeItem('ita_live_config_overrides_v1');
+      showToast('✓ Credenziali ripristinate ai valori predefiniti!');
     }
 
     document.addEventListener('DOMContentLoaded', function () {
       renderAdminAll();
       renderReportLogsInAdmin();
+      loadLiveConfigForm();
       if (window.ITACloudSync) {
         ITACloudSync.onLiveSync(function () {
           renderReportLogsInAdmin();

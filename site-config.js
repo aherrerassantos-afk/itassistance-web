@@ -142,8 +142,36 @@
       supabaseUrl: 'https://aunnoivzjeiyiczsxzbp.supabase.co',
       supabaseAnonKey: 'sb_publishable_DWG41-bTiTEE-iSJEJr2qw_LBxAJCTb',
       syncTable: 'preventivi'
+    },
+
+    payments: {
+      stripeMonthlyUrl: 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_99_mensile',
+      stripeYearlyUrl: 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_1188_annuale',
+      bankHolder: 'Blue Arroyo SRL',
+      bankIban: 'IT00X0000000000000000000000 (Richiedi coordinate aggiornate su WhatsApp +39 351 038 0392)'
     }
   };
+
+  // Unisce eventuali override configurati dal pannello Super Admin (/admin.html)
+  try {
+    if (typeof localStorage !== 'undefined') {
+      var rawOverrides = localStorage.getItem('ita_live_config_overrides_v1');
+      if (rawOverrides) {
+        var ov = JSON.parse(rawOverrides);
+        if (ov && typeof ov === 'object') {
+          if (ov.stripeMonthlyUrl) SITE_CONFIG.payments.stripeMonthlyUrl = ov.stripeMonthlyUrl;
+          if (ov.stripeYearlyUrl) SITE_CONFIG.payments.stripeYearlyUrl = ov.stripeYearlyUrl;
+          if (ov.bankIban) SITE_CONFIG.payments.bankIban = ov.bankIban;
+          if (ov.n8nLeadsUrl) {
+            SITE_CONFIG.webhook.n8nLeadsUrl = ov.n8nLeadsUrl;
+            SITE_CONFIG.webhook.n8nDailyReportUrl = ov.n8nLeadsUrl;
+          }
+          if (ov.supabaseUrl) SITE_CONFIG.cloud.supabaseUrl = ov.supabaseUrl;
+          if (ov.supabaseAnonKey) SITE_CONFIG.cloud.supabaseAnonKey = ov.supabaseAnonKey;
+        }
+      }
+    }
+  } catch (e) {}
 
   // Popola automaticamente eventuali nodi DOM con attributo [data-site-config="percorso.chiave"]
   function applySiteConfigToDOM() {
