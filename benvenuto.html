@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Benvenuto in itassistance — Il tuo appartamento è attivo | 14 gg Soddisfatto o Rimborsato</title>
+  <meta name="description" content="Conferma attivazione app itassistance: scarica la tua ricevuta/fattura, completa i dati rapidi del tuo appartamento e accedi subito al tuo Report del Giorno."/>
+  <meta name="robots" content="noindex, nofollow"/>
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
+
+  <script src="/site-config.js"></script>
+  <script src="/cloud-sync.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.min.js" defer></script>
+
+  <style>
+    :root {
+      --navy: #111111;
+      --gold: #C9A84C;
+      --gold-dark: #9E7E28;
+      --gold-light: #FBF7EC;
+      --bg: #F7F7F5;
+      --card: #FFFFFF;
+      --text: #1A1A1A;
+      --text-muted: #52525B;
+      --border: #E4E4E7;
+      --green: #15803D;
+      --green-bg: #DCFCE7;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      padding-bottom: 60px;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .top-bar {
+      background: var(--navy);
+      color: #fff;
+      padding: 14px 20px;
+      border-bottom: 2px solid var(--gold);
+    }
+    .top-bar-inner {
+      max-width: 920px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 19px;
+      color: #fff;
+    }
+    .brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #fff;
+      padding: 2px;
+    }
+
+    .wrap {
+      max-width: 920px;
+      margin: 32px auto;
+      padding: 0 20px;
+    }
+
+    .hero-welcome {
+      background: var(--navy);
+      color: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      border: 2px solid var(--gold);
+      margin-bottom: 24px;
+    }
+    .badge-ok {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-bg);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+    .hero-welcome h1 {
+      font-family: var(--serif);
+      font-size: clamp(26px, 3.6vw, 36px);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    .hero-welcome p {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.82);
+      max-width: 680px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .sum-item {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .sum-item small {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--gold);
+      margin-bottom: 3px;
+    }
+    .sum-item strong {
+      font-size: 14px;
+      color: #fff;
+    }
+    @media (max-width: 760px) {
+      .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .summary-grid { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 8px 24px rgba(17, 17, 17, 0.05);
+    }
+    .card h2 {
+      font-family: var(--serif);
+      font-size: 22px;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 5px;
+    }
+    .field input, .field select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-size: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 22px;
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+    .btn-gold { background: var(--gold); color: var(--navy); }
+    .btn-gold:hover { background: #b8963c; }
+    .btn-primary { background: var(--navy); color: #fff; }
+    .btn-outline { background: #fff; color: var(--navy); border-color: var(--border); }
+  </style>
+</head>
+<body>
+
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <a href="/" class="brand">
+        <img src="/brand/logo.png" alt="Logo itassistance"/>
+        <span>itassistance</span>
+      </a>
+      <a href="/app.html" class="btn btn-gold" style="padding:8px 14px;font-size:12.5px;">📱 Apri subito l'Area Proprietario →</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- BENVENUTO & CONFERMA GARANZIA 14 GIORNI -->
+    <section class="hero-welcome">
+      <span class="badge-ok">✓ ATTIVAZIONE COMPLETATA · CLOUD SYNC ATTIVO</span>
+      <h1 id="w-title">Benvenuto in itassistance! Il tuo appartamento è configurato.</h1>
+      <p>
+        Abbiamo preparato la tua Area Proprietario e attivato la tua <strong>Garanzia 14 giorni Soddisfatto o Rimborsato</strong>: hai 2 settimane complete per usare il report giornaliero delle 08:00 sul tuo appartamento, con rimborso integrale del 100% in un clic se decidi di disdire.
+      </p>
+
+      <div class="summary-grid">
+        <div class="sum-item">
+          <small>Immobile Attivo</small>
+          <strong id="w-apt">Appartamento Firenze</strong>
+        </div>
+        <div class="sum-item">
+          <small>Piano &amp; Fatturazione</small>
+          <strong id="w-plan">99,00 € / mese (IVA incl.)</strong>
+        </div>
+        <div class="sum-item">
+          <small>Extra +10% Revenue &amp; Legge</small>
+          <strong id="w-addon">Opzionale</strong>
+        </div>
+        <div class="sum-item">
+          <small>Garanzia 100% Rimborso fino al</small>
+          <strong id="w-guarantee">—</strong>
+        </div>
+      </div>
+
+      <div style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="/app.html" class="btn btn-gold">📱 Entra nella tua Area Proprietario (Report 10 min) →</a>
+        <button type="button" class="btn btn-outline" style="background:rgba(255,255,255,0.1);color:#fff;border-color:rgba(255,255,255,0.3);" onclick="downloadWelcomeInvoicePDF()">
+          📄 Scarica Fattura / Ricevuta PDF (Blue Arroyo SRL)
+        </button>
+      </div>
+    </section>
+
+    <!-- ONBOARDING RAPIDO 60 SECONDI -->
+    <section class="card">
+      <h2>⚡ Onboarding rapido in 60 secondi (Opzionale)</h2>
+      <p style="font-size:14px;color:var(--text-muted);">
+        Inserisci ora i dati principali del tuo appartamento: li troverai già salvati nel tuo <strong>Report delle 08:00</strong>, nella guida <strong>Alloggiati Web</strong> e nel <strong>Generatore PDF Istruzioni Check-in</strong>.
+      </p>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="ob-cin">Codice CIN (Codice Identificativo Nazionale)</label>
+          <input type="text" id="ob-cin" placeholder="es. IT048017C200001234"/>
+        </div>
+        <div class="field">
+          <label for="ob-reptime">Orario preferito per il Report Mattutino</label>
+          <select id="ob-reptime">
+            <option value="07:30">07:30 · Mattina presto</option>
+            <option value="08:00" selected>08:00 · Orario consigliato (10 min)</option>
+            <option value="08:30">08:30 · Mattina</option>
+            <option value="09:00">09:00 · Apertura giornata</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="ob-code">Codice Portone / Keybox (per il PDF Check-in)</label>
+          <input type="text" id="ob-code" placeholder="es. Keybox 4829 a sinistra del portone"/>
+        </div>
+        <div class="field">
+          <label for="ob-wifi">Nome Rete Wi-Fi &amp; Password</label>
+          <input type="text" id="ob-wifi" placeholder="es. Fibra-Casa / Password123"/>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <button type="button" class="btn btn-primary" onclick="saveQuickOnboardingAndOpenApp()">
+          ✓ Salva configurazione e apri il tuo primo Report delle 08:00 →
+        </button>
+        <a href="/app.html" style="font-size:13px;color:var(--text-muted);text-decoration:underline;">Salta questo passaggio e vai subito all'app</a>
+      </div>
+    </section>
+
+    <footer style="text-align:center;font-size:12px;color:var(--text-muted);margin-top:28px;">
+      Blue Arroyo SRL · P.IVA 07480210488 · Via Matteo Palmieri 20r, 50122 Firenze (FI) · Assistenza proprietari Firenze (09:00–23:00): +39 351 038 0392
+    </footer>
+  </main>
+
+  <script>
+    var actData = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+      try {
+        var raw = localStorage.getItem('itassistance_last_activation');
+        if (raw) actData = JSON.parse(raw);
+      } catch (e) {}
+
+      var params = new URLSearchParams(window.location.search);
+      if (!actData) {
+        var now = new Date();
+        var gEnd = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+        actData = {
+          invoiceId: 'FATT-2026-109',
+          activatedAt: now.toLocaleDateString('it-IT'),
+          guaranteeUntil: gEnd.toLocaleDateString('it-IT'),
+          ownerName: params.get('nome') || 'Proprietario',
+          ownerEmail: params.get('email') || '',
+          ownerPhone: params.get('tel') || '+39 351 038 0392',
+          ownerCf: params.get('cf') || '—',
+          apartmentName: params.get('imm') || 'Appartamento Firenze',
+          apartmentAddress: params.get('addr') || 'Firenze',
+          billingCycle: params.get('ciclo') || 'mensile',
+          amountEur: params.get('ciclo') === 'annuale' ? 1188 : 99,
+          addon10Active: params.get('extra10') === '1'
+        };
+      }
+
+      document.getElementById('w-title').textContent = 'Benvenuto ' + (actData.ownerName || '') + '! Il tuo appartamento è attivo.';
+      document.getElementById('w-apt').textContent = actData.apartmentName + ' (' + actData.apartmentAddress + ')';
+      document.getElementById('w-plan').textContent = actData.billingCycle === 'annuale'
+        ? '1.188,00 € / anno (IVA incl.)'
+        : '99,00 € / mese (IVA incl.)';
+      document.getElementById('w-addon').textContent = actData.addon10Active
+        ? '✓ Attivo (+10%)'
+        : 'Non attivo (0% comm.)';
+      document.getElementById('w-guarantee').textContent = actData.guaranteeUntil || '14 giorni da oggi';
+    });
+
+    function saveQuickOnboardingAndOpenApp() {
+      try {
+        var raw = localStorage.getItem('itassistance_owner_app_v1');
+        var state = raw ? JSON.parse(raw) : null;
+        if (state && state.apartment) {
+          var cin = document.getElementById('ob-cin').value.trim();
+          var repTime = document.getElementById('ob-reptime').value;
+          var code = document.getElementById('ob-code').value.trim();
+          var wifi = document.getElementById('ob-wifi').value.trim();
+
+          if (cin) state.apartment.cin = cin;
+          if (repTime) state.apartment.reportTime = repTime;
+          if (code) state.apartment.doorCode = code;
+          if (wifi) state.apartment.wifi = wifi;
+
+          localStorage.setItem('itassistance_owner_app_v1', JSON.stringify(state));
+          if (window.ITACloudSync) {
+            ITACloudSync.syncSnapshotToSupabase('welcome_onboarding', state);
+          }
+        }
+      } catch (e) {}
+      window.location.href = '/app.html';
+    }
+
+    function downloadWelcomeInvoicePDF() {
+      if (typeof pdfMake === 'undefined' || !actData) return;
+      var tot = Number(actData.amountEur || 99);
+      var net = (tot / 1.22).toFixed(2);
+      var vat = (tot - tot / 1.22).toFixed(2);
+
+      var docDef = {
+        pageSize: 'A4',
+        pageMargins: [40, 40, 40, 40],
+        content: [
+          {
+            columns: [
+              {
+                stack: [
+                  { text: 'itassistance', fontSize: 20, bold: true, color: '#111111' },
+                  { text: 'Blue Arroyo SRL', fontSize: 11, bold: true, margin: [0, 4, 0, 0] },
+                  { text: 'Via Matteo Palmieri 20r, 50122 Firenze (FI)', fontSize: 9.5, color: '#52525B' },
+                  { text: 'P.IVA / C.F.: IT07480210488', fontSize: 9.5, color: '#52525B' }
+                ]
+              },
+              {
+                alignment: 'right',
+                stack: [
+                  { text: 'RICEVUTA ATTIVAZIONE / FATTURA', fontSize: 12, bold: true, color: '#9E7E28' },
+                  { text: 'Numero: ' + (actData.invoiceId || 'FATT-2026'), fontSize: 11, bold: true, margin: [0, 4, 0, 0] },
+                  { text: 'Data: ' + (actData.activatedAt || new Date().toLocaleDateString('it-IT')), fontSize: 9.5 }
+                ]
+              }
+            ]
+          },
+          { canvas: [{ type: 'rect', x: 0, y: 0, w: 515, h: 2, color: '#C9A84C' }], margin: [0, 14, 0, 18] },
+          { text: 'INTESTATARIO:', fontSize: 9, bold: true, color: '#52525B' },
+          { text: (actData.ownerName || 'Proprietario') + ' — ' + (actData.apartmentName || 'Appartamento Firenze'), fontSize: 12, bold: true, margin: [0, 2, 0, 4] },
+          { text: 'Indirizzo immobile: ' + (actData.apartmentAddress || 'Firenze') + ' · C.F./P.IVA: ' + (actData.ownerCf || '—'), fontSize: 9.5, margin: [0, 0, 0, 16] },
+          {
+            table: {
+              headerRows: 1,
+              widths: ['*', 80, 70, 90],
+              body: [
+                [
+                  { text: 'Descrizione Piano', bold: true, fillColor: '#111111', color: '#FFFFFF', margin: [6, 6, 6, 6] },
+                  { text: 'Imponibile', bold: true, fillColor: '#111111', color: '#FFFFFF', margin: [6, 6, 6, 6], alignment: 'right' },
+                  { text: 'IVA 22%', bold: true, fillColor: '#111111', color: '#FFFFFF', margin: [6, 6, 6, 6], alignment: 'right' },
+                  { text: 'Totale IVA incl.', bold: true, fillColor: '#111111', color: '#FFFFFF', margin: [6, 6, 6, 6], alignment: 'right' }
+                ],
+                [
+                  {
+                    text: (actData.billingCycle === 'annuale'
+                      ? 'Canone Annuale Anticipato App itassistance (1.188,00 € IVA inclusa)'
+                      : 'Canone Mensile App itassistance (99,00 € IVA inclusa)') +
+                      (actData.addon10Active ? ' + Extra +10% Revenue Management & Adempimenti di Legge' : ''),
+                    margin: [6, 8, 6, 8]
+                  },
+                  { text: net + ' €', margin: [6, 8, 6, 8], alignment: 'right' },
+                  { text: vat + ' €', margin: [6, 8, 6, 8], alignment: 'right' },
+                  { text: tot.toFixed(2) + ' €', bold: true, margin: [6, 8, 6, 8], alignment: 'right' }
+                ]
+              ]
+            }
+          },
+          {
+            margin: [0, 16, 0, 0],
+            text: 'Garanzia 14 giorni Soddisfatto o Rimborsato valida fino al ' + (actData.guaranteeUntil || '') + ': se disdici entro 14 giorni ricevi il rimborso integrale del 100%.',
+            fontSize: 9.5,
+            color: '#15803D',
+            bold: true
+          }
+        ]
+      };
+
+      pdfMake.createPdf(docDef).download((actData.invoiceId || 'Ricevuta') + '_itassistance.pdf');
+    }
+  </script>
+</body>
+</html>

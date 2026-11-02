@@ -235,6 +235,149 @@
     }
   }
 
+  // Punto 2: Attivazione automatica Immobile in /app.html + Registrazione Cliente e Fattura in /admin.html dal Checkout
+  async function activateNewOwnerFromCheckout(checkoutData) {
+    var d = checkoutData || {};
+    var now = new Date();
+    var guaranteeEnd = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+    var isAnnual = d.ciclo === 'annuale';
+    var amountEur = isAnnual ? 1188 : 99;
+    var invoiceId = 'FATT-2026-' + Math.floor(110 + Math.random() * 890);
+
+    // 1. Pre-configura l'Area Proprietario (/app.html)
+    var ownerState = null;
+    try {
+      var rawOwner = localStorage.getItem(OWNER_KEY);
+      ownerState = rawOwner ? JSON.parse(rawOwner) : null;
+    } catch (e) {}
+
+    if (!ownerState || !ownerState.apartment) {
+      ownerState = {
+        apartment: {},
+        tasks: [
+          {
+            id: 't1',
+            time: '08:00 · Passo 1 (2 min)',
+            title: 'Controlla il report arrivi e partenze di oggi',
+            desc: 'Verifica gli arrivi previsti e scarica il PDF istruzioni check-in per gli ospiti.',
+            done: false,
+            actionTab: 'operativo',
+            actionLabel: 'Vedi calendario e PDF →'
+          },
+          {
+            id: 't2',
+            time: '08:03 · Passo 2 (3 min) · OBBLIGO DI LEGGE',
+            title: 'Registra ospiti su Alloggiati Web entro 24h',
+            desc: 'Segui la guida passo passo per inviare la schedina sul portale della Polizia di Stato.',
+            done: false,
+            actionTab: 'alloggiati',
+            actionLabel: 'Apri guida Alloggiati Web →'
+          },
+          {
+            id: 't3',
+            time: '08:07 · Passo 3 (2 min)',
+            title: 'Controlla turni pulizia e spese fornitori',
+            desc: 'Verifica i turni programmati alle 11:00 e tieni aggiornato il bilancio mensile.',
+            done: false,
+            actionTab: 'fornitori',
+            actionLabel: 'Controlla fornitori →'
+          },
+          {
+            id: 't4',
+            time: '08:10 · Passo 4 (1 min)',
+            title: 'Verifica conteggio Tassa di Soggiorno Comune di Firenze',
+            desc: 'Conteggio aggiornato automaticamente (scadenza dichiarazione: giorno 16 del mese).',
+            done: false,
+            actionTab: 'fiscale',
+            actionLabel: 'Vedi conteggio fiscale →'
+          }
+        ],
+        bookings: [],
+        expenses: []
+      };
+    }
+
+    ownerState.apartment.name = d.immobile || ownerState.apartment.name || 'Appartamento Firenze';
+    ownerState.apartment.address = d.indirizzo || ownerState.apartment.address || 'Firenze';
+    ownerState.apartment.ownerName = d.nome || 'Proprietario';
+    ownerState.apartment.ownerEmail = d.email || '';
+    ownerState.apartment.ownerPhone = d.telefono || '';
+    ownerState.apartment.ownerCf = d.cf || '';
+    ownerState.apartment.billingCycle = isAnnual ? 'annuale' : 'mensile';
+    ownerState.apartment.planAmountEur = amountEur;
+    ownerState.apartment.addon10Active = Boolean(d.extraRevenue);
+    ownerState.apartment.reportTime = ownerState.apartment.reportTime || '08:00';
+    ownerState.apartment.reportChannel = ownerState.apartment.reportChannel || 'whatsapp_email';
+    ownerState.apartment.activatedAt = now.toLocaleDateString('it-IT');
+    ownerState.apartment.guaranteeUntil = guaranteeEnd.toLocaleDateString('it-IT');
+    ownerState.apartment.lastInvoiceId = invoiceId;
+
+    try {
+      localStorage.setItem(OWNER_KEY, JSON.stringify(ownerState));
+      localStorage.setItem('itassistance_last_activation', JSON.stringify({
+        invoiceId: invoiceId,
+        activatedAt: ownerState.apartment.activatedAt,
+        guaranteeUntil: ownerState.apartment.guaranteeUntil,
+        ownerName: ownerState.apartment.ownerName,
+        ownerEmail: ownerState.apartment.ownerEmail,
+        ownerPhone: ownerState.apartment.ownerPhone,
+        ownerCf: ownerState.apartment.ownerCf,
+        apartmentName: ownerState.apartment.name,
+        apartmentAddress: ownerState.apartment.address,
+        billingCycle: ownerState.apartment.billingCycle,
+        amountEur: amountEur,
+        addon10Active: ownerState.apartment.addon10Active
+      }));
+    } catch (e) {}
+
+    // 2. Registra automaticamente Cliente e Fattura in Console Super Admin (/admin.html)
+    try {
+      var rawAdm = localStorage.getItem(ADMIN_KEY);
+      var adm = rawAdm ? JSON.parse(rawAdm) : null;
+      if (adm && adm.partners && adm.invoices) {
+        var planLabel = (isAnnual ? '1.188 €/anno Anticipato' : '99 €/mese Base') +
+          (d.extraRevenue ? ' + Extra +10% Revenue & Adempimenti' : ' (Zero Commissioni)');
+
+        adm.partners.unshift({
+          id: 'p_' + Date.now(),
+          name: (d.nome || 'Proprietario') + ' (' + (d.immobile || 'Appartamento FI') + ')',
+          type: 'Proprietario Attivo (Checkout Web)',
+          contact: (d.email || '') + ' · ' + (d.telefono || ''),
+          vat: d.cf || '—',
+          apts: 1,
+          plan: planLabel,
+          active: true
+        });
+
+        adm.invoices.unshift({
+          id: invoiceId,
+          date: now.toLocaleDateString('it-IT'),
+          client: (d.nome || 'Proprietario') + ' — ' + (d.immobile || 'Appartamento Firenze'),
+          cf: d.cf || '—',
+          desc: (isAnnual
+            ? 'Canone Annuale Anticipato App itassistance (1.188,00 € IVA inclusa)'
+            : 'Canone Mensile App itassistance (99,00 € IVA inclusa)') +
+            (d.extraRevenue ? ' + Attivazione Extra +10% Revenue Management & Adempimenti di Legge' : ''),
+          total: amountEur,
+          method: 'Stripe Checkout (Garanzia 14gg attiva fino al ' + guaranteeEnd.toLocaleDateString('it-IT') + ')',
+          status: 'Pagata'
+        });
+
+        localStorage.setItem(ADMIN_KEY, JSON.stringify(adm));
+      }
+    } catch (e) {}
+
+    // 3. Sincronizza su Supabase e notifica le schede aperte
+    await syncSnapshotToSupabase('checkout_onboarding', ownerState);
+    broadcastStateChange('new_owner_activated', { invoiceId: invoiceId, apartment: ownerState.apartment.name });
+
+    return {
+      ok: true,
+      invoiceId: invoiceId,
+      guaranteeUntil: ownerState.apartment.guaranteeUntil
+    };
+  }
+
   root.ITACloudSync = {
     syncSnapshotToSupabase: syncSnapshotToSupabase,
     broadcastStateChange: broadcastStateChange,
@@ -242,6 +385,7 @@
     buildDailyReportMessage: buildDailyReportMessage,
     dispatchDailyReport0800: dispatchDailyReport0800,
     pushTaskFromAdminToOwner: pushTaskFromAdminToOwner,
-    getReportLogs: getReportLogs
+    getReportLogs: getReportLogs,
+    activateNewOwnerFromCheckout: activateNewOwnerFromCheckout
   };
 })(typeof window !== 'undefined' ? window : this);

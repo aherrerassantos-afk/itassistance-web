@@ -14,6 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
   <script src="/site-config.js"></script>
+  <script src="/cloud-sync.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -435,8 +436,12 @@
             🛡️ <strong>Garanzia 14 giorni Soddisfatto o Rimborsato:</strong> se entro 14 giorni dall'attivazione l'app non ti piace, disdici con un clic e ti rimborsiamo il <strong>100% dei soldi</strong> sul tuo metodo di pagamento.
           </div>
 
-          <button type="button" class="btn-stripe-pay" id="btn-pay" onclick="proceedToStripe()">
+          <button type="button" class="btn-stripe-pay" id="btn-pay" onclick="proceedToStripe('stripe')">
             Attiva e Paga in Sicurezza ➔
+          </button>
+
+          <button type="button" onclick="proceedToStripe('instant_onboarding')" style="width:100%;margin-top:10px;padding:11px 14px;border-radius:8px;background:#FBF7EC;border:1.5px solid var(--gold);color:var(--navy);font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;">
+            ⚡ Attiva subito l'immobile e apri l'Area Proprietario (Prova 14 gg) →
           </button>
 
           <div class="stripe-badges">
@@ -507,7 +512,7 @@
       }
     }
 
-    function proceedToStripe() {
+    async function proceedToStripe(mode) {
       var nome = document.getElementById('f-nome').value.trim();
       var email = document.getElementById('f-email').value.trim();
       var tel = document.getElementById('f-tel').value.trim();
@@ -517,18 +522,33 @@
       var extraRevenue = document.getElementById('chk-extra-revenue') && document.getElementById('chk-extra-revenue').checked;
 
       if (!nome || !email || !tel) {
-        alert('Inserisci almeno Nome, Email e Telefono per procedere al pagamento.');
+        alert('Inserisci almeno Nome, Email e Telefono per procedere all’attivazione.');
         return;
       }
 
       var btn = document.getElementById('btn-pay');
       btn.disabled = true;
-      btn.textContent = 'Reindirizzamento al pagamento sicuro...';
+      btn.textContent = 'Configurazione appartamento e attivazione in corso...';
 
       if (typeof window.trackSiteEvent === 'function') {
         window.trackSiteEvent('begin_checkout', { cycle: currentCycle, price: currentCycle === 'annuale' ? 1188 : 99, extra_revenue_10pct: extraRevenue });
       }
 
+      // 1. Pre-configura automaticamente /app.html e registra Cliente + Fattura in /admin.html + Supabase
+      if (window.ITACloudSync && typeof ITACloudSync.activateNewOwnerFromCheckout === 'function') {
+        await ITACloudSync.activateNewOwnerFromCheckout({
+          nome: nome,
+          email: email,
+          telefono: tel,
+          cf: cf,
+          immobile: imm || 'Appartamento Firenze',
+          indirizzo: addr || 'Firenze',
+          ciclo: currentCycle,
+          extraRevenue: extraRevenue
+        });
+      }
+
+      // 2. Invia il lead al webhook n8n
       try {
         fetch('https://aherreras.app.n8n.cloud/webhook/leads/itassistance', {
           method: 'POST',
@@ -550,13 +570,25 @@
         }).catch(function () {});
       } catch (e) {}
 
+      var welcomeUrl = '/benvenuto.html?ciclo=' + encodeURIComponent(currentCycle) +
+        '&nome=' + encodeURIComponent(nome) +
+        '&imm=' + encodeURIComponent(imm || 'Appartamento Firenze') +
+        '&addr=' + encodeURIComponent(addr || 'Firenze') +
+        '&extra10=' + (extraRevenue ? '1' : '0');
+
+      if (mode === 'instant_onboarding') {
+        window.location.href = welcomeUrl;
+        return;
+      }
+
       var targetUrl = STRIPE_LINKS[currentCycle] || STRIPE_LINKS['mensile'];
       var sep = targetUrl.indexOf('?') !== -1 ? '&' : '?';
       var finalUrl = targetUrl + sep + 'prefilled_email=' + encodeURIComponent(email);
 
+      window.open(finalUrl, '_blank');
       setTimeout(function () {
-        window.location.href = finalUrl;
-      }, 350);
+        window.location.href = welcomeUrl;
+      }, 400);
     }
   </script>
 </body>

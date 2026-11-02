@@ -1,6 +1,7 @@
 {
   "trailingSlash": false,
   "redirects": [
+    { "source": "/benvenuto", "destination": "/benvenuto.html", "permanent": true },
     { "source": "/admin", "destination": "/admin.html", "permanent": true },
     { "source": "/superadmin", "destination": "/admin.html", "permanent": true },
     { "source": "/fatturazione", "destination": "/admin.html?role=billing", "permanent": true },
