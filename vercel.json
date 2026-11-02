@@ -1,6 +1,7 @@
 {
   "trailingSlash": false,
   "redirects": [
+    { "source": "/modello-contratto-turistico", "destination": "/contratto-locazione-turistica-affitto-breve-modello.html", "permanent": true },
     { "source": "/assicurazione-danni-firenze", "destination": "/assicurazione-affitti-brevi-deposito-cauzionale-danni-firenze.html", "permanent": true },
     { "source": "/aprire-affitto-breve-firenze", "destination": "/come-aprire-affitto-breve-firenze-suap-cin-alloggiati.html", "permanent": true },
     { "source": "/guide", "destination": "/guide-affitti-brevi-firenze.html", "permanent": true },

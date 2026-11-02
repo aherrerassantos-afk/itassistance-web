@@ -1227,7 +1227,10 @@
                 Scarica in un clic il prospetto completo di incassi lordi, tassa di soggiorno e spese fornitori.
               </p>
             </div>
-            <button type="button" class="btn btn-gold" onclick="exportCommercialistaCSV()">⬇ Scarica Prospetto CSV per Commercialista</button>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-gold" onclick="exportCommercialistaCSV()">⬇ Scarica Prospetto CSV per Commercialista</button>
+              <button type="button" class="btn btn-outline" onclick="printShortTermLeasePDF()">📝 Stampa Scrittura Privata Locazione Turistica PDF</button>
+            </div>
           </div>
           <div style="background:var(--gold-light);border:1px solid rgba(201,168,76,0.45);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--navy);">
             <strong>Nota importante sulla conformità fiscale:</strong> <strong>itassistance</strong> ti guida passo passo, ti ricorda le scadenze e prepara l'archivio ordinato dei soggiorni, ma <strong>non sostituisce il commercialista</strong> né presenta la dichiarazione dei redditi (es. scelta tra cedolare secca 21%/26% o regime ordinario e verifica della Certificazione Unica dei portali).
@@ -2041,6 +2044,37 @@
       w.document.close();
     }
 
+    function printShortTermLeasePDF() {
+      var apt = appState.apartment || {};
+      var w = window.open('', '_blank');
+      if (!w) return;
+      var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Scrittura Privata Locazione Turistica Breve — ' + (apt.name || 'Appartamento') + '</title>' +
+        '<style>body{font-family:Arial,sans-serif;color:#1F2937;padding:32px;max-width:780px;margin:0 auto;line-height:1.55;font-size:13px;}' +
+        '.hdr{display:flex;justify-content:space-between;border-bottom:3px solid #0F2342;padding-bottom:14px;margin-bottom:18px;}' +
+        '.title{font-size:18px;font-weight:800;color:#0F2342;}' +
+        '.box{background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:8px;padding:12px 16px;margin-bottom:12px;}' +
+        '</style></head><body>' +
+        '<div class="hdr"><div><div class="title">📝 SCRITTURA PRIVATA DI LOCAZIONE AD USO ESCLUSIVAMENTE TURISTICO (AFFITTO BREVE ≤ 30 GIORNI)</div>' +
+        '<div style="font-size:12px;color:#52525B;">Ai sensi dell\'art. 1 c. 2 lett. c) L. 431/1998, art. 1571 c.c. e art. 4 D.L. 50/2017 · Esente da registrazione fiscale</div></div>' +
+        '<div style="text-align:right;font-size:12px;">Data: <strong>' + new Date().toLocaleDateString('it-IT') + '</strong></div></div>' +
+        '<div class="box"><strong>1. LE PARTI</strong><br>' +
+        '<strong>Locatore (Proprietario):</strong> ' + (apt.ownerName || '_______________________________') + ' · C.F.: ' + (apt.ownerCf || '_______________________') + '<br>' +
+        '<strong>Conduttore (Ospite):</strong> _______________________________________ · Doc. Identità / Passaporto n.: _______________________</div>' +
+        '<div class="box"><strong>2. OGGETTO E CODICE IDENTIFICATIVO NAZIONALE (CIN)</strong><br>' +
+        'Il Locatore concede in locazione ad uso esclusivamente turistico l\'unità immobiliare denominata <strong>' + (apt.name || '_______________') + '</strong> sita in <strong>' + (apt.address || 'Firenze') + '</strong>, dotata di <strong>Codice CIN: ' + (apt.cin || 'IT048017C200001234') + '</strong>, provvista di estintore portatile a norma e rilevatori di gas combustibili e monossido di carbonio.</div>' +
+        '<div class="box"><strong>3. DURATA INFERIORE A 30 GIORNI E NUMERO OCCUPANTI (ART. 109 TULPS)</strong><br>' +
+        'La locazione ha durata dal giorno ____/____/2026 (Check-in ore ' + (apt.checkinTime || '15:00') + ') al giorno ____/____/2026 (Check-out entro le ore ' + (apt.checkoutTime || '10:00') + '), data in cui cesserà automaticamente senza necessità di disdetta. Numero massimo di occupanti autorizzati e comunicati su Alloggiati Web: <strong>n. ____</strong>. È vietata ogni sublocazione o l\'accesso di terzi non registrati.</div>' +
+        '<div class="box"><strong>4. CORRISPETTIVO, OPZIONE CEDOLARE SECCA E IMPOSTA DI SOGGIORNO FIRENZE</strong><br>' +
+        'Il canone complessivo pattuito per l\'intero soggiorno è di <strong>€ ____________</strong>, oltre all\'Imposta di Soggiorno del Comune di Firenze (fino a massimo 7 pernottamenti consecutivi). Il Locatore dichiara di avvalersi del regime fiscale della Cedolare Secca ex art. 4 D.L. 50/2017.</div>' +
+        '<div style="margin-top:24px;display:flex;justify-content:space-between;">' +
+        '<div>Il Locatore (Proprietario): ___________________________</div>' +
+        '<div>Il Conduttore (Ospite): ___________________________</div></div>' +
+        '<script>setTimeout(function(){window.print();},350);<\/script></body></html>';
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
+    }
+
     function printDamageReportPDF() {
       var apt = appState.apartment || {};
       var w = window.open('', '_blank');
@@ -2067,6 +2101,37 @@
         '<div style="margin-top:28px;display:flex;justify-content:space-between;font-size:13px;">' +
         '<div>Firma Addetto Verifica / Pulizie: ___________________________</div>' +
         '<div>Firma Proprietario / Host: ___________________________</div></div>' +
+        '<script>setTimeout(function(){window.print();},350);<\/script></body></html>';
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
+    }
+
+    function printShortTermLeasePDF() {
+      var apt = appState.apartment || {};
+      var w = window.open('', '_blank');
+      if (!w) return;
+      var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Scrittura Privata Locazione Turistica Breve — ' + (apt.name || 'Appartamento') + '</title>' +
+        '<style>body{font-family:Arial,sans-serif;color:#1F2937;padding:32px;max-width:780px;margin:0 auto;line-height:1.55;font-size:13px;}' +
+        '.hdr{display:flex;justify-content:space-between;border-bottom:3px solid #0F2342;padding-bottom:14px;margin-bottom:18px;}' +
+        '.title{font-size:18px;font-weight:800;color:#0F2342;}' +
+        '.box{background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:8px;padding:12px 16px;margin-bottom:12px;}' +
+        '</style></head><body>' +
+        '<div class="hdr"><div><div class="title">📝 SCRITTURA PRIVATA DI LOCAZIONE AD USO ESCLUSIVAMENTE TURISTICO (AFFITTO BREVE ≤ 30 GIORNI)</div>' +
+        '<div style="font-size:12px;color:#52525B;">Ai sensi dell\'art. 1 c. 2 lett. c) L. 431/1998, art. 1571 c.c. e art. 4 D.L. 50/2017 · Esente da registrazione fiscale</div></div>' +
+        '<div style="text-align:right;font-size:12px;">Data: <strong>' + new Date().toLocaleDateString('it-IT') + '</strong></div></div>' +
+        '<div class="box"><strong>1. LE PARTI</strong><br>' +
+        '<strong>Locatore (Proprietario):</strong> ' + (apt.ownerName || '_______________________________') + ' · C.F.: ' + (apt.ownerCf || '_______________________') + '<br>' +
+        '<strong>Conduttore (Ospite):</strong> _______________________________________ · Doc. Identità / Passaporto n.: _______________________</div>' +
+        '<div class="box"><strong>2. OGGETTO E CODICE IDENTIFICATIVO NAZIONALE (CIN)</strong><br>' +
+        'Il Locatore concede in locazione ad uso esclusivamente turistico l\'unità immobiliare denominata <strong>' + (apt.name || '_______________') + '</strong> sita in <strong>' + (apt.address || 'Firenze') + '</strong>, dotata di <strong>Codice CIN: ' + (apt.cin || 'IT048017C200001234') + '</strong>, provvista di estintore portatile a norma e rilevatori di gas combustibili e monossido di carbonio.</div>' +
+        '<div class="box"><strong>3. DURATA INFERIORE A 30 GIORNI E NUMERO OCCUPANTI (ART. 109 TULPS)</strong><br>' +
+        'La locazione ha durata dal giorno ____/____/2026 (Check-in ore ' + (apt.checkinTime || '15:00') + ') al giorno ____/____/2026 (Check-out entro le ore ' + (apt.checkoutTime || '10:00') + '), data in cui cesserà automaticamente senza necessità di disdetta. Numero massimo di occupanti autorizzati e comunicati su Alloggiati Web: <strong>n. ____</strong>. È vietata ogni sublocazione o l\'accesso di terzi non registrati.</div>' +
+        '<div class="box"><strong>4. CORRISPETTIVO, OPZIONE CEDOLARE SECCA E IMPOSTA DI SOGGIORNO FIRENZE</strong><br>' +
+        'Il canone complessivo pattuito per l\'intero soggiorno è di <strong>€ ____________</strong>, oltre all\'Imposta di Soggiorno del Comune di Firenze (fino a massimo 7 pernottamenti consecutivi). Il Locatore dichiara di avvalersi del regime fiscale della Cedolare Secca ex art. 4 D.L. 50/2017.</div>' +
+        '<div style="margin-top:24px;display:flex;justify-content:space-between;">' +
+        '<div>Il Locatore (Proprietario): ___________________________</div>' +
+        '<div>Il Conduttore (Ospite): ___________________________</div></div>' +
         '<script>setTimeout(function(){window.print();},350);<\/script></body></html>';
       w.document.open();
       w.document.write(html);
