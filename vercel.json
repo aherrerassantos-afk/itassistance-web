@@ -1,6 +1,9 @@
 {
   "trailingSlash": false,
   "redirects": [
+    { "source": "/partner", "destination": "/partner.html", "permanent": true },
+    { "source": "/cin-firenze", "destination": "/cin-e-obblighi-affitti-brevi-firenze.html", "permanent": true },
+    { "source": "/cedolare-secca", "destination": "/cedolare-secca-affitti-brevi-commercialista.html", "permanent": true },
     { "source": "/chi-siamo", "destination": "/chi-siamo.html", "permanent": true },
     { "source": "/login", "destination": "/login.html", "permanent": true },
     { "source": "/ospiti", "destination": "/ospiti.html", "permanent": true },
