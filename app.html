@@ -1236,11 +1236,16 @@
                   <td><button type="button" class="btn btn-outline btn-sm" onclick="exportCommercialistaCSV()">Esporta presenze CSV</button></td>
                 </tr>
                 <tr>
-                  <td><strong>Esposizione CIN (Codice Identificativo Nazionale)</strong></td>
+                  <td><strong>Esposizione CIN &amp; Dotazioni Sicurezza (Art. 13-ter)</strong></td>
                   <td>Ministero del Turismo (BDSR)</td>
-                  <td>Sempre visibile in annuncio e all'esterno</td>
+                  <td>Sempre visibile in annuncio, all'esterno e in casa</td>
                   <td><span class="badge badge-ok" id="fisc-cin-badge">IT048017C200001234</span></td>
-                  <td><button type="button" class="btn btn-outline btn-sm" onclick="openAptModal()">Aggiorna CIN</button></td>
+                  <td>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                      <button type="button" class="btn btn-outline btn-sm" onclick="openAptModal()">Aggiorna CIN</button>
+                      <button type="button" class="btn btn-primary btn-sm" onclick="printSafetySignagePDF()">🧯 Stampa Cartello Sicurezza &amp; CIN PDF</button>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -1259,6 +1264,7 @@
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
               <button type="button" class="btn btn-gold" onclick="exportCommercialistaCSV()">⬇ Scarica Prospetto CSV per Commercialista</button>
               <button type="button" class="btn btn-outline" onclick="printShortTermLeasePDF()">📝 Stampa Scrittura Privata Locazione Turistica PDF</button>
+              <button type="button" class="btn btn-outline" onclick="printSafetySignagePDF()">🧯 Cartello Sicurezza &amp; Emergenze (IT/EN) PDF</button>
             </div>
           </div>
           <div style="background:var(--gold-light);border:1px solid rgba(201,168,76,0.45);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--navy);">
@@ -2685,6 +2691,100 @@
       var text = ta ? ta.value : '';
       var url = 'https://wa.me/?text=' + encodeURIComponent(text);
       window.open(url, '_blank', 'noopener');
+    }
+
+    function printSafetySignagePDF() {
+      var apt = appState.apartment || {};
+      var aptName = apt.name || 'Appartamento Santo Spirito';
+      var aptAddr = apt.address || 'Via Maggio 18, 50125 Firenze (FI)';
+      var aptCin = apt.cin || 'IT048017C200001234';
+      var aptFloor = apt.floor || 'Secondo piano';
+      var aptWifi = apt.wifi || 'Fibra-SantoSpirito';
+      var aptPass = apt.pass || 'Firenze2026!';
+
+      var win = window.open('', '_blank', 'width=880,height=980');
+      if (!win) {
+        showToast('Abilita i pop-up per stampare il Cartello Sicurezza & CIN PDF.');
+        return;
+      }
+
+      var html = '<!doctype html><html lang="it"><head><meta charset="utf-8"/>' +
+        '<title>Cartello Sicurezza & CIN — ' + aptName + '</title>' +
+        '<style>' +
+        '@page { size: A4 portrait; margin: 12mm; }' +
+        'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; color: #1E293B; margin: 0; padding: 18px; line-height: 1.45; }' +
+        '.hdr { background: #0F1A2E; color: #fff; padding: 16px 20px; border-radius: 10px; border-bottom: 4px solid #C9A84C; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }' +
+        '.doc-title { font-size: 20px; font-weight: 800; color: #fff; }' +
+        '.cin-box { background: #FAF4E4; border: 2px solid #C9A84C; border-radius: 10px; padding: 12px 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }' +
+        '.cin-code { font-family: monospace; font-size: 18px; font-weight: 800; color: #0F1A2E; background: #fff; padding: 5px 12px; border-radius: 6px; border: 1px solid #C9A84C; }' +
+        '.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }' +
+        '.card { border: 1.5px solid #CBD5E1; border-radius: 10px; padding: 12px 14px; background: #fff; }' +
+        '.card-title { font-size: 13.5px; font-weight: 800; color: #0F1A2E; text-transform: uppercase; border-bottom: 2px solid #FAF4E4; padding-bottom: 6px; margin-bottom: 8px; }' +
+        'table { width: 100%; border-collapse: collapse; font-size: 12.5px; }' +
+        'th, td { border-bottom: 1px solid #E2E8F0; padding: 7px 6px; text-align: left; vertical-align: top; }' +
+        'th { background: #F8FAFC; font-weight: 700; color: #0F1A2E; }' +
+        '.emg-num { font-size: 15px; font-weight: 800; color: #B91C1C; }' +
+        '.ftr { margin-top: 14px; padding-top: 10px; border-top: 1px solid #CBD5E1; font-size: 11px; color: #64748B; display: flex; justify-content: space-between; }' +
+        '@media print { .no-print { display: none !important; } body { padding: 0; } }' +
+        '</style></head><body>' +
+        '<div class="no-print" style="margin-bottom:14px;text-align:right;">' +
+          '<button onclick="window.print()" style="background:#C9A84C;color:#0F1A2E;border:none;padding:10px 18px;border-radius:8px;font-weight:800;cursor:pointer;">🖨️ Stampa / Salva Cartello A4 in PDF</button>' +
+        '</div>' +
+        '<div class="hdr">' +
+          '<div>' +
+            '<div class="doc-title">🧯 CARTELLO SICUREZZA &amp; EMERGENZE / SAFETY &amp; EMERGENCY SIGN</div>' +
+            '<div style="font-size:12.5px;color:#E2E8F0;margin-top:3px;">Ai sensi dell\'Art. 13-ter D.L. 145/2023 (L. 191/2023) · Locazione Turistica — Comune di Firenze</div>' +
+          '</div>' +
+          '<div style="text-align:right;font-size:12px;color:#C9A84C;font-weight:700;">itassistance<br/>Firenze</div>' +
+        '</div>' +
+        '<div class="cin-box">' +
+          '<div>' +
+            '<div style="font-size:12px;font-weight:700;color:#A6862E;text-transform:uppercase;">Immobile / Property · Indirizzo / Address</div>' +
+            '<div style="font-size:15px;font-weight:800;color:#0F1A2E;">' + aptName + ' — ' + aptAddr + ' (' + aptFloor + ')</div>' +
+          '</div>' +
+          '<div>' +
+            '<div style="font-size:11px;font-weight:700;color:#0F1A2E;text-transform:uppercase;margin-bottom:2px;">Codice Identificativo Nazionale (CIN)</div>' +
+            '<div class="cin-code">' + aptCin + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="grid-2">' +
+          '<div class="card">' +
+            '<div class="card-title">🧯 Dotazioni di Sicurezza / Safety Equipment</div>' +
+            '<table>' +
+              '<tr><td><strong>Estintore Portatile (UNI EN 3-7)</strong><br/><em>Portable Fire Extinguisher (6 kg / 6L)</em></td><td>Ingresso / Disimpegno cucina (ben visibile)<br/><em>Entrance hall / Near kitchen</em></td></tr>' +
+              '<tr><td><strong>Rilevatore Gas Metano / GPL</strong><br/><em>Combustible Gas Detector (UNI EN 50194-1)</em></td><td>Cucina / Zona caldaia (sempre collegato)<br/><em>Kitchen / Boiler area (keep plugged in)</em></td></tr>' +
+              '<tr><td><strong>Rilevatore Monossido (CO)</strong><br/><em>Carbon Monoxide Alarm (UNI EN 50291-1)</em></td><td>Vicino caldaia / impianto termico (1,5–1,8m)<br/><em>Near heating boiler at breathing height</em></td></tr>' +
+              '<tr><td><strong>Quadro Elettrico &amp; Valvole Acqua/Gas</strong><br/><em>Main Breaker &amp; Water/Gas Shut-off</em></td><td>Ingresso (Quadro) · Sotto lavello cucina (Gas/Acqua)<br/><em>Entrance (Breaker) · Under kitchen sink</em></td></tr>' +
+            '</table>' +
+          '</div>' +
+          '<div class="card">' +
+            '<div class="card-title">🚨 Numeri di Emergenza / Emergency Numbers</div>' +
+            '<table>' +
+              '<tr><td><strong>Numero Unico Emergenze Europeo</strong><br/><em>Single European Emergency Number</em></td><td class="emg-num">112</td></tr>' +
+              '<tr><td><strong>Emergenza Sanitaria / Ambulanza</strong><br/><em>Medical Emergency / Ambulance</em></td><td class="emg-num">118</td></tr>' +
+              '<tr><td><strong>Vigili del Fuoco / Fire Brigade</strong></td><td class="emg-num">115</td></tr>' +
+              '<tr><td><strong>Polizia di Stato / State Police</strong></td><td class="emg-num">113</td></tr>' +
+              '<tr><td><strong>Polizia Municipale Firenze</strong><br/><em>Florence Municipal Police</em></td><td><strong>055 328 3333</strong></td></tr>' +
+              '<tr><td><strong>Assistenza Ospiti itassistance (09:00–23:00)</strong><br/><em>Guest Support &amp; Maintenance Florence</em></td><td><strong>+39 351 038 0392</strong></td></tr>' +
+            '</table>' +
+          '</div>' +
+        '</div>' +
+        '<div class="card" style="margin-bottom:12px;">' +
+          '<div class="card-title">⚠️ Comportamento in Caso di Emergenza / In Case of Emergency (IT / EN)</div>' +
+          '<div style="font-size:12px;display:grid;grid-template-columns:1fr 1fr;gap:14px;">' +
+            '<div><strong>🇮🇹 ITALIANO:</strong><br/>1) In caso di allarme del rilevatore di gas o odore di gas: NON azionare interruttori elettrici, apri subito le finestre, chiudi il rubinetto del gas sotto il lavello, esci dall\'appartamento e chiama il <strong>112</strong> o il <strong>115</strong>.<br/>2) Non usare mai l\'ascensore in caso di incendio.<br/>3) Wi-Fi Casa: Rete <strong>' + aptWifi + '</strong> · Password: <strong>' + aptPass + '</strong> · Check-out: <strong>entro le ore 10:00</strong>.</div>' +
+            '<div><strong>🇬🇧 ENGLISH:</strong><br/>1) If the gas/CO detector sounds or you smell gas: DO NOT touch light switches, open all windows immediately, turn off the gas valve, leave the apartment and call <strong>112</strong> or <strong>115</strong>.<br/>2) Never use the elevator in case of fire.<br/>3) Home Wi-Fi: Network <strong>' + aptWifi + '</strong> · Password: <strong>' + aptPass + '</strong> · Check-out: <strong>by 10:00 AM</strong>.</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="ftr">' +
+          '<div>Documento generato da <strong>itassistance</strong> (Blue Arroyo SRL · Via Matteo Palmieri 20r, 50122 Firenze · P.IVA 07480210488)</div>' +
+          '<div>Da esporre all\'interno dell\'unità immobiliare (Art. 13-ter D.L. 145/2023)</div>' +
+        '</div>' +
+        '</body></html>';
+
+      win.document.open();
+      win.document.write(html);
+      win.document.close();
     }
 
     document.addEventListener('DOMContentLoaded', function () {
