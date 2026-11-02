@@ -18,3 +18,8 @@
 4. **Contatti unici:** Telefono e WhatsApp `+39 351 038 0392` · Email `info@itadreamteam.com`.
 5. **Ragione sociale:** `Blue Arroyo SRL`, P.IVA `07480210488`, Via Matteo Palmieri 20r, 50122 Firenze (FI) — solo nel footer, termini/contratto, privacy e fatture.
 6. **PDF Check-in:** una sola lingua per documento (`it` oppure `en`), zero segnaposto vuoti (`N/A`, `()`, `—`). Se un dato manca, la riga viene omessa.
+
+## 3. Regola Generale Obbligatoria Dopo Ogni Deploy
+- **Dopo ogni deploy**, presenta sempre:
+  1. **Check di cosa è stato fatto** (allineamento con la visione `itassistance`).
+  2. **Suggerimento del passaggio successivo più efficace** (nuove funzioni da implementare, integrazioni backend/automazioni, o miglioramenti ad alto impatto sul funnel) per mantenere una tabella di marcia chiara ed efficace.

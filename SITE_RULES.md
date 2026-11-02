@@ -54,3 +54,8 @@
 - [ ] Nessun testo in lingua mista nella stessa pagina o nello stesso PDF.
 - [ ] Test responsive verificato a `360px`, `390px`, `768px` e `1280px` (zero scroll orizzontale).
 - [ ] JSON-LD valido con `SoftwareApplication` (offer `99 EUR`), `Organization` e `FAQPage`.
+
+## 7. Regola Generale Obbligatoria: Dopo Ogni Deploy (Check + Prossimo Passo Strategico)
+Dopo **OGNI deploy** in produzione, la risposta all'utente deve SEMPRE concludersi con un blocco strutturato **"🧭 Visione & Prossimo Passo Consigliato"** che contiene:
+1. **Check dello stato attuale (Cosa è fatto e live):** sintesi rapida dei blocchi chiusi rispetto alla visione complessiva di `itassistance`.
+2. **Proposta del passaggio successivo più efficace:** suggerire proattivamente 2–3 opzioni concrete ordinate per impatto sul business (es. collegamento database reale Supabase / autenticazione utenti, automazione invio report mattutino ore 08:00 via WhatsApp/Email con n8n, link Stripe live definitivi per i piani `99 €` / `1.188 €` / `+10%`, o ottimizzazione conversione) per guidare la decisione sul prossimo step.
