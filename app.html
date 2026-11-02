@@ -908,6 +908,7 @@
               <div class="panel-title">🧹 Coordinamento Turni di Pulizia e Biancheria</div>
               <p style="font-size:13px;color:var(--text-muted);">Ogni check-out genera automaticamente il turno di pulizia collegato al cambio ospite.</p>
             </div>
+            <button type="button" class="btn btn-outline btn-sm" onclick="printCleaningChecklistPDF()">📄 Stampa Checklist Operativa &amp; Fotografica PDF</button>
           </div>
           <div class="table-wrap">
             <table class="app-table">
@@ -1991,6 +1992,40 @@
       saveState();
       renderAll();
       showToast('✓ Turno pulizia verificato.');
+    }
+
+    function printCleaningChecklistPDF() {
+      var apt = appState.apartment || {};
+      var w = window.open('', '_blank');
+      if (!w) return;
+      var html = '<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Checklist Pulizie — ' + (apt.name || 'Appartamento') + '</title>' +
+        '<style>body{font-family:Arial,sans-serif;color:#1F2937;padding:32px;max-width:780px;margin:0 auto;line-height:1.5;}' +
+        '.hdr{display:flex;justify-content:space-between;border-bottom:3px solid #0F2342;padding-bottom:14px;margin-bottom:20px;}' +
+        '.title{font-size:20px;font-weight:800;color:#0F2342;}' +
+        '.box{background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:10px;padding:14px 18px;margin-bottom:14px;font-size:13.5px;}' +
+        'ul{list-style:none;padding:0;margin:0;}li{padding:6px 0;border-bottom:1px dashed #E2E8F0;}' +
+        '</style></head><body>' +
+        '<div class="hdr"><div><div class="title">🧹 CHECKLIST OPERATIVA &amp; FOTOGRAFICA PULIZIE</div>' +
+        '<div style="font-size:13px;color:#52525B;">Immobile: <strong>' + (apt.name || 'Residenza') + '</strong> · Indirizzo: ' + (apt.address || 'Firenze') + '<br>CIN: <strong>' + (apt.cin || '-') + '</strong> · Finestra Turno: <strong>10:00 – 15:00</strong></div></div>' +
+        '<div style="text-align:right;font-size:12px;"><strong>itassistance</strong><br>Supporto Firenze: +39 351 038 0392</div></div>' +
+        '<div class="box"><strong>1. Camera da Letto &amp; Biancheria Certificata</strong><ul>' +
+        '<li>☐ Ritiro biancheria usata e controllo assenza macchie su coprimaterasso e cuscini</li>' +
+        '<li>☐ Allestimento letto con set lenzuola stirate e 2–3 asciugamani per ospite</li>' +
+        '<li>☐ Svuotamento armadi/cassetti da eventuali oggetti dimenticati (segnalare subito su WhatsApp)</li></ul></div>' +
+        '<div class="box"><strong>2. Bagno &amp; Kit Cortesia</strong><ul>' +
+        '<li>☐ Igienizzazione completa sanitari, box doccia, rubinetteria e specchio</li>' +
+        '<li>☐ Ripristino 2 rotoli carta igienica, sapone mani, shampoo/docciaschiuma e sacchetto cestino</li></ul></div>' +
+        '<div class="box"><strong>3. Cucina, Soggiorno &amp; Rifiuti Alia Firenze</strong><ul>' +
+        '<li>☐ Svuotamento frigorifero, pulizia piano cottura, forno/microonde, macchina caffè e lavastoviglie</li>' +
+        '<li>☐ Conferimento rifiuti differenziati (chiavetta/cassonetti Alia) e inserimento nuovi sacchetti</li></ul></div>' +
+        '<div class="box"><strong>4. Controllo Sicurezza Obbligatorio (Normativa CIN) &amp; Invio 4 Foto WhatsApp</strong><ul>' +
+        '<li>☐ Verifica presenza e integrità <strong>Estintore portatile</strong> e <strong>Rilevatore Gas / Monossido</strong></li>' +
+        '<li>☐ Controllo funzionamento Wi-Fi (<code>' + (apt.wifi || '-') + '</code>) e chiusura finestre/luci</li>' +
+        '<li>☐ <strong>Invio 4 foto su WhatsApp entro le 14:30:</strong> 1) Letto pronto · 2) Bagno · 3) Cucina · 4) Chiavi/Portone</li></ul></div>' +
+        '<script>setTimeout(function(){window.print();},350);<\/script></body></html>';
+      w.document.open();
+      w.document.write(html);
+      w.document.close();
     }
 
     function sendCheckinWhatsApp(guestName) {

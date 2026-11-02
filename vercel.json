@@ -1,6 +1,7 @@
 {
   "trailingSlash": false,
   "redirects": [
+    { "source": "/pulizie-firenze", "destination": "/pulizie-e-manutenzione-affitti-brevi-firenze.html", "permanent": true },
     { "source": "/modello-checkin-pdf", "destination": "/regole-casa-e-istruzioni-check-in-pdf-affitti-brevi.html", "permanent": true },
     { "source": "/sincronizza-calendari", "destination": "/sincronizzare-airbnb-booking-calendario-affitti-brevi.html", "permanent": true },
     { "source": "/quartieri-firenze", "destination": "/affitti-brevi-centro-storico-firenze-quartieri.html", "permanent": true },
