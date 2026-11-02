@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Console Super Admin &amp; Fatturazione — itassistance | Blue Arroyo SRL</title>
+  <meta name="description" content="Console direzionale Super Admin di itassistance per la gestione di Partners, HR, Fornitori, Proprietari e Admin Fatturazione."/>
+  <meta name="robots" content="noindex, nofollow"/>
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
+
+  <!-- Fonte Unica Dati -->
+  <script src="/site-config.js"></script>
+  <!-- Motore PDF per generazione Fatture / Proforma -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.min.js" defer></script>
+
+  <style>
+    :root {
+      --navy: #111111;
+      --navy-soft: #1C1F26;
+      --gold: #C9A84C;
+      --gold-dark: #9E7E28;
+      --gold-light: #FBF7EC;
+      --bg: #F3F4F6;
+      --card: #FFFFFF;
+      --text: #18181B;
+      --text-muted: #52525B;
+      --border: #E4E4E7;
+      --green: #15803D;
+      --green-bg: #DCFCE7;
+      --amber: #B45309;
+      --amber-bg: #FEF3C7;
+      --red: #B91C1C;
+      --red-bg: #FEE2E2;
+      --blue: #1D4ED8;
+      --blue-bg: #DBEAFE;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --radius: 12px;
+      --shadow: 0 8px 24px rgba(17, 17, 17, 0.06);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 84px;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ═══ LOGIN SCREEN OVERLAY ═══ */
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(145deg, #111111 0%, #1E2028 100%);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .login-screen.hidden { display: none; }
+    .login-card {
+      background: #fff;
+      width: 100%;
+      max-width: 520px;
+      border-radius: 16px;
+      padding: 32px 28px;
+      border: 2px solid var(--gold);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    }
+    .login-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .login-brand img {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .role-preset-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 14px 0 20px;
+    }
+    .role-preset-btn {
+      text-align: left;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: #FAFAFA;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: var(--sans);
+    }
+    .role-preset-btn:hover, .role-preset-btn.selected {
+      border-color: var(--gold);
+      background: var(--gold-light);
+    }
+    .role-preset-btn strong {
+      display: block;
+      font-size: 13px;
+      color: var(--navy);
+    }
+    .role-preset-btn span {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ═══ HEADER TOPBAR ═══ */
+    .admin-header {
+      background: var(--navy);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 600;
+      border-bottom: 2px solid var(--gold);
+    }
+    .admin-header-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .admin-brand img {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: #fff;
+      padding: 2px;
+    }
+    .role-badge-top {
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .role-switcher-select {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid rgba(201, 168, 76, 0.5);
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .role-switcher-select option { color: #111; }
+
+    /* ═══ SHELL LAYOUT ═══ */
+    .admin-shell {
+      max-width: 1320px;
+      margin: 22px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .admin-sidebar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 12px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 82px;
+    }
+    .user-box {
+      padding: 12px;
+      background: var(--navy);
+      color: #fff;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      border-left: 4px solid var(--gold);
+    }
+    .user-box-role {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .user-box-name {
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+    .user-box-email {
+      font-size: 11.5px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .side-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .side-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      text-align: left;
+      padding: 11px 12px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      font-family: var(--sans);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .side-btn:hover { background: var(--bg); color: var(--navy); }
+    .side-btn.active { background: var(--navy); color: #fff; }
+    .side-btn.active .pill-cnt { background: var(--gold); color: var(--navy); }
+    .pill-cnt {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: var(--bg);
+      color: var(--navy);
+    }
+
+    /* Mobile Bottom Navigation */
+    .mob-admin-bar {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--navy);
+      border-top: 2px solid var(--gold);
+      z-index: 700;
+      padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
+      grid-template-columns: repeat(6, 1fr);
+      gap: 2px;
+    }
+    .mob-admin-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.65);
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 6px 2px;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+    }
+    .mob-admin-btn.active {
+      color: var(--gold);
+      background: rgba(201, 168, 76, 0.15);
+    }
+
+    @media (max-width: 980px) {
+      .admin-shell { grid-template-columns: 1fr; }
+      .admin-sidebar { display: none; }
+      .mob-admin-bar { display: grid; }
+    }
+
+    /* UI Elements */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+    .btn-primary { background: var(--navy); color: #fff; }
+    .btn-primary:hover { background: #27272A; }
+    .btn-gold { background: var(--gold); color: var(--navy); font-weight: 700; }
+    .btn-gold:hover { background: #b8963c; }
+    .btn-outline { background: #fff; color: var(--navy); border-color: var(--border); }
+    .btn-outline:hover { border-color: var(--navy); }
+    .btn-green { background: var(--green); color: #fff; }
+    .btn-sm { padding: 6px 11px; font-size: 12px; border-radius: 6px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .badge-ok { background: var(--green-bg); color: var(--green); }
+    .badge-warn { background: var(--amber-bg); color: var(--amber); }
+    .badge-err { background: var(--red-bg); color: var(--red); }
+    .badge-info { background: var(--blue-bg); color: var(--blue); }
+    .badge-gold { background: var(--gold-light); color: var(--gold-dark); border: 1px solid rgba(201,168,76,0.45); }
+
+    .adm-view { display: none; }
+    .adm-view.active { display: block; }
+
+    /* KPI Row */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .kpi-val {
+      font-family: var(--serif);
+      font-size: 25px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.15;
+    }
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    @media (max-width: 860px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Cards & Tables */
+    .panel-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .table-wrap { width: 100%; overflow-x: auto; }
+    table.adm-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    table.adm-table th, table.adm-table td {
+      padding: 11px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    table.adm-table th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      background: var(--bg);
+    }
+
+    /* Form Box */
+    .form-box {
+      display: none;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 18px;
+    }
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 720px) {
+      .form-grid-3 { grid-template-columns: 1fr; }
+    }
+    .field label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .field input, .field select {
+      width: 100%;
+      padding: 9px 11px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-family: var(--sans);
+      font-size: 13.5px;
+      background: #fff;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 86px;
+      right: 20px;
+      background: var(--navy);
+      color: #fff;
+      border: 1px solid var(--gold);
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      z-index: 2500;
+      display: none;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.28);
+    }
+    .toast.show { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       SCHERMATA DI ACCESSO / SELEZIONE PROFILO ADMIN
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="login-screen" id="login-screen">
+    <div class="login-card">
+      <div class="login-brand">
+        <img src="/brand/logo.png" alt="Logo itassistance"/>
+        <div>
+          <div style="font-size:20px;font-weight:700;color:var(--navy);">itassistance · Backoffice</div>
+          <div style="font-size:12px;color:var(--text-muted);">Blue Arroyo SRL · P.IVA 07480210488 · Firenze</div>
+        </div>
+      </div>
+
+      <h2 style="font-family:var(--serif);font-size:22px;color:var(--navy);margin-bottom:6px;">Accedi alla Console Amministrativa</h2>
+      <p style="font-size:13px;color:var(--text-muted);">Seleziona il profilo amministrativo con cui operare o inserisci le credenziali:</p>
+
+      <div class="role-preset-grid">
+        <button type="button" class="role-preset-btn selected" id="preset-superadmin" onclick="selectLoginPreset('superadmin')">
+          <strong>👑 Super Admin</strong>
+          <span>Accesso totale (Partners, HR, Fornitori, Fatturazione)</span>
+        </button>
+        <button type="button" class="role-preset-btn" id="preset-billing" onclick="selectLoginPreset('billing')">
+          <strong>🧾 Admin Fatturazione</strong>
+          <span>Fatture SDI, Piani 99€/1.188€, Extra +10%, Rimborsi 14gg</span>
+        </button>
+        <button type="button" class="role-preset-btn" id="preset-hr" onclick="selectLoginPreset('hr')">
+          <strong>👥 HR &amp; Team Manager</strong>
+          <span>Personale Firenze, Turni 09–23, Contratti e Buste Paga</span>
+        </button>
+        <button type="button" class="role-preset-btn" id="preset-partners" onclick="selectLoginPreset('partners')">
+          <strong>🤝 Partners &amp; Fornitori</strong>
+          <span>Partner commerciali, Ditte Pulizie, Manutentori FI</span>
+        </button>
+      </div>
+
+      <div class="field" style="margin-bottom:12px;">
+        <label for="login-email">Email Account</label>
+        <input type="email" id="login-email" value="superadmin@itadreamteam.com"/>
+      </div>
+      <div class="field" style="margin-bottom:18px;">
+        <label for="login-pin">Codice PIN / Password Amministratore</label>
+        <input type="password" id="login-pin" value="2026" placeholder="PIN predefinito: 2026"/>
+      </div>
+
+      <button type="button" class="btn btn-gold" style="width:100%;padding:13px;" onclick="performAdminLogin()">
+        🔐 Entra nella Console →
+      </button>
+      <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted);">
+        <a href="/app.html" style="text-decoration:underline;">Vai all'Area Proprietario (App)</a> · <a href="/" style="text-decoration:underline;">Torna al sito pubblico</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       TOPBAR SUPER ADMIN
+  ════════════════════════════════════════════════════════════════ -->
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <a href="/" class="admin-brand">
+          <img src="/brand/logo.png" alt="Logo itassistance"/>
+          <span>itassistance</span>
+        </a>
+        <span class="role-badge-top" id="top-role-badge">👑 SUPER ADMIN</span>
+      </div>
+
+      <div class="header-right">
+        <label for="quick-role-switch" style="font-size:12px;color:rgba(255,255,255,0.75);">Vista Ruolo:</label>
+        <select id="quick-role-switch" class="role-switcher-select" onchange="switchActiveRole(this.value)">
+          <option value="superadmin">👑 Super Admin (Accesso Totale)</option>
+          <option value="billing">🧾 Admin Fatturazione &amp; Contabilità</option>
+          <option value="hr">👥 HR &amp; Team Firenze</option>
+          <option value="partners">🤝 Partners &amp; Fornitori</option>
+        </select>
+        <a href="/app.html" class="btn btn-outline btn-sm" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.3);">📱 Vista App Proprietario</a>
+        <button type="button" class="btn btn-gold btn-sm" onclick="logoutAdmin()">Esci</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       SHELL PRINCIPALE BACKOFFICE
+  ════════════════════════════════════════════════════════════════ -->
+  <div class="admin-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar" aria-label="Menu Amministrazione">
+      <div class="user-box">
+        <div class="user-box-role" id="side-role-label">SUPER ADMIN</div>
+        <div class="user-box-name" id="side-user-name">Julian Herrera · Direzione</div>
+        <div class="user-box-email" id="side-user-email">superadmin@itadreamteam.com</div>
+      </div>
+
+      <nav class="side-nav">
+        <button type="button" class="side-btn active" data-tab="overview" onclick="switchAdminTab('overview')">
+          <span>📊 1. Regia Super Admin</span>
+          <span class="pill-cnt">KPI</span>
+        </button>
+        <button type="button" class="side-btn" data-tab="partners" onclick="switchAdminTab('partners')">
+          <span>🤝 2. Partners &amp; Clienti</span>
+          <span class="pill-cnt" id="cnt-partners">5</span>
+        </button>
+        <button type="button" class="side-btn" data-tab="hr" onclick="switchAdminTab('hr')">
+          <span>👥 3. HR &amp; Team Firenze</span>
+          <span class="pill-cnt" id="cnt-hr">5</span>
+        </button>
+        <button type="button" class="side-btn" data-tab="fornitori" onclick="switchAdminTab('fornitori')">
+          <span>🧹 4. Fornitori &amp; Lavori</span>
+          <span class="pill-cnt" id="cnt-fornitori">4</span>
+        </button>
+        <button type="button" class="side-btn" data-tab="fatturazione" onclick="switchAdminTab('fatturazione')">
+          <span>🧾 5. Admin Fatturazione</span>
+          <span class="pill-cnt" id="cnt-fatture">6</span>
+        </button>
+        <button type="button" class="side-btn" data-tab="accounts" onclick="switchAdminTab('accounts')">
+          <span>🔐 6. Account &amp; Ruoli</span>
+          <span class="pill-cnt" id="cnt-accounts">4</span>
+        </button>
+      </nav>
+
+      <div style="margin-top:16px;padding:12px;border-radius:10px;background:var(--gold-light);border:1px solid rgba(201,168,76,0.4);font-size:11.5px;color:var(--navy);">
+        <strong>Dati Fiscali Emittente</strong><br/>
+        Blue Arroyo SRL<br/>
+        P.IVA 07480210488<br/>
+        Via Matteo Palmieri 20r, 50122 Firenze
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+      <!-- ══════════════════════════════════════════════════
+           1. OVERVIEW DIREZIONALE SUPER ADMIN
+      ══════════════════════════════════════════════════ -->
+      <section class="adm-view active" id="adm-overview">
+        <div class="panel-card" style="background:var(--navy);color:#fff;border:1px solid var(--gold);">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;">
+            <div>
+              <span class="badge badge-gold">CONSOLE SUPER ADMIN · BLUE ARROYO SRL</span>
+              <h1 style="font-family:var(--serif);font-size:26px;margin-top:6px;">Controllo Centrale: Partners, HR, Fornitori e Fatturazione</h1>
+              <p style="font-size:13.5px;color:rgba(255,255,255,0.75);margin-top:4px;">
+                Modello attivo: <strong>99 € / mese IVA inclusa</strong> (o <strong>1.188 € / anno</strong>) · Garanzia 14 gg Soddisfatto o Rimborsato · Extra opzionale <strong>+10% Revenue &amp; Adempimenti</strong>.
+              </p>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.35);" onclick="resetAdminDemoData()">↺ Ripristina dati demo</button>
+          </div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">MRR Ricorrente + Extra +10%</div>
+            <div class="kpi-val" id="ov-mrr">4.845,00 €</div>
+            <div class="kpi-sub">Canoni 99€/mese + deleghe Revenue/Adempimenti</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Partners &amp; Segnalatori Attivi</div>
+            <div class="kpi-val" id="ov-partners">5 Partner</div>
+            <div class="kpi-sub">Agenzie, Studi Commercialisti e Host Firenze</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Team HR &amp; Turni Firenze (09–23)</div>
+            <div class="kpi-val" id="ov-hr">5 Risorse</div>
+            <div class="kpi-sub">Copertura 09:00–23:00 garantita oggi</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Fatture Attive Incassate</div>
+            <div class="kpi-val" id="ov-invoices" style="color:var(--green);">3.153,00 €</div>
+            <div class="kpi-sub">IVA 22% inclusa · Pronte per SDI</div>
+          </div>
+        </div>
+
+        <!-- Sintesi Operativa Rapida -->
+        <div class="panel-card">
+          <div class="panel-head">
+            <div class="panel-title">⚡ Accesso Rapido ai 4 Reparti Direzionali</div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;">
+            <div style="border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <strong style="font-size:15px;color:var(--navy);">🤝 Reparto Partners &amp; Proprietari</strong>
+                <p style="font-size:12.5px;color:var(--text-muted);">Gestisci segnalatori, fee partner, proprietari a 99 €/mese e deleghe +10%.</p>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm" onclick="switchAdminTab('partners')">Apri Partners →</button>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <strong style="font-size:15px;color:var(--navy);">👥 Reparto HR &amp; Personale Firenze</strong>
+                <p style="font-size:12.5px;color:var(--text-muted);">Contratti, turni 09:00–23:00, operatori check-in e buste paga/compensi.</p>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm" onclick="switchAdminTab('hr')">Apri HR →</button>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <strong style="font-size:15px;color:var(--navy);">🧹 Reparto Fornitori &amp; Manutenzione</strong>
+                <p style="font-size:12.5px;color:var(--text-muted);">Imprese pulizie, lavanderie, tecnici a Firenze (20€ check-in / 30€ manutenzione).</p>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm" onclick="switchAdminTab('fornitori')">Apri Fornitori →</button>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <strong style="font-size:15px;color:var(--navy);">🧾 Admin Fatturazione &amp; Rimborsi 14gg</strong>
+                <p style="font-size:12.5px;color:var(--text-muted);">Emissione fatture PDF Blue Arroyo SRL, incassi Stripe e note di credito.</p>
+              </div>
+              <button type="button" class="btn btn-gold btn-sm" onclick="switchAdminTab('fatturazione')">Apri Fatturazione →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════
+           2. GESTIONE PARTNERS & PROPRIETARI AFFILIATI
+      ══════════════════════════════════════════════════ -->
+      <section class="adm-view" id="adm-partners">
+        <div class="panel-card">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">🤝 Gestione Partners Commerciali &amp; Proprietari Attivi</div>
+              <p style="font-size:13px;color:var(--text-muted);">Monitora agenzie partner, studi commercialisti, segnalatori, appartamenti portati e piano attivo (Base 99 € vs Extra +10%).</p>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="toggleForm('form-new-partner')">+ Aggiungi Partner / Affiliato</button>
+          </div>
+
+          <div class="form-box" id="form-new-partner">
+            <h4 style="margin-bottom:10px;font-size:14px;color:var(--navy);">Nuovo Partner o Proprietario Direzionale</h4>
+            <div class="form-grid-3">
+              <div class="field">
+                <label>Nome / Ragione Sociale *</label>
+                <input type="text" id="pt-name" placeholder="es. Studio Associato Bianchi FI"/>
+              </div>
+              <div class="field">
+                <label>Tipologia Partner</label>
+                <select id="pt-type">
+                  <option value="Studio Commercialista Partner">Studio Commercialista Partner</option>
+                  <option value="Agenzia Immobiliare Segnalatrice">Agenzia Immobiliare Segnalatrice</option>
+                  <option value="Proprietario Multi-Immobile">Proprietario Multi-Immobile</option>
+                  <option value="Host Ambassador Firenze">Host Ambassador Firenze</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Email &amp; Telefono *</label>
+                <input type="text" id="pt-contact" placeholder="info@studiobianchi.it · +39 348..."/>
+              </div>
+              <div class="field">
+                <label>Appartamenti Attivi su Firenze</label>
+                <input type="number" id="pt-apts" value="3" min="1"/>
+              </div>
+              <div class="field">
+                <label>Piano / Accordo Fee</label>
+                <select id="pt-plan">
+                  <option value="99 €/mese + Extra 10% Revenue & Adempimenti">99 €/mese + Extra +10% (Revenue &amp; Adempimenti)</option>
+                  <option value="99 €/mese Base (Zero Commissioni)">99 €/mese Base (Zero Commissioni)</option>
+                  <option value="1.188 €/anno Anticipato + Extra 10%">1.188 €/anno Anticipato + Extra +10%</option>
+                  <option value="Fee Segnalazione Partner 15%">Fee Segnalazione Partner 15%</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>P.IVA / Codice Fiscale</label>
+                <input type="text" id="pt-vat" placeholder="IT01234567890"/>
+              </div>
+            </div>
+            <div style="margin-top:12px;display:flex;gap:8px;">
+              <button type="button" class="btn btn-gold btn-sm" onclick="addPartner()">Salva Partner</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="toggleForm('form-new-partner')">Annulla</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>Partner / Ragione Sociale</th>
+                  <th>Tipologia</th>
+                  <th>Contatti &amp; P.IVA</th>
+                  <th>Immobili (FI)</th>
+                  <th>Piano / Condizione Economica</th>
+                  <th>Stato</th>
+                  <th>Azioni</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-partners"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════
+           3. GESTIONE HR (RISORSE UMANE & TURNI FIRENZE)
+      ══════════════════════════════════════════════════ -->
+      <section class="adm-view" id="adm-hr">
+        <div class="panel-card">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">👥 Gestione HR, Dipendenti, Collaboratori &amp; Turni Firenze (09:00 – 23:00)</div>
+              <p style="font-size:13px;color:var(--text-muted);">Anagrafica personale, contratti, turni di copertura su Firenze, interventi check-in eseguiti e stato liquidazione compensi.</p>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="toggleForm('form-new-hr')">+ Inserisci Risorsa HR</button>
+          </div>
+
+          <div class="form-box" id="form-new-hr">
+            <h4 style="margin-bottom:10px;font-size:14px;color:var(--navy);">Nuovo Dipendente / Collaboratore HR</h4>
+            <div class="form-grid-3">
+              <div class="field">
+                <label>Nome e Cognome *</label>
+                <input type="text" id="hr-name" placeholder="es. Lorenzo Neri"/>
+              </div>
+              <div class="field">
+                <label>Ruolo Operativo *</label>
+                <select id="hr-role">
+                  <option value="Operatore Accoglienza & Check-in (Firenze)">Operatore Accoglienza &amp; Check-in (Firenze)</option>
+                  <option value="Specialista Alloggiati Web & Adempimenti">Specialista Alloggiati Web &amp; Adempimenti</option>
+                  <option value="Revenue Manager (+10% Extra)">Revenue Manager (+10% Extra)</option>
+                  <option value="Supporto Proprietari (Turno 09:00–23:00)">Supporto Proprietari (Turno 09:00–23:00)</option>
+                  <option value="Tecnico Manutenzione Rapida FI">Tecnico Manutenzione Rapida FI</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Inquadramento Contrattuale</label>
+                <select id="hr-contract">
+                  <option value="Tempo Indeterminato Full-Time">Tempo Indeterminato Full-Time</option>
+                  <option value="Part-Time Turnista">Part-Time Turnista</option>
+                  <option value="Collaboratore P.IVA">Collaboratore P.IVA</option>
+                  <option value="Contratto a Chiamata">Contratto a Chiamata</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Turno Assegnato (Firenze)</label>
+                <input type="text" id="hr-shift" value="Mattina 09:00 – 16:00"/>
+              </div>
+              <div class="field">
+                <label>Compenso Mensile Lordo (€) *</label>
+                <input type="number" id="hr-salary" value="1650" min="100" step="50"/>
+              </div>
+              <div class="field">
+                <label>Telefono &amp; Email</label>
+                <input type="text" id="hr-phone" placeholder="+39 333... · lorenzo@itadreamteam.com"/>
+              </div>
+            </div>
+            <div style="margin-top:12px;display:flex;gap:8px;">
+              <button type="button" class="btn btn-gold btn-sm" onclick="addHrMember()">Salva Risorsa HR</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="toggleForm('form-new-hr')">Annulla</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>Nome &amp; Contatti</th>
+                  <th>Ruolo in itassistance</th>
+                  <th>Contratto</th>
+                  <th>Turno Presidio (09–23)</th>
+                  <th>Compenso Mensile</th>
+                  <th>Stato Busta Paga / Compenso</th>
+                  <th>Azioni</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-hr"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════
+           4. GESTIONE FORNITORI & ORDINI DI LAVORO (FIRENZE)
+      ══════════════════════════════════════════════════ -->
+      <section class="adm-view" id="adm-fornitori">
+        <div class="panel-card">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">🧹 Gestione Fornitori Certificati Firenze &amp; Liquidazioni</div>
+              <p style="font-size:13px;color:var(--text-muted);">Ditte di pulizia, lavanderie industriali, idraulici/elettricisti e fornitori per gli interventi extra su Firenze.</p>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="toggleForm('form-new-supplier')">+ Aggiungi Fornitore</button>
+          </div>
+
+          <div class="form-box" id="form-new-supplier">
+            <h4 style="margin-bottom:10px;font-size:14px;color:var(--navy);">Nuovo Fornitore Operativo (Firenze)</h4>
+            <div class="form-grid-3">
+              <div class="field">
+                <label>Ragione Sociale Fornitore *</label>
+                <input type="text" id="sup-name" placeholder="es. Toscoclean SRL"/>
+              </div>
+              <div class="field">
+                <label>Categoria Servizio</label>
+                <select id="sup-cat">
+                  <option value="Pulizie & Sanificazione Appartamenti">Pulizie &amp; Sanificazione Appartamenti</option>
+                  <option value="Lavanderia & Noleggio Biancheria">Lavanderia &amp; Noleggio Biancheria</option>
+                  <option value="Manutenzione Idraulica / Elettrica (30€)">Manutenzione Idraulica / Elettrica (30€)</option>
+                  <option value="Accoglienza Check-in Presenziale (20€)">Accoglienza Check-in Presenziale (20€)</option>
+                  <option value="Fornitura Kit Cortesia">Fornitura Kit Cortesia</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>P.IVA e IBAN</label>
+                <input type="text" id="sup-vat" placeholder="P.IVA 06543210481 · IT60X..."/>
+              </div>
+              <div class="field">
+                <label>Tariffa / Accordo Quadro</label>
+                <input type="text" id="sup-rate" placeholder="es. 45 € a turnover / 30 € uscita"/>
+              </div>
+              <div class="field">
+                <label>Saldo Fatture Passive Mese (€) *</label>
+                <input type="number" id="sup-amount" value="450" min="0" step="10"/>
+              </div>
+              <div class="field">
+                <label>Referente &amp; WhatsApp</label>
+                <input type="text" id="sup-contact" placeholder="Elena · +39 347..."/>
+              </div>
+            </div>
+            <div style="margin-top:12px;display:flex;gap:8px;">
+              <button type="button" class="btn btn-gold btn-sm" onclick="addSupplier()">Salva Fornitore</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="toggleForm('form-new-supplier')">Annulla</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>Fornitore &amp; Referente</th>
+                  <th>Categoria</th>
+                  <th>P.IVA / IBAN</th>
+                  <th>Listino Concordato</th>
+                  <th>Da Liquidare (Mese)</th>
+                  <th>Stato Pagamento</th>
+                  <th>Azioni</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-suppliers"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════
+           5. ADMIN FATTURAZIONE (ATTIVA, PASSIVA, PDF & 14GG)
+      ══════════════════════════════════════════════════ -->
+      <section class="adm-view" id="adm-fatturazione">
+        <div class="panel-card">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">🧾 Admin Fatturazione — Blue Arroyo SRL (P.IVA 07480210488)</div>
+              <p style="font-size:13px;color:var(--text-muted);">
+                Emissione fatture attive (piani <strong>99 €/mese</strong>, <strong>1.188 €/anno</strong>, <strong>Extra +10% Revenue &amp; Adempimenti</strong>, interventi extra Firenze), gestione <strong>Garanzia 14 giorni Soddisfatto o Rimborsato</strong> e download PDF.
+              </p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-outline btn-sm" onclick="exportBillingCSV()">⬇ Esporta Registro Fatture CSV</button>
+              <button type="button" class="btn btn-gold btn-sm" onclick="toggleForm('form-new-invoice')">+ Emetti Nuova Fattura</button>
+            </div>
+          </div>
+
+          <!-- Form Nuova Fattura -->
+          <div class="form-box" id="form-new-invoice">
+            <h4 style="margin-bottom:10px;font-size:14px;color:var(--navy);">Emetti Nuova Fattura Attiva (IVA 22% inclusa)</h4>
+            <div class="form-grid-3">
+              <div class="field">
+                <label>Cliente / Proprietario *</label>
+                <input type="text" id="inv-client" placeholder="es. Mario Rossi (App. Santo Spirito)"/>
+              </div>
+              <div class="field">
+                <label>C.F. / Partita IVA Cliente *</label>
+                <input type="text" id="inv-cf" placeholder="RSSMRA80A01D612X"/>
+              </div>
+              <div class="field">
+                <label>Causale / Piano Fatturato *</label>
+                <select id="inv-desc" onchange="autoFillInvoiceAmount()">
+                  <option value="Canone Mensile App itassistance (IVA incl.)" data-amt="99">Canone Mensile App itassistance (99,00 € IVA incl.)</option>
+                  <option value="Canone Annuale Anticipato App itassistance (IVA incl.)" data-amt="1188">Canone Annuale App itassistance (1.188,00 € IVA incl.)</option>
+                  <option value="Canone Mensile 99€ + Extra +10% Revenue & Adempimenti" data-amt="399">Canone 99€ + Extra +10% Revenue &amp; Adempimenti (es. 399,00 €)</option>
+                  <option value="Intervento Extra Check-in di persona Firenze" data-amt="20">Intervento Extra Check-in di persona Firenze (20,00 € IVA incl.)</option>
+                  <option value="Intervento Extra Manutenzione ordinaria Firenze" data-amt="30">Intervento Extra Manutenzione Firenze (30,00 € IVA incl.)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Totale Documento (€ IVA 22% inclusa) *</label>
+                <input type="number" id="inv-total" value="99" min="1" step="0.5"/>
+              </div>
+              <div class="field">
+                <label>Metodo di Pagamento</label>
+                <select id="inv-method">
+                  <option value="Stripe (Carta / Apple Pay)">Stripe (Carta / Apple Pay)</option>
+                  <option value="Bonifico Bancario Blue Arroyo SRL">Bonifico Bancario Blue Arroyo SRL</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Stato Fattura</label>
+                <select id="inv-status">
+                  <option value="Pagata">Pagata</option>
+                  <option value="In attesa">In attesa di saldo</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-top:12px;display:flex;gap:8px;">
+              <button type="button" class="btn btn-gold btn-sm" onclick="createInvoice()">Genera e Registra Fattura</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="toggleForm('form-new-invoice')">Annulla</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>N° Fattura &amp; Data</th>
+                  <th>Cliente &amp; C.F./P.IVA</th>
+                  <th>Descrizione Piano / Servizio</th>
+                  <th>Imponibile + IVA 22%</th>
+                  <th>Totale (IVA incl.)</th>
+                  <th>Stato &amp; Garanzia 14gg</th>
+                  <th>Azioni (PDF / Rimborso)</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-invoices"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════════════════
+           6. GESTIONE ACCOUNT ADMIN & PERMESSI
+      ══════════════════════════════════════════════════ -->
+      <section class="adm-view" id="adm-accounts">
+        <div class="panel-card">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">🔐 Gestione Account Amministratori &amp; Permessi (RBAC)</div>
+              <p style="font-size:13px;color:var(--text-muted);">Configura gli account per Super Admin, Admin Fatturazione, Responsabile HR e Responsabile Partners/Fornitori.</p>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="toggleForm('form-new-admin')">+ Crea Account Admin</button>
+          </div>
+
+          <div class="form-box" id="form-new-admin">
+            <h4 style="margin-bottom:10px;font-size:14px;color:var(--navy);">Crea Nuovo Account Amministrativo</h4>
+            <div class="form-grid-3">
+              <div class="field">
+                <label>Nome e Cognome *</label>
+                <input type="text" id="acc-name" placeholder="es. Francesca Conti"/>
+              </div>
+              <div class="field">
+                <label>Email Aziendale *</label>
+                <input type="email" id="acc-email" placeholder="francesca@itadreamteam.com"/>
+              </div>
+              <div class="field">
+                <label>Ruolo &amp; Permessi *</label>
+                <select id="acc-role">
+                  <option value="Super Admin (Accesso Totale)">👑 Super Admin (Accesso Totale)</option>
+                  <option value="Admin Fatturazione (Fatture, Piani, Rimborsi 14gg)">🧾 Admin Fatturazione (Fatture, Piani, Rimborsi 14gg)</option>
+                  <option value="HR Manager (Dipendenti, Turni 09-23, Compensi)">👥 HR Manager (Dipendenti, Turni 09-23, Compensi)</option>
+                  <option value="Partners & Fornitori Manager">🤝 Partners &amp; Fornitori Manager</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-top:12px;display:flex;gap:8px;">
+              <button type="button" class="btn btn-gold btn-sm" onclick="addAdminAccount()">Crea Account</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="toggleForm('form-new-admin')">Annulla</button>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>Utente</th>
+                  <th>Email Login</th>
+                  <th>Ruolo Assegnato</th>
+                  <th>Moduli Abilitati</th>
+                  <th>Stato</th>
+                  <th>Azione Rapida</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-accounts"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer style="margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+        <div>itassistance Backoffice · Blue Arroyo SRL · P.IVA 07480210488 · Via Matteo Palmieri 20r, 50122 Firenze (FI)</div>
+        <div>Supporto operativo Firenze (09:00–23:00): +39 351 038 0392 · info@itadreamteam.com</div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- BARRA MOBILE -->
+  <nav class="mob-admin-bar" aria-label="Menu rapido Super Admin">
+    <button type="button" class="mob-admin-btn active" data-tab="overview" onclick="switchAdminTab('overview')">
+      <span>📊</span><span>Regia</span>
+    </button>
+    <button type="button" class="mob-admin-btn" data-tab="partners" onclick="switchAdminTab('partners')">
+      <span>🤝</span><span>Partners</span>
+    </button>
+    <button type="button" class="mob-admin-btn" data-tab="hr" onclick="switchAdminTab('hr')">
+      <span>👥</span><span>HR</span>
+    </button>
+    <button type="button" class="mob-admin-btn" data-tab="fornitori" onclick="switchAdminTab('fornitori')">
+      <span>🧹</span><span>Fornitori</span>
+    </button>
+    <button type="button" class="mob-admin-btn" data-tab="fatturazione" onclick="switchAdminTab('fatturazione')">
+      <span>🧾</span><span>Fatture</span>
+    </button>
+    <button type="button" class="mob-admin-btn" data-tab="accounts" onclick="switchAdminTab('accounts')">
+      <span>🔐</span><span>Ruoli</span>
+    </button>
+  </nav>
+
+  <div class="toast" id="adm-toast"></div>
+
+  <script>
+    var ADM_STORAGE_KEY = 'itassistance_superadmin_v1';
+
+    var ROLE_PROFILES = {
+      superadmin: {
+        badge: '👑 SUPER ADMIN',
+        name: 'Julian Herrera · Super Admin',
+        email: 'superadmin@itadreamteam.com',
+        defaultTab: 'overview'
+      },
+      billing: {
+        badge: '🧾 ADMIN FATTURAZIONE',
+        name: 'Amministrazione & Fatturazione',
+        email: 'fatturazione@itadreamteam.com',
+        defaultTab: 'fatturazione'
+      },
+      hr: {
+        badge: '👥 HR & TEAM MANAGER',
+        name: 'Responsabile HR Firenze',
+        email: 'hr@itadreamteam.com',
+        defaultTab: 'hr'
+      },
+      partners: {
+        badge: '🤝 PARTNERS & FORNITORI',
+        name: 'Responsabile Rete & Fornitori',
+        email: 'fornitori@itadreamteam.com',
+        defaultTab: 'partners'
+      }
+    };
+
+    var selectedPreset = 'superadmin';
+
+    function getDefaultAdminData() {
+      return {
+        currentRole: 'superadmin',
+        loggedIn: true,
+        partners: [
+          {
+            id: 'p1',
+            name: 'Studio Commercialista Ferri & Associati',
+            type: 'Studio Commercialista Partner',
+            contact: 'info@studioferrifi.it · +39 055 219843',
+            vat: 'IT04918270481',
+            apts: 12,
+            plan: 'Partner Fiscale · 12 appartamenti attivi a 99 €/mese',
+            active: true
+          },
+          {
+            id: 'p2',
+            name: 'Firenze Prestige Real Estate SRL',
+            type: 'Agenzia Immobiliare Segnalatrice',
+            contact: 'partner@firenzeprestige.it · +39 348 9123456',
+            vat: 'IT06123940482',
+            apts: 8,
+            plan: '99 €/mese + Extra +10% Revenue & Adempimenti',
+            active: true
+          },
+          {
+            id: 'p3',
+            name: 'Famiglia Corsini (Palazzo Oltrarno)',
+            type: 'Proprietario Multi-Immobile',
+            contact: 'amministrazione@corsinifi.it · +39 335 7712390',
+            vat: 'IT03819200489',
+            apts: 4,
+            plan: '1.188 €/anno Anticipato + Extra +10%',
+            active: true
+          },
+          {
+            id: 'p4',
+            name: 'Marco Rinaldi (App. Santa Croce & Duomo)',
+            type: 'Proprietario Multi-Immobile',
+            contact: 'm.rinaldi@email.it · +39 340 5519823',
+            vat: 'RNLMRC78B12D612K',
+            apts: 2,
+            plan: '99 €/mese Base (Zero Commissioni)',
+            active: true
+          },
+          {
+            id: 'p5',
+            name: 'Chiara Bellini — Host Ambassador Centro Storico',
+            type: 'Host Ambassador Firenze',
+            contact: 'chiara.bellini@email.it · +39 392 4410982',
+            vat: 'BLLCHR85D55D612Z',
+            apts: 6,
+            plan: 'Fee Segnalazione Partner 15%',
+            active: true
+          }
+        ],
+        hr: [
+          {
+            id: 'h1',
+            name: 'Matteo Lombardi',
+            role: 'Supporto Proprietari & Coordinamento (Firenze)',
+            contract: 'Tempo Indeterminato Full-Time',
+            shift: 'Mattina 09:00 – 16:30',
+            salary: 1850,
+            phone: '+39 351 038 0392 · matteo@itadreamteam.com',
+            paid: true
+          },
+          {
+            id: 'h2',
+            name: 'Sofia Moretti',
+            role: 'Specialista Alloggiati Web, ISTAT & Tassa Soggiorno (Extra +10%)',
+            contract: 'Tempo Indeterminato Full-Time',
+            shift: '09:30 – 17:30',
+            salary: 1900,
+            phone: '+39 347 8821904 · sofia@itadreamteam.com',
+            paid: true
+          },
+          {
+            id: 'h3',
+            name: 'Davide Galli',
+            role: 'Revenue Manager Dinamico Airbnb/Booking (Extra +10%)',
+            contract: 'Collaboratore P.IVA',
+            shift: '10:00 – 18:30',
+            salary: 2100,
+            phone: '+39 339 1102938 · davide@itadreamteam.com',
+            paid: true
+          },
+          {
+            id: 'h4',
+            name: 'Martina Bartoli',
+            role: 'Presidio Serale Assistenza & Check-in Firenze',
+            contract: 'Part-Time Turnista',
+            shift: 'Sera 16:00 – 23:00',
+            salary: 1350,
+            phone: '+39 340 9981234 · martina@itadreamteam.com',
+            paid: false
+          },
+          {
+            id: 'h5',
+            name: 'Alessandro Gori',
+            role: 'Tecnico Manutenzione Rapida Firenze (Interventi 30€)',
+            contract: 'Contratto a Chiamata',
+            shift: 'Reperibilità 09:00 – 21:00',
+            salary: 950,
+            phone: '+39 328 7654321 · tecnico@itadreamteam.com',
+            paid: false
+          }
+        ],
+        suppliers: [
+          {
+            id: 's1',
+            name: 'Elena Pulizie & Sanificazioni Firenze SRL',
+            category: 'Pulizie & Sanificazione Appartamenti',
+            vat: 'P.IVA 06819230481 · IT60X0306902880...',
+            rate: '40–65 € a cambio ospite (in base ai mq)',
+            amount: 1420,
+            contact: 'Elena · +39 347 1239876',
+            paid: false
+          },
+          {
+            id: 's2',
+            name: 'Lavanderia Industriale Giglio Bianco',
+            category: 'Lavanderia & Noleggio Biancheria',
+            vat: 'P.IVA 05419280484 · IT82M0103002800...',
+            rate: '11 € a kit matrimoniale completo',
+            amount: 680,
+            contact: 'Roberto · +39 055 318920',
+            paid: true
+          },
+          {
+            id: 's3',
+            name: 'Pronto Intervento Idraulico/Elettrico F.lli Conti',
+            category: 'Manutenzione Idraulica / Elettrica (30€)',
+            vat: 'P.IVA 04910290488 · IT19A0200802810...',
+            rate: '30 € uscita rapida Firenze',
+            amount: 210,
+            contact: 'Stefano · +39 335 6612098',
+            paid: true
+          },
+          {
+            id: 's4',
+            name: 'Welcome Florence — Team Check-in Presenziale',
+            category: 'Accoglienza Check-in Presenziale (20€)',
+            vat: 'P.IVA 07192830482 · IT44K0503402801...',
+            rate: '20 € ad accoglienza di persona',
+            amount: 340,
+            contact: 'Giulia · +39 349 8871203',
+            paid: false
+          }
+        ],
+        invoices: [
+          {
+            id: 'FATT-2026-101',
+            date: '02/11/2026',
+            client: 'Famiglia Corsini (Palazzo Oltrarno)',
+            cf: 'IT03819200489',
+            desc: 'Canone Annuale Anticipato App itassistance (1.188 € IVA incl.) + Extra +10% Revenue & Adempimenti',
+            total: 1588,
+            method: 'Stripe (Carta / Apple Pay)',
+            status: 'Pagata'
+          },
+          {
+            id: 'FATT-2026-102',
+            date: '02/11/2026',
+            client: 'Marco Rinaldi (App. Santa Croce)',
+            cf: 'RNLMRC78B12D612K',
+            desc: 'Canone Mensile App itassistance (IVA inclusa)',
+            total: 99,
+            method: 'Stripe (Carta / Apple Pay)',
+            status: 'Pagata'
+          },
+          {
+            id: 'FATT-2026-103',
+            date: '01/11/2026',
+            client: 'Appartamento Santo Spirito (Via Maggio 18)',
+            cf: 'RSSMRA80A01D612X',
+            desc: 'Canone Mensile 99€ + Extra +10% Revenue Management & Adempimenti di Legge',
+            total: 441,
+            method: 'Stripe (Carta / Apple Pay)',
+            status: 'Pagata'
+          },
+          {
+            id: 'FATT-2026-104',
+            date: '30/10/2026',
+            client: 'Elena Guicciardini (Borgo San Jacopo)',
+            cf: 'GCCLNE75C41D612W',
+            desc: 'Canone Annuale Anticipato App itassistance (IVA inclusa)',
+            total: 1188,
+            method: 'Bonifico Bancario Blue Arroyo SRL',
+            status: 'Pagata'
+          },
+          {
+            id: 'FATT-2026-105',
+            date: '29/10/2026',
+            client: 'Marco Rinaldi (App. Santa Croce)',
+            cf: 'RNLMRC78B12D612K',
+            desc: 'Intervento Extra Check-in di persona Firenze (20€) + Manutenzione (30€)',
+            total: 50,
+            method: 'Stripe (Carta / Apple Pay)',
+            status: 'In attesa'
+          },
+          {
+            id: 'FATT-2026-106',
+            date: '25/10/2026',
+            client: 'Paolo Benvenuti (Prova 14 giorni)',
+            cf: 'BNVPLA82E10D612T',
+            desc: 'Canone Mensile App itassistance — Rimborso Garanzia 14 gg Soddisfatto o Rimborsato',
+            total: 99,
+            method: 'Stripe (Carta / Apple Pay)',
+            status: 'Rimborsata 14gg'
+          }
+        ],
+        accounts: [
+          {
+            id: 'a1',
+            name: 'Julian Herrera',
+            email: 'superadmin@itadreamteam.com',
+            role: '👑 Super Admin (Accesso Totale)',
+            modules: 'Tutti i moduli (Partners, HR, Fornitori, Fatturazione, Sicurezza)',
+            presetKey: 'superadmin'
+          },
+          {
+            id: 'a2',
+            name: 'Ufficio Fatturazione Blue Arroyo SRL',
+            email: 'fatturazione@itadreamteam.com',
+            role: '🧾 Admin Fatturazione',
+            modules: 'Fatture Attive/Passive, Piani 99€/1.188€, Extra +10%, Rimborsi 14gg, Export SDI',
+            presetKey: 'billing'
+          },
+          {
+            id: 'a3',
+            name: 'Coordinamento HR Firenze',
+            email: 'hr@itadreamteam.com',
+            role: '👥 HR & Team Manager',
+            modules: 'Anagrafica Dipendenti, Turni 09:00–23:00, Contratti e Buste Paga',
+            presetKey: 'hr'
+          },
+          {
+            id: 'a4',
+            name: 'Responsabile Rete Partners & Fornitori',
+            email: 'fornitori@itadreamteam.com',
+            role: '🤝 Partners & Fornitori Manager',
+            modules: 'Partner Commerciali, Ditte Pulizie, Lavanderie, Manutentori Firenze',
+            presetKey: 'partners'
+          }
+        ]
+      };
+    }
+
+    var admState = loadAdminState();
+
+    function loadAdminState() {
+      try {
+        var raw = localStorage.getItem(ADM_STORAGE_KEY);
+        if (raw) {
+          var p = JSON.parse(raw);
+          if (p && p.partners && p.hr && p.suppliers && p.invoices && p.accounts) return p;
+        }
+      } catch (e) {}
+      return getDefaultAdminData();
+    }
+
+    function saveAdminState() {
+      try {
+        localStorage.setItem(ADM_STORAGE_KEY, JSON.stringify(admState));
+      } catch (e) {}
+    }
+
+    function showToast(msg) {
+      var el = document.getElementById('adm-toast');
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(window._admToastTimer);
+      window._admToastTimer = setTimeout(function () {
+        el.classList.remove('show');
+      }, 3200);
+    }
+
+    function fmtEur(n) {
+      return Number(n || 0).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    }
+
+    function selectLoginPreset(presetKey) {
+      selectedPreset = presetKey;
+      ['superadmin', 'billing', 'hr', 'partners'].forEach(function (k) {
+        var btn = document.getElementById('preset-' + k);
+        if (btn) btn.classList.toggle('selected', k === presetKey);
+      });
+      var prof = ROLE_PROFILES[presetKey];
+      if (prof) {
+        document.getElementById('login-email').value = prof.email;
+      }
+    }
+
+    function performAdminLogin() {
+      admState.loggedIn = true;
+      admState.currentRole = selectedPreset || 'superadmin';
+      saveAdminState();
+      document.getElementById('login-screen').classList.add('hidden');
+      switchActiveRole(admState.currentRole);
+      showToast('✓ Accesso effettuato come ' + ROLE_PROFILES[admState.currentRole].badge);
+    }
+
+    function logoutAdmin() {
+      document.getElementById('login-screen').classList.remove('hidden');
+    }
+
+    function switchActiveRole(roleKey) {
+      var prof = ROLE_PROFILES[roleKey] || ROLE_PROFILES.superadmin;
+      admState.currentRole = roleKey;
+      saveAdminState();
+
+      document.getElementById('top-role-badge').textContent = prof.badge;
+      document.getElementById('side-role-label').textContent = prof.badge;
+      document.getElementById('side-user-name').textContent = prof.name;
+      document.getElementById('side-user-email').textContent = prof.email;
+      document.getElementById('quick-role-switch').value = roleKey;
+
+      switchAdminTab(prof.defaultTab);
+      showToast('Vista attiva: ' + prof.badge);
+    }
+
+    function switchAdminTab(tabId) {
+      document.querySelectorAll('.adm-view').forEach(function (v) {
+        v.classList.toggle('active', v.id === 'adm-' + tabId);
+      });
+      document.querySelectorAll('.side-btn, .mob-admin-btn').forEach(function (b) {
+        b.classList.toggle('active', b.getAttribute('data-tab') === tabId);
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleForm(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function renderAdminAll() {
+      // Counts
+      document.getElementById('cnt-partners').textContent = admState.partners.length;
+      document.getElementById('cnt-hr').textContent = admState.hr.length;
+      document.getElementById('cnt-fornitori').textContent = admState.suppliers.length;
+      document.getElementById('cnt-fatture').textContent = admState.invoices.length;
+      document.getElementById('cnt-accounts').textContent = admState.accounts.length;
+
+      // 1. Partners Table
+      var ptHtml = '';
+      var totalApts = 0;
+      admState.partners.forEach(function (p) {
+        totalApts += Number(p.apts || 0);
+        ptHtml += '<tr>' +
+          '<td><strong>' + p.name + '</strong></td>' +
+          '<td><span class="badge badge-info">' + p.type + '</span></td>' +
+          '<td>' + p.contact + '<br/><small style="color:var(--text-muted)">' + (p.vat || '') + '</small></td>' +
+          '<td><strong>' + p.apts + ' immobili</strong></td>' +
+          '<td>' + p.plan + '</td>' +
+          '<td>' + (p.active ? '<span class="badge badge-ok">✓ Attivo</span>' : '<span class="badge badge-warn">Sospeso</span>') + '</td>' +
+          '<td><button type="button" class="btn btn-outline btn-sm" onclick="togglePartnerStatus(\'' + p.id + '\')">' + (p.active ? 'Sospendi' : 'Attiva') + '</button></td>' +
+        '</tr>';
+      });
+      document.getElementById('tbody-partners').innerHTML = ptHtml;
+
+      // 2. HR Table
+      var hrHtml = '';
+      admState.hr.forEach(function (h) {
+        hrHtml += '<tr>' +
+          '<td><strong>' + h.name + '</strong><br/><small style="color:var(--text-muted)">' + h.phone + '</small></td>' +
+          '<td>' + h.role + '</td>' +
+          '<td><span class="badge badge-gold">' + h.contract + '</span></td>' +
+          '<td><strong>' + h.shift + '</strong></td>' +
+          '<td><strong>' + fmtEur(h.salary) + '</strong></td>' +
+          '<td>' + (h.paid ? '<span class="badge badge-ok">✓Saldato mese</span>' : '<span class="badge badge-warn">Da liquidare</span>') + '</td>' +
+          '<td><button type="button" class="btn btn-sm ' + (h.paid ? 'btn-outline' : 'btn-green') + '" onclick="toggleHrPaid(\'' + h.id + '\')">' + (h.paid ? 'Annulla' : '✓ Segna pagato') + '</button></td>' +
+        '</tr>';
+      });
+      document.getElementById('tbody-hr').innerHTML = hrHtml;
+
+      // 3. Suppliers Table
+      var supHtml = '';
+      admState.suppliers.forEach(function (s) {
+        supHtml += '<tr>' +
+          '<td><strong>' + s.name + '</strong><br/><small style="color:var(--text-muted)">' + s.contact + '</small></td>' +
+          '<td>' + s.category + '</td>' +
+          '<td><small>' + s.vat + '</small></td>' +
+          '<td>' + s.rate + '</td>' +
+          '<td><strong>' + fmtEur(s.amount) + '</strong></td>' +
+          '<td>' + (s.paid ? '<span class="badge badge-ok">✓ Fattura saldata</span>' : '<span class="badge badge-warn">Da bonificare</span>') + '</td>' +
+          '<td><button type="button" class="btn btn-sm ' + (s.paid ? 'btn-outline' : 'btn-green') + '" onclick="toggleSupplierPaid(\'' + s.id + '\')">' + (s.paid ? 'Riapri' : '✓ Liquida fornitore') + '</button></td>' +
+        '</tr>';
+      });
+      document.getElementById('tbody-suppliers').innerHTML = supHtml;
+
+      // 4. Invoices Table (Admin Fatturazione)
+      var invHtml = '';
+      var paidInvoicesTotal = 0;
+      admState.invoices.forEach(function (inv) {
+        var tot = Number(inv.total || 0);
+        if (inv.status === 'Pagata') paidInvoicesTotal += tot;
+        var net = tot / 1.22;
+        var vat = tot - net;
+
+        var statusBadge = '<span class="badge badge-ok">✓ Pagata</span>';
+        if (inv.status === 'In attesa') statusBadge = '<span class="badge badge-warn">⏳ In attesa</span>';
+        if (inv.status === 'Rimborsata 14gg') statusBadge = '<span class="badge badge-err">↺ Rimborsata (14gg)</span>';
+
+        invHtml += '<tr>' +
+          '<td><strong>' + inv.id + '</strong><br/><small style="color:var(--text-muted)">' + inv.date + '</small></td>' +
+          '<td><strong>' + inv.client + '</strong><br/><small style="color:var(--text-muted)">' + inv.cf + '</small></td>' +
+          '<td>' + inv.desc + '<br/><small style="color:var(--text-muted)">' + inv.method + '</small></td>' +
+          '<td>Imp: ' + fmtEur(net) + '<br/><small>IVA 22%: ' + fmtEur(vat) + '</small></td>' +
+          '<td><strong style="font-size:14px;">' + fmtEur(tot) + '</strong></td>' +
+          '<td>' + statusBadge + '</td>' +
+          '<td>' +
+            '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
+              '<button type="button" class="btn btn-primary btn-sm" onclick="downloadInvoicePDF(\'' + inv.id + '\')">📄 PDF</button>' +
+              (inv.status === 'In attesa' ? '<button type="button" class="btn btn-green btn-sm" onclick="markInvoicePaid(\'' + inv.id + '\')">✓ Incassa</button>' : '') +
+              (inv.status === 'Pagata' ? '<button type="button" class="btn btn-outline btn-sm" onclick="refundInvoice14Days(\'' + inv.id + '\')" title="Applica Garanzia 14 giorni Soddisfatto o Rimborsato">↺ Rimborso 14gg</button>' : '') +
+            '</div>' +
+          '</td>' +
+        '</tr>';
+      });
+      document.getElementById('tbody-invoices').innerHTML = invHtml;
+
+      // 5. Accounts Table
+      var accHtml = '';
+      admState.accounts.forEach(function (a) {
+        accHtml += '<tr>' +
+          '<td><strong>' + a.name + '</strong></td>' +
+          '<td><code>' + a.email + '</code></td>' +
+          '<td><span class="badge badge-gold">' + a.role + '</span></td>' +
+          '<td>' + a.modules + '</td>' +
+          '<td><span class="badge badge-ok">✓ Attivo</span></td>' +
+          '<td><button type="button" class="btn btn-outline btn-sm" onclick="switchActiveRole(\'' + (a.presetKey || 'superadmin') + '\')">Usa questo profilo →</button></td>' +
+        '</tr>';
+      });
+      document.getElementById('tbody-accounts').innerHTML = accHtml;
+
+      // Update Top Overview KPIs
+      document.getElementById('ov-partners').textContent = admState.partners.length + ' Partner (' + totalApts + ' imm.)';
+      document.getElementById('ov-hr').textContent = admState.hr.length + ' Risorse';
+      document.getElementById('ov-invoices').textContent = fmtEur(paidInvoicesTotal);
+      document.getElementById('ov-mrr').textContent = fmtEur(totalApts * 99 + 1677);
+    }
+
+    // Actions: Partners
+    function addPartner() {
+      var name = (document.getElementById('pt-name').value || '').trim();
+      var type = document.getElementById('pt-type').value;
+      var contact = (document.getElementById('pt-contact').value || '').trim();
+      var apts = parseInt(document.getElementById('pt-apts').value, 10) || 1;
+      var plan = document.getElementById('pt-plan').value;
+      var vat = (document.getElementById('pt-vat').value || '').trim();
+      if (!name) { alert('Inserisci il nome del Partner o Proprietario.'); return; }
+      admState.partners.unshift({
+        id: 'p_' + Date.now(),
+        name: name,
+        type: type,
+        contact: contact || 'Firenze',
+        vat: vat,
+        apts: apts,
+        plan: plan,
+        active: true
+      });
+      saveAdminState();
+      renderAdminAll();
+      toggleForm('form-new-partner');
+      showToast('✓ Nuovo Partner registrato.');
+    }
+
+    function togglePartnerStatus(id) {
+      admState.partners.forEach(function (p) { if (p.id === id) p.active = !p.active; });
+      saveAdminState();
+      renderAdminAll();
+      showToast('✓ Stato Partner aggiornato.');
+    }
+
+    // Actions: HR
+    function addHrMember() {
+      var name = (document.getElementById('hr-name').value || '').trim();
+      var role = document.getElementById('hr-role').value;
+      var contract = document.getElementById('hr-contract').value;
+      var shift = (document.getElementById('hr-shift').value || '').trim();
+      var salary = parseFloat(document.getElementById('hr-salary').value) || 1500;
+      var phone = (document.getElementById('hr-phone').value || '').trim();
+      if (!name) { alert('Inserisci nome e cognome della risorsa HR.'); return; }
+      admState.hr.unshift({
+        id: 'h_' + Date.now(),
+        name: name,
+        role: role,
+        contract: contract,
+        shift: shift || '09:00 – 17:00',
+        salary: salary,
+        phone: phone || 'Firenze',
+        paid: false
+      });
+      saveAdminState();
+      renderAdminAll();
+      toggleForm('form-new-hr');
+      showToast('✓ Risorsa HR aggiunta al team di Firenze.');
+    }
+
+    function toggleHrPaid(id) {
+      admState.hr.forEach(function (h) { if (h.id === id) h.paid = !h.paid; });
+      saveAdminState();
+      renderAdminAll();
+      showToast('✓ Stato pagamento compenso HR aggiornato.');
+    }
+
+    // Actions: Suppliers
+    function addSupplier() {
+      var name = (document.getElementById('sup-name').value || '').trim();
+      var cat = document.getElementById('sup-cat').value;
+      var vat = (document.getElementById('sup-vat').value || '').trim();
+      var rate = (document.getElementById('sup-rate').value || '').trim();
+      var amount = parseFloat(document.getElementById('sup-amount').value) || 0;
+      var contact = (document.getElementById('sup-contact').value || '').trim();
+      if (!name) { alert('Inserisci la ragione sociale del fornitore.'); return; }
+      admState.suppliers.unshift({
+        id: 's_' + Date.now(),
+        name: name,
+        category: cat,
+        vat: vat || 'P.IVA —',
+        rate: rate || 'Listino standard Firenze',
+        amount: amount,
+        contact: contact || 'Firenze',
+        paid: false
+      });
+      saveAdminState();
+      renderAdminAll();
+      toggleForm('form-new-supplier');
+      showToast('✓ Fornitore aggiunto all’albo di Firenze.');
+    }
+
+    function toggleSupplierPaid(id) {
+      admState.suppliers.forEach(function (s) { if (s.id === id) s.paid = !s.paid; });
+      saveAdminState();
+      renderAdminAll();
+      showToast('✓ Stato liquidazione fornitore aggiornato.');
+    }
+
+    // Actions: Billing / Invoices
+    function autoFillInvoiceAmount() {
+      var sel = document.getElementById('inv-desc');
+      var opt = sel.options[sel.selectedIndex];
+      var amt = opt ? opt.getAttribute('data-amt') : null;
+      if (amt) document.getElementById('inv-total').value = amt;
+    }
+
+    function createInvoice() {
+      var client = (document.getElementById('inv-client').value || '').trim();
+      var cf = (document.getElementById('inv-cf').value || '').trim();
+      var desc = document.getElementById('inv-desc').value;
+      var total = parseFloat(document.getElementById('inv-total').value) || 99;
+      var method = document.getElementById('inv-method').value;
+      var status = document.getElementById('inv-status').value;
+      if (!client) { alert('Inserisci il nome del cliente / proprietario.'); return; }
+      var nextNum = 101 + admState.invoices.length;
+      admState.invoices.unshift({
+        id: 'FATT-2026-' + nextNum,
+        date: new Date().toLocaleDateString('it-IT'),
+        client: client,
+        cf: cf || '—',
+        desc: desc,
+        total: total,
+        method: method,
+        status: status
+      });
+      saveAdminState();
+      renderAdminAll();
+      toggleForm('form-new-invoice');
+      showToast('✓ Fattura FATT-2026-' + nextNum + ' emessa con successo.');
+    }
+
+    function markInvoicePaid(invId) {
+      admState.invoices.forEach(function (i) { if (i.id === invId) i.status = 'Pagata'; });
+      saveAdminState();
+      renderAdminAll();
+      showToast('✓ Fattura ' + invId + ' registrata come Pagata.');
+    }
+
+    function refundInvoice14Days(invId) {
+      admState.invoices.forEach(function (i) { if (i.id === invId) i.status = 'Rimborsata 14gg'; });
+      saveAdminState();
+      renderAdminAll();
+      showToast('✓ Rimborso 100% (Garanzia 14 giorni Soddisfatto o Rimborsato) eseguito per ' + invId);
+    }
+
+    function downloadInvoicePDF(invId) {
+      var inv = admState.invoices.find(function (x) { return x.id === invId; });
+      if (!inv || typeof pdfMake === 'undefined') {
+        alert('Attendere il caricamento del motore PDF.');
+        return;
+      }
+      var tot = Number(inv.total || 0);
+      var net = (tot / 1.22).toFixed(2);
+      var vat = (tot - tot / 1.22).toFixed(2);
+
+      var docDef = {
+        pageSize: 'A4',
+        pageMargins: [40, 40, 40, 40],
+        content: [
+          {
+            columns: [
+              {
+                stack: [
+                  { text: 'itassistance', fontSize: 20, bold: true, color: '#111111' },
+                  { text: 'Blue Arroyo SRL', fontSize: 11, bold: true, margin: [0, 4, 0, 0] },
+                  { text: 'Via Matteo Palmieri 20r, 50122 Firenze (FI)', fontSize: 9.5, color: '#52525B' },
+                  { text: 'P.IVA / C.F.: IT07480210488', fontSize: 9.5, color: '#52525B' },
+                  { text: 'Email: info@itadreamteam.com · Tel: +39 351 038 0392', fontSize: 9, color: '#52525B' }
+                ]
+              },
+              {
+                alignment: 'right',
+                stack: [
+                  { text: inv.status === 'Rimborsata 14gg' ? 'NOTA DI CREDITO / RIMBORSO 14GG' : 'FATTURA / RICEVUTA', fontSize: 13, bold: true, color: '#9E7E28' },
+                  { text: 'Numero: ' + inv.id, fontSize: 11, bold: true, margin: [0, 4, 0, 0] },
+                  { text: 'Data emissione: ' + inv.date, fontSize: 9.5, color: '#52525B' },
+                  { text: 'Stato: ' + inv.status, fontSize: 9.5, bold: true, margin: [0, 2, 0, 0] }
+                ]
+              }
+            ]
+          },
+          { canvas: [{ type: 'rect', x: 0, y: 0, w: 515, h: 2, color: '#C9A84C' }], margin: [0, 14, 0, 18] },
+          { text: 'DESTINATARIO (PROPRIETARIO / PARTNER):', fontSize: 9, bold: true, color: '#52525B', margin: [0, 0, 0, 4] },
+          { text: inv.client, fontSize: 12, bold: true },
+          { text: 'C.F. / P.IVA: ' + inv.cf, fontSize: 10, margin: [0, 2, 0, 18] },
+          {
+            table: {
+              headerRows: 1,
+              widths: ['*', 80, 70, 90],
+              body: [
+                [
+                  { text: 'Descrizione Servizio', bold: true, fillColor: '#111111', color: '#FFFFFF', margin: [6, 6, 6, 6] },
+                  { text: 'Imponibile', bold: true, fillColor: '#111111', color: '#FFFFFF', margin: [6, 6, 6, 6], alignment: 'right' },
+                  { text: 'IVA 22%', bold: true, fillColor: '#111111', color: '#FFFFFF', margin: [6, 6, 6, 6], alignment: 'right' },
+                  { text: 'Totale IVA incl.', bold: true, fillColor: '#111111', color: '#FFFFFF', margin: [6, 6, 6, 6], alignment: 'right' }
+                ],
+                [
+                  { text: inv.desc, margin: [6, 8, 6, 8] },
+                  { text: net + ' €', margin: [6, 8, 6, 8], alignment: 'right' },
+                  { text: vat + ' €', margin: [6, 8, 6, 8], alignment: 'right' },
+                  { text: tot.toFixed(2) + ' €', bold: true, margin: [6, 8, 6, 8], alignment: 'right' }
+                ]
+              ]
+            }
+          },
+          {
+            margin: [0, 18, 0, 0],
+            text: 'Metodo di pagamento: ' + inv.method + '\nGaranzia applicata: 14 giorni Soddisfatto o Rimborsato (rimborso integrale 100% su richiesta entro 14 giorni dall’attivazione).',
+            fontSize: 9.5,
+            color: '#52525B'
+          }
+        ]
+      };
+      pdfMake.createPdf(docDef).download(inv.id + '_itassistance_BlueArroyoSRL.pdf');
+      showToast('✓ PDF Fattura ' + inv.id + ' scaricato.');
+    }
+
+    function exportBillingCSV() {
+      var rows = [['Numero Fattura', 'Data', 'Cliente', 'CF_PIVA', 'Descrizione', 'Imponibile EUR', 'IVA 22% EUR', 'Totale IVA Inclusa EUR', 'Metodo', 'Stato']];
+      admState.invoices.forEach(function (i) {
+        var tot = Number(i.total || 0);
+        var net = (tot / 1.22).toFixed(2);
+        var vat = (tot - tot / 1.22).toFixed(2);
+        rows.push([i.id, i.date, i.client, i.cf, i.desc, net, vat, tot.toFixed(2), i.method, i.status]);
+      });
+      var csv = rows.map(function (r) {
+        return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(';');
+      }).join('\n');
+      var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'Registro_Fatture_BlueArroyoSRL_itassistance.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('✓ Registro Fatture CSV esportato.');
+    }
+
+    function addAdminAccount() {
+      var name = (document.getElementById('acc-name').value || '').trim();
+      var email = (document.getElementById('acc-email').value || '').trim();
+      var role = document.getElementById('acc-role').value;
+      if (!name || !email) { alert('Inserisci nome ed email aziendale.'); return; }
+      admState.accounts.push({
+        id: 'a_' + Date.now(),
+        name: name,
+        email: email,
+        role: role,
+        modules: 'Accesso configurato da Super Admin',
+        presetKey: 'superadmin'
+      });
+      saveAdminState();
+      renderAdminAll();
+      toggleForm('form-new-admin');
+      showToast('✓ Nuovo account amministratore creato.');
+    }
+
+    function resetAdminDemoData() {
+      admState = getDefaultAdminData();
+      saveAdminState();
+      renderAdminAll();
+      showToast('✓ Dati dimostrativi Super Admin ripristinati.');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      renderAdminAll();
+      var params = new URLSearchParams(window.location.search);
+      var roleParam = params.get('role');
+      if (roleParam && ROLE_PROFILES[roleParam]) {
+        document.getElementById('login-screen').classList.add('hidden');
+        switchActiveRole(roleParam);
+      }
+    });
+  </script>
+</body>
+</html>
