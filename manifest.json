@@ -1,0 +1,26 @@
+{
+  "name": "itassistance — Area Proprietario Affitti Brevi",
+  "short_name": "itassistance",
+  "description": "Il tuo appartamento in affitto breve sotto controllo in 10 minuti al giorno. Report ore 08:00, Alloggiati Web, Tassa di Soggiorno Firenze, Pulizie e Prospetto Commercialista.",
+  "start_url": "/app.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0F2342",
+  "theme_color": "#0F2342",
+  "orientation": "portrait-primary",
+  "lang": "it-IT",
+  "icons": [
+    {
+      "src": "/brand/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/brand/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

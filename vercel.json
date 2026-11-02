@@ -1,6 +1,7 @@
 {
   "trailingSlash": false,
   "redirects": [
+    { "source": "/aprire-affitto-breve-firenze", "destination": "/come-aprire-affitto-breve-firenze-suap-cin-alloggiati.html", "permanent": true },
     { "source": "/guide", "destination": "/guide-affitti-brevi-firenze.html", "permanent": true },
     { "source": "/revenue-firenze", "destination": "/revenue-management-prezzi-affitti-brevi-firenze.html", "permanent": true },
     { "source": "/pulizie-firenze", "destination": "/pulizie-e-manutenzione-affitti-brevi-firenze.html", "permanent": true },

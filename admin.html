@@ -751,7 +751,7 @@
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
               <a href="/llms.txt" target="_blank" class="btn btn-outline btn-sm">📄 Vedi /llms.txt</a>
-              <a href="/sitemap.xml" target="_blank" class="btn btn-outline btn-sm">🗺️ Vedi Sitemap (21 URL)</a>
+              <a href="/sitemap.xml" target="_blank" class="btn btn-outline btn-sm">🗺️ Vedi Sitemap (22 URL)</a>
               <button type="button" class="btn btn-gold btn-sm" onclick="pingIndexNowAllUrls()">🚀 Notifica IndexNow (Bing / ChatGPT)</button>
             </div>
           </div>
@@ -858,10 +858,16 @@
                   <td><span class="badge badge-ok">✓ Dati AIGAB + Tabella Eventi</span></td>
                 </tr>
                 <tr>
-                  <td><strong>16. Hub Centrale Tutte le 14 Guide Affitti Brevi Firenze</strong></td>
+                  <td><strong>16. Hub Centrale Tutte le Guide Affitti Brevi Firenze</strong></td>
                   <td><a href="/guide-affitti-brevi-firenze.html" target="_blank" style="text-decoration:underline;">/guide-affitti-brevi-firenze.html</a></td>
                   <td><a href="https://www.perplexity.ai/search?q=guide+complete+affitti+brevi+firenze+cin+alloggiati+tassa+soggiorno+itassistance" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:700;">🔍 Perplexity</a> · <a href="https://www.google.com/search?q=guide+affitti+brevi+firenze+itassistance" target="_blank" rel="noopener" style="text-decoration:underline;">Google</a></td>
                   <td><span class="badge badge-ok">✓ CollectionPage + ItemList</span></td>
+                </tr>
+                <tr>
+                  <td><strong>17. Come Aprire un Affitto Breve a Firenze (SUAP, Ross1000, CIN)</strong></td>
+                  <td><a href="/come-aprire-affitto-breve-firenze-suap-cin-alloggiati.html" target="_blank" style="text-decoration:underline;">/come-aprire-affitto-breve-firenze-suap-cin-alloggiati.html</a></td>
+                  <td><a href="https://www.perplexity.ai/search?q=come+aprire+affitto+breve+locazione+turistica+firenze+suap+ross1000+cin+alloggiati" target="_blank" rel="noopener" style="text-decoration:underline;font-weight:700;">🔍 Perplexity</a> · <a href="https://www.google.com/search?q=come+aprire+affitto+breve+firenze+suap+cin+itassistance" target="_blank" rel="noopener" style="text-decoration:underline;">Google</a></td>
+                  <td><span class="badge badge-ok">✓ HowTo 5 Passi + FAQPage</span></td>
                 </tr>
               </tbody>
             </table>
@@ -2194,7 +2200,7 @@ P.IVA: 07480210488</div>
       var st = document.getElementById('adm-indexnow-status');
       if (st) {
         st.style.display = 'block';
-        st.textContent = 'Invio notifica IndexNow per le 21 URL pubbliche a Bing / ChatGPT Search / Copilot...';
+        st.textContent = 'Invio notifica IndexNow per le 22 URL pubbliche a Bing / ChatGPT Search / Copilot...';
       }
       var urls = [
         'https://www.itadreamteam.com/',
@@ -2203,6 +2209,7 @@ P.IVA: 07480210488</div>
         'https://www.itadreamteam.com/chi-siamo.html',
         'https://www.itadreamteam.com/partner.html',
         'https://www.itadreamteam.com/guide-affitti-brevi-firenze.html',
+        'https://www.itadreamteam.com/come-aprire-affitto-breve-firenze-suap-cin-alloggiati.html',
         'https://www.itadreamteam.com/faq-affitti-brevi-firenze.html',
         'https://www.itadreamteam.com/calcola-risparmio.html',
         'https://www.itadreamteam.com/affitti-brevi-centro-storico-firenze-quartieri.html',
@@ -2232,9 +2239,9 @@ P.IVA: 07480210488</div>
         });
       } catch (e) {}
       if (st) {
-        st.textContent = '✓ Ping IndexNow completato per 21 URL pubbliche (' + new Date().toLocaleTimeString('it-IT') + ') · SEO/GEO: ok';
+        st.textContent = '✓ Ping IndexNow completato per 22 URL pubbliche (' + new Date().toLocaleTimeString('it-IT') + ') · SEO/GEO: ok';
       }
-      showToast('✓ Notifica IndexNow inviata per tutte le 21 pagine pubbliche!');
+      showToast('✓ Notifica IndexNow inviata per tutte le 22 pagine pubbliche!');
     }
 
     function exportFullSystemBackupJSON() {
