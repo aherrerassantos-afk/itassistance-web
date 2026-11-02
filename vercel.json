@@ -1,6 +1,9 @@
 {
   "trailingSlash": false,
   "redirects": [
+    { "source": "/portal.html", "destination": "/app.html", "permanent": true },
+    { "source": "/portal", "destination": "/app.html", "permanent": true },
+    { "source": "/area-proprietario", "destination": "/app.html", "permanent": true },
     { "source": "/assistenza-ospiti-airbnb-firenze.html", "destination": "/gestire-affitto-breve-senza-property-manager.html", "permanent": true },
     { "source": "/assistenza-ospiti-airbnb-firenze", "destination": "/gestire-affitto-breve-senza-property-manager.html", "permanent": true },
     { "source": "/check-in-airbnb-firenze.html", "destination": "/registrazione-ospiti-alloggiati-web.html", "permanent": true },

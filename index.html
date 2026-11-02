@@ -1353,10 +1353,10 @@
         <a href="#cosa-gestisce">Cosa gestisce l'app</a>
         <a href="#confronto">Calcola il risparmio</a>
         <a href="#prezzo">Prezzo</a>
-        <a href="#faq">Domande frequenti</a>
+        <a href="/app.html" style="color:var(--navy);font-weight:700;">Area Proprietario</a>
       </nav>
       <div class="nav-actions">
-        <a href="https://wa.me/393510380392?text=Ciao%20itassistance%2C%20vorrei%20informazioni%20sull%27app" target="_blank" rel="noopener" class="btn btn-outline btn-sm" onclick="trackSiteEvent('click_whatsapp',{location:'navbar'})">WhatsApp</a>
+        <a href="/app.html" class="btn btn-outline btn-sm">📱 Apri Area App</a>
         <a href="/checkout.html" class="btn btn-primary btn-sm" onclick="trackSiteEvent('click_prova_app',{location:'navbar'})">Prova l'app</a>
       </div>
     </div>
@@ -1413,39 +1413,39 @@
                 <div class="app-greeting">Buongiorno proprietario · Appartamento Firenze</div>
                 <div class="app-report-title">📋 Report del giorno (3 azioni · ~8 min)</div>
 
-                <div class="app-task">
+                <div class="app-task" style="cursor:pointer;" onclick="window.location.href='/app.html?tab=alloggiati'">
                   <div class="app-task-head">
                     <span>1 · Obbligo di Legge</span>
                     <span class="app-task-badge">Da fare entro le 14:00</span>
                   </div>
                   <div class="app-task-title">Registra 2 ospiti su Alloggiati Web</div>
                   <div class="app-task-sub">Check-in ieri sera (Fam. Martin). Documenti già verificati e pronti per l'invio alla Polizia di Stato.</div>
-                  <span class="app-task-btn">Segui guida e invia schedina (3 min) →</span>
+                  <a href="/app.html?tab=alloggiati" class="app-task-btn">Segui guida e invia schedina (3 min) →</a>
                 </div>
 
-                <div class="app-task">
+                <div class="app-task" style="cursor:pointer;" onclick="window.location.href='/app.html?tab=fornitori'">
                   <div class="app-task-head">
                     <span>2 · Fornitori &amp; Operatività</span>
                     <span class="app-task-badge">Da confermare</span>
                   </div>
                   <div class="app-task-title">Approva spesa pulizia e cambio biancheria</div>
                   <div class="app-task-sub">Turnover completato con foto verifica. Importo fornitore: 45,00 €.</div>
-                  <span class="app-task-btn">Registra pagamento fornitore (1 tap) →</span>
+                  <a href="/app.html?tab=fornitori" class="app-task-btn">Registra pagamento fornitore (1 tap) →</a>
                 </div>
 
-                <div class="app-task done">
+                <div class="app-task done" style="cursor:pointer;" onclick="window.location.href='/app.html?tab=fiscale'">
                   <div class="app-task-head">
                     <span>3 · Fiscale &amp; Comune di Firenze</span>
                     <span class="app-task-badge">✓ Già calcolato</span>
                   </div>
                   <div class="app-task-title">Tassa di soggiorno mese corrente</div>
-                  <div class="app-task-sub">14 pernottamenti registrati. Prossima scadenza dichiarazione: giorno 15 del mese.</div>
+                  <div class="app-task-sub">14 pernottamenti registrati. Prossima scadenza dichiarazione: giorno 16 del mese.</div>
                 </div>
 
-                <div class="app-summary-bar">
-                  <span>Stato appartamento:</span>
-                  <strong>✓ In regola oggi</strong>
-                </div>
+                <a href="/app.html" class="app-summary-bar" style="display:flex;text-decoration:none;">
+                  <span>Apri Area Proprietario interattiva:</span>
+                  <strong>Entra nell'App →</strong>
+                </a>
               </div>
             </div>
           </div>
@@ -1995,6 +1995,7 @@
         <div>
           <div class="footer-title">Prodotto &amp; Condizioni</div>
           <ul class="footer-links">
+            <li><a href="/app.html"><strong>📱 Area Dedicata Proprietario (App)</strong></a></li>
             <li><a href="/prezzi.html">Prezzo e confronto (99 €/mese IVA incl.)</a></li>
             <li><a href="/checkout.html">Prova l'app (14 gg Soddisfatto o Rimborsato)</a></li>
             <li><a href="/contratto.html">Termini di Servizio e Condizioni</a></li>

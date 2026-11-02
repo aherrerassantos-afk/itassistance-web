@@ -7,6 +7,12 @@
     <changefreq>weekly</changefreq>
   </url>
   <url>
+    <loc>https://www.itadreamteam.com/app.html</loc>
+    <lastmod>2026-11-02</lastmod>
+    <priority>0.95</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
     <loc>https://www.itadreamteam.com/prezzi.html</loc>
     <lastmod>2026-11-02</lastmod>
     <priority>0.95</priority>
