@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="it" id="html-root">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Online Check-in &amp; Istruzioni Appartamento · Firenze | itassistance</title>
+  <meta name="description" content="Modulo di registrazione ospiti online (art. 109 TULPS Alloggiati Web) e download istruzioni di check-in per il tuo soggiorno a Firenze."/>
+  <meta name="robots" content="noindex, nofollow"/>
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
+
+  <script src="/site-config.js"></script>
+  <script src="/cloud-sync.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.min.js" defer></script>
+
+  <style>
+    :root {
+      --navy: #111111;
+      --gold: #C9A84C;
+      --gold-dark: #9E7E28;
+      --gold-light: #FBF7EC;
+      --bg: #F6F6F3;
+      --card: #FFFFFF;
+      --text: #1A1A1A;
+      --text-muted: #52525B;
+      --border: #E4E4E7;
+      --green: #15803D;
+      --green-bg: #DCFCE7;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      padding-bottom: 60px;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .header {
+      background: var(--navy);
+      color: #fff;
+      padding: 14px 20px;
+      border-bottom: 2px solid var(--gold);
+    }
+    .header-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 18px;
+      color: #fff;
+    }
+    .brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #fff;
+      padding: 2px;
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(201, 168, 76, 0.5);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .lang-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.75);
+      padding: 7px 12px;
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .lang-btn.active {
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    .wrap {
+      max-width: 780px;
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+
+    .apt-banner {
+      background: var(--navy);
+      color: #fff;
+      border-radius: 14px;
+      padding: 24px;
+      border: 1.5px solid var(--gold);
+      margin-bottom: 20px;
+    }
+    .apt-banner small {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .apt-banner h1 {
+      font-family: var(--serif);
+      font-size: clamp(24px, 3.5vw, 32px);
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+    .apt-banner p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(17, 17, 17, 0.05);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 5px;
+    }
+    .field input, .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 22px;
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+    }
+    .btn-gold { background: var(--gold); color: var(--navy); }
+    .btn-gold:hover { background: #b8963c; }
+    .btn-primary { background: var(--navy); color: #fff; }
+
+    .success-box {
+      display: none;
+      background: var(--green-bg);
+      border: 1.5px solid var(--green);
+      color: #14532D;
+      border-radius: 12px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+    .success-box.show { display: block; }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <img src="/brand/logo.png" alt="Logo itassistance"/>
+        <span>itassistance · Firenze</span>
+      </div>
+      <div class="lang-switch" role="group" aria-label="Language selector">
+        <button type="button" class="lang-btn active" id="btn-lang-it" onclick="setGuestLang('it')">🇮🇹 Italiano</button>
+        <button type="button" class="lang-btn" id="btn-lang-en" onclick="setGuestLang('en')">🇬🇧 English</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- INTESTAZIONE APPARTAMENTO -->
+    <section class="apt-banner">
+      <small id="lbl-eyebrow">REGISTRAZIONE OSPITI OBBLIGATORIA PER LEGGE (ART. 109 TULPS)</small>
+      <h1 id="lbl-apt-title">Check-in Online — Appartamento Santo Spirito</h1>
+      <p id="lbl-apt-sub">
+        In Italia la legge richiede a ogni struttura ricettiva di comunicare i dati del documento di identità degli ospiti alla Polizia di Stato (Alloggiati Web). Compila i dati qui sotto per sbloccare subito le istruzioni di accesso e il Wi-Fi.
+      </p>
+    </section>
+
+    <!-- BOX CONFERMA DOPO L'INVIO (SBLOCCA IL PDF CHECK-IN) -->
+    <section class="success-box" id="guest-success-box">
+      <h2 id="lbl-ok-title" style="font-size:20px;margin-bottom:6px;">✓ Documenti registrati con successo!</h2>
+      <p id="lbl-ok-desc" style="font-size:14px;margin-bottom:14px;">
+        I tuoi dati sono stati inviati al proprietario per la registrazione su Alloggiati Web. Ora puoi scaricare il PDF con l'indirizzo, i codici di accesso e la password Wi-Fi.
+      </p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button type="button" class="btn btn-primary" onclick="downloadGuestCheckinPdf()">
+          📄 <span id="lbl-btn-pdf">Scarica PDF Istruzioni Check-in</span>
+        </button>
+        <a href="/app.html?tab=alloggiati" class="btn btn-gold" style="font-size:13px;">
+          👁️ Vedi dati precompilati nell'Area Proprietario →
+        </a>
+      </div>
+    </section>
+
+    <!-- MODULO DATI DOCUMENTO OSPITE -->
+    <section class="card">
+      <h2 id="lbl-form-title" style="font-family:var(--serif);font-size:21px;color:var(--navy);margin-bottom:14px;">
+        Dati Documento Ospite Principale
+      </h2>
+
+      <div class="form-grid">
+        <div class="field">
+          <label id="lbl-f-tipo" for="g-tipo">Tipo Ospite *</label>
+          <select id="g-tipo">
+            <option value="17" id="opt-family">Capofamiglia / Ospite Principale</option>
+            <option value="16" id="opt-single">Ospite Singolo</option>
+            <option value="18" id="opt-group">Capogruppo</option>
+          </select>
+        </div>
+        <div class="field">
+          <label id="lbl-f-pax" for="g-pax">Numero Totale Ospiti *</label>
+          <input type="number" id="g-pax" value="2" min="1" max="12"/>
+        </div>
+        <div class="field">
+          <label id="lbl-f-arrivo" for="g-arrivo">Data di Check-in *</label>
+          <input type="date" id="g-arrivo"/>
+        </div>
+        <div class="field">
+          <label id="lbl-f-giorni" for="g-giorni">Numero di Notti *</label>
+          <input type="number" id="g-giorni" value="3" min="1" max="30"/>
+        </div>
+        <div class="field">
+          <label id="lbl-f-nome" for="g-nome">Nome (come sul documento) *</label>
+          <input type="text" id="g-nome" placeholder="es. Jean Luc"/>
+        </div>
+        <div class="field">
+          <label id="lbl-f-cognome" for="g-cognome">Cognome (come sul documento) *</label>
+          <input type="text" id="g-cognome" placeholder="es. Martin"/>
+        </div>
+        <div class="field">
+          <label id="lbl-f-sesso" for="g-sesso">Sesso *</label>
+          <select id="g-sesso">
+            <option value="M">M</option>
+            <option value="F">F</option>
+          </select>
+        </div>
+        <div class="field">
+          <label id="lbl-f-nascita" for="g-nascita">Data di Nascita *</label>
+          <input type="date" id="g-nascita" value="1986-04-18"/>
+        </div>
+        <div class="field">
+          <label id="lbl-f-citt" for="g-citt">Cittadinanza e Stato di Nascita *</label>
+          <input type="text" id="g-citt" value="FRANCIA" placeholder="es. ITALIA / FRANCE / USA"/>
+        </div>
+        <div class="field">
+          <label id="lbl-f-doctipo" for="g-doctipo">Tipo di Documento *</label>
+          <select id="g-doctipo">
+            <option value="PASOR">Passaporto (PASOR)</option>
+            <option value="IDENT">Carta d'Identità UE (IDENT)</option>
+            <option value="PATEN">Patente di Guida (PATEN)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label id="lbl-f-docnum" for="g-docnum">Numero Documento *</label>
+          <input type="text" id="g-docnum" placeholder="es. 22CF89102"/>
+        </div>
+        <div class="field">
+          <label id="lbl-f-docluogo" for="g-docluogo">Luogo / Stato di Rilascio *</label>
+          <input type="text" id="g-docluogo" value="FRANCIA" placeholder="es. FRANCIA o FIRENZE"/>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;font-size:12px;color:var(--text-muted);" id="lbl-privacy">
+        🔒 I tuoi dati vengono trattati esclusivamente per l'adempimento di legge previsto dall'art. 109 TULPS (Portale Alloggiati Web della Polizia di Stato) e non vengono ceduti a terzi per fini commerciali.
+      </div>
+
+      <div style="margin-top:18px;">
+        <button type="button" class="btn btn-gold" style="width:100%;padding:14px;" onclick="submitGuestSelfCheckin()">
+          <span id="lbl-btn-submit">✓ Invia Dati Documento e Sblocca Istruzioni Check-in</span>
+        </button>
+      </div>
+    </section>
+
+    <footer style="text-align:center;font-size:12px;color:var(--text-muted);">
+      <span id="lbl-footer-support">Assistenza Ospiti Firenze (09:00–23:00): +39 351 038 0392 · info@itadreamteam.com</span><br/>
+      Blue Arroyo SRL · P.IVA 07480210488 · Via Matteo Palmieri 20r, 50122 Firenze (FI)
+    </footer>
+  </main>
+
+  <script>
+    var currentLang = 'it';
+    var aptInfo = {
+      name: 'Appartamento Santo Spirito',
+      address: 'Via Maggio 18, 50125 Firenze',
+      doorCode: 'Keybox 4829 a sinistra del portone',
+      floor: 'Secondo piano',
+      wifi: 'Fibra-SantoSpirito',
+      pass: 'Firenze2026!',
+      checkout: 'Entro le ore 10:00'
+    };
+
+    var I18N = {
+      it: {
+        eyebrow: 'REGISTRAZIONE OSPITI OBBLIGATORIA PER LEGGE (ART. 109 TULPS)',
+        aptTitlePrefix: 'Check-in Online — ',
+        aptSub: 'In Italia la legge richiede a ogni struttura ricettiva di comunicare i dati del documento di identità degli ospiti alla Polizia di Stato (Alloggiati Web). Compila i dati qui sotto per sbloccare subito le istruzioni di accesso e il Wi-Fi.',
+        formTitle: 'Dati Documento Ospite Principale',
+        fTipo: 'Tipo Ospite *',
+        optFamily: 'Capofamiglia / Ospite Principale',
+        optSingle: 'Ospite Singolo',
+        optGroup: 'Capogruppo',
+        fPax: 'Numero Totale Ospiti *',
+        fArrivo: 'Data di Check-in *',
+        fGiorni: 'Numero di Notti *',
+        fNome: 'Nome (come sul documento) *',
+        fCognome: 'Cognome (come sul documento) *',
+        fSesso: 'Sesso *',
+        fNascita: 'Data di Nascita *',
+        fCitt: 'Cittadinanza e Stato di Nascita *',
+        fDocTipo: 'Tipo di Documento *',
+        fDocNum: 'Numero Documento *',
+        fDocLuogo: 'Luogo / Stato di Rilascio *',
+        privacy: '🔒 I tuoi dati vengono trattati esclusivamente per l’adempimento di legge previsto dall’art. 109 TULPS (Portale Alloggiati Web della Polizia di Stato).',
+        btnSubmit: '✓ Invia Dati Documento e Sblocca Istruzioni Check-in',
+        okTitle: '✓ Documenti registrati con successo!',
+        okDesc: 'I tuoi dati sono stati inviati al proprietario per la registrazione su Alloggiati Web. Ora puoi scaricare il PDF con l’indirizzo, i codici di accesso e la password Wi-Fi.',
+        btnPdf: 'Scarica PDF Istruzioni Check-in (🇮🇹)',
+        footerSupport: 'Assistenza Ospiti Firenze (Tutti i giorni 09:00–23:00): +39 351 038 0392 · info@itadreamteam.com'
+      },
+      en: {
+        eyebrow: 'MANDATORY GUEST REGISTRATION BY ITALIAN LAW (ART. 109 TULPS)',
+        aptTitlePrefix: 'Online Check-in — ',
+        aptSub: 'Italian law requires all short-term rentals to register guest ID details with the State Police (Alloggiati Web) within 24 hours of arrival. Complete the form below to immediately unlock your apartment access instructions and Wi-Fi.',
+        formTitle: 'Primary Guest ID Details',
+        fTipo: 'Guest Type *',
+        optFamily: 'Head of Family / Main Guest',
+        optSingle: 'Single Guest',
+        optGroup: 'Group Leader',
+        fPax: 'Total Number of Guests *',
+        fArrivo: 'Check-in Date *',
+        fGiorni: 'Number of Nights *',
+        fNome: 'First Name (as shown on passport/ID) *',
+        fCognome: 'Last Name / Surname *',
+        fSesso: 'Gender *',
+        fNascita: 'Date of Birth *',
+        fCitt: 'Citizenship & Country of Birth *',
+        fDocTipo: 'Document Type *',
+        fDocNum: 'Passport / ID Number *',
+        fDocLuogo: 'Issuing Country / Authority *',
+        privacy: '🔒 Your data is processed solely for mandatory registration with the Italian State Police (Alloggiati Web, art. 109 TULPS).',
+        btnSubmit: '✓ Submit ID Details & Unlock Check-in Instructions',
+        okTitle: '✓ ID Details Successfully Registered!',
+        okDesc: 'Your details have been sent to the property owner. You can now download your Check-in Instructions PDF with address, keybox code and Wi-Fi.',
+        btnPdf: 'Download Check-in Instructions PDF (🇬🇧)',
+        footerSupport: 'Florence Guest Support (Every day 09:00 AM – 11:00 PM): +39 351 038 0392 · info@itadreamteam.com'
+      }
+    };
+
+    function setGuestLang(lang) {
+      currentLang = (lang === 'en') ? 'en' : 'it';
+      document.getElementById('html-root').setAttribute('lang', currentLang);
+      document.getElementById('btn-lang-it').classList.toggle('active', currentLang === 'it');
+      document.getElementById('btn-lang-en').classList.toggle('active', currentLang === 'en');
+
+      var t = I18N[currentLang];
+      document.getElementById('lbl-eyebrow').textContent = t.eyebrow;
+      document.getElementById('lbl-apt-title').textContent = t.aptTitlePrefix + aptInfo.name;
+      document.getElementById('lbl-apt-sub').textContent = t.aptSub;
+      document.getElementById('lbl-form-title').textContent = t.formTitle;
+      document.getElementById('lbl-f-tipo').textContent = t.fTipo;
+      document.getElementById('opt-family').textContent = t.optFamily;
+      document.getElementById('opt-single').textContent = t.optSingle;
+      document.getElementById('opt-group').textContent = t.optGroup;
+      document.getElementById('lbl-f-pax').textContent = t.fPax;
+      document.getElementById('lbl-f-arrivo').textContent = t.fArrivo;
+      document.getElementById('lbl-f-giorni').textContent = t.fGiorni;
+      document.getElementById('lbl-f-nome').textContent = t.fNome;
+      document.getElementById('lbl-f-cognome').textContent = t.fCognome;
+      document.getElementById('lbl-f-sesso').textContent = t.fSesso;
+      document.getElementById('lbl-f-nascita').textContent = t.fNascita;
+      document.getElementById('lbl-f-citt').textContent = t.fCitt;
+      document.getElementById('lbl-f-doctipo').textContent = t.fDocTipo;
+      document.getElementById('lbl-f-docnum').textContent = t.fDocNum;
+      document.getElementById('lbl-f-docluogo').textContent = t.fDocLuogo;
+      document.getElementById('lbl-privacy').textContent = t.privacy;
+      document.getElementById('lbl-btn-submit').textContent = t.btnSubmit;
+      document.getElementById('lbl-ok-title').textContent = t.okTitle;
+      document.getElementById('lbl-ok-desc').textContent = t.okDesc;
+      document.getElementById('lbl-btn-pdf').textContent = t.btnPdf;
+      document.getElementById('lbl-footer-support').textContent = t.footerSupport;
+    }
+
+    async function submitGuestSelfCheckin() {
+      var nome = (document.getElementById('g-nome').value || '').trim();
+      var cognome = (document.getElementById('g-cognome').value || '').trim();
+      var docNum = (document.getElementById('g-docnum').value || '').trim();
+
+      if (!nome || !cognome || !docNum) {
+        alert(currentLang === 'en'
+          ? 'Please enter your First Name, Last Name and Passport/ID Number.'
+          : 'Inserisci Nome, Cognome e Numero di Documento.');
+        return;
+      }
+
+      var payload = {
+        tipo: document.getElementById('g-tipo').value,
+        ospitiTotali: document.getElementById('g-pax').value,
+        arrivo: document.getElementById('g-arrivo').value,
+        giorni: document.getElementById('g-giorni').value,
+        nome: nome,
+        cognome: cognome,
+        sesso: document.getElementById('g-sesso').value,
+        nascita: document.getElementById('g-nascita').value,
+        cittadinanza: document.getElementById('g-citt').value,
+        docTipo: document.getElementById('g-doctipo').value,
+        docNum: docNum,
+        docLuogo: document.getElementById('g-docluogo').value
+      };
+
+      if (window.ITACloudSync && typeof ITACloudSync.saveGuestCheckinSubmission === 'function') {
+        await ITACloudSync.saveGuestCheckinSubmission(payload);
+      }
+
+      document.getElementById('guest-success-box').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function downloadGuestCheckinPdf() {
+      if (typeof pdfMake === 'undefined') return;
+      var isEN = currentLang === 'en';
+      var rows = [
+        { text: [{ text: isEN ? 'Apartment: ' : 'Appartamento: ', bold: true }, aptInfo.name], margin: [0, 0, 0, 6] },
+        { text: [{ text: isEN ? 'Address: ' : 'Indirizzo: ', bold: true }, aptInfo.address], margin: [0, 0, 0, 6] }
+      ];
+      if (aptInfo.doorCode) rows.push({ text: [{ text: isEN ? 'Access / Keybox: ' : 'Codice Accesso / Keybox: ', bold: true }, aptInfo.doorCode], margin: [0, 0, 0, 6] });
+      if (aptInfo.floor) rows.push({ text: [{ text: isEN ? 'Floor: ' : 'Piano: ', bold: true }, aptInfo.floor], margin: [0, 0, 0, 6] });
+      if (aptInfo.wifi) rows.push({ text: [{ text: 'Wi-Fi: ', bold: true }, aptInfo.wifi + (aptInfo.pass ? ' (Password: ' + aptInfo.pass + ')' : '')], margin: [0, 0, 0, 6] });
+      if (aptInfo.checkout) rows.push({ text: [{ text: 'Check-out: ', bold: true }, aptInfo.checkout], margin: [0, 0, 0, 6] });
+
+      var docDef = {
+        pageSize: 'A4',
+        pageMargins: [40, 40, 40, 40],
+        content: [
+          { text: isEN ? 'CHECK-IN INSTRUCTIONS · FLORENCE' : 'ISTRUZIONI DI CHECK-IN · FIRENZE', fontSize: 16, bold: true, color: '#111111', margin: [0, 0, 0, 12] },
+          { stack: rows, fontSize: 11 },
+          {
+            margin: [0, 20, 0, 0],
+            text: isEN
+              ? 'itassistance Guest Support · Florence (09:00 AM – 11:00 PM): +39 351 038 0392 · info@itadreamteam.com'
+              : 'Assistenza Ospiti itassistance · Firenze (09:00 – 23:00): +39 351 038 0392 · info@itadreamteam.com',
+            fontSize: 9.5,
+            color: '#52525B'
+          }
+        ]
+      };
+      pdfMake.createPdf(docDef).download((isEN ? 'Checkin_' : 'Istruzioni_') + aptInfo.name.replace(/\s+/g, '_') + '.pdf');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('g-arrivo').value = new Date().toISOString().slice(0, 10);
+      try {
+        var raw = localStorage.getItem('itassistance_owner_app_v1');
+        if (raw) {
+          var st = JSON.parse(raw);
+          if (st && st.apartment) {
+            aptInfo = Object.assign(aptInfo, st.apartment);
+          }
+        }
+      } catch (e) {}
+
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('apt')) aptInfo.name = params.get('apt');
+      if (params.get('lang') === 'en') setGuestLang('en');
+      else setGuestLang('it');
+    });
+  </script>
+</body>
+</html>

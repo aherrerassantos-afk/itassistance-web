@@ -378,6 +378,79 @@
     };
   }
 
+  // Punto 3: Ricezione dati documento ospite dal Self Check-in (/ospiti.html) -> precompila Alloggiati Web in /app.html
+  async function saveGuestCheckinSubmission(guestData) {
+    var g = guestData || {};
+    var fullName = ((g.nome || '') + ' ' + (g.cognome || '')).trim() || 'Ospite';
+
+    try {
+      var rawOwner = localStorage.getItem(OWNER_KEY);
+      var state = rawOwner ? JSON.parse(rawOwner) : null;
+      if (state) {
+        state.lastGuestDoc = {
+          tipo: g.tipo || '17',
+          arrivo: g.arrivo || new Date().toISOString().slice(0, 10),
+          giorni: Number(g.giorni || 3),
+          cognome: (g.cognome || '').toUpperCase(),
+          nome: (g.nome || '').toUpperCase(),
+          sesso: g.sesso || 'M',
+          nascita: g.nascita || '1985-01-01',
+          cittadinanza: (g.cittadinanza || 'ITALIA').toUpperCase(),
+          docTipo: g.docTipo || 'PASOR',
+          docNum: (g.docNum || '').toUpperCase(),
+          docLuogo: (g.docLuogo || 'ITALIA').toUpperCase(),
+          submittedAt: new Date().toLocaleString('it-IT')
+        };
+
+        // Aggiunge o aggiorna la prenotazione corrispondente
+        state.bookings = state.bookings || [];
+        var existing = state.bookings.find(function (b) {
+          return b.guest && b.guest.toLowerCase().indexOf((g.cognome || '').toLowerCase()) !== -1;
+        });
+
+        if (existing) {
+          existing.guestDocVerified = true;
+          existing.guestDocData = state.lastGuestDoc;
+        } else {
+          state.bookings.unshift({
+            id: 'b_' + Date.now(),
+            guest: fullName,
+            channel: 'Self Check-in Web',
+            guests: Number(g.ospitiTotali || 2),
+            checkin: state.lastGuestDoc.arrivo,
+            checkout: state.lastGuestDoc.arrivo,
+            nights: state.lastGuestDoc.giorni,
+            amount: Number(g.giorni || 3) * 190,
+            alloggiatiSent: false,
+            guestDocVerified: true,
+            guestDocData: state.lastGuestDoc,
+            cleaningStatus: 'Programmata 11:00',
+            cleaner: 'Elena Pulizie Firenze',
+            cleaningCost: 45
+          });
+        }
+
+        // Aggiorna la task Alloggiati Web nel Report del Giorno
+        state.tasks = state.tasks || [];
+        state.tasks.unshift({
+          id: 't_guest_' + Date.now(),
+          time: '🛂 Documenti Ospite Ricevuti · Pronti per Alloggiati Web',
+          title: 'Invia schedina Alloggiati Web per ' + fullName + ' (dati già precompilati)',
+          desc: 'Documento ' + state.lastGuestDoc.docTipo + ' n. ' + state.lastGuestDoc.docNum + ' ricevuto dal link Self Check-in.',
+          done: false,
+          actionTab: 'alloggiati',
+          actionLabel: 'Apri schedina precompilata →'
+        });
+
+        localStorage.setItem(OWNER_KEY, JSON.stringify(state));
+        await syncSnapshotToSupabase('guest_self_checkin', state);
+      }
+    } catch (e) {}
+
+    broadcastStateChange('guest_checkin_submitted', { guest: fullName, docNum: g.docNum });
+    return { ok: true, guest: fullName };
+  }
+
   root.ITACloudSync = {
     syncSnapshotToSupabase: syncSnapshotToSupabase,
     broadcastStateChange: broadcastStateChange,
@@ -386,6 +459,7 @@
     dispatchDailyReport0800: dispatchDailyReport0800,
     pushTaskFromAdminToOwner: pushTaskFromAdminToOwner,
     getReportLogs: getReportLogs,
-    activateNewOwnerFromCheckout: activateNewOwnerFromCheckout
+    activateNewOwnerFromCheckout: activateNewOwnerFromCheckout,
+    saveGuestCheckinSubmission: saveGuestCheckinSubmission
   };
 })(typeof window !== 'undefined' ? window : this);

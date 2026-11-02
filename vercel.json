@@ -1,6 +1,8 @@
 {
   "trailingSlash": false,
   "redirects": [
+    { "source": "/ospiti", "destination": "/ospiti.html", "permanent": true },
+    { "source": "/checkin", "destination": "/ospiti.html", "permanent": true },
     { "source": "/benvenuto", "destination": "/benvenuto.html", "permanent": true },
     { "source": "/admin", "destination": "/admin.html", "permanent": true },
     { "source": "/superadmin", "destination": "/admin.html", "permanent": true },

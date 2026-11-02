@@ -1426,7 +1426,7 @@
 
           <div class="hero-ctas">
             <a href="/checkout.html" class="btn btn-gold" onclick="trackSiteEvent('click_prova_app',{location:'hero'})">Prova l'app — 14 gg Soddisfatto o Rimborsato</a>
-            <a href="#giornata" class="btn btn-outline" onclick="trackSiteEvent('play_how_it_works',{location:'hero'})">▶ Guarda come funziona (2 min)</a>
+            <button type="button" class="btn btn-outline" onclick="openTourModal(); trackSiteEvent('play_how_it_works',{location:'hero'})">▶ Guarda come funziona (2 min)</button>
           </div>
           <div class="hero-guarantee-note">
             🛡️ Paghi mese per mese o tutto l'anno anticipato, non cambia nulla (+10% opzionale se vuoi anche Revenue Management e adempimenti di legge). Se non ti piace entro 14 giorni, disdici e ti rimborsiamo il 100%.
@@ -2153,6 +2153,43 @@
     </div>
   </div>
 
+  <!-- ══════════════════════════════════════════
+       TOUR INTERATTIVO 2 MINUTI (MODAL HERO)
+  ══════════════════════════════════════════ -->
+  <div id="tour-modal" class="checkin-modal" role="dialog" aria-modal="true" aria-labelledby="tour-modal-title">
+    <div class="checkin-content" style="max-width:680px;">
+      <button type="button" class="checkin-close" onclick="closeTourModal()" aria-label="Chiudi">×</button>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--gold-dark);margin-bottom:4px;">
+        ▶ Tour Guidato Interattivo (2 Minuti) · itassistance
+      </div>
+      <h3 id="tour-modal-title" style="font-family:var(--serif);font-size:24px;color:var(--navy);margin-bottom:8px;">
+        Come gestisci il tuo appartamento in 10 minuti al giorno
+      </h3>
+      <p style="font-size:13.5px;color:var(--text-muted);margin-bottom:16px;">
+        Clicca sui 4 passaggi della mattina per vedere cosa fa l'app per te e perché il 75% dei proprietari sceglie l'autonomia invece di cedere il 20% a un Property Manager.
+      </p>
+
+      <!-- Step selector tabs -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;" id="tour-tabs">
+        <button type="button" class="btn btn-sm btn-primary" data-step="0" onclick="setTourStep(0)" style="padding:10px 8px;font-size:12px;">1 · Ore 08:00<br/>Report Mattina</button>
+        <button type="button" class="btn btn-sm btn-outline" data-step="1" onclick="setTourStep(1)" style="padding:10px 8px;font-size:12px;">2 · Ore 08:03<br/>Alloggiati Web</button>
+        <button type="button" class="btn btn-sm btn-outline" data-step="2" onclick="setTourStep(2)" style="padding:10px 8px;font-size:12px;">3 · Ore 08:07<br/>Pulizie &amp; Tasse</button>
+        <button type="button" class="btn btn-sm btn-outline" data-step="3" onclick="setTourStep(3)" style="padding:10px 8px;font-size:12px;">4 · Ore 08:10<br/>100% In Regola</button>
+      </div>
+
+      <!-- Dynamic Step Box -->
+      <div id="tour-step-body" style="background:#F8FAFC;border:1.5px solid var(--border);border-radius:10px;padding:18px;margin-bottom:18px;"></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--border);">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="/app.html" class="btn btn-outline btn-sm">📱 Prova ora l'Area Proprietario Live</a>
+          <a href="/ospiti.html" class="btn btn-outline btn-sm">🛂 Vedi Link Self Check-in Ospite</a>
+        </div>
+        <a href="/checkout.html" class="btn btn-gold btn-sm">Attiva a 99 €/mese (14gg Garanzia) →</a>
+      </div>
+    </div>
+  </div>
+
   <!-- pdfmake 0.2.10 Vector Engine -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.js"></script>
@@ -2221,6 +2258,88 @@
 
     function closeCheckinModal() {
       var modal = document.getElementById('checkin-modal');
+      if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    }
+
+    var _tourStepsData = [
+      {
+        badge: 'PASSO 1 DI 4 · ORE 08:00 (2 MINUTI)',
+        title: '📲 Ricevi su WhatsApp/Email il Report delle 3 cose da fare oggi',
+        desc: 'Non devi aprire 4 portali diversi. Alle 08:00 itassistance ti invia il riepilogo del tuo appartamento con le sole azioni necessarie della giornata.',
+        highlights: [
+          '✓ Arrivo di oggi già verificato (es. Famiglia Martin · 2 ospiti · 3 notti)',
+          '✓ Promemoria automatico scadenza Alloggiati Web entro 24 ore',
+          '✓ Stato turno pulizie delle ore 11:00 e incasso netto del mese'
+        ]
+      },
+      {
+        badge: 'PASSO 2 DI 4 · ORE 08:03 (3 MINUTI)',
+        title: '🛂 L’ospite compila il Self Check-in (/ospiti) e tu invii Alloggiati Web',
+        desc: 'Invii all’ospite il tuo link personale itadreamteam.com/ospiti (in Italiano o Inglese): l’ospite inserisce il passaporto in 60 secondi, scarica il PDF Check-in con Wi-Fi e mappa, e tu trovi la schedina già compilata nell’Area Proprietario.',
+        highlights: [
+          '✓ Dati documento (Passaporto / Carta d’identità) raccolti senza rincorrere l’ospite su WhatsApp',
+          '✓ Controllo conformità art. 109 TULPS e scaricamento tracciato .txt per la Questura',
+          '✓ Archiviazione ordinata delle ricevute per 5 anni'
+        ]
+      },
+      {
+        badge: 'PASSO 3 DI 4 · ORE 08:07 (3 MINUTI)',
+        title: '🧹 Confermi pulizie, fornitori e Tassa di Soggiorno Firenze',
+        desc: 'Verifichi con un tocco il turno della tua addetta alle pulizie, tieni sotto controllo le spese vive (biancheria, manutenzioni) e il calcolo automatico della Tassa di Soggiorno del Comune di Firenze (max 7 notti).',
+        highlights: [
+          '✓ Calcolo automatico Imposta di Soggiorno Firenze e promemoria giorno 16 del mese',
+          '✓ Esportazione 1-clic del Prospetto Fiscale CSV per il tuo Commercialista (Cedolare Secca 21%/26%)',
+          '✓ A Firenze puoi richiedere extra a consumo: Check-in di persona (20 €) o Manutenzione (30 €)'
+        ]
+      },
+      {
+        badge: 'PASSO 4 DI 4 · ORE 08:10 (FATTO!)',
+        title: '🏛️ Sei 100% in regola e tieni in tasca il 100% dei tuoi incassi',
+        desc: 'Alle 08:10 hai finito. Gli affitti di Airbnb e Booking arrivano direttamente sul tuo conto corrente. Non cedi il 20% (5.000–7.000 €/anno) a nessun intermediario.',
+        highlights: [
+          '✓ Canone fisso 99 €/mese (IVA inclusa) · Zero commissioni sulle prenotazioni',
+          '✓ Opzione +10% se vuoi delegare anche Revenue Management dinamico e adempimenti operativi',
+          '✓ Garanzia 14 giorni Soddisfatto o Rimborsato (rimborso 100% con 1 clic)'
+        ]
+      }
+    ];
+
+    function setTourStep(idx) {
+      var step = _tourStepsData[idx] || _tourStepsData[0];
+      var btns = document.querySelectorAll('#tour-tabs button');
+      for (var i = 0; i < btns.length; i++) {
+        var active = (i === idx);
+        btns[i].className = 'btn btn-sm ' + (active ? 'btn-primary' : 'btn-outline');
+      }
+      var listHtml = step.highlights.map(function (h) {
+        return '<li style="margin-bottom:6px;font-size:13px;color:var(--navy);font-weight:500;">' + h + '</li>';
+      }).join('');
+      var nextBtn = idx < 3
+        ? '<button type="button" class="btn btn-primary btn-sm" onclick="setTourStep(' + (idx + 1) + ')">Passo successivo (' + (idx + 2) + '/4) →</button>'
+        : '<a href="/app.html" class="btn btn-gold btn-sm">Entra ora nell\'Area Proprietario →</a>';
+
+      document.getElementById('tour-step-body').innerHTML =
+        '<div style="font-size:11px;font-weight:700;color:var(--gold-dark);letter-spacing:0.8px;margin-bottom:4px;">' + step.badge + '</div>' +
+        '<h4 style="font-size:17px;color:var(--navy);margin-bottom:8px;">' + step.title + '</h4>' +
+        '<p style="font-size:13.5px;color:var(--text-muted);margin-bottom:12px;">' + step.desc + '</p>' +
+        '<ul style="list-style:none;padding:12px 14px;background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:14px;">' + listHtml + '</ul>' +
+        '<div style="display:flex;justify-content:flex-end;">' + nextBtn + '</div>';
+    }
+
+    function openTourModal() {
+      var modal = document.getElementById('tour-modal');
+      if (modal) {
+        setTourStep(0);
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeTourModal() {
+      var modal = document.getElementById('tour-modal');
       if (modal) {
         modal.classList.remove('show');
         document.body.style.overflow = '';

@@ -1004,7 +1004,25 @@
                 La legge (art. 109 TULPS) richiede l'invio dei dati <strong>entro 24 ore dall'arrivo</strong> (o <strong>entro 6 ore</strong> per soggiorni di 1 sola notte). Compila qui i dati per verificare tutto e preparare l'invio guidato.
               </p>
             </div>
-            <a href="https://alloggiatiweb.poliziadistato.it/PortaleAlloggiati/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">↗ Apri Portale Alloggiati Web</a>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <a href="/ospiti.html" target="_blank" class="btn btn-gold btn-sm">🔗 Apri Link Self Check-in Ospite</a>
+              <a href="https://alloggiatiweb.poliziadistato.it/PortaleAlloggiati/" target="_blank" rel="noopener" class="btn btn-primary btn-sm">↗ Apri Portale Alloggiati Web</a>
+            </div>
+          </div>
+
+          <!-- Barra Link Self Check-in Documenti per l'Ospite -->
+          <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:10px;padding:14px 16px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#1E40AF;">📲 Raccolta Automatica Documenti dall'Ospite (IT / EN)</div>
+              <div style="font-size:13px;color:var(--navy);margin-top:2px;">
+                Invia all'ospite il link <strong>itadreamteam.com/ospiti</strong>: compila passaporto/carta d'identità in 60 secondi, riceve il PDF istruzioni casa e tu trovi la schedina già pronta qui sotto.
+              </div>
+              <div id="aw-guest-selfcheckin-badge" style="display:none;margin-top:6px;font-size:12px;font-weight:700;color:var(--green);"></div>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-outline btn-sm" style="background:#fff;" onclick="copyGuestCheckinLink()">📋 Copia Link Ospite</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="sendGuestSelfCheckinWhatsApp()">💬 Invia Link su WhatsApp</button>
+            </div>
           </div>
 
           <!-- I 4 Passi Guidati -->
@@ -1826,6 +1844,32 @@
         btn10.textContent = 'Attiva Extra +10%';
         btn10.className = 'btn btn-primary';
       }
+
+      // Auto-popolamento da Self Check-in Ospite (/ospiti.html)
+      var guestDocBadge = document.getElementById('aw-guest-selfcheckin-badge');
+      if (appState.lastGuestDoc && appState.lastGuestDoc.docNum) {
+        var gd = appState.lastGuestDoc;
+        if (guestDocBadge) {
+          guestDocBadge.style.display = 'block';
+          guestDocBadge.textContent = '✓ Dati documento ricevuti da Self Check-in Ospite: ' + (gd.cognome || '') + ' ' + (gd.nome || '') + ' (' + (gd.docTipo || 'PASOR') + ' ' + gd.docNum + ')';
+        }
+        if (window._lastAppliedGuestDocNum !== gd.docNum) {
+          window._lastAppliedGuestDocNum = gd.docNum;
+          if (gd.tipo) document.getElementById('aw-tipo').value = gd.tipo;
+          if (gd.arrivo) document.getElementById('aw-arrivo').value = gd.arrivo;
+          if (gd.giorni) document.getElementById('aw-giorni').value = gd.giorni;
+          if (gd.cognome) document.getElementById('aw-cognome').value = gd.cognome;
+          if (gd.nome) document.getElementById('aw-nome').value = gd.nome;
+          if (gd.sesso) document.getElementById('aw-sesso').value = gd.sesso;
+          if (gd.nascita) document.getElementById('aw-nascita').value = gd.nascita;
+          if (gd.cittadinanza) document.getElementById('aw-cittadinanza').value = gd.cittadinanza;
+          if (gd.docTipo) document.getElementById('aw-doc-tipo').value = gd.docTipo;
+          if (gd.docNum) document.getElementById('aw-doc-num').value = gd.docNum;
+          if (gd.docLuogo) document.getElementById('aw-doc-luogo').value = gd.docLuogo;
+        }
+      } else if (guestDocBadge) {
+        guestDocBadge.style.display = 'none';
+      }
     }
 
     function populateCheckinFormFromState() {
@@ -1950,10 +1994,27 @@
 
     function sendCheckinWhatsApp(guestName) {
       var apt = appState.apartment;
+      var checkinUrl = window.location.origin + '/ospiti.html';
       var text = 'Ciao ' + guestName + ', benvenuto a Firenze presso ' + apt.name + ' (' + apt.address + '). ' +
+        'Prima dell\'arrivo compila il Self Check-in rapido (1 min) per ricevere il PDF con codice portone e Wi-Fi: ' + checkinUrl + ' — ' +
         'Codice accesso: ' + (apt.doorCode || 'vedi PDF') + '. Wi-Fi: ' + (apt.wifi || '-') + ' (Password: ' + (apt.pass || '-') + '). ' +
         'Per qualsiasi necessità a Firenze (09:00-23:00): +39 351 038 0392.';
       window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+    }
+
+    function copyGuestCheckinLink() {
+      var url = window.location.origin + '/ospiti.html';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url);
+      }
+      showToast('✓ Link Self Check-in Ospite copiato: ' + url);
+    }
+
+    function sendGuestSelfCheckinWhatsApp() {
+      var apt = appState.apartment;
+      var url = window.location.origin + '/ospiti.html';
+      var msg = 'Ciao! Welcome to Florence · ' + apt.name + '. Please complete the 1-minute Guest Check-in form to unlock your Check-in Instructions PDF (Wi-Fi, Door Code & Map): ' + url;
+      window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
     }
 
     function openAlloggiatiFor(bookingId) {

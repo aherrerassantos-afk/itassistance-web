@@ -122,6 +122,7 @@
       app: '/app.html',
       admin: '/admin.html',
       welcome: '/benvenuto.html',
+      guestCheckin: '/ospiti.html',
       checkout: '/checkout.html',
       checkoutMonthly: '/checkout.html?ciclo=mensile',
       checkoutYearly: '/checkout.html?ciclo=annuale',
