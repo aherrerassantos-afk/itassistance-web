@@ -1,13 +1,27 @@
 {
   "trailingSlash": false,
   "redirects": [
-    { "source": "/assistenza-ospiti-airbnb-firenze.html", "destination": "/assistenza-ospiti-airbnb-firenze", "permanent": true },
-    { "source": "/check-in-airbnb-firenze.html", "destination": "/check-in-airbnb-firenze", "permanent": true },
-    { "source": "/prezzi.html", "destination": "/prezzi", "permanent": true },
-    { "source": "/gestione-ospiti-firenze.html", "destination": "/gestione-ospiti-firenze", "permanent": true },
-    { "source": "/assistenza-airbnb-centro-storico-firenze.html", "destination": "/assistenza-airbnb-centro-storico-firenze", "permanent": true },
-    { "source": "/assistenza-airbnb-toscana.html", "destination": "/assistenza-airbnb-toscana", "permanent": true },
-    { "source": "/contratto.html", "destination": "/contratto", "permanent": true },
-    { "source": "/checkout.html", "destination": "/checkout", "permanent": true }
+    { "source": "/assistenza-ospiti-airbnb-firenze.html", "destination": "/gestire-affitto-breve-senza-property-manager.html", "permanent": true },
+    { "source": "/assistenza-ospiti-airbnb-firenze", "destination": "/gestire-affitto-breve-senza-property-manager.html", "permanent": true },
+    { "source": "/check-in-airbnb-firenze.html", "destination": "/registrazione-ospiti-alloggiati-web.html", "permanent": true },
+    { "source": "/check-in-airbnb-firenze", "destination": "/registrazione-ospiti-alloggiati-web.html", "permanent": true },
+    { "source": "/gestione-ospiti-firenze.html", "destination": "/gestire-affitto-breve-senza-property-manager.html", "permanent": true },
+    { "source": "/gestione-ospiti-firenze", "destination": "/gestire-affitto-breve-senza-property-manager.html", "permanent": true },
+    { "source": "/assistenza-airbnb-centro-storico-firenze.html", "destination": "/tassa-di-soggiorno-affitti-brevi-firenze.html", "permanent": true },
+    { "source": "/assistenza-airbnb-centro-storico-firenze", "destination": "/tassa-di-soggiorno-affitti-brevi-firenze.html", "permanent": true },
+    { "source": "/assistenza-airbnb-toscana.html", "destination": "/alternativa-property-manager.html", "permanent": true },
+    { "source": "/assistenza-airbnb-toscana", "destination": "/alternativa-property-manager.html", "permanent": true },
+    { "source": "/agenzia-affitti-brevi-firenze.html", "destination": "/alternativa-property-manager.html", "permanent": true },
+    { "source": "/agenzia-affitti-brevi-firenze", "destination": "/alternativa-property-manager.html", "permanent": true },
+    { "source": "/gestione-airbnb-firenze.html", "destination": "/gestire-affitto-breve-senza-property-manager.html", "permanent": true },
+    { "source": "/gestione-airbnb-firenze", "destination": "/gestire-affitto-breve-senza-property-manager.html", "permanent": true },
+    { "source": "/co-host-airbnb-firenze.html", "destination": "/alternativa-property-manager.html", "permanent": true },
+    { "source": "/co-host-airbnb-firenze", "destination": "/alternativa-property-manager.html", "permanent": true },
+    { "source": "/airbnb-guest-assistant-florence.html", "destination": "/", "permanent": true },
+    { "source": "/airbnb-guest-assistant-florence", "destination": "/", "permanent": true },
+    { "source": "/gestion-huespedes-airbnb-florencia.html", "destination": "/", "permanent": true },
+    { "source": "/gestion-huespedes-airbnb-florencia", "destination": "/", "permanent": true },
+    { "source": "/gestion-voyageurs-airbnb-florence.html", "destination": "/", "permanent": true },
+    { "source": "/gestion-voyageurs-airbnb-florence", "destination": "/", "permanent": true }
   ]
 }

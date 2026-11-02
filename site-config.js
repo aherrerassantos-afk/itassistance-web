@@ -1,0 +1,165 @@
+/**
+ * site-config.js — UNICA FONTE DI VERITÀ (Single Source of Truth) per itassistance
+ * Tutti i prezzi, condizioni, orari, contatti e dati legali del sito, del generatore PDF
+ * e delle comunicazioni email/WhatsApp sono letti da questo file.
+ */
+(function (root) {
+  'use strict';
+
+  var SITE_CONFIG = {
+    brand: {
+      name: 'itassistance',
+      teamLabel: 'il team di itassistance',
+      tagline: 'Il tuo appartamento, sotto controllo. In 10 minuti al giorno.',
+      domain: 'https://www.itadreamteam.com',
+      logoPath: '/brand/logo.png'
+    },
+
+    pricing: {
+      monthlyEur: 99,
+      yearlyEur: 1188,
+      currency: '€',
+      currencyCode: 'EUR',
+      vatIncluded: true,
+      vatLabel: 'IVA inclusa',
+      monthlyFormatted: '99 €',
+      yearlyFormatted: '1.188 €',
+      pricePerMonthLabel: '99 € / mese',
+      priceFullLabel: '99 € al mese (IVA inclusa)',
+      commissionPct: 0,
+      commissionLabel: 'Zero commissioni sulle prenotazioni (0%)',
+      activationFeeEur: 0,
+      activationLabel: 'Zero costi di attivazione',
+      cancellationLabel: 'Disdetta libera in qualsiasi momento, senza penali',
+      paymentModesLabel: 'Paghi mese per mese (99 €/mese) oppure tutto l’anno anticipato (1.188 €/anno), non cambia nulla.',
+      guaranteeDays: 14,
+      guaranteeTitle: 'Garanzia 14 giorni Soddisfatto o Rimborsato',
+      guaranteeText: 'Prova l’app senza rischi: se entro 14 giorni decidi che non fa per te, disdici con un clic e ti rimborsiamo il 100% di quanto versato.'
+    },
+
+    calculatorDefaults: {
+      defaultAnnualRevenueEur: 30000,
+      minAnnualRevenueEur: 10000,
+      maxAnnualRevenueEur: 120000,
+      stepAnnualRevenueEur: 2500,
+      defaultPmCommissionPct: 20,
+      pmCommissionRangeLabel: '18–25%'
+    },
+
+    extras: {
+      availableCity: 'Firenze',
+      note: 'Servizi operativi opzionali a richiesta su Firenze (separati dal canone dell’app, paghi solo se e quando li richiedi):',
+      items: [
+        {
+          id: 'checkin',
+          name: 'Accoglienza e check-in di persona',
+          priceEur: 20,
+          priceFormatted: '20 € (IVA inclusa) a intervento'
+        },
+        {
+          id: 'maintenance',
+          name: 'Intervento di piccola manutenzione ordinaria',
+          priceEur: 30,
+          priceFormatted: '30 € (IVA inclusa) a intervento'
+        },
+        {
+          id: 'cleaning',
+          name: 'Pulizie e cambio biancheria con fornitori certificati',
+          priceEur: null,
+          priceFormatted: 'Su preventivo in base alla metratura'
+        }
+      ]
+    },
+
+    support: {
+      phoneDisplay: '+39 351 038 0392',
+      phoneTel: '+393510380392',
+      whatsappNumber: '393510380392',
+      whatsappUrl: 'https://wa.me/393510380392',
+      email: 'info@itadreamteam.com',
+      hoursIT: 'Tutti i giorni dalle 09:00 alle 23:00',
+      hoursEN: 'Every day from 09:00 AM to 11:00 PM',
+      hoursShortIT: '09:00 – 23:00',
+      responseTimeIT: 'Risposta rapida da persone vere a Firenze',
+      activeCity: 'Firenze',
+      comingSoonCities: 'Altre città italiane: Prossimamente'
+    },
+
+    legal: {
+      companyName: 'Blue Arroyo SRL',
+      vatNumber: '07480210488',
+      vatFull: 'IT07480210488',
+      address: 'Via Matteo Palmieri 20r, 50122 Firenze (FI), Italia',
+      city: 'Firenze',
+      copyrightYear: '2026',
+      footerLine: 'itassistance è un prodotto di Blue Arroyo SRL · P.IVA 07480210488 · Via Matteo Palmieri 20r, 50122 Firenze (FI)'
+    },
+
+    urls: {
+      checkout: '/checkout.html',
+      checkoutMonthly: '/checkout.html?ciclo=mensile',
+      checkoutYearly: '/checkout.html?ciclo=annuale',
+      contract: '/contratto.html',
+      pricing: '/prezzi.html'
+    },
+
+    webhook: {
+      n8nLeadsUrl: 'https://aherreras.app.n8n.cloud/webhook/leads/itassistance'
+    }
+  };
+
+  // Popola automaticamente eventuali nodi DOM con attributo [data-site-config="percorso.chiave"]
+  function applySiteConfigToDOM() {
+    if (typeof document === 'undefined') return;
+    var nodes = document.querySelectorAll('[data-site-config]');
+    for (var i = 0; i < nodes.length; i++) {
+      var el = nodes[i];
+      var path = el.getAttribute('data-site-config');
+      if (!path) continue;
+      var parts = path.split('.');
+      var val = SITE_CONFIG;
+      for (var j = 0; j < parts.length; j++) {
+        if (val && typeof val === 'object' && parts[j] in val) {
+          val = val[parts[j]];
+        } else {
+          val = null;
+          break;
+        }
+      }
+      if (val !== null && val !== undefined) {
+        el.textContent = String(val);
+      }
+    }
+  }
+
+  // Helper per tracciamento eventi (rispetta eventuale consenso cookie / dataLayer / gtag)
+  function trackSiteEvent(eventName, params) {
+    try {
+      var payload = Object.assign({
+        event: eventName,
+        brand: SITE_CONFIG.brand.name,
+        timestamp: new Date().toISOString()
+      }, params || {});
+
+      if (typeof window !== 'undefined') {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(payload);
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', eventName, payload);
+        }
+      }
+    } catch (e) {}
+  }
+
+  root.SITE_CONFIG = SITE_CONFIG;
+  root.applySiteConfigToDOM = applySiteConfigToDOM;
+  root.trackSiteEvent = trackSiteEvent;
+
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', applySiteConfigToDOM);
+    } else {
+      applySiteConfigToDOM();
+    }
+  }
+})(typeof window !== 'undefined' ? window : this);
