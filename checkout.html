@@ -392,6 +392,33 @@
             <input type="text" id="f-addr" placeholder="es. Via Maggio 18, Firenze" required>
           </div>
         </div>
+
+        <!-- STEP 3: METODO DI PAGAMENTO (STRIPE CARTA OPPURE BONIFICO BLUE ARROYO SRL) -->
+        <div class="co-card">
+          <h2 class="co-card-title">3. Scegli come preferisci saldare (Garanzia 14 gg inclusa su entrambi)</h2>
+
+          <div class="plan-option selected" id="pay-opt-stripe" onclick="selectPaymentMethod('stripe')">
+            <div class="plan-head">
+              <div class="plan-radio-label">
+                <span class="plan-radio-circle"></span>
+                💳 Carta di Credito / Debito / Apple Pay (Stripe)
+              </div>
+              <span style="font-size:12px;font-weight:700;color:var(--green);">Attivazione Istantanea</span>
+            </div>
+            <p class="plan-desc">Pagamento sicuro con ricevuta immediata. Rimborso automatico 100% con 1 clic entro 14 giorni.</p>
+          </div>
+
+          <div class="plan-option" id="pay-opt-bonifico" onclick="selectPaymentMethod('bonifico')">
+            <div class="plan-head">
+              <div class="plan-radio-label">
+                <span class="plan-radio-circle"></span>
+                🏦 Bonifico Bancario / Istantaneo (Fattura Blue Arroyo SRL)
+              </div>
+              <span style="font-size:12px;font-weight:700;color:var(--navy);">Senza Carta di Credito</span>
+            </div>
+            <p class="plan-desc">L'Area Proprietario si attiva subito con i 14 giorni di prova e ricevi nella schermata successiva la fattura pro-forma PDF di <strong>Blue Arroyo SRL (P.IVA 07480210488)</strong> da saldare tramite bonifico.</p>
+          </div>
+        </div>
       </div>
 
       <!-- RIEPILOGO -->
@@ -465,6 +492,21 @@
     };
 
     var currentCycle = 'mensile';
+    var currentPaymentMethod = 'stripe';
+
+    function selectPaymentMethod(method) {
+      currentPaymentMethod = method;
+      var sEl = document.getElementById('pay-opt-stripe');
+      var bEl = document.getElementById('pay-opt-bonifico');
+      if (sEl) sEl.classList.toggle('selected', method === 'stripe');
+      if (bEl) bEl.classList.toggle('selected', method === 'bonifico');
+      var btn = document.getElementById('btn-pay');
+      if (btn) {
+        btn.textContent = method === 'bonifico'
+          ? '🏦 Attiva con Bonifico Bancario e Scarica Fattura ➔'
+          : '💳 Attiva e Paga in Sicurezza con Carta ➔';
+      }
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
       var params = new URLSearchParams(window.location.search);
@@ -535,8 +577,9 @@
       }
 
       // 1. Pre-configura automaticamente /app.html e registra Cliente + Fattura in /admin.html + Supabase
+      var activationResult = { ownerCode: 'ITA-FIRENZE-01', invoiceId: 'FATT-2026-101' };
       if (window.ITACloudSync && typeof ITACloudSync.activateNewOwnerFromCheckout === 'function') {
-        await ITACloudSync.activateNewOwnerFromCheckout({
+        activationResult = await ITACloudSync.activateNewOwnerFromCheckout({
           nome: nome,
           email: email,
           telefono: tel,
@@ -544,7 +587,8 @@
           immobile: imm || 'Appartamento Firenze',
           indirizzo: addr || 'Firenze',
           ciclo: currentCycle,
-          extraRevenue: extraRevenue
+          extraRevenue: extraRevenue,
+          metodoPagamento: currentPaymentMethod
         });
       }
 
@@ -555,6 +599,9 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             prodotto: 'itassistance',
+            codice_proprietario: activationResult.ownerCode,
+            numero_fattura: activationResult.invoiceId,
+            metodo_pagamento: currentPaymentMethod,
             nome: nome,
             email: email,
             telefono: tel,
@@ -565,18 +612,22 @@
             extra_revenue_adempimenti_10pct: extraRevenue ? 'SI (+10%)' : 'NO',
             totale: currentCycle === 'annuale' ? '1188€ IVA inclusa' : '99€ IVA inclusa',
             garanzia: '14 giorni soddisfatto o rimborsato',
+            link_area_proprietario: 'https://www.itadreamteam.com/app.html?code=' + activationResult.ownerCode,
+            link_self_checkin_ospite: 'https://www.itadreamteam.com/ospiti.html',
             fonte: 'checkout.html'
           })
         }).catch(function () {});
       } catch (e) {}
 
       var welcomeUrl = '/benvenuto.html?ciclo=' + encodeURIComponent(currentCycle) +
+        '&code=' + encodeURIComponent(activationResult.ownerCode || 'ITA-FIRENZE-01') +
+        '&metodo=' + encodeURIComponent(currentPaymentMethod) +
         '&nome=' + encodeURIComponent(nome) +
         '&imm=' + encodeURIComponent(imm || 'Appartamento Firenze') +
         '&addr=' + encodeURIComponent(addr || 'Firenze') +
         '&extra10=' + (extraRevenue ? '1' : '0');
 
-      if (mode === 'instant_onboarding') {
+      if (mode === 'instant_onboarding' || currentPaymentMethod === 'bonifico') {
         window.location.href = welcomeUrl;
         return;
       }

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Accedi all'Area Proprietario — itassistance</title>
+  <meta name="robots" content="noindex, follow"/>
+  <link rel="icon" type="image/png" href="/brand/logo.png"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="/site-config.js"></script>
+  <script src="/cloud-sync.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #111111;
+      --gold: #C9A84C;
+      --gold-dark: #9A7422;
+      --gold-light: #FBF7EC;
+      --bg: #FAF9F6;
+      --border: #E5E3DC;
+      --text: #1F2937;
+      --text-muted: #4B5563;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      background: var(--navy);
+      color: #fff;
+      border-bottom: 2px solid var(--gold);
+      padding: 14px 20px;
+    }
+    .topbar-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      text-decoration: none;
+      font-family: var(--serif);
+      font-size: 26px;
+      font-weight: 700;
+    }
+    .brand img { width: 32px; height: 32px; border-radius: 6px; }
+    .wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 36px 16px;
+    }
+    .login-card {
+      background: #fff;
+      border: 1.5px solid var(--gold);
+      border-radius: 14px;
+      max-width: 480px;
+      width: 100%;
+      padding: 32px 28px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+    }
+    .badge {
+      display: inline-block;
+      background: var(--gold-light);
+      color: var(--gold-dark);
+      border: 1px solid rgba(201,168,76,0.45);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-size: 32px;
+      color: var(--navy);
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      line-height: 1.55;
+    }
+    .field { margin-bottom: 14px; }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 5px;
+    }
+    .field input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-size: 14px;
+    }
+    .field input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn-gold { background: var(--gold); color: var(--navy); }
+    .btn-gold:hover { background: #b89539; }
+    .btn-outline { background: #fff; color: var(--navy); border: 1.5px solid var(--navy); }
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 18px 0;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .role-links {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12.5px;
+    }
+    .role-links a {
+      color: var(--navy);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="/" class="brand">
+        <img src="/brand/logo.png" alt="Logo itassistance"/>
+        <span>itassistance</span>
+      </a>
+      <a href="/checkout.html" style="color:var(--gold);font-size:13px;font-weight:700;text-decoration:none;">Non hai ancora un account? Attiva (14gg Garanzia) →</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="login-card">
+      <span class="badge">🔐 Accesso Area Proprietario · Cloud Sync</span>
+      <h1>Entra nel tuo appartamento</h1>
+      <p class="sub">
+        Inserisci il tuo <strong>Codice Appartamento</strong> (es. <code>ITA-FIRENZE-01</code> ricevuto all'attivazione) e la tua email per aprire la tua Area Proprietario sincronizzata.
+      </p>
+
+      <div class="field">
+        <label for="lg-code">Codice Appartamento Personale *</label>
+        <input type="text" id="lg-code" value="ITA-FIRENZE-01" placeholder="es. ITA-4829 o ITA-FIRENZE-01"/>
+      </div>
+
+      <div class="field">
+        <label for="lg-email">Email Proprietario *</label>
+        <input type="email" id="lg-email" value="proprietario@itadreamteam.com" placeholder="la-tua-email@esempio.it"/>
+      </div>
+
+      <div class="field">
+        <label for="lg-apt">Nome Immobile (opzionale)</label>
+        <input type="text" id="lg-apt" placeholder="es. Appartamento Santo Spirito"/>
+      </div>
+
+      <button type="button" class="btn btn-gold" onclick="doOwnerLogin()">
+        📱 Entra nell'Area Proprietario (10 min/giorno) →
+      </button>
+
+      <div class="divider">oppure esplora o attiva</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <a href="/app.html?demo=1" class="btn btn-outline" style="font-size:13px;padding:11px;">⚡ Apri Demo Live</a>
+        <a href="/checkout.html" class="btn btn-outline" style="font-size:13px;padding:11px;">✨ Nuovo Immobile (99€)</a>
+      </div>
+
+      <div class="role-links">
+        <a href="/ospiti.html">🛂 Link Self Check-in Ospite</a>
+        <a href="/admin.html">👑 Console Super Admin / Fatturazione</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.ITACloudSync && typeof ITACloudSync.getOwnerSession === 'function') {
+        var s = ITACloudSync.getOwnerSession();
+        if (s && s.ownerCode) document.getElementById('lg-code').value = s.ownerCode;
+        if (s && s.email) document.getElementById('lg-email').value = s.email;
+        if (s && s.apartmentName) document.getElementById('lg-apt').value = s.apartmentName;
+      }
+    });
+
+    function doOwnerLogin() {
+      var code = (document.getElementById('lg-code').value || 'ITA-FIRENZE-01').trim().toUpperCase();
+      var email = (document.getElementById('lg-email').value || '').trim();
+      var apt = (document.getElementById('lg-apt').value || '').trim();
+
+      if (!code || !email) {
+        alert('Inserisci Codice Appartamento ed Email.');
+        return;
+      }
+
+      if (window.ITACloudSync && typeof ITACloudSync.loginOwnerSession === 'function') {
+        ITACloudSync.loginOwnerSession({
+          ownerCode: code,
+          email: email,
+          apartmentName: apt
+        });
+      }
+
+      window.location.href = '/app.html?code=' + encodeURIComponent(code);
+    }
+  </script>
+</body>
+</html>

@@ -120,6 +120,7 @@
 
     urls: {
       app: '/app.html',
+      login: '/login.html',
       admin: '/admin.html',
       welcome: '/benvenuto.html',
       guestCheckin: '/ospiti.html',

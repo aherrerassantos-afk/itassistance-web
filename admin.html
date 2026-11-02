@@ -815,6 +815,35 @@
             </table>
           </div>
         </div>
+
+        <!-- CRM Lead Diagnosi Risparmio (dal Calcolatore di index.html) -->
+        <div class="panel-card">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">🎯 Lead "Diagnosi Risparmio &amp; Conformità Firenze" (Proprietari dal Sito Web)</div>
+              <p style="font-size:13px;color:var(--text-muted);">
+                Proprietari che hanno calcolato il proprio risparmio rispetto al Property Manager su <code>itadreamteam.com</code> e richiesto il prospetto su WhatsApp/Email.
+              </p>
+            </div>
+            <span class="badge badge-gold">Funnel Acquisizione Attivo</span>
+          </div>
+          <div class="table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Proprietario</th>
+                  <th>Recapiti</th>
+                  <th>Fatturato Stimato</th>
+                  <th>Risparmio vs PM</th>
+                  <th>Extra +10%</th>
+                  <th>Azioni Commerciali</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-diagnosis-leads"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
       <!-- ══════════════════════════════════════════════════
@@ -1616,6 +1645,48 @@
       document.getElementById('ov-hr').textContent = admState.hr.length + ' Risorse';
       document.getElementById('ov-invoices').textContent = fmtEur(paidInvoicesTotal);
       document.getElementById('ov-mrr').textContent = fmtEur(totalApts * 99 + 1677);
+
+      // 6. Diagnosis Leads Table
+      var leadsBody = document.getElementById('tbody-diagnosis-leads');
+      if (leadsBody && window.ITACloudSync && typeof ITACloudSync.getDiagnosisLeads === 'function') {
+        var leads = ITACloudSync.getDiagnosisLeads();
+        var lHtml = '';
+        leads.forEach(function (ld) {
+          var cleanPh = String(ld.phone || '393510380392').replace(/[^0-9]/g, '');
+          var waText = 'Ciao ' + ld.name + ', sono del team itassistance Firenze. Ecco la tua diagnosi: con ' + fmtEur(ld.annualRevenue) + ' di incasso annuo risparmi ' + fmtEur(ld.netSaving) + '/anno rispetto a un Property Manager. Vuoi attivare la prova di 14 giorni Soddisfatto o Rimborsato?';
+          lHtml += '<tr>' +
+            '<td><small>' + (ld.createdAt || 'Oggi') + '</small></td>' +
+            '<td><strong>' + ld.name + '</strong></td>' +
+            '<td>' + (ld.phone || '—') + '<br/><small style="color:var(--text-muted)">' + (ld.email || '') + '</small></td>' +
+            '<td>' + fmtEur(ld.annualRevenue) + '/anno</td>' +
+            '<td><strong style="color:var(--green)">+' + fmtEur(ld.netSaving) + '/anno</strong></td>' +
+            '<td>' + (ld.addon10Interest ? '<span class="badge badge-gold">Interessato +10%</span>' : '<span class="badge badge-blue">Solo Piano 99€</span>') + '</td>' +
+            '<td>' +
+              '<div style="display:flex;gap:6px;flex-wrap:wrap;">' +
+                '<a href="https://wa.me/' + cleanPh + '?text=' + encodeURIComponent(waText) + '" target="_blank" class="btn btn-green btn-sm">💬 WhatsApp</a>' +
+                '<button type="button" class="btn btn-outline btn-sm" onclick="convertLeadToPartner(\'' + (ld.name || '').replace(/'/g, '') + '\', \'' + (ld.email || '') + ' · ' + (ld.phone || '') + '\', ' + Boolean(ld.addon10Interest) + ')">+ Converti in Cliente</button>' +
+              '</div>' +
+            '</td>' +
+          '</tr>';
+        });
+        leadsBody.innerHTML = lHtml;
+      }
+    }
+
+    function convertLeadToPartner(name, contact, addon10) {
+      admState.partners.unshift({
+        id: 'p_lead_' + Date.now(),
+        name: name,
+        type: 'Proprietario Convertito da Diagnosi',
+        contact: contact,
+        vat: '—',
+        apts: 1,
+        plan: addon10 ? '99 €/mese + Extra +10% Revenue & Adempimenti' : '99 €/mese Base (Zero Commissioni)',
+        active: true
+      });
+      saveAdminState();
+      renderAdminAll();
+      showToast('✓ Lead "' + name + '" convertito in Proprietario Attivo!');
     }
 
     // Actions: Partners

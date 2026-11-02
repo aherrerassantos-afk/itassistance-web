@@ -8,6 +8,8 @@
   var OWNER_KEY = 'itassistance_owner_app_v1';
   var ADMIN_KEY = 'itassistance_superadmin_v1';
   var REPORT_LOG_KEY = 'itassistance_daily_report_logs_v1';
+  var LEADS_KEY = 'itassistance_diagnosis_leads_v1';
+  var SESSION_KEY = 'itassistance_owner_session_v1';
   var CHANNEL_NAME = 'itassistance_live_sync_channel';
 
   var bc = null;
@@ -243,6 +245,10 @@
     var isAnnual = d.ciclo === 'annuale';
     var amountEur = isAnnual ? 1188 : 99;
     var invoiceId = 'FATT-2026-' + Math.floor(110 + Math.random() * 890);
+    var ownerCode = d.ownerCode || ('ITA-' + Math.floor(1000 + Math.random() * 9000));
+    var paymentMethodLabel = d.metodoPagamento === 'bonifico'
+      ? 'Bonifico Bancario Blue Arroyo SRL (Garanzia 14gg attiva fino al ' + guaranteeEnd.toLocaleDateString('it-IT') + ')'
+      : 'Stripe Checkout (Garanzia 14gg attiva fino al ' + guaranteeEnd.toLocaleDateString('it-IT') + ')';
 
     // 1. Pre-configura l'Area Proprietario (/app.html)
     var ownerState = null;
@@ -311,10 +317,19 @@
     ownerState.apartment.activatedAt = now.toLocaleDateString('it-IT');
     ownerState.apartment.guaranteeUntil = guaranteeEnd.toLocaleDateString('it-IT');
     ownerState.apartment.lastInvoiceId = invoiceId;
+    ownerState.apartment.ownerCode = ownerCode;
+    ownerState.apartment.paymentMethod = d.metodoPagamento || 'stripe';
 
     try {
       localStorage.setItem(OWNER_KEY, JSON.stringify(ownerState));
+      localStorage.setItem(SESSION_KEY, JSON.stringify({
+        ownerCode: ownerCode,
+        email: ownerState.apartment.ownerEmail || 'proprietario@itadreamteam.com',
+        apartmentName: ownerState.apartment.name,
+        loggedAt: now.toISOString()
+      }));
       localStorage.setItem('itassistance_last_activation', JSON.stringify({
+        ownerCode: ownerCode,
         invoiceId: invoiceId,
         activatedAt: ownerState.apartment.activatedAt,
         guaranteeUntil: ownerState.apartment.guaranteeUntil,
@@ -326,7 +341,8 @@
         apartmentAddress: ownerState.apartment.address,
         billingCycle: ownerState.apartment.billingCycle,
         amountEur: amountEur,
-        addon10Active: ownerState.apartment.addon10Active
+        addon10Active: ownerState.apartment.addon10Active,
+        paymentMethod: d.metodoPagamento || 'stripe'
       }));
     } catch (e) {}
 
@@ -359,8 +375,8 @@
             : 'Canone Mensile App itassistance (99,00 € IVA inclusa)') +
             (d.extraRevenue ? ' + Attivazione Extra +10% Revenue Management & Adempimenti di Legge' : ''),
           total: amountEur,
-          method: 'Stripe Checkout (Garanzia 14gg attiva fino al ' + guaranteeEnd.toLocaleDateString('it-IT') + ')',
-          status: 'Pagata'
+          method: paymentMethodLabel,
+          status: d.metodoPagamento === 'bonifico' ? 'In Verifica Bonifico (14gg Attivi)' : 'Pagata'
         });
 
         localStorage.setItem(ADMIN_KEY, JSON.stringify(adm));
@@ -369,10 +385,11 @@
 
     // 3. Sincronizza su Supabase e notifica le schede aperte
     await syncSnapshotToSupabase('checkout_onboarding', ownerState);
-    broadcastStateChange('new_owner_activated', { invoiceId: invoiceId, apartment: ownerState.apartment.name });
+    broadcastStateChange('new_owner_activated', { invoiceId: invoiceId, ownerCode: ownerCode, apartment: ownerState.apartment.name });
 
     return {
       ok: true,
+      ownerCode: ownerCode,
       invoiceId: invoiceId,
       guaranteeUntil: ownerState.apartment.guaranteeUntil
     };
@@ -451,6 +468,144 @@
     return { ok: true, guest: fullName };
   }
 
+  // Passo 2 (Go-To-Market): Salva Lead "Diagnosi Risparmio & Conformità Firenze" dal Calcolatore di index.html
+  async function saveSavingsDiagnosisLead(leadInput) {
+    var l = leadInput || {};
+    var rev = Number(l.annualRevenue || 30000);
+    var pmPct = Number(l.pmPct || 20);
+    var pmCost = Math.round(rev * (pmPct / 100));
+    var itaCost = 1188;
+    var netSaving = Math.max(0, pmCost - itaCost);
+
+    var record = {
+      id: 'lead_' + Date.now(),
+      createdAt: new Date().toLocaleString('it-IT'),
+      name: l.name || 'Proprietario Firenze',
+      email: l.email || '',
+      phone: l.phone || '',
+      annualRevenue: rev,
+      pmPct: pmPct,
+      netSaving: netSaving,
+      addon10Interest: Boolean(l.addon10Interest),
+      status: 'Nuova Diagnosi Inviata'
+    };
+
+    // 1. Salva nella lista Lead condivisa con Super Admin (/admin.html)
+    try {
+      var list = JSON.parse(localStorage.getItem(LEADS_KEY) || '[]');
+      list.unshift(record);
+      localStorage.setItem(LEADS_KEY, JSON.stringify(list.slice(0, 50)));
+    } catch (e) {}
+
+    // 2. Invia al Webhook n8n
+    var cfg = getConfig();
+    var webhookUrl = (cfg.webhook && cfg.webhook.n8nLeadsUrl) || 'https://aherreras.app.n8n.cloud/webhook/leads/itassistance';
+    try {
+      fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event: 'lead_diagnosi_risparmio_firenze',
+          brand: 'itassistance',
+          nome: record.name,
+          email: record.email,
+          telefono: record.phone,
+          fatturato_annuo_stimato: rev,
+          commissione_pm_confronto: pmPct + '%',
+          risparmio_annuo_itassistance: netSaving + ' € / anno',
+          interesse_extra_10pct: record.addon10Interest ? 'SI (+10%)' : 'NO',
+          timestamp: new Date().toISOString()
+        })
+      }).catch(function () {});
+    } catch (e) {}
+
+    // 3. Salva su Supabase (tabella preventivi)
+    await syncSnapshotToSupabase('diagnosi_risparmio_lead', {
+      apartment: {
+        name: 'Lead Diagnosi: ' + record.name + ' (Risparmio ' + netSaving + '€/anno)',
+        ownerEmail: record.email,
+        ownerPhone: record.phone
+      },
+      tasks: [],
+      bookings: []
+    });
+
+    broadcastStateChange('new_diagnosis_lead', record);
+    return { ok: true, record: record };
+  }
+
+  function getDiagnosisLeads() {
+    try {
+      var raw = localStorage.getItem(LEADS_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return [
+      {
+        id: 'lead_demo_1',
+        createdAt: '02/11/2026, 09:15:00',
+        name: 'Dott. Alessandro Conti (Oltrarno)',
+        email: 'a.conti@email.it',
+        phone: '+39 335 8192011',
+        annualRevenue: 35000,
+        pmPct: 20,
+        netSaving: 5812,
+        addon10Interest: true,
+        status: 'Da ricontattare (Interessato +10%)'
+      },
+      {
+        id: 'lead_demo_2',
+        createdAt: '01/11/2026, 18:40:00',
+        name: 'Elena Guicciardini (Santa Croce)',
+        email: 'elena.guicciardini@email.it',
+        phone: '+39 347 4401928',
+        annualRevenue: 28000,
+        pmPct: 20,
+        netSaving: 4412,
+        addon10Interest: false,
+        status: 'Report WhatsApp Inviato'
+      }
+    ];
+  }
+
+  // Gestione Sessione Proprietario (/login.html <-> /app.html)
+  function loginOwnerSession(input) {
+    var i = input || {};
+    var code = (i.ownerCode || 'ITA-FIRENZE-01').toUpperCase().trim();
+    var email = (i.email || 'proprietario@itadreamteam.com').trim();
+    try {
+      var raw = localStorage.getItem(OWNER_KEY);
+      var state = raw ? JSON.parse(raw) : null;
+      if (state && state.apartment) {
+        state.apartment.ownerCode = code;
+        if (i.email) state.apartment.ownerEmail = email;
+        if (i.apartmentName) state.apartment.name = i.apartmentName;
+        localStorage.setItem(OWNER_KEY, JSON.stringify(state));
+      }
+      var sess = {
+        ownerCode: code,
+        email: email,
+        apartmentName: (state && state.apartment && state.apartment.name) || i.apartmentName || 'Appartamento Santo Spirito',
+        loggedAt: new Date().toISOString()
+      };
+      localStorage.setItem(SESSION_KEY, JSON.stringify(sess));
+      return sess;
+    } catch (e) {
+      return { ownerCode: code, email: email };
+    }
+  }
+
+  function getOwnerSession() {
+    try {
+      var raw = localStorage.getItem(SESSION_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    return {
+      ownerCode: 'ITA-FIRENZE-01',
+      email: 'proprietario@itadreamteam.com',
+      apartmentName: 'Appartamento Santo Spirito'
+    };
+  }
+
   root.ITACloudSync = {
     syncSnapshotToSupabase: syncSnapshotToSupabase,
     broadcastStateChange: broadcastStateChange,
@@ -460,6 +615,10 @@
     pushTaskFromAdminToOwner: pushTaskFromAdminToOwner,
     getReportLogs: getReportLogs,
     activateNewOwnerFromCheckout: activateNewOwnerFromCheckout,
-    saveGuestCheckinSubmission: saveGuestCheckinSubmission
+    saveGuestCheckinSubmission: saveGuestCheckinSubmission,
+    saveSavingsDiagnosisLead: saveSavingsDiagnosisLead,
+    getDiagnosisLeads: getDiagnosisLeads,
+    loginOwnerSession: loginOwnerSession,
+    getOwnerSession: getOwnerSession
   };
 })(typeof window !== 'undefined' ? window : this);

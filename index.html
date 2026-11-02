@@ -147,8 +147,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet"/>
 
-  <!-- Fonte Unica Dati -->
+  <!-- Fonte Unica Dati & Cloud Sync -->
   <script src="/site-config.js"></script>
+  <script src="/cloud-sync.js"></script>
 
   <style>
     :root {
@@ -1793,6 +1794,35 @@
               <a href="/checkout.html" class="btn btn-primary" style="width:100%;margin-top:14px;" onclick="trackSiteEvent('click_prova_app',{location:'calculator'})">Prova l'app (14 gg Soddisfatto o Rimborsato)</a>
             </div>
           </div>
+
+          <!-- Lead Magnet per Proprietari Indecisi: Diagnosi Risparmio & Checklist Firenze -->
+          <div style="margin-top:24px;padding-top:20px;border-top:1.5px dashed rgba(201,168,76,0.5);">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:12px;">
+              <div>
+                <span style="display:inline-block;background:var(--navy);color:var(--gold);font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;">
+                  📩 Non vuoi attivare subito? Ricevi il Prospetto sul Telefono
+                </span>
+                <h4 style="font-size:17px;color:var(--navy);font-weight:700;">
+                  Inviati su WhatsApp/Email la Diagnosi di Risparmio + Checklist Obblighi Firenze (CIN, Alloggiati Web, Tassa Soggiorno)
+                </h4>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:center;">
+              <input type="text" id="lead-diag-name" placeholder="Tuo Nome (es. Marco)" style="padding:11px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;"/>
+              <input type="tel" id="lead-diag-phone" placeholder="WhatsApp (es. +39 340...)" style="padding:11px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;"/>
+              <input type="email" id="lead-diag-email" placeholder="La tua Email" style="padding:11px 12px;border:1px solid var(--border);border-radius:8px;font-size:13.5px;"/>
+              <button type="button" class="btn btn-gold btn-sm" style="padding:12px 18px;white-space:nowrap;" onclick="submitSavingsDiagnosisLead()">
+                📲 Ricevi Diagnosi Gratuita →
+              </button>
+            </div>
+            <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--text-muted);">
+              <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;">
+                <input type="checkbox" id="lead-diag-addon10" style="accent-color:var(--navy);"/>
+                <span>Includi nel calcolo anche la simulazione con l'opzione <strong>+10% Revenue Management &amp; Adempimenti di Legge</strong></span>
+              </label>
+              <span id="lead-diag-status" style="font-weight:700;color:var(--green);"></span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -2240,6 +2270,59 @@
       if (typeof window.trackSiteEvent === 'function') {
         window.trackSiteEvent('use_calculator', { annual_revenue: rev, pm_pct: _currentPmPct, saving: netSaving });
       }
+    }
+
+    async function submitSavingsDiagnosisLead() {
+      var name = (document.getElementById('lead-diag-name').value || '').trim();
+      var phone = (document.getElementById('lead-diag-phone').value || '').trim();
+      var email = (document.getElementById('lead-diag-email').value || '').trim();
+      var addon10 = document.getElementById('lead-diag-addon10') && document.getElementById('lead-diag-addon10').checked;
+      var rev = parseFloat(document.getElementById('calc-number').value) || 30000;
+
+      if (!name || (!phone && !email)) {
+        alert('Inserisci il tuo nome e almeno un recapito (WhatsApp o Email) per ricevere la diagnosi personalizzata.');
+        return;
+      }
+
+      var statusEl = document.getElementById('lead-diag-status');
+      if (statusEl) statusEl.textContent = 'Elaborazione diagnosi in corso...';
+
+      var pmCost = Math.round(rev * (_currentPmPct / 100));
+      var netSaving = Math.max(0, pmCost - 1188);
+
+      if (window.ITACloudSync && typeof ITACloudSync.saveSavingsDiagnosisLead === 'function') {
+        await ITACloudSync.saveSavingsDiagnosisLead({
+          name: name,
+          phone: phone,
+          email: email,
+          annualRevenue: rev,
+          pmPct: _currentPmPct,
+          addon10Interest: addon10
+        });
+      }
+
+      if (statusEl) {
+        statusEl.textContent = '✓ Diagnosi salvata! Apertura riepilogo WhatsApp...';
+      }
+
+      var msg = [
+        '📊 *DIAGNOSI RISPARMIO & CONFORMITÀ FIRENZE — itassistance*',
+        '👤 Proprietario: *' + name + '*',
+        '💰 Incasso annuo stimato: *' + formatEurIT(rev) + '*',
+        '❌ Costo Property Manager (' + _currentPmPct + '%): *' + formatEurIT(pmCost) + '/anno*',
+        '✅ Canone fisso itassistance: *1.188 €/anno (99 €/mese IVA incl.)*',
+        '🏆 *RISPARMIO NETTO CHE RESTA A TE: +' + formatEurIT(netSaving) + ' / anno*',
+        addon10 ? '📈 Nota: Richiesta info anche su Opzione Extra +10% (Revenue Management & Adempimenti di Legge).' : '',
+        '',
+        '📋 *Checklist Obblighi Firenze inclusa nell\'app:*',
+        '1. Alloggiati Web Polizia di Stato (entro 24h / 6h)',
+        '2. Tassa di Soggiorno Comune di Firenze (max 7 notti, scadenza giorno 16)',
+        '3. Esposizione CIN e flussi ISTAT / Ross1000',
+        '',
+        '👉 Prova l\'app con 14 giorni Soddisfatto o Rimborsato: https://www.itadreamteam.com/checkout.html'
+      ].filter(Boolean).join('\n');
+
+      window.open('https://wa.me/393510380392?text=' + encodeURIComponent(msg), '_blank');
     }
 
     /* ────────────────────────────────────────────────────────
