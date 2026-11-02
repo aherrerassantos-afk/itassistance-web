@@ -502,20 +502,20 @@
 
       <div class="role-preset-grid">
         <button type="button" class="role-preset-btn selected" id="preset-superadmin" onclick="selectLoginPreset('superadmin');performAdminLogin();">
-          <strong>👑 1. Super Admin (1 Clic)</strong>
-          <span>Regia Totale, Broadcast 08:00, Backup &amp; SEO/GEO</span>
-        </button>
-        <button type="button" class="role-preset-btn" id="preset-billing" onclick="selectLoginPreset('billing');performAdminLogin();">
-          <strong>🧾 2. Admin Fatturazione (1 Clic)</strong>
-          <span>Fatture 1-Clic, Piani 99€/1.188€, +10%, Rimborsi 14gg</span>
+          <strong>👑 Holding / Super Admin (1 Clic)</strong>
+          <span>Regia Gruppo (1→2→3→4), Broadcast 08:00 &amp; SEO/GEO</span>
         </button>
         <button type="button" class="role-preset-btn" id="preset-hr" onclick="selectLoginPreset('hr');performAdminLogin();">
-          <strong>🛠️ 3. Team Operativo Firenze (1 Clic)</strong>
-          <span>Turni 09–23, Check-in 20€, Manutenzione 30€, Push Compiti</span>
+          <strong>🛠️ 1. General Director Operatività (1 Clic)</strong>
+          <span>Turni 09–23, Adempimenti, Revenue RM &amp; Interventi 20€/30€</span>
+        </button>
+        <button type="button" class="role-preset-btn" id="preset-billing" onclick="selectLoginPreset('billing');performAdminLogin();">
+          <strong>🧾 2. General Director Amministrazione (1 Clic)</strong>
+          <span>Fatture 1-Clic, Piani 99€/1.188€, +10%, Rimborsi 14gg &amp; SDI</span>
         </button>
         <button type="button" class="role-preset-btn" id="preset-partners" onclick="selectLoginPreset('partners');performAdminLogin();">
-          <strong>🤝 4. Vendite, CRM Lead &amp; Partner (1 Clic)</strong>
-          <span>Conversione Lead 1-Clic, Commercialisti &amp; Fornitori</span>
+          <strong>🤝 3. General Director Vendite (1 Clic)</strong>
+          <span>Acquisizione PM, Conversione Lead 1-Clic &amp; Rete Partner</span>
         </button>
       </div>
 
@@ -557,10 +557,10 @@
       <div class="header-right">
         <label for="quick-role-switch" style="font-size:12px;color:rgba(255,255,255,0.75);">Vista Ruolo:</label>
         <select id="quick-role-switch" class="role-switcher-select" onchange="switchActiveRole(this.value)">
-          <option value="superadmin">👑 Super Admin (Accesso Totale)</option>
-          <option value="billing">🧾 Admin Fatturazione &amp; Contabilità</option>
-          <option value="hr">👥 HR &amp; Team Firenze</option>
-          <option value="partners">🤝 Partners &amp; Fornitori</option>
+          <option value="superadmin">👑 Holding / Super Admin Gruppo</option>
+          <option value="hr">🛠️ 1. General Director Operatività</option>
+          <option value="billing">🧾 2. General Director Amministrazione</option>
+          <option value="partners">🤝 3. General Director Vendite (PM &amp; Partner)</option>
         </select>
         <a href="/app.html" class="btn btn-outline btn-sm" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.3);">📱 Vista App Proprietario</a>
         <button type="button" class="btn btn-gold btn-sm" onclick="logoutAdmin()">Esci</button>
@@ -808,63 +808,111 @@
           </div>
         </div>
 
-        <!-- MAPPA ECOSISTEMA & FLUSSI INTER-AZIENDALI DEL GRUPPO BLUE ARROYO (1 DATO = 1 SOLA VOLTA) -->
+        <!-- MAPPA ECOSISTEMA & FLUSSI INTER-AZIENDALI DEL GRUPPO BLUE ARROYO (ORDINE UFFICIALE 1 -> 2 -> 3 -> 4 + 3 GENERAL DIRECTORS PER AZIENDA) -->
         <div class="panel-card" id="adm-group-synergy-card" style="border:2px solid var(--navy);">
           <div class="panel-head">
             <div>
               <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
-                <span class="badge badge-gold">🏛️ ECOSISTEMA INTEGRATO GRUPPO BLUE ARROYO</span>
-                <span class="badge badge-ok">✓ 4 Divisioni Sincronizzate · Zero Dati Reinseriti Due Volte</span>
+                <span class="badge badge-gold">🏛️ ARCHITETTURA UFFICIALE GRUPPO BLUE ARROYO (1 → 2 → 3 → 4)</span>
+                <span class="badge badge-ok">✓ 4 Aziende Autonome · 12 General Directors (3 per Azienda) · Sinergia Totale</span>
               </div>
-              <div class="panel-title">🔗 Come Interagisce itassistance con le Altre Aziende del Gruppo</div>
+              <div class="panel-title">🔗 Le 4 Aziende del Gruppo, il Cliente Ideale di Ciascuna e i 3 General Directors (Operatività · Amministrazione · Vendite)</div>
               <p style="font-size:13px;color:var(--text-muted);">
-                Catena del valore completa dal cantiere edile alla rendita ricettiva ricorrente, alla prenotazione diretta e alla logistica ZTL a Firenze:
+                Ogni azienda cresce in autonomia risolvendo il problema specifico del proprio cliente con i suoi <strong>3 General Directors dedicati (Operatività, Amministrazione, Vendite)</strong>, e allo stesso tempo passa valore alle altre aziende del Gruppo Blue Arroyo senza mai reinserire un dato due volte:
               </p>
             </div>
           </div>
 
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;">
-            <div style="background:#F8FAFC;border:1.5px solid var(--border);border-top:4px solid #B45309;border-radius:10px;padding:14px;">
-              <div style="font-size:11px;font-weight:800;color:#B45309;text-transform:uppercase;">1. A Monte · General Contractor</div>
-              <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">🏗️ Toscan Costruzioni</div>
-              <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
-                Ristruttura e trasforma l'immobile a prezzo fisso in <strong>5 SAL garantiti (15+25+25+25+10%)</strong> con Report del Venerdì, DURC, DM 37/08, APE, Agibilità e self check-in cablato.
-              </p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;">
+            <!-- 1. TOSCAN COSTRUZIONI -->
+            <div style="background:#F8FAFC;border:1.5px solid var(--border);border-top:4px solid #B45309;border-radius:10px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
+              <div>
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                  <span style="font-size:11px;font-weight:800;color:#B45309;text-transform:uppercase;">1° Azienda Gruppo</span>
+                  <span class="badge badge-gold" style="font-size:10.5px;">🎯 Cliente: INVESTITORI</span>
+                </div>
+                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">🏗️ 1. Toscan Costruzioni</div>
+                <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
+                  <strong>Problema risolto per l'Investitore:</strong> Trasforma l'immobile in struttura ricettiva "Chiavi in Mano" a prezzo fisso in <strong>5 SAL garantiti (15+25+25+25+10%)</strong> con Report del Venerdì, DURC, DM 37/08, APE, Agibilità e self check-in cablato.
+                </p>
+                <div style="font-size:11px;background:#fff;border:1px solid var(--border);border-radius:6px;padding:6px 8px;margin-bottom:8px;color:var(--navy);">
+                  <strong>👥 I 3 General Directors:</strong><br/>
+                  • <strong>DG Operatività:</strong> Cantieri, 5 SAL &amp; Collaudi<br/>
+                  • <strong>DG Amministrazione:</strong> Appalti, DURC, CAR &amp; SAL<br/>
+                  • <strong>DG Vendite:</strong> Acquisizione Investitori Immobiliari
+                </div>
+              </div>
               <div style="font-size:11.5px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;padding:6px 8px;color:#92400E;font-weight:700;">
-                ➡️ <strong>Ponte verso itassistance:</strong> Il giorno stesso del collaudo ("Chiavi in Mano") l'immobile entra in 1 clic su <code>itassistance</code> per generare il 2° ricavo ricorrente di gruppo.
+                🤝 <strong>Aiuto al Gruppo:</strong> Al collaudo consegna l'immobile pronto ai PM su <code>2. itassistance</code> e copre le manutenzioni rapide (30€).
               </div>
             </div>
 
-            <div style="background:var(--gold-light);border:1.5px solid var(--gold);border-top:4px solid var(--navy);border-radius:10px;padding:14px;">
-              <div style="font-size:11px;font-weight:800;color:var(--navy);text-transform:uppercase;">2. Cabina di Regia Centrale</div>
-              <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">🧠 itassistance (itadreamteam.com)</div>
-              <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
-                Sistema operativo del Proprietario e dei Property Manager (<strong>99 €/mese 0% comm.</strong> + <strong>Extra +10% Revenue &amp; Adempimenti</strong>): Alloggiati Web 24h, ISTAT Ross1000, Tassa Soggiorno FI, 6 PDF e Channel Manager Prezzi Variabili.
-              </p>
-              <div style="font-size:11.5px;background:#fff;border:1px solid var(--gold);border-radius:6px;padding:6px 8px;color:var(--navy);font-weight:700;">
-                🔄 <strong>Centro di Smistamento:</strong> Riceve immobili da Toscan Costruzioni, sincronizza tariffe con Smartbookings e attiva i turnover PBA.
+            <!-- 2. itassistance -->
+            <div style="background:var(--gold-light);border:2px solid var(--navy);border-top:4px solid var(--navy);border-radius:10px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
+              <div>
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                  <span style="font-size:11px;font-weight:800;color:var(--navy);text-transform:uppercase;">2° Azienda Gruppo (Qui)</span>
+                  <span class="badge badge-ok" style="font-size:10.5px;">🎯 Cliente: PROPERTY MANAGER</span>
+                </div>
+                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">🧠 2. itassistance</div>
+                <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
+                  <strong>Problema risolto per il PM:</strong> Software gestionale + <strong>Channel Manager Revenue Autonomo</strong> + Adempimenti (Alloggiati 24h, Ross1000, Tassa Soggiorno FI, 6 PDF, Report 08:00) a <strong>99 €/m</strong> (o <strong>+10% RM</strong>) con pochi minuti a settimana.
+                </p>
+                <div style="font-size:11px;background:#fff;border:1px solid var(--gold);border-radius:6px;padding:6px 8px;margin-bottom:8px;color:var(--navy);">
+                  <strong>👥 I 3 General Directors (Questa Console):</strong><br/>
+                  • <strong>DG Operatività:</strong> Assistenza 09–23, Adempimenti &amp; Revenue<br/>
+                  • <strong>DG Amministrazione:</strong> Fatturazione 99€/+10%, Rimborsi &amp; SDI<br/>
+                  • <strong>DG Vendite:</strong> Acquisizione PM, Commercialisti &amp; Agenzie
+                </div>
+              </div>
+              <div style="font-size:11.5px;background:#fff;border:1px solid var(--navy);border-radius:6px;padding:6px 8px;color:var(--navy);font-weight:700;">
+                🤝 <strong>Aiuto al Gruppo:</strong> Smista i turnover dei PM a <code>3. Blue Arroyo Cleaning Co.</code> e sincronizza prezzi/disponibilità con <code>4. Smartbookings</code>.
               </div>
             </div>
 
-            <div style="background:#F8FAFC;border:1.5px solid var(--border);border-top:4px solid #0284C7;border-radius:10px;padding:14px;">
-              <div style="font-size:11px;font-weight:800;color:#0284C7;text-transform:uppercase;">3. Canale Chiuso del Turismo</div>
-              <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">💎 Smartbookings (smarstbookings.com)</div>
-              <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
-                Circuito di prenotazione diretta senza ricarichi OTA: <strong>+15–25% margine netto</strong> al proprietario, <strong>Payout 85% entro le ore 12:00 del check-out</strong>, <strong>15% Cashback</strong> all'ospite in 48h e <strong>Runner Valigie</strong>.
-              </p>
-              <div style="font-size:11.5px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:6px;padding:6px 8px;color:#0369A1;font-weight:700;">
-                ⬅️➡️ <strong>Ponte con itassistance:</strong> Alimenta il canale <em>Sito Diretto (0% Comm. · -8% tariffa)</em> del Channel Manager ed elimina le commissioni parassitarie.
+            <!-- 3. BLUE ARROYO CLEANING CO. -->
+            <div style="background:#F8FAFC;border:1.5px solid var(--border);border-top:4px solid #059669;border-radius:10px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
+              <div>
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                  <span style="font-size:11px;font-weight:800;color:#059669;text-transform:uppercase;">3° Azienda Gruppo</span>
+                  <span class="badge badge-info" style="font-size:10.5px;">🎯 Cliente: PROPERTY MANAGER</span>
+                </div>
+                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">🧹 3. Blue Arroyo Cleaning Co.</div>
+                <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
+                  <strong>Problema risolto per il PM (che gestisce per i proprietari):</strong> <strong>3 Hub fisici in ZTL Firenze</strong>, 100% turnover chiusi entro le <strong>15:00</strong>, biancheria 60°C, <strong>Forniture Bagno/Cucina gratuite (232 €/m risparmio)</strong> e <strong>Dossier 4 Foto SHA-256</strong>.
+                </p>
+                <div style="font-size:11px;background:#fff;border:1px solid var(--border);border-radius:6px;padding:6px 8px;margin-bottom:8px;color:var(--navy);">
+                  <strong>👥 I 3 General Directors:</strong><br/>
+                  • <strong>DG Operatività:</strong> 3 Hub ZTL, Turnover h 15:00 &amp; Foto SHA-256<br/>
+                  • <strong>DG Amministrazione:</strong> Fattura Unica SDI 1-Clic &amp; Magazzino Kit<br/>
+                  • <strong>DG Vendite:</strong> Acquisizione &amp; Fidelizzazione B2B dei PM
+                </div>
               </div>
-            </div>
-
-            <div style="background:#F8FAFC;border:1.5px solid var(--border);border-top:4px solid #059669;border-radius:10px;padding:14px;">
-              <div style="font-size:11px;font-weight:800;color:#059669;text-transform:uppercase;">4. Braccio Operativo &amp; Logistica ZTL</div>
-              <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">🧹 PBA · Palazzo Blue Arroyo</div>
-              <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
-                <strong>3 Hub logistici fisici in ZTL Firenze</strong>: 100% turnover chiusi entro le 15:00, biancheria 60°C, <strong>Forniture Bagno/Cucina gratuite (232 €/mese risparmio)</strong> e <strong>Dossier 4 Foto Certificato SHA-256</strong> su WhatsApp.
-              </p>
               <div style="font-size:11.5px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:6px;padding:6px 8px;color:#065F46;font-weight:700;">
-                ⬅️ <strong>Ponte con itassistance:</strong> Ogni check-out su <code>/app.html</code> attiva il turnover PBA e restituisce il certificato SHA-256 anti-rimborsi OTA.
+                🤝 <strong>Aiuto al Gruppo:</strong> Invia a <code>2. itassistance</code> il certificato SHA-256 anti-rimborsi OTA e segnala guasti a <code>1. Toscan Costruzioni</code>.
+              </div>
+            </div>
+
+            <!-- 4. SMARTS BOOKINGS -->
+            <div style="background:#F8FAFC;border:1.5px solid var(--border);border-top:4px solid #0284C7;border-radius:10px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
+              <div>
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                  <span style="font-size:11px;font-weight:800;color:#0284C7;text-transform:uppercase;">4° Azienda Gruppo</span>
+                  <span class="badge badge-gold" style="font-size:10.5px;">🎯 Cliente: I TURISTI</span>
+                </div>
+                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">💎 4. Smarts Bookings</div>
+                <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
+                  <strong>Problema risolto per il Turista:</strong> Prezzo più basso garantito (zero ricarichi OTA), <strong>15% di Cashback reale in 48h</strong> ed <strong>esperienza a mani libere con Runner Valigie casa-a-casa</strong> (con Payout 85% entro le 12:00 al PM/proprietario).
+                </p>
+                <div style="font-size:11px;background:#fff;border:1px solid var(--border);border-radius:6px;padding:6px 8px;margin-bottom:8px;color:var(--navy);">
+                  <strong>👥 I 3 General Directors:</strong><br/>
+                  • <strong>DG Operatività:</strong> Runner Valigie, Concierge &amp; Esperienze Turisti<br/>
+                  • <strong>DG Amministrazione:</strong> Cashback 15% (48h) &amp; Payout 85% (h 12)<br/>
+                  • <strong>DG Vendite:</strong> Acquisizione &amp; Fidelizzazione Turisti Diretti
+                </div>
+              </div>
+              <div style="font-size:11.5px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:6px;padding:6px 8px;color:#0369A1;font-weight:700;">
+                🤝 <strong>Aiuto al Gruppo:</strong> Porta prenotazioni dirette a 0% commissioni dentro il Channel Manager di <code>2. itassistance</code> e riempie gli alloggi dei PM.
               </div>
             </div>
           </div>
@@ -1570,26 +1618,26 @@ P.IVA: 07480210488</div>
 
     var ROLE_PROFILES = {
       superadmin: {
-        badge: '👑 SUPER ADMIN',
-        name: 'Julian Herrera · Super Admin',
+        badge: '👑 HOLDING / SUPER ADMIN',
+        name: 'Julian Herrera · Presidente Gruppo Blue Arroyo',
         email: 'superadmin@itadreamteam.com',
         defaultTab: 'overview'
       },
-      billing: {
-        badge: '🧾 ADMIN FATTURAZIONE',
-        name: 'Amministrazione & Fatturazione',
-        email: 'fatturazione@itadreamteam.com',
-        defaultTab: 'fatturazione'
-      },
       hr: {
-        badge: '🛠️ OPERATIVO & ASSISTENZA FI',
-        name: 'Team Operativo & Assistenza Firenze (09–23)',
+        badge: '🛠️ DG OPERATIVITÀ',
+        name: 'General Director Operatività (Assistenza, Adempimenti & RM)',
         email: 'hr@itadreamteam.com',
         defaultTab: 'overview'
       },
+      billing: {
+        badge: '🧾 DG AMMINISTRAZIONE',
+        name: 'General Director Amministrazione (Fatture, SDI & Fornitori)',
+        email: 'fatturazione@itadreamteam.com',
+        defaultTab: 'fatturazione'
+      },
       partners: {
-        badge: '🤝 VENDITE, CRM & PARTNERS',
-        name: 'Team Vendite, Lead & Partner',
+        badge: '🤝 DG VENDITE (PM & PARTNER)',
+        name: 'General Director Vendite (Acquisizione PM, Lead & Partner)',
         email: 'fornitori@itadreamteam.com',
         defaultTab: 'partners'
       }
@@ -1728,12 +1776,12 @@ P.IVA: 07480210488</div>
         suppliers: [
           {
             id: 's0',
-            name: 'PBA · Palazzo Blue Arroyo (3 Hub Logistici ZTL Firenze)',
-            category: 'Turnover 15:00, Biancheria 60°C, Kit Bio Gratuiti & Dossier SHA-256',
-            vat: 'Divisione Operativa Blue Arroyo SRL · Fattura Unica SDI 1-Clic',
+            name: '3. Blue Arroyo Cleaning Co. (PBA · 3 Hub Logistici ZTL Firenze)',
+            category: 'Turnover 15:00 per PM, Biancheria 60°C, Kit Bio Gratuiti & Dossier SHA-256',
+            vat: '3° Azienda Gruppo Blue Arroyo (Cliente: PM) · Fattura Unica SDI 1-Clic',
             rate: 'Turnover garantito h 15:00 + Forniture Bagno/Cucina gratuite (232€/m risparmio)',
             amount: 2450,
-            contact: 'Centrale Operativa ZTL Firenze · Certificato 4 Foto SHA-256 WhatsApp',
+            contact: 'DG Operatività / Vendite B2B PM · Certificato 4 Foto SHA-256 WhatsApp',
             paid: true
           },
           {
