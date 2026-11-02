@@ -980,6 +980,49 @@
     }
   </style>
 
+  <!-- Solo telefono (≤768px): la home mostra main.ita-m e nasconde i blocchi .ita-d. Il PC resta invariato. Regole in ISTRUZIONI-IA-MOBILE-ITASSISTANCE.md -->
+  <style id="ita-mobile">
+    .ita-m{display:none}
+    @media (max-width:768px){
+      .ita-d{display:none!important}
+      .ita-m{display:block;padding-bottom:84px}
+      .ita-m section{padding:44px 20px;border-bottom:1px solid var(--rule-light)}
+      .ita-m .m-eyebrow{font-size:10.5px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+      .ita-m h1,.ita-m h2{font-family:var(--serif);font-weight:400;line-height:1.12;letter-spacing:-.5px;color:var(--navy)}
+      .ita-m h1{font-size:34px;margin-bottom:16px}
+      .ita-m h2{font-size:27px;margin-bottom:14px}
+      .ita-m h1 em,.ita-m h2 em{font-style:italic;color:var(--gold)}
+      .ita-m p{font-size:15.5px;line-height:1.6;color:#383838}
+      .ita-m p+p{margin-top:12px}
+      .ita-m strong{color:var(--navy)}
+      .ita-m .m-hero{padding-top:36px;background:var(--beige2)}
+      .ita-m .m-pills{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 24px}
+      .ita-m .m-pills span{font-size:12px;font-weight:500;border:1px solid var(--rule-dark);border-radius:999px;padding:6px 12px;background:#fff}
+      .ita-m .m-btn{display:block;text-align:center;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:16px;border-radius:10px;min-height:48px}
+      .ita-m .m-btn+.m-btn{margin-top:10px}
+      .ita-m .m-btn--dark{background:var(--navy);color:#fff}
+      .ita-m .m-btn--line{border:1px solid var(--navy);color:var(--navy);background:#fff}
+      .ita-m .m-list{list-style:none;margin-top:16px}
+      .ita-m .m-list li{position:relative;padding:12px 0 12px 22px;border-top:1px solid var(--rule-light);font-size:15px;line-height:1.5}
+      .ita-m .m-list li::before{content:"—";position:absolute;left:0;color:var(--gold)}
+      .ita-m .m-card{border:1px solid var(--rule-dark);border-radius:14px;padding:20px;margin-top:14px;background:#fff}
+      .ita-m .m-card h3{font-family:var(--serif);font-size:21px;font-weight:400;margin-bottom:8px}
+      .ita-m .m-card .m-num{font-size:11px;font-weight:600;letter-spacing:2px;color:var(--gold);margin-bottom:6px}
+      .ita-m .m-card ul{margin:10px 0 0 18px}
+      .ita-m .m-card li{font-size:14.5px;line-height:1.55;margin:4px 0}
+      .ita-m .m-guarantee{background:var(--navy);color:#fff}
+      .ita-m .m-guarantee h2,.ita-m .m-guarantee p,.ita-m .m-guarantee strong{color:#fff}
+      .ita-m .m-price{font-family:var(--serif);font-size:56px;line-height:1;margin:6px 0}
+      .ita-m .m-small{font-size:13px;color:#707070}
+      .ita-m .m-steps{counter-reset:s;list-style:none;margin-top:12px}
+      .ita-m .m-steps li{counter-increment:s;position:relative;padding:14px 0 14px 44px;border-top:1px solid var(--rule-light);font-size:15px;line-height:1.5}
+      .ita-m .m-steps li::before{content:counter(s);position:absolute;left:0;top:12px;width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center}
+      .ita-m .m-contact a{color:var(--navy);font-weight:600;text-decoration:none}
+      .ita-m .m-sticky{position:fixed;left:0;right:0;bottom:0;z-index:150;display:flex;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid var(--rule-dark);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+      .ita-m .m-sticky a{flex:1;margin:0!important;padding:14px 8px;font-size:12px}
+      .checkin-trigger,.pf-trigger{bottom:calc(84px + env(safe-area-inset-bottom))!important}
+    }
+  </style>
 </head>
 <body>
 
@@ -996,9 +1039,103 @@
 
 
 <!-- ══════════════════════════════════════════
+     VERSIONE TELEFONO (≤768px) — visibile solo su telefono
+══════════════════════════════════════════ -->
+<main class="ita-m" aria-label="itassistance — versione telefono">
+
+  <section class="m-hero">
+    <div class="m-eyebrow">itassistance · Firenze</div>
+    <h1>La rete di property manager che <em>risponde per te.</em></h1>
+    <p>In itassistance gestiamo appartamenti turistici con tre specialità: <strong>front desk per i tuoi ospiti</strong>, <strong>revenue management</strong> e <strong>fornitori certificati sotto contratto d'appalto</strong>.</p>
+    <div class="m-pills"><span>Front desk</span><span>Revenue management</span><span>Fornitori certificati</span><span>€55/mese</span></div>
+    <a class="m-btn m-btn--dark" href="https://wa.me/393510380392?text=Ciao%20itassistance%2C%20vorrei%20un%20sopralluogo%20gratuito">Sopralluogo gratuito</a>
+    <a class="m-btn m-btn--line" href="contratto.html">Entra nella rete itassistance</a>
+  </section>
+
+  <section>
+    <div class="m-eyebrow">I tuoi problemi</div>
+    <h2>Tre cose che ti tolgono tempo.</h2>
+    <ul class="m-list">
+      <li><strong>Ospiti che scrivono a ogni ora.</strong> Arrivi, chiavi, Wi-Fi, guasti: il telefono non smette mai.</li>
+      <li><strong>Prezzi fermi mentre il mercato si muove.</strong> Eventi, stagioni e concorrenza cambiano ogni settimana.</li>
+      <li><strong>Fornitori senza garanzie.</strong> Se le pulizie o la manutenzione sbagliano, chi ne risponde?</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="m-eyebrow">Le soluzioni itassistance</div>
+    <h2>Nella itassistance lavoriamo su <em>tre fronti.</em></h2>
+
+    <div class="m-card">
+      <div class="m-num">01 · FRONT DESK</div>
+      <h3>Il front desk itassistance</h3>
+      <p>Persone vere a Firenze, non un bot. Il tuo ospite ha un numero diretto itassistance e tu non vieni disturbato.</p>
+      <ul>
+        <li>Messaggi Airbnb e Booking in italiano e inglese</li>
+        <li>Reperibilità serale 18–23, risposta entro 15 minuti</li>
+        <li>Check-in in persona e reclami gestiti prima della recensione</li>
+      </ul>
+    </div>
+
+    <div class="m-card">
+      <div class="m-num">02 · REVENUE</div>
+      <h3>Revenue management itassistance</h3>
+      <p>In itassistance pensiamo che un appartamento pieno al prezzo sbagliato sia un'occasione persa. Leggiamo stagioni, eventi e concorrenza e ti proponiamo prezzi e soggiorni minimi.</p>
+    </div>
+
+    <div class="m-card">
+      <div class="m-num">03 · FORNITORI</div>
+      <h3>Fornitori certificati, sotto contratto</h3>
+      <p>Pulizie, biancheria e turnover non sono affidati a chiunque: itassistance li assegna con un <strong>contratto d'appalto</strong> a fornitori certificati, con prezzi e standard scritti.</p>
+    </div>
+  </section>
+
+  <section class="m-guarantee">
+    <div class="m-eyebrow">La garanzia itassistance</div>
+    <h2>Dietro ogni intervento c'è <em>una società vera.</em></h2>
+    <p>Il fornitore principale della rete itassistance è <strong>Blue Arroyo S.r.l.</strong> (P.IVA 07480210488, Firenze). È una società di capitali: risponde del lavoro svolto con il proprio patrimonio, non con una promessa a voce.</p>
+    <p>Dall'inizio i titolari di itassistance hanno capito che un proprietario non cerca l'ennesimo fornitore: cerca qualcuno che <strong>risponda quando qualcosa va storto</strong>.</p>
+  </section>
+
+  <section>
+    <div class="m-eyebrow">Il piano partner itassistance</div>
+    <h2>Un canone fisso. <em>Zero commissioni.</em></h2>
+    <div class="m-price">€55</div>
+    <p class="m-small">al mese · per struttura · disdetta mensile</p>
+    <ul class="m-list">
+      <li><strong>Incluso:</strong> customer care ospiti, reperibilità serale 18–23, guest card digitale, report settimanale.</li>
+      <li><strong>A consumo:</strong> check-in in persona €20 + IVA · manutenzione €30 + IVA.</li>
+      <li><strong>Su preventivo:</strong> revenue management, pulizie e biancheria dei fornitori certificati.</li>
+      <li><strong>Mai:</strong> costo di attivazione, commissioni sulle prenotazioni, penali di uscita.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="m-eyebrow">Come si entra</div>
+    <h2>Tre passi con itassistance.</h2>
+    <ol class="m-steps">
+      <li><strong>Sopralluogo gratuito.</strong> Vediamo l'appartamento e come lo gestisci oggi.</li>
+      <li><strong>Contratto chiaro.</strong> Firmi l'accordo partner itassistance online.</li>
+      <li><strong>Il front desk itassistance parte.</strong> Ospiti, prezzi e fornitori passano a noi.</li>
+    </ol>
+  </section>
+
+  <section class="m-contact">
+    <div class="m-eyebrow">Contatti</div>
+    <h2>Parla con itassistance.</h2>
+    <p>WhatsApp <a href="https://wa.me/393510380392">+39 351 038 0392</a><br/>Email <a href="mailto:info@itassistance.it">info@itassistance.it</a><br/>Firenze, Italia · risposta entro 24 ore</p>
+  </section>
+
+  <div class="m-sticky">
+    <a class="m-btn m-btn--dark" href="https://wa.me/393510380392?text=Ciao%20itassistance%2C%20vorrei%20un%20sopralluogo%20gratuito">WhatsApp</a>
+    <a class="m-btn m-btn--line" href="contratto.html">Entra nella rete</a>
+  </div>
+</main>
+
+<!-- ══════════════════════════════════════════
      HERO FORM SECTION
 ══════════════════════════════════════════ -->
-<section class="hero-form-wrap" id="home">
+<section class="ita-d hero-form-wrap" id="home">
   <img class="hero-form-bg"
     src="https://images.unsplash.com/photo-1504214208698-ea1916a2195a?w=2000&q=90&fit=crop&crop=center"
     alt="Appartamenti Firenze — itassistance"/>
@@ -1031,7 +1168,7 @@
 <!-- ══════════════════════════════════════════
      § ABOUT US — Il Team
 ══════════════════════════════════════════════ -->
-<div class="photo-text-split">
+<div class="ita-d photo-text-split">
   <div class="photo-side">
     <img src="https://www.itadreamteam.com/brand/staff.png" alt="itassistance Dream Team a Firenze"/>
   </div>
@@ -1051,7 +1188,7 @@
 </div>
 
 <!-- APPARTAMENTO BANNER — full width editorial -->
-<div class="photo-banner">
+<div class="ita-d photo-banner">
   <img src="https://images.unsplash.com/photo-1504214208698-ea1916a2195a?w=1800&q=85&fit=crop&crop=center" alt="Palazzina italiana centro Firenze"/>
   <div class="photo-banner-overlay"></div>
   <div class="photo-banner-text">
@@ -1062,7 +1199,7 @@
 </div>
 
 
-<section id="modello">
+<section class="ita-d" id="modello">
   <div class="sec-header">
     <span class="sec-rubric">§ 1 — Il Modello</span>
     <span class="sec-num">Chi sono i veri clienti</span>
@@ -1117,7 +1254,7 @@
 <!-- ══════════════════════════════════════════
      DIVISE DEL TEAM — dopo sezione modello
 ══════════════════════════════════════════════ -->
-<div class="photo-trio">
+<div class="ita-d photo-trio">
   <div class="photo-card">
     <img src="https://www.itadreamteam.com/brand/jacket.png" alt="Divisa itassistance giacca e gilet"/>
     <div class="photo-card-overlay"></div>
@@ -1151,7 +1288,7 @@
      § 2 — COME FUNZIONA
 ══════════════════════════════════════════════ -->
 
-<section id="come-funziona">
+<section class="ita-d" id="come-funziona">
   <div class="sec-header">
     <span class="sec-rubric">§ 2 — Come Funziona</span>
     <span class="sec-num">Tre passi. Zero complicazioni.</span>
@@ -1183,7 +1320,7 @@
 </section>
 
 <!-- EUROPA TRIO — Italia · Spagna · Francia -->
-<div class="photo-trio">
+<div class="ita-d photo-trio">
   <div class="photo-card">
     <img src="https://images.unsplash.com/photo-1504214208698-ea1916a2195a?w=900&q=85&fit=crop&crop=center" alt="Firenze centro storico Italia"/>
     <div class="photo-card-overlay"></div>
@@ -1214,7 +1351,7 @@
 </div>
 
 <!-- EUROPA DUO — radici nel continente -->
-<div class="photo-duo">
+<div class="ita-d photo-duo">
   <div class="photo-card" style="height:480px">
     <img src="https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=1000&q=85&fit=crop&crop=center" alt="Madrid Spagna piazza centro"/>
     <div class="photo-card-overlay"></div>
@@ -1239,7 +1376,7 @@
      § 3 — SERVIZI
 ══════════════════════════════════════════════ -->
 
-<section id="servizi">
+<section class="ita-d" id="servizi">
   <div class="sec-header">
     <span class="sec-rubric">§ 3 — I Servizi</span>
     <span class="sec-num">Cosa include itassistance</span>
@@ -1324,7 +1461,7 @@
 </section>
 
 <!-- Merchandise brand — griglia 4 prodotti -->
-<div class="photo-quad">
+<div class="ita-d photo-quad">
   <div class="photo-card">
     <img src="https://www.itadreamteam.com/brand/backpack.png" alt="Zaino itassistance Dream Team"/>
     <div class="photo-card-overlay"></div>
@@ -1363,7 +1500,7 @@
      § 4 — AMENITIES
 ══════════════════════════════════════════════ -->
 
-<section id="amenities">
+<section class="ita-d" id="amenities">
   <div class="sec-header">
     <span class="sec-rubric">§ 4 — Amenities Esclusive</span>
     <span class="sec-num">Solo strutture partner itassistance</span>
@@ -1412,7 +1549,7 @@
 </section>
 
 <!-- Welcome Kit split — dopo amenities -->
-<div class="photo-text-split">
+<div class="ita-d photo-text-split">
   <div class="text-side light">
     <div class="pts-rubric" style="color:var(--navy);opacity:.6">Welcome Kit · Stationery</div>
     <h2 class="pts-title dark">Ogni dettaglio.<br/><em style="color:var(--gold)">Curato.</em></h2>
@@ -1429,7 +1566,7 @@
   </div>
 </div>
 
-<div class="photo-duo">
+<div class="ita-d photo-duo">
   <div class="photo-card" style="height:340px">
     <img src="https://www.itadreamteam.com/brand/stationery.png" alt="Stationery itassistance"/>
     <div class="photo-card-overlay"></div>
@@ -1454,7 +1591,7 @@
      § 5 — PRICING
 ══════════════════════════════════════════════ -->
 
-<section id="pricing">
+<section class="ita-d" id="pricing">
   <div class="sec-header">
     <span class="sec-rubric">§ 5 — Il Piano Partner</span>
     <span class="sec-num">Un prezzo. Tutto incluso.</span>
@@ -1511,7 +1648,7 @@
 <!-- ══════════════════════════════════════════
      CONTATTI
 ══════════════════════════════════════════ -->
-<section id="contatti">
+<section class="ita-d" id="contatti">
   <div class="cta-eyebrow">Inizia oggi</div>
   <h2 class="cta-title">Sopralluogo<br/><em>gratuito.</em></h2>
   <div class="cta-rule"></div>
