@@ -141,5 +141,28 @@ Obiettivo finale per i membri e i Property Manager di `itassistance`: un sistema
 3. **Zero Overbooking, Zero Prezzi Fuori Controllo:** Ogni inserimento prenotazione verifica preventivamente le collisioni di date (`ITACloudSync.checkBookingOverlap`) bloccando doppie prenotazioni; ogni prezzo (calcolato o inserito a mano) è vincolato matematicamente (`clampPriceToGuardrails`) tra il `Floor Minimo` e il `Cap Massimo` decisi dal proprietario.
 4. **Meno Clic Possibili per i Membri:** L'interazione ordinaria del membro o del Property Manager si riduce a **1 solo tap a settimana** (`⚡ Approva Piano Settimanale & Scarica Listino CSV`).
 
+---
+
+## 11. REGOLA PERMANENTE — MAPPA DELL'ECOSISTEMA DEL GRUPPO BLUE ARROYO (INTERAZIONE TRA LE 4 AZIENDE/DIVISIONI)
+
+`itassistance` (`itadreamteam.com`) non opera isolata ma è il **sistema nervoso gestionale, fiscale e di Channel Management** che collega le 4 aziende/divisioni del **Gruppo Blue Arroyo** secondo il principio **"Nessun dato viene reinserito due volte"**:
+
+1. **🏗️ `Toscan Costruzioni` (A Monte — General Contractor Edile & Ricettivo in 5 SAL garantiti):**
+   - **Cosa fa:** Ristruttura, arreda e trasforma immobili in strutture ricettive "Chiavi in Mano" con Contratto d'Appalto a Prezzo Fisso e **5 SAL (`15% + 25% + 25% + 25% + 10%`)**, `/stato-cantiere` + Report del Venerdì, Polizza CAR/RC, DURC, certificazioni DM 37/08, APE, Agibilità, Garanzia Decennale e self check-in cablato (**1° Ricavo del Gruppo: Margine industriale di General Contractor**).
+   - **Come interagisce con `itassistance`:** Il giorno stesso del Verbale di Collaudo, `Toscan Costruzioni` consegna l'immobile certificato direttamente a `itassistance` / `Blue Arroyo`, già pronto per incassare prenotazioni dal giorno successivo (**2° Ricavo Ricorrente di Gruppo: canone `99 €/mese` + gestione `+10%`**). Inoltre interviene per manutenzioni e adeguamenti strutturali sugli immobili già attivi.
+2. **🧠 `itassistance` (`itadreamteam.com` — Cabina di Regia Proprietario, Adempimenti di Legge & Channel Manager):**
+   - **Cosa fa:** Governa in 10 minuti al giorno (Report ore `08:00`) gli adempimenti obbligatori (Alloggiati Web Questura 24h, ISTAT Ross1000 entro il giorno 5, Tassa di Soggiorno Firenze entro il giorno 16, Contratti `<=30gg`, Cartello Sicurezza CIN, CSV Commercialista) e il **Channel Manager con Prezzi Variabili Comportamentali**.
+   - **Come interagisce con le altre 3 aziende:** Riceve i nuovi immobili da `Toscan Costruzioni`, sincronizza disponibilità e tariffe dirette con `Smartbookings` e innesca automaticamente i turni di pulizia/biancheria e gli interventi sul campo verso `PBA · Palazzo Blue Arroyo`.
+3. **💎 `Smartbookings` (`smarstbookings.com` — Il Canale Chiuso del Turismo, Prenotazione Diretta & Runner Bagagli):**
+   - **Cosa fa:** Elimina l'intermediazione parassitaria delle OTA offrendo al **Proprietario** `+15–25%` di margine netto in tasca e **Payout dell'85% accreditato il giorno del check-out entro le ore 12:00**, e al **Viaggiatore/Ospite** il prezzo più basso garantito (`-8%`), **15% di cashback reale** riaccreditato sul conto 48h dopo il soggiorno ed **esperienza a mani libere da casa a casa (valigie gestite dal Runner)**.
+   - **Come interagisce con `itassistance`:** È collegato direttamente come canale privilegiato a **0% commissioni** dentro il Channel Manager di `/app.html` e riceve i flussi ospiti da `/ospiti.html`.
+4. **🧹 `PBA · Palazzo Blue Arroyo` (A Valle — Logistica ZTL Firenze, Turnover Garantiti h 15:00 & Dossier SHA-256):**
+   - **Cosa fa:** Opera tramite **3 Hub logistici fisici dentro la ZTL di Firenze** garantendo ai Property Manager e ai proprietari di `itassistance`:
+     - **100% dei Turnover chiusi entro le ore 15:00** (check-in sempre protetti);
+     - **Forniture Bagno/Cucina gratuite** (`232 €/mese` di risparmio medio per immobile: Kit Bagno Bio, spugna cucina nuova sigillata, sigillo igienico WC) + **biancheria igienizzata a 60°C** con letto tirato ad angolo;
+     - **Dossier di Riconsegna Certificato SHA-256 su WhatsApp** (4 foto ad alta risoluzione con sigillo crittografico inviate in tempo reale -> **Zero truffe da rimborso OTA / AirCover blindato**);
+     - **Fattura unica SDI in 1 clic**.
+
+
 
 
