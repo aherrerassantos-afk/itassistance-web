@@ -2084,8 +2084,40 @@
               </div>
             </div>
 
-            <div style="background:rgba(201,168,76,0.12);border:1px dashed var(--gold);border-radius:10px;padding:12px 14px;font-size:13px;color:#FDE68A;">
+            <div style="background:rgba(201,168,76,0.12);border:1px dashed var(--gold);border-radius:10px;padding:12px 14px;font-size:13px;color:#FDE68A;margin-bottom:14px;">
               💡 <strong>Perché è la tua mossa successiva:</strong> Risparmiando oltre <strong>7.500 €/anno</strong> di commissioni sul tuo 1° immobile con <strong>itassistance</strong>, in pochi anni generi la liquidità per acquisire o frazionare la tua seconda unità a Firenze.
+            </div>
+
+            <!-- MINI-SIMULATORE INTERATTIVO 5 SAL & RIENTRO INVESTIMENTO IN HOMEPAGE -->
+            <div style="background:rgba(15,26,46,0.92);border:1.5px solid var(--gold);border-radius:12px;padding:16px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+                <span style="font-size:12px;font-weight:800;color:#FDE68A;text-transform:uppercase;">🧮 Simulatore Live: Rientro Cantiere 5 SAL &amp; Nuova Rendita</span>
+                <span style="background:#065F46;color:#A7F3D0;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:800;" id="idx-sim-payback-badge">⚡ Rientro in 1,8 anni</span>
+              </div>
+              <div style="margin-bottom:10px;">
+                <div style="display:flex;justify-content:space-between;font-size:12.5px;color:#E2E8F0;margin-bottom:4px;">
+                  <span>Budget Lavori / Cantiere a Prezzo Fisso (5 SAL):</span>
+                  <strong style="color:#FDE68A;font-size:15px;" id="idx-sim-budget-lbl">68.000 €</strong>
+                </div>
+                <input type="range" id="idx-sim-slider" min="35000" max="150000" step="1000" value="68000" oninput="updateIndexToscanSimulator(this.value)" style="width:100%;accent-color:#C9A84C;cursor:pointer;"/>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin-bottom:10px;">
+                <div style="background:rgba(255,255,255,0.06);padding:8px 6px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);">
+                  <div style="font-size:10px;color:#CBD5E1;text-transform:uppercase;">Flusso Extra / Anno</div>
+                  <div style="font-size:15px;font-weight:800;color:#10B981;margin-top:2px;" id="idx-sim-extra-cashflow">+37.400 €/a</div>
+                </div>
+                <div style="background:rgba(255,255,255,0.06);padding:8px 6px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);">
+                  <div style="font-size:10px;color:#CBD5E1;text-transform:uppercase;">Tempo Rientro 5 SAL</div>
+                  <div style="font-size:14.5px;font-weight:800;color:#FDE68A;margin-top:2px;" id="idx-sim-years">1,8 anni (22 mesi)</div>
+                </div>
+                <div style="background:rgba(255,255,255,0.06);padding:8px 6px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);">
+                  <div style="font-size:10px;color:#CBD5E1;text-transform:uppercase;">Tuo Tempo Gestione</div>
+                  <div style="font-size:14px;font-weight:800;color:#38BDF8;margin-top:2px;">30 sec / sett.</div>
+                </div>
+              </div>
+              <div style="font-size:11.5px;color:#CBD5E1;background:rgba(255,255,255,0.04);padding:8px 10px;border-radius:6px;line-height:1.45;" id="idx-sim-sal-breakdown">
+                📊 <strong>Piano 5 SAL Garantiti (68.000 €):</strong> 1° SAL (15%): <strong>10.200 €</strong> · 2° SAL (25%): <strong>17.000 €</strong> · 3° SAL (25%): <strong>17.000 €</strong> · 4° SAL (25%): <strong>17.000 €</strong> · 5° Fine Lavori &amp; Collaudo (10%): <strong>6.800 €</strong>.
+              </div>
             </div>
           </div>
 
@@ -2584,7 +2616,10 @@
       window.open('https://wa.me/393510380392?text=' + encodeURIComponent(msg), '_blank');
     }
 
+    var _idxToscanSimMode = 'buy';
+
     function selectToscanGoalChip(key, label) {
+      _idxToscanSimMode = key;
       var inp = document.getElementById('tc-lead-goal');
       if (inp) inp.value = label;
       ['buy', 'split', 'upgrade'].forEach(function (k) {
@@ -2595,6 +2630,39 @@
           btn.style.fontWeight = (k === key) ? '700' : '500';
         }
       });
+      var defaultBudgets = { buy: 85000, split: 68000, upgrade: 38000 };
+      var slider = document.getElementById('idx-sim-slider');
+      var targetVal = defaultBudgets[key] || 68000;
+      if (slider) slider.value = targetVal;
+      updateIndexToscanSimulator(targetVal);
+    }
+
+    function updateIndexToscanSimulator(rawVal) {
+      var cap = parseInt(rawVal, 10) || 68000;
+      var yieldFactor = (_idxToscanSimMode === 'split') ? 0.44 : (_idxToscanSimMode === 'upgrade' ? 0.36 : 0.42);
+      var newAptCashflow = Math.round(cap * yieldFactor);
+      var itaSavedCommissions = 7500;
+      var cleaningKitSaved = 2784;
+      var totalAnnualBoost = newAptCashflow + itaSavedCommissions + cleaningKitSaved;
+      var paybackYears = Math.max(0.8, (cap / totalAnnualBoost)).toFixed(1);
+      var paybackMonths = Math.round((cap / totalAnnualBoost) * 12);
+
+      var bLbl = document.getElementById('idx-sim-budget-lbl');
+      if (bLbl) bLbl.textContent = cap.toLocaleString('it-IT') + ' €';
+      var cLbl = document.getElementById('idx-sim-extra-cashflow');
+      if (cLbl) cLbl.textContent = '+' + totalAnnualBoost.toLocaleString('it-IT') + ' €/a';
+      var yLbl = document.getElementById('idx-sim-years');
+      if (yLbl) yLbl.textContent = paybackYears.replace('.', ',') + ' anni (' + paybackMonths + ' mesi)';
+      var pBadge = document.getElementById('idx-sim-payback-badge');
+      if (pBadge) pBadge.textContent = '⚡ Rientro in ' + paybackYears.replace('.', ',') + ' anni';
+
+      var s1 = Math.round(cap * 0.15).toLocaleString('it-IT');
+      var s25 = Math.round(cap * 0.25).toLocaleString('it-IT');
+      var s10 = Math.round(cap * 0.10).toLocaleString('it-IT');
+      var salEl = document.getElementById('idx-sim-sal-breakdown');
+      if (salEl) {
+        salEl.innerHTML = '📊 <strong>Piano 5 SAL Garantiti (' + cap.toLocaleString('it-IT') + ' €):</strong> 1° SAL (15%): <strong>' + s1 + ' €</strong> · 2° SAL (25%): <strong>' + s25 + ' €</strong> · 3° SAL (25%): <strong>' + s25 + ' €</strong> · 4° SAL (25%): <strong>' + s25 + ' €</strong> · 5° Fine Lavori &amp; Collaudo (10%): <strong>' + s10 + ' €</strong>.';
+      }
     }
 
     async function submitToscanLeadFromIndex() {
@@ -2603,6 +2671,9 @@
       var email = (document.getElementById('tc-lead-email').value || '').trim();
       var goal = (document.getElementById('tc-lead-goal').value || '').trim();
       var budget = (document.getElementById('tc-lead-budget').value || '').trim();
+      var simCap = (document.getElementById('idx-sim-slider') ? document.getElementById('idx-sim-slider').value : '68000');
+      var simYears = (document.getElementById('idx-sim-years') ? document.getElementById('idx-sim-years').textContent : '1,8 anni');
+      var simBoost = (document.getElementById('idx-sim-extra-cashflow') ? document.getElementById('idx-sim-extra-cashflow').textContent : '+37.400 €/a');
 
       if (!phone && !email) {
         alert('Inserisci il tuo numero WhatsApp o la tua Email per ricevere il Brief di 1. Toscan Costruzioni.');
@@ -2612,7 +2683,7 @@
       var statusBox = document.getElementById('tc-lead-status-box');
       if (statusBox) {
         statusBox.style.display = 'block';
-        statusBox.textContent = '⏳ Invio richiesta al CRM di 1. Toscan Costruzioni (DG Vendite Investitori)...';
+        statusBox.textContent = '⏳ Invio simulazione al CRM di 1. Toscan Costruzioni (DG Vendite Investitori)...';
       }
 
       if (window.ITACloudSync && typeof ITACloudSync.submitToscanRealEstateLead === 'function') {
@@ -2621,14 +2692,14 @@
           phone: phone,
           email: email,
           goalType: goal,
-          budgetRange: budget,
-          source: '/index.html (Sezione Real Estate Toscan Costruzioni)',
-          notes: 'Richiesta Brief e Studio di Fattibilità 5 SAL da Homepage itassistance.'
+          budgetRange: budget + ' · Simulazione 5 SAL: ' + Number(simCap).toLocaleString('it-IT') + ' €',
+          source: '/index.html (Simulatore Real Estate Toscan Costruzioni)',
+          notes: 'Simulazione 5 SAL da Homepage: Cantiere ' + Number(simCap).toLocaleString('it-IT') + ' €, Flusso Extra ' + simBoost + ', Rientro stimato ' + simYears + '.'
         });
       }
 
       if (statusBox) {
-        statusBox.innerHTML = '✅ <strong>Richiesta registrata nel CRM di 1. Toscan Costruzioni!</strong> Il General Director Vendite ti invierà il Brief sui 5 SAL garantiti e lo studio di rendita (' + budget + ').';
+        statusBox.innerHTML = '✅ <strong>Simulazione (' + Number(simCap).toLocaleString('it-IT') + ' € · Rientro ' + simYears + ') registrata nel CRM di 1. Toscan Costruzioni!</strong> Il General Director Vendite ti invierà il Brief sui 5 SAL garantiti e lo studio di rendita.';
       }
     }
 

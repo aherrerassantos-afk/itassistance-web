@@ -1763,6 +1763,38 @@
               <div style="margin-top:12px;font-size:12px;color:#FDE68A;font-weight:700;">
                 🎯 I 3 General Directors di Toscan Costruzioni (Operatività Cantieri, Amministrazione Appalti, Vendite Investitori) seguono l'operazione dall'acquisto alla messa a reddito.
               </div>
+
+              <!-- MINI-SIMULATORE INTERATTIVO 5 SAL & RIENTRO INVESTIMENTO (1 TAP + SLIDER) -->
+              <div style="margin-top:14px;background:rgba(15,26,46,0.92);border:1.5px solid var(--gold);border-radius:10px;padding:14px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+                  <span style="font-size:11.5px;font-weight:800;color:#FDE68A;text-transform:uppercase;">🧮 Simulatore Live: Rientro Cantiere 5 SAL &amp; Nuova Rendita</span>
+                  <span class="badge badge-ok" id="app-sim-payback-badge">⚡ Rientro in 1,8 anni</span>
+                </div>
+                <div style="margin-bottom:10px;">
+                  <div style="display:flex;justify-content:space-between;font-size:12px;color:#E2E8F0;margin-bottom:4px;">
+                    <span>Budget Lavori / Cantiere a Prezzo Fisso (5 SAL):</span>
+                    <strong style="color:#FDE68A;font-size:14px;" id="app-sim-budget-lbl">68.000 €</strong>
+                  </div>
+                  <input type="range" id="app-sim-slider" min="35000" max="150000" step="1000" value="68000" oninput="updateAppToscanSimulator(this.value)" style="width:100%;accent-color:#C9A84C;cursor:pointer;"/>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin-bottom:10px;">
+                  <div style="background:rgba(255,255,255,0.06);padding:8px 6px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);">
+                    <div style="font-size:10px;color:#CBD5E1;text-transform:uppercase;">Flusso Extra / Anno</div>
+                    <div style="font-size:14.5px;font-weight:800;color:#10B981;margin-top:2px;" id="app-sim-extra-cashflow">+37.400 €/a</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.06);padding:8px 6px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);">
+                    <div style="font-size:10px;color:#CBD5E1;text-transform:uppercase;">Tempo Rientro 5 SAL</div>
+                    <div style="font-size:14.5px;font-weight:800;color:#FDE68A;margin-top:2px;" id="app-sim-years">1,8 anni (22 mesi)</div>
+                  </div>
+                  <div style="background:rgba(255,255,255,0.06);padding:8px 6px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);">
+                    <div style="font-size:10px;color:#CBD5E1;text-transform:uppercase;">Tuo Tempo Gestione</div>
+                    <div style="font-size:13.5px;font-weight:800;color:#38BDF8;margin-top:2px;">30 sec / sett.</div>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:#CBD5E1;background:rgba(255,255,255,0.04);padding:7px 9px;border-radius:6px;line-height:1.45;" id="app-sim-sal-breakdown">
+                  📊 <strong>Piano 5 SAL Garantiti:</strong> 1° SAL (15%): <strong>10.200 €</strong> · 2° SAL (25%): <strong>17.000 €</strong> · 3° SAL (25%): <strong>17.000 €</strong> · 4° SAL (25%): <strong>17.000 €</strong> · 5° Fine Lavori &amp; Collaudo (10%): <strong>6.800 €</strong>.
+                </div>
+              </div>
             </div>
 
             <!-- FORM PRECOMPILATO IN 1 TAP VERSO CRM TOSCAN COSTRUZIONI -->
@@ -2649,7 +2681,10 @@
       }, 80);
     }
 
+    var _appToscanSimMode = 'buy';
+
     function selectAppToscanGoal(key, label) {
+      _appToscanSimMode = key;
       var inp = document.getElementById('app-tc-selected-goal');
       if (inp) inp.value = label;
       ['buy', 'split', 'upgrade'].forEach(function (k) {
@@ -2660,6 +2695,39 @@
           btn.style.fontWeight = (k === key) ? '700' : '500';
         }
       });
+      var defaultBudgets = { buy: 85000, split: 68000, upgrade: 38000 };
+      var slider = document.getElementById('app-sim-slider');
+      var targetVal = defaultBudgets[key] || 68000;
+      if (slider) slider.value = targetVal;
+      updateAppToscanSimulator(targetVal);
+    }
+
+    function updateAppToscanSimulator(rawVal) {
+      var cap = parseInt(rawVal, 10) || 68000;
+      var yieldFactor = (_appToscanSimMode === 'split') ? 0.44 : (_appToscanSimMode === 'upgrade' ? 0.36 : 0.42);
+      var newAptCashflow = Math.round(cap * yieldFactor);
+      var itaSavedCommissions = 7500;
+      var cleaningKitSaved = 2784;
+      var totalAnnualBoost = newAptCashflow + itaSavedCommissions + cleaningKitSaved;
+      var paybackYears = Math.max(0.8, (cap / totalAnnualBoost)).toFixed(1);
+      var paybackMonths = Math.round((cap / totalAnnualBoost) * 12);
+
+      var bLbl = document.getElementById('app-sim-budget-lbl');
+      if (bLbl) bLbl.textContent = cap.toLocaleString('it-IT') + ' €';
+      var cLbl = document.getElementById('app-sim-extra-cashflow');
+      if (cLbl) cLbl.textContent = '+' + totalAnnualBoost.toLocaleString('it-IT') + ' €/a';
+      var yLbl = document.getElementById('app-sim-years');
+      if (yLbl) yLbl.textContent = paybackYears.replace('.', ',') + ' anni (' + paybackMonths + ' mesi)';
+      var pBadge = document.getElementById('app-sim-payback-badge');
+      if (pBadge) pBadge.textContent = '⚡ Rientro in ' + paybackYears.replace('.', ',') + ' anni';
+
+      var s1 = Math.round(cap * 0.15).toLocaleString('it-IT');
+      var s25 = Math.round(cap * 0.25).toLocaleString('it-IT');
+      var s10 = Math.round(cap * 0.10).toLocaleString('it-IT');
+      var salEl = document.getElementById('app-sim-sal-breakdown');
+      if (salEl) {
+        salEl.innerHTML = '📊 <strong>Piano 5 SAL Garantiti (' + cap.toLocaleString('it-IT') + ' €):</strong> 1° SAL (15%): <strong>' + s1 + ' €</strong> · 2° SAL (25%): <strong>' + s25 + ' €</strong> · 3° SAL (25%): <strong>' + s25 + ' €</strong> · 4° SAL (25%): <strong>' + s25 + ' €</strong> · 5° Fine Lavori &amp; Collaudo (10%): <strong>' + s10 + ' €</strong>.';
+      }
     }
 
     async function submitToscanLeadFromApp() {
@@ -2668,6 +2736,9 @@
       var email = (document.getElementById('app-tc-email').value || '').trim();
       var goal = (document.getElementById('app-tc-selected-goal').value || '').trim();
       var budget = (document.getElementById('app-tc-budget').value || '').trim();
+      var simCap = (document.getElementById('app-sim-slider') ? document.getElementById('app-sim-slider').value : '68000');
+      var simYears = (document.getElementById('app-sim-years') ? document.getElementById('app-sim-years').textContent : '1,8 anni');
+      var simBoost = (document.getElementById('app-sim-extra-cashflow') ? document.getElementById('app-sim-extra-cashflow').textContent : '+37.400 €/a');
       var aptName = (appState && appState.apartment && appState.apartment.name) ? appState.apartment.name : 'Immobile Attivo';
 
       if (window.ITACloudSync && typeof ITACloudSync.submitToscanRealEstateLead === 'function') {
@@ -2676,18 +2747,18 @@
           phone: phone,
           email: email,
           goalType: goal,
-          budgetRange: budget,
-          source: '/app.html (Area Membro — Prossima Sfida Real Estate)',
-          notes: 'Membro attivo con immobile ' + aptName + '. Richiede Brief 5 SAL e studio di fattibilità a 1. Toscan Costruzioni.'
+          budgetRange: budget + ' · Simulazione 5 SAL: ' + Number(simCap).toLocaleString('it-IT') + ' €',
+          source: '/app.html (Simulatore Real Estate Area Membro)',
+          notes: 'Simulazione 5 SAL inviata da ' + aptName + ': Cantiere ' + Number(simCap).toLocaleString('it-IT') + ' €, Flusso Extra ' + simBoost + ', Rientro stimato ' + simYears + '.'
         });
       }
 
       var box = document.getElementById('app-tc-status-msg');
       if (box) {
         box.style.display = 'block';
-        box.innerHTML = '✅ <strong>Richiesta inviata in 1 tap al CRM di 1. Toscan Costruzioni!</strong> Il General Director Vendite ti contatterà con il Brief 5 SAL e lo studio di fattibilità per: <em>' + goal + '</em>.';
+        box.innerHTML = '✅ <strong>Simulazione (' + Number(simCap).toLocaleString('it-IT') + ' € · Rientro ' + simYears + ') inviata al CRM di 1. Toscan Costruzioni!</strong> Il General Director Vendite ti contatterà con lo studio di fattibilità.';
       }
-      showToast('🏗️ Richiesta inviata al CRM di 1. Toscan Costruzioni!');
+      showToast('🏗️ Simulazione 5 SAL inviata al CRM di 1. Toscan Costruzioni!');
     }
 
     function openAlloggiatiFor(bookingId) {
