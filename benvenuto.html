@@ -386,8 +386,14 @@
 
       <div id="w-bonifico-box" class="bonifico-alert">
         <strong>Coordinate per il Bonifico Bancario (Blue Arroyo SRL · P.IVA 07480210488):</strong><br/>
-        Intestatario: <strong>Blue Arroyo SRL</strong> (Via Matteo Palmieri 20r, 50122 Firenze) · Causale: <code id="w-bonifico-causale" style="font-weight:700;">Attivazione itassistance</code>.<br/>
+        Intestatario: <strong>Blue Arroyo SRL</strong> (Via Matteo Palmieri 20r, 50122 Firenze)<br/>
+        IBAN: <strong id="w-bonifico-iban">IT60X0306902887100000007480</strong> · Causale: <code id="w-bonifico-causale" style="font-weight:700;">Attivazione itassistance</code>.<br/>
         <span>La tua Area Proprietario e i 14 giorni di garanzia sono già attivi fin da subito.</span>
+        <div style="margin-top:10px;">
+          <button type="button" class="btn btn-outline" id="btn-copy-iban" onclick="copyWelcomeBankDetails()" style="min-height:48px;padding:10px 16px;font-size:0.9375rem;">
+            Copia IBAN e Causale in 1 Tap
+          </button>
+        </div>
       </div>
 
       <!-- AZIONE PRINCIPALE UNICA (56PX) -->
@@ -448,6 +454,11 @@
         <input type="text" id="ob-wifi" placeholder="Es. Fibra-Casa / Password123"/>
       </div>
 
+      <div class="field">
+        <label for="ob-ical">Link Calendario iCal (.ics) Airbnb o Booking.com (Facoltativo · importa subito le tue prenotazioni)</label>
+        <input type="url" id="ob-ical" placeholder="Es. https://www.airbnb.it/calendar/ical/12345678.ics"/>
+      </div>
+
       <div id="ob-feedback" class="save-feedback" role="status">
         Configurazione salvata. Apertura del Riepilogo delle 08:00 in corso...
       </div>
@@ -504,11 +515,13 @@
         };
       }
 
+      var amtNum = Number(actData.amountEur) || (actData.billingCycle === 'annuale' ? 1188 : 99);
+      var amtFmt = amtNum.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
       document.getElementById('w-title').textContent = 'Benvenuto ' + (actData.ownerName || '') + '. Il tuo appartamento è attivo.';
       document.getElementById('w-apt').textContent = actData.apartmentName + ' (' + actData.apartmentAddress + ')';
       document.getElementById('w-plan').textContent = actData.billingCycle === 'annuale'
-        ? '1.188,00 € / anno (IVA incl.)'
-        : '99,00 € / mese (IVA incl.)';
+        ? amtFmt + ' / anno (IVA incl.)'
+        : amtFmt + ' / mese (IVA incl.)';
       document.getElementById('w-addon').textContent = actData.addon10Active
         ? 'Attivo (+10%)'
         : 'Non attivo (0% commissioni)';
@@ -524,14 +537,39 @@
         mainBtn.href = '/app.html?code=' + encodeURIComponent(codeVal);
       }
 
+      var bankDetails = (window.SITE_CONFIG && typeof SITE_CONFIG.getBankTransferDetails === 'function')
+        ? SITE_CONFIG.getBankTransferDetails({
+            billingCycle: actData.billingCycle,
+            lockedMonthlyEur: actData.lockedMonthlyEur || (actData.billingCycle === 'annuale' ? amtNum / 12 : amtNum),
+            ownerCode: codeVal,
+            invoiceId: actData.invoiceId || 'FATT-2026'
+          })
+        : { iban: 'IT60X0306902887100000007480', causale: 'Attivazione itassistance ' + codeVal + ' - ' + (actData.invoiceId || 'FATT-2026') };
+
+      var bIban = document.getElementById('w-bonifico-iban');
+      if (bIban) bIban.textContent = bankDetails.iban;
+      var bCaus = document.getElementById('w-bonifico-causale');
+      if (bCaus) bCaus.textContent = bankDetails.causale;
+
       var metodo = params.get('metodo') || actData.paymentMethod || 'stripe';
       if (metodo === 'bonifico') {
         var bBox = document.getElementById('w-bonifico-box');
         if (bBox) bBox.style.display = 'block';
-        var bCaus = document.getElementById('w-bonifico-causale');
-        if (bCaus) bCaus.textContent = 'Attivazione itassistance ' + codeVal + ' - ' + (actData.invoiceId || 'FATT-2026');
       }
     });
+
+    function copyWelcomeBankDetails() {
+      var iban = (document.getElementById('w-bonifico-iban') && document.getElementById('w-bonifico-iban').textContent) || 'IT60X0306902887100000007480';
+      var caus = (document.getElementById('w-bonifico-causale') && document.getElementById('w-bonifico-causale').textContent) || 'Attivazione itassistance';
+      var copyStr = 'Intestatario: Blue Arroyo SRL\nIBAN: ' + iban + '\nCausale: ' + caus;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(copyStr);
+        }
+      } catch (e) {}
+      var btn = document.getElementById('btn-copy-iban');
+      if (btn) btn.textContent = 'Coordinate IBAN e Causale copiate negli appunti';
+    }
 
     function sendActivationSummaryWhatsApp() {
       if (!actData) return;
@@ -552,7 +590,7 @@
       window.open('https://wa.me/393510380392?text=' + encodeURIComponent(text), '_blank');
     }
 
-    function saveQuickOnboardingAndOpenApp() {
+    async function saveQuickOnboardingAndOpenApp() {
       try {
         var raw = localStorage.getItem('itassistance_owner_app_v1');
         var state = raw ? JSON.parse(raw) : { apartment: {} };
@@ -561,13 +599,18 @@
         var repTime = document.getElementById('ob-reptime').value;
         var code = document.getElementById('ob-code').value.trim();
         var wifi = document.getElementById('ob-wifi').value.trim();
+        var icalUrl = (document.getElementById('ob-ical') && document.getElementById('ob-ical').value.trim()) || '';
 
         if (cin) state.apartment.cin = cin;
         if (repTime) state.apartment.reportTime = repTime;
         if (code) state.apartment.doorCode = code;
         if (wifi) state.apartment.wifi = wifi;
+        if (icalUrl) state.apartment.icalUrl = icalUrl;
 
         localStorage.setItem('itassistance_owner_app_v1', JSON.stringify(state));
+        if (icalUrl && window.ITACloudSync && typeof ITACloudSync.parseAndImportICalFeed === 'function') {
+          await ITACloudSync.parseAndImportICalFeed(icalUrl, 'Airbnb');
+        }
         if (window.ITACloudSync && typeof ITACloudSync.syncSnapshotToSupabase === 'function') {
           ITACloudSync.syncSnapshotToSupabase('welcome_onboarding', state);
         }

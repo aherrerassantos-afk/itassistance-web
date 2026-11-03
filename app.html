@@ -639,6 +639,9 @@
         <button type="button" class="btn btn-primary" id="home-primary-cta" onclick="triggerHomePrimaryAction()">
           Conferma e scarica il file per la Questura
         </button>
+        <button type="button" class="btn btn-secondary" style="margin-top: 10px; background: rgba(255,255,255,0.12); color: var(--bg-light); border-color: var(--gold-accent);" onclick="triggerMorning0800DispatchInApp()">
+          Invia ora il Riepilogo delle 08:00 su WhatsApp e Cloud
+        </button>
       </div>
 
       <!-- Ricerca rapida tra soggiorni, spese e sezioni -->
@@ -1023,6 +1026,30 @@
           <button type="button" class="btn btn-primary" onclick="goToBookingStep(2)">
             Verifica disponibilità e vai all'importo (Passaggio 2 di 2)
           </button>
+
+          <details class="expand-details" style="margin-top: 20px;">
+            <summary>Oppure sincronizza automaticamente il calendario iCal (.ics Airbnb / Booking.com)</summary>
+            <div class="expand-body">
+              <p style="margin-bottom: 12px;">
+                Incolla il link <code>.ics</code> o il contenuto del file iCal di Airbnb o Booking.com: il motore importa automaticamente i soggiorni reali, verifica il blocco anti-overbooking e prepara le schedine Alloggiati Web.
+              </p>
+              <div class="field-group">
+                <label for="ical-portal-select" class="field-label">Portale del calendario iCal</label>
+                <select id="ical-portal-select" class="field-select">
+                  <option value="Airbnb">Airbnb (.ics)</option>
+                  <option value="Booking.com">Booking.com (.ics)</option>
+                  <option value="Vrbo">Vrbo (.ics)</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label for="ical-feed-input" class="field-label">Link iCal (.ics) o tracciato VEVENT (lascia vuoto per testare il feed reale preconfigurato)</label>
+                <input type="text" id="ical-feed-input" class="field-input" placeholder="https://www.airbnb.it/calendar/ical/12345678.ics?s=..."/>
+              </div>
+              <button type="button" class="btn btn-secondary" onclick="importICalCalendarInApp()">
+                Importa soggiorni da Calendario iCal in 1 Tap
+              </button>
+            </div>
+          </details>
         </div>
 
         <div id="bk-step-2" style="display: none;">
@@ -2337,6 +2364,34 @@
         'I movimenti turistici mensili per ' + appState.apartment.name + ' (CIN: ' + appState.apartment.cin + ') sono pronti per il caricamento entro il giorno 5.',
         'fisco',
         'Torna a Fisco e Spese'
+      );
+    }
+
+    async function importICalCalendarInApp() {
+      if (!window.ITACloudSync || typeof ITACloudSync.parseAndImportICalFeed !== 'function') return;
+      var portal = (document.getElementById('ical-portal-select') && document.getElementById('ical-portal-select').value) || 'Airbnb';
+      var rawInput = (document.getElementById('ical-feed-input') && document.getElementById('ical-feed-input').value) || '';
+      var res = await ITACloudSync.parseAndImportICalFeed(rawInput, portal);
+      appState = loadState();
+      renderAll();
+      prefillAlloggiatiFromBooking();
+      showConfirmationScreen(
+        'Calendario iCal ' + portal + ' sincronizzato (' + res.importedCount + ' nuovi soggiorni)',
+        'Importati ' + res.importedCount + ' soggiorni reali con controllo anti-overbooking (' + res.skippedOverlapsCount + ' collisioni bloccate) e turni pulizie 3. Blue Arroyo Cleaning programmati.',
+        'dettaglio-ospiti',
+        'Vedi i soggiorni importati'
+      );
+    }
+
+    async function triggerMorning0800DispatchInApp() {
+      if (!window.ITACloudSync || typeof ITACloudSync.runMorning0800AutomationBatch !== 'function') return;
+      var batchRes = await ITACloudSync.runMorning0800AutomationBatch();
+      var msg = ITACloudSync.buildDailyReportMessage(appState);
+      showConfirmationScreen(
+        'Riepilogo delle 08:00 inviato e sincronizzato (' + batchRes.dispatchedCount + ' immobili)',
+        msg.replace(/\n/g, ' · '),
+        'home',
+        'Torna alla Home'
       );
     }
 
