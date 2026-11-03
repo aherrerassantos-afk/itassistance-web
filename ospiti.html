@@ -2,18 +2,26 @@
 <html lang="it" id="html-root">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Online Check-in &amp; Istruzioni Appartamento · Firenze | itassistance</title>
-  <meta name="description" content="Modulo di registrazione ospiti online (art. 109 TULPS Alloggiati Web) e download istruzioni di check-in per il tuo soggiorno a Firenze."/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Registrazione Ospiti e Libretto Check-in · Firenze — itassistance</title>
+  <meta name="description" content="Modulo di registrazione ospiti online (art. 109 TULPS Alloggiati Web) e download del libretto istruzioni di check-in per il soggiorno a Firenze."/>
   <meta name="robots" content="noindex, nofollow"/>
+  <link rel="canonical" href="https://itadreamteam.com/ospiti"/>
+  <link rel="icon" type="image/png" href="/brand/logo.png"/>
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png"/>
-  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png"/>
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Registrazione Ospiti e Libretto Check-in · Firenze — itassistance",
+    "url": "https://itadreamteam.com/ospiti",
+    "description": "Modulo bilingue IT/EN per la registrazione obbligatoria del documento ospite (art. 109 TULPS) e lo sblocco del libretto PDF di check-in a Firenze."
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 
   <script src="/site-config.js"></script>
   <script src="/cloud-sync.js"></script>
@@ -22,269 +30,361 @@
 
   <style>
     :root {
-      --navy: #111111;
-      --gold: #C9A84C;
-      --gold-dark: #9E7E28;
-      --gold-light: #FBF7EC;
-      --bg: #F6F6F3;
-      --card: #FFFFFF;
-      --text: #1A1A1A;
-      --text-muted: #52525B;
-      --border: #E4E4E7;
-      --green: #15803D;
-      --green-bg: #DCFCE7;
-      --serif: 'Playfair Display', Georgia, serif;
-      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --bg-light: #FAFAF8;
+      --bg-stone: #F2EFE9;
+      --ink-navy: #0F1A2E;
+      --ink-muted: #475569;
+      --ink-on-dark-muted: #CBD5E1;
+      --gold-accent: #C9A84C;
+      --gold-text-light: #7A5C12;
+      --border-control: #64748B;
+      --status-ok-bg: #ECFDF5;
+      --status-ok-text: #065F46;
+      --error-bg: #FEF2F2;
+      --error-text: #991B1B;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      -webkit-text-size-adjust: 100%;
+    }
+
     body {
-      font-family: var(--sans);
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.55;
-      padding-bottom: 60px;
+      font-family: var(--font-sans);
+      background-color: var(--bg-light);
+      color: var(--ink-navy);
+      line-height: 1.5;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      padding-bottom: 64px;
     }
-    a { color: inherit; text-decoration: none; }
 
-    .header {
-      background: var(--navy);
-      color: #fff;
-      padding: 14px 20px;
-      border-bottom: 2px solid var(--gold);
-    }
-    .header-inner {
-      max-width: 780px;
-      margin: 0 auto;
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 56px;
+      background-color: var(--ink-navy);
+      color: var(--bg-light);
+      border-bottom: 2px solid var(--gold-accent);
+      padding: 0 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      flex-wrap: wrap;
     }
-    .brand {
+
+    .back-btn {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      font-size: 18px;
-      color: #fff;
+      gap: 8px;
+      min-height: 48px;
+      padding: 0 12px 0 4px;
+      background: transparent;
+      border: none;
+      color: var(--bg-light);
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
     }
-    .brand img {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: #fff;
-      padding: 2px;
+
+    .back-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--gold-accent);
+      stroke-width: 2.2;
+      fill: none;
     }
 
     .lang-switch {
       display: inline-flex;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(201, 168, 76, 0.5);
+      border: 1.5px solid var(--gold-accent);
       border-radius: 8px;
       overflow: hidden;
     }
+
     .lang-btn {
-      background: none;
+      min-height: 36px;
+      padding: 0 12px;
+      background: transparent;
       border: none;
-      color: rgba(255, 255, 255, 0.75);
-      padding: 7px 12px;
-      font-family: var(--sans);
-      font-size: 12.5px;
-      font-weight: 600;
+      color: var(--ink-on-dark-muted);
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      font-weight: 700;
       cursor: pointer;
     }
+
     .lang-btn.active {
-      background: var(--gold);
-      color: var(--navy);
-      font-weight: 700;
+      background-color: var(--gold-accent);
+      color: var(--ink-navy);
     }
 
-    .wrap {
-      max-width: 780px;
-      margin: 28px auto;
-      padding: 0 20px;
+    .main-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 24px 16px;
     }
 
-    .apt-banner {
-      background: var(--navy);
-      color: #fff;
-      border-radius: 14px;
-      padding: 24px;
-      border: 1.5px solid var(--gold);
-      margin-bottom: 20px;
-    }
-    .apt-banner small {
-      color: var(--gold);
-      font-size: 11px;
+    .step-badge {
+      display: inline-block;
+      font-size: 0.875rem;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      display: block;
-      margin-bottom: 4px;
+      color: var(--gold-text-light);
+      background-color: var(--bg-stone);
+      border: 1px solid var(--border-control);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 12px;
     }
-    .apt-banner h1 {
-      font-family: var(--serif);
-      font-size: clamp(24px, 3.5vw, 32px);
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.85rem, 5vw, 2.35rem);
       line-height: 1.15;
-      margin-bottom: 6px;
+      color: var(--ink-navy);
+      margin-bottom: 8px;
     }
-    .apt-banner p {
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.8);
+
+    .lead-text {
+      font-size: 1rem;
+      color: var(--ink-muted);
+      margin-bottom: 24px;
+      max-width: 65ch;
     }
 
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 24px rgba(17, 17, 17, 0.05);
+      background-color: #FFFFFF;
+      border: 1.5px solid var(--border-control);
+      border-radius: 12px;
+      padding: 24px 16px;
+      margin-bottom: 24px;
     }
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
+
+    .preset-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
     }
-    @media (max-width: 600px) {
-      .form-grid { grid-template-columns: 1fr; }
-    }
-    .field label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--navy);
-      margin-bottom: 5px;
-    }
-    .field input, .field select {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
+
+    .preset-chip {
+      min-height: 40px;
+      padding: 6px 12px;
       border-radius: 8px;
-      font-family: var(--sans);
-      font-size: 14px;
-      background: #fff;
+      border: 1.5px solid var(--border-control);
+      background-color: var(--bg-light);
+      color: var(--ink-navy);
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .field-group {
+      margin-bottom: 16px;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--ink-navy);
+      margin-bottom: 6px;
+    }
+
+    .field-group input,
+    .field-group select {
+      width: 100%;
+      min-height: 56px;
+      padding: 12px 16px;
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      color: var(--ink-navy);
+      background-color: var(--bg-light);
+      border: 1.5px solid var(--border-control);
+      border-radius: 8px;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 13px 22px;
-      border-radius: 8px;
-      font-family: var(--sans);
-      font-size: 14px;
+      gap: 10px;
+      width: 100%;
+      min-height: 56px;
+      padding: 14px 20px;
+      font-family: var(--font-sans);
+      font-size: 1rem;
       font-weight: 700;
+      border-radius: 8px;
       cursor: pointer;
-      border: 1px solid transparent;
-      transition: all 0.15s;
+      text-decoration: none;
+      border: 2px solid transparent;
     }
-    .btn-gold { background: var(--gold); color: var(--navy); }
-    .btn-gold:hover { background: #b8963c; }
-    .btn-primary { background: var(--navy); color: #fff; }
+
+    @media (min-width: 1024px) {
+      .btn { min-height: 48px; }
+    }
+
+    .btn-primary {
+      background-color: var(--ink-navy);
+      color: var(--bg-light);
+      border-color: var(--ink-navy);
+    }
+
+    .btn-gold {
+      background-color: var(--gold-accent);
+      color: var(--ink-navy);
+      border-color: var(--gold-accent);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--ink-navy);
+      border-color: var(--ink-navy);
+    }
+
+    .btn + .btn {
+      margin-top: 12px;
+    }
+
+    .error-banner {
+      display: none;
+      background-color: var(--error-bg);
+      color: var(--error-text);
+      border: 1.5px solid var(--error-text);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .error-banner.visible {
+      display: block;
+    }
 
     .success-box {
       display: none;
-      background: var(--green-bg);
-      border: 1.5px solid var(--green);
-      color: #14532D;
+      background-color: var(--status-ok-bg);
+      border: 2px solid var(--status-ok-text);
+      color: var(--status-ok-text);
       border-radius: 12px;
-      padding: 22px;
-      margin-bottom: 20px;
+      padding: 24px 16px;
+      margin-bottom: 24px;
     }
-    .success-box.show { display: block; }
+
+    .success-box.show {
+      display: block;
+    }
+
+    details.expand-box {
+      background-color: var(--bg-stone);
+      border: 1.5px solid var(--border-control);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+
+    details.expand-box summary {
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+    }
   </style>
 </head>
 <body>
 
-  <header class="header">
-    <div class="header-inner">
-      <div class="brand">
-        <img src="/brand/logo.png" alt="Logo itassistance"/>
-        <span>itassistance · Firenze</span>
-      </div>
-      <div class="lang-switch" role="group" aria-label="Language selector">
-        <button type="button" class="lang-btn active" id="btn-lang-it" onclick="setGuestLang('it')">🇮🇹 Italiano</button>
-        <button type="button" class="lang-btn" id="btn-lang-en" onclick="setGuestLang('en')">🇬🇧 English</button>
-      </div>
+  <header class="app-header">
+    <a href="/app.html?view=ospiti" class="back-btn">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      <span>Area Ospiti</span>
+    </a>
+    <div class="lang-switch" role="group" aria-label="Selettore lingua">
+      <button type="button" class="lang-btn active" id="btn-lang-it" onclick="setGuestLang('it')">IT</button>
+      <button type="button" class="lang-btn" id="btn-lang-en" onclick="setGuestLang('en')">EN</button>
     </div>
   </header>
 
-  <main class="wrap">
-    <!-- INTESTAZIONE APPARTAMENTO -->
-    <section class="apt-banner">
-      <small id="lbl-eyebrow">REGISTRAZIONE OSPITI OBBLIGATORIA PER LEGGE (ART. 109 TULPS)</small>
-      <h1 id="lbl-apt-title">Check-in Online — Appartamento Santo Spirito</h1>
-      <p id="lbl-apt-sub">
-        In Italia la legge richiede a ogni struttura ricettiva di comunicare i dati del documento di identità degli ospiti alla Polizia di Stato (Alloggiati Web). Compila i dati qui sotto per sbloccare subito le istruzioni di accesso e il Wi-Fi.
+  <main class="main-wrap">
+    <span class="step-badge" id="lbl-eyebrow">REGISTRAZIONE OSPITI OBBLIGATORIA (ART. 109 TULPS)</span>
+    <h1 id="lbl-apt-title">Check-in Online — Appartamento Santo Spirito</h1>
+    <p class="lead-text" id="lbl-apt-sub">
+      La legge italiana richiede a ogni struttura ricettiva di comunicare i dati del documento di identità degli ospiti alla Polizia di Stato (Alloggiati Web). Compila i 5 campi essenziali per sbloccare subito il libretto con i codici di accesso e il Wi-Fi.
+    </p>
+
+    <!-- CONFERMA DOPO L'INVIO -->
+    <section class="success-box" id="guest-success-box" role="status">
+      <h2 id="lbl-ok-title" style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:8px;">Documenti registrati con successo</h2>
+      <p id="lbl-ok-desc" style="font-size:1rem;color:var(--ink-navy);margin-bottom:16px;">
+        I tuoi dati sono stati inviati al proprietario per la trasmissione su Alloggiati Web. Ora puoi scaricare il PDF con l'indirizzo, i codici di accesso e la password Wi-Fi.
       </p>
+      <button type="button" class="btn btn-primary" onclick="downloadGuestCheckinPdf()">
+        <span id="lbl-btn-pdf">Scarica il PDF con le istruzioni di check-in</span>
+      </button>
+      <a href="/app.html?view=azione-alloggiati" class="btn btn-secondary">
+        Apri i dati precompilati nell'Area Proprietario
+      </a>
     </section>
 
-    <!-- BOX CONFERMA DOPO L'INVIO (SBLOCCA IL PDF CHECK-IN) -->
-    <section class="success-box" id="guest-success-box">
-      <h2 id="lbl-ok-title" style="font-size:20px;margin-bottom:6px;">✓ Documenti registrati con successo!</h2>
-      <p id="lbl-ok-desc" style="font-size:14px;margin-bottom:14px;">
-        I tuoi dati sono stati inviati al proprietario per la registrazione su Alloggiati Web. Ora puoi scaricare il PDF con l'indirizzo, i codici di accesso e la password Wi-Fi.
-      </p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <button type="button" class="btn btn-primary" onclick="downloadGuestCheckinPdf()">
-          📄 <span id="lbl-btn-pdf">Scarica PDF Istruzioni Check-in</span>
-        </button>
-        <a href="/app.html?tab=alloggiati" class="btn btn-gold" style="font-size:13px;">
-          👁️ Vedi dati precompilati nell'Area Proprietario →
-        </a>
-      </div>
-    </section>
-
-    <!-- MODULO DATI DOCUMENTO OSPITE (OTTIMIZZATO: SOLO 5 CAMPI ESSENZIALI) -->
+    <!-- MODULO DOCUMENTO -->
     <section class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
-        <h2 id="lbl-form-title" style="font-family:var(--serif);font-size:21px;color:var(--navy);margin:0;">
-          Dati Documento Ospite Principale
-        </h2>
-        <span style="font-size:11.5px;font-weight:700;background:#ECFDF5;color:#166534;padding:4px 10px;border-radius:999px;">⚡ Compilazione rapida 30 secondi</span>
+      <h2 id="lbl-form-title" style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:12px;">
+        Dati Documento Ospite Principale
+      </h2>
+
+      <div id="guest-error" class="error-banner" role="alert"></div>
+
+      <div class="preset-row">
+        <button type="button" class="preset-chip" onclick="setGuestCountryPreset('ITALIA','IDENT')">Italia (Carta ID)</button>
+        <button type="button" class="preset-chip" onclick="setGuestCountryPreset('STATI UNITI','PASOR')">USA (Passport)</button>
+        <button type="button" class="preset-chip" onclick="setGuestCountryPreset('REGNO UNITO','PASOR')">UK (Passport)</button>
+        <button type="button" class="preset-chip" onclick="setGuestCountryPreset('FRANCIA','IDENT')">France (ID)</button>
+        <button type="button" class="preset-chip" onclick="setGuestCountryPreset('GERMANIA','IDENT')">Germany (ID)</button>
       </div>
 
-      <!-- 1-Click Country Presets -->
-      <div style="margin-bottom:14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-        <span style="font-size:11.5px;font-weight:700;color:var(--text-muted);">⚡ Paese / Country (1 Clic):</span>
-        <button type="button" onclick="setGuestCountryPreset('ITALIA','IDENT')" style="padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;font-weight:700;cursor:pointer;">🇮🇹 Italia</button>
-        <button type="button" onclick="setGuestCountryPreset('STATI UNITI','PASOR')" style="padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;font-weight:700;cursor:pointer;">🇺🇸 USA</button>
-        <button type="button" onclick="setGuestCountryPreset('REGNO UNITO','PASOR')" style="padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;font-weight:700;cursor:pointer;">🇬🇧 UK</button>
-        <button type="button" onclick="setGuestCountryPreset('FRANCIA','IDENT')" style="padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;font-weight:700;cursor:pointer;">🇫🇷 France</button>
-        <button type="button" onclick="setGuestCountryPreset('GERMANIA','IDENT')" style="padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:11.5px;font-weight:700;cursor:pointer;">🇩🇪 Germany</button>
+      <div class="field-group">
+        <label id="lbl-f-nome" for="g-nome">Nome (come sul documento)</label>
+        <input type="text" id="g-nome" placeholder="Es. Jean Luc"/>
       </div>
 
-      <div class="form-grid">
-        <div class="field">
-          <label id="lbl-f-nome" for="g-nome">Nome (come sul documento) *</label>
-          <input type="text" id="g-nome" placeholder="es. Jean Luc"/>
-        </div>
-        <div class="field">
-          <label id="lbl-f-cognome" for="g-cognome">Cognome (come sul documento) *</label>
-          <input type="text" id="g-cognome" placeholder="es. Martin"/>
-        </div>
-        <div class="field">
-          <label id="lbl-f-docnum" for="g-docnum">Numero Documento / Passaporto *</label>
-          <input type="text" id="g-docnum" placeholder="es. 22CF89102"/>
-        </div>
-        <div class="field">
-          <label id="lbl-f-nascita" for="g-nascita">Data di Nascita *</label>
-          <input type="date" id="g-nascita" value="1986-04-18"/>
-        </div>
-        <div class="field" style="grid-column:1 / -1;">
-          <label id="lbl-f-citt" for="g-citt">Cittadinanza e Paese di Rilascio *</label>
-          <input type="text" id="g-citt" value="FRANCIA" placeholder="es. ITALIA / FRANCE / USA" oninput="document.getElementById('g-docluogo').value=this.value"/>
-        </div>
+      <div class="field-group">
+        <label id="lbl-f-cognome" for="g-cognome">Cognome (come sul documento)</label>
+        <input type="text" id="g-cognome" placeholder="Es. Martin"/>
       </div>
 
-      <details style="margin-top:12px;background:var(--bg);border:1px dashed var(--border);border-radius:10px;padding:10px 14px;">
-        <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--navy);">➕ Dettagli Soggiorno e Tipo Documento (Già preimpostati automaticamente — clicca per modificare)</summary>
-        <div class="form-grid" style="margin-top:12px;">
-          <div class="field">
+      <div class="field-group">
+        <label id="lbl-f-docnum" for="g-docnum">Numero Documento o Passaporto</label>
+        <input type="text" id="g-docnum" placeholder="Es. 22CF89102"/>
+      </div>
+
+      <div class="field-group">
+        <label id="lbl-f-nascita" for="g-nascita">Data di Nascita</label>
+        <input type="date" id="g-nascita" value="1986-04-18"/>
+      </div>
+
+      <div class="field-group">
+        <label id="lbl-f-citt" for="g-citt">Cittadinanza e Paese di Rilascio</label>
+        <input type="text" id="g-citt" value="FRANCIA" oninput="document.getElementById('g-docluogo').value=this.value"/>
+      </div>
+
+      <details class="expand-box">
+        <summary>Modifica tipo documento o numero di notti (preimpostati)</summary>
+        <div style="margin-top:12px;">
+          <div class="field-group">
             <label id="lbl-f-doctipo" for="g-doctipo">Tipo di Documento</label>
             <select id="g-doctipo">
               <option value="PASOR">Passaporto (PASOR)</option>
@@ -292,14 +392,14 @@
               <option value="PATEN">Patente di Guida (PATEN)</option>
             </select>
           </div>
-          <div class="field">
+          <div class="field-group">
             <label id="lbl-f-sesso" for="g-sesso">Sesso</label>
             <select id="g-sesso">
               <option value="M">M</option>
               <option value="F">F</option>
             </select>
           </div>
-          <div class="field">
+          <div class="field-group">
             <label id="lbl-f-tipo" for="g-tipo">Tipo Ospite</label>
             <select id="g-tipo">
               <option value="17" id="opt-family">Capofamiglia / Ospite Principale</option>
@@ -307,37 +407,35 @@
               <option value="18" id="opt-group">Capogruppo</option>
             </select>
           </div>
-          <div class="field">
+          <div class="field-group">
             <label id="lbl-f-pax" for="g-pax">Numero Totale Ospiti</label>
             <input type="number" id="g-pax" value="2" min="1" max="12"/>
           </div>
-          <div class="field">
+          <div class="field-group">
             <label id="lbl-f-arrivo" for="g-arrivo">Data di Check-in</label>
             <input type="date" id="g-arrivo"/>
           </div>
-          <div class="field">
+          <div class="field-group">
             <label id="lbl-f-giorni" for="g-giorni">Numero di Notti</label>
             <input type="number" id="g-giorni" value="3" min="1" max="30"/>
           </div>
-          <div class="field" style="grid-column:1 / -1;">
-            <label id="lbl-f-docluogo" for="g-docluogo">Luogo / Stato di Rilascio Documento</label>
-            <input type="text" id="g-docluogo" value="FRANCIA" placeholder="es. FRANCIA o FIRENZE"/>
+          <div class="field-group">
+            <label id="lbl-f-docluogo" for="g-docluogo">Stato o Comune di Rilascio Documento</label>
+            <input type="text" id="g-docluogo" value="FRANCIA"/>
           </div>
         </div>
       </details>
 
-      <div style="margin-top:16px;font-size:12px;color:var(--text-muted);" id="lbl-privacy">
-        🔒 I tuoi dati vengono trattati esclusivamente per l'adempimento di legge previsto dall'art. 109 TULPS (Portale Alloggiati Web della Polizia di Stato) e non vengono ceduti a terzi per fini commerciali.
-      </div>
+      <p id="lbl-privacy" style="font-size:0.875rem;color:var(--ink-muted);margin-bottom:16px;">
+        I dati sono trattati esclusivamente per l'adempimento di legge previsto dall'art. 109 TULPS (Portale Alloggiati Web della Polizia di Stato).
+      </p>
 
-      <div style="margin-top:18px;">
-        <button type="button" class="btn btn-gold" style="width:100%;padding:14px;" onclick="submitGuestSelfCheckin()">
-          <span id="lbl-btn-submit">✓ Invia Dati Documento e Sblocca Istruzioni Check-in</span>
-        </button>
-      </div>
+      <button type="button" class="btn btn-gold" onclick="submitGuestSelfCheckin()">
+        <span id="lbl-btn-submit">Invia i dati documento e sblocca le istruzioni check-in</span>
+      </button>
     </section>
 
-    <footer style="text-align:center;font-size:12px;color:var(--text-muted);">
+    <footer style="text-align:center;font-size:0.875rem;color:var(--ink-muted);">
       <span id="lbl-footer-support">Assistenza Ospiti Firenze (09:00–23:00): +39 351 038 0392 · info@itadreamteam.com</span><br/>
       Blue Arroyo SRL · P.IVA 07480210488 · Via Matteo Palmieri 20r, 50122 Firenze (FI)
     </footer>
@@ -357,57 +455,57 @@
 
     var I18N = {
       it: {
-        eyebrow: 'REGISTRAZIONE OSPITI OBBLIGATORIA PER LEGGE (ART. 109 TULPS)',
+        eyebrow: 'REGISTRAZIONE OSPITI OBBLIGATORIA (ART. 109 TULPS)',
         aptTitlePrefix: 'Check-in Online — ',
-        aptSub: 'In Italia la legge richiede a ogni struttura ricettiva di comunicare i dati del documento di identità degli ospiti alla Polizia di Stato (Alloggiati Web). Compila i dati qui sotto per sbloccare subito le istruzioni di accesso e il Wi-Fi.',
+        aptSub: 'La legge italiana richiede a ogni struttura ricettiva di comunicare i dati del documento di identità degli ospiti alla Polizia di Stato (Alloggiati Web). Compila i 5 campi essenziali per sbloccare subito il libretto con i codici di accesso e il Wi-Fi.',
         formTitle: 'Dati Documento Ospite Principale',
-        fTipo: 'Tipo Ospite *',
+        fTipo: 'Tipo Ospite',
         optFamily: 'Capofamiglia / Ospite Principale',
         optSingle: 'Ospite Singolo',
         optGroup: 'Capogruppo',
-        fPax: 'Numero Totale Ospiti *',
-        fArrivo: 'Data di Check-in *',
-        fGiorni: 'Numero di Notti *',
-        fNome: 'Nome (come sul documento) *',
-        fCognome: 'Cognome (come sul documento) *',
-        fSesso: 'Sesso *',
-        fNascita: 'Data di Nascita *',
-        fCitt: 'Cittadinanza e Stato di Nascita *',
-        fDocTipo: 'Tipo di Documento *',
-        fDocNum: 'Numero Documento *',
-        fDocLuogo: 'Luogo / Stato di Rilascio *',
-        privacy: '🔒 I tuoi dati vengono trattati esclusivamente per l’adempimento di legge previsto dall’art. 109 TULPS (Portale Alloggiati Web della Polizia di Stato).',
-        btnSubmit: '✓ Invia Dati Documento e Sblocca Istruzioni Check-in',
-        okTitle: '✓ Documenti registrati con successo!',
-        okDesc: 'I tuoi dati sono stati inviati al proprietario per la registrazione su Alloggiati Web. Ora puoi scaricare il PDF con l’indirizzo, i codici di accesso e la password Wi-Fi.',
-        btnPdf: 'Scarica PDF Istruzioni Check-in (🇮🇹)',
+        fPax: 'Numero Totale Ospiti',
+        fArrivo: 'Data di Check-in',
+        fGiorni: 'Numero di Notti',
+        fNome: 'Nome (come sul documento)',
+        fCognome: 'Cognome (come sul documento)',
+        fSesso: 'Sesso',
+        fNascita: 'Data di Nascita',
+        fCitt: 'Cittadinanza e Paese di Rilascio',
+        fDocTipo: 'Tipo di Documento',
+        fDocNum: 'Numero Documento o Passaporto',
+        fDocLuogo: 'Stato o Comune di Rilascio Documento',
+        privacy: 'I dati sono trattati esclusivamente per l’adempimento di legge previsto dall’art. 109 TULPS (Portale Alloggiati Web della Polizia di Stato).',
+        btnSubmit: 'Invia i dati documento e sblocca le istruzioni check-in',
+        okTitle: 'Documenti registrati con successo',
+        okDesc: 'I tuoi dati sono stati inviati al proprietario per la trasmissione su Alloggiati Web. Ora puoi scaricare il PDF con l’indirizzo, i codici di accesso e la password Wi-Fi.',
+        btnPdf: 'Scarica il PDF con le istruzioni di check-in (IT)',
         footerSupport: 'Assistenza Ospiti Firenze (Tutti i giorni 09:00–23:00): +39 351 038 0392 · info@itadreamteam.com'
       },
       en: {
         eyebrow: 'MANDATORY GUEST REGISTRATION BY ITALIAN LAW (ART. 109 TULPS)',
         aptTitlePrefix: 'Online Check-in — ',
-        aptSub: 'Italian law requires all short-term rentals to register guest ID details with the State Police (Alloggiati Web) within 24 hours of arrival. Complete the form below to immediately unlock your apartment access instructions and Wi-Fi.',
+        aptSub: 'Italian law requires all short-term rentals to register guest ID details with the State Police (Alloggiati Web) within 24 hours of arrival. Complete the form below to unlock your apartment access instructions and Wi-Fi.',
         formTitle: 'Primary Guest ID Details',
-        fTipo: 'Guest Type *',
+        fTipo: 'Guest Type',
         optFamily: 'Head of Family / Main Guest',
         optSingle: 'Single Guest',
         optGroup: 'Group Leader',
-        fPax: 'Total Number of Guests *',
-        fArrivo: 'Check-in Date *',
-        fGiorni: 'Number of Nights *',
-        fNome: 'First Name (as shown on passport/ID) *',
-        fCognome: 'Last Name / Surname *',
-        fSesso: 'Gender *',
-        fNascita: 'Date of Birth *',
-        fCitt: 'Citizenship & Country of Birth *',
-        fDocTipo: 'Document Type *',
-        fDocNum: 'Passport / ID Number *',
-        fDocLuogo: 'Issuing Country / Authority *',
-        privacy: '🔒 Your data is processed solely for mandatory registration with the Italian State Police (Alloggiati Web, art. 109 TULPS).',
-        btnSubmit: '✓ Submit ID Details & Unlock Check-in Instructions',
-        okTitle: '✓ ID Details Successfully Registered!',
+        fPax: 'Total Number of Guests',
+        fArrivo: 'Check-in Date',
+        fGiorni: 'Number of Nights',
+        fNome: 'First Name (as shown on passport/ID)',
+        fCognome: 'Last Name / Surname',
+        fSesso: 'Gender',
+        fNascita: 'Date of Birth',
+        fCitt: 'Citizenship & Issuing Country',
+        fDocTipo: 'Document Type',
+        fDocNum: 'Passport / ID Number',
+        fDocLuogo: 'Issuing Country / Authority',
+        privacy: 'Your data is processed solely for mandatory registration with the Italian State Police (Alloggiati Web, art. 109 TULPS).',
+        btnSubmit: 'Submit ID Details and Unlock Check-in Instructions',
+        okTitle: 'ID Details Successfully Registered',
         okDesc: 'Your details have been sent to the property owner. You can now download your Check-in Instructions PDF with address, keybox code and Wi-Fi.',
-        btnPdf: 'Download Check-in Instructions PDF (🇬🇧)',
+        btnPdf: 'Download Check-in Instructions PDF (EN)',
         footerSupport: 'Florence Guest Support (Every day 09:00 AM – 11:00 PM): +39 351 038 0392 · info@itadreamteam.com'
       }
     };
@@ -456,16 +554,19 @@
     }
 
     async function submitGuestSelfCheckin() {
+      var errEl = document.getElementById('guest-error');
       var nome = (document.getElementById('g-nome').value || '').trim();
       var cognome = (document.getElementById('g-cognome').value || '').trim();
       var docNum = (document.getElementById('g-docnum').value || '').trim();
 
       if (!nome || !cognome || !docNum) {
-        alert(currentLang === 'en'
+        errEl.textContent = currentLang === 'en'
           ? 'Please enter your First Name, Last Name and Passport/ID Number.'
-          : 'Inserisci Nome, Cognome e Numero di Documento.');
+          : 'Inserisci Nome, Cognome e Numero di Documento per procedere.';
+        errEl.classList.add('visible');
         return;
       }
+      errEl.classList.remove('visible');
 
       var payload = {
         tipo: document.getElementById('g-tipo').value,
@@ -506,7 +607,7 @@
         pageSize: 'A4',
         pageMargins: [40, 40, 40, 40],
         content: [
-          { text: isEN ? 'CHECK-IN INSTRUCTIONS · FLORENCE' : 'ISTRUZIONI DI CHECK-IN · FIRENZE', fontSize: 16, bold: true, color: '#111111', margin: [0, 0, 0, 12] },
+          { text: isEN ? 'CHECK-IN INSTRUCTIONS · FLORENCE' : 'ISTRUZIONI DI CHECK-IN · FIRENZE', fontSize: 16, bold: true, color: '#0F1A2E', margin: [0, 0, 0, 12] },
           { stack: rows, fontSize: 11 },
           {
             margin: [0, 20, 0, 0],
@@ -514,7 +615,7 @@
               ? 'itassistance Guest Support · Florence (09:00 AM – 11:00 PM): +39 351 038 0392 · info@itadreamteam.com'
               : 'Assistenza Ospiti itassistance · Firenze (09:00 – 23:00): +39 351 038 0392 · info@itadreamteam.com',
             fontSize: 9.5,
-            color: '#52525B'
+            color: '#475569'
           }
         ]
       };

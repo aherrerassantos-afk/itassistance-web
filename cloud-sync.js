@@ -60,7 +60,7 @@
     }
   }
 
-  // Notifica le altre schede aperte (es. Admin <-> App Proprietario)
+  // Notifica le altre schede aperte (es. Admin <->App Proprietario)
   function broadcastStateChange(type, detail) {
     var msg = {
       type: type,
@@ -103,32 +103,32 @@
     var pendingAlloggiati = bookings.filter(function (b) { return !b.alloggiatiSent; });
 
     var lines = [
-      '☀️ *REPORT DEL GIORNO — itassistance (Ore 08:00)*',
-      '🏠 Immobile: *' + apt.name + '* (' + apt.address + ')',
+      '️ *REPORT DEL GIORNO — itassistance (Ore 08:00)*',
+      ' Immobile: *' + apt.name + '* (' + apt.address + ')',
       '🆔 CIN: ' + (apt.cin || 'Non inserito'),
-      '⏱️ Tempo stimato oggi: *~' + (pending.length > 0 ? (pending.length * 2 + 1) : 1) + ' minuti*',
+      '️ Tempo stimato oggi: *~' + (pending.length >0 ? (pending.length * 2 + 1) : 1) + ' minuti*',
       '',
-      '📋 *COSE DA FARE OGGI (' + pending.length + ' da completare, ' + doneCount + ' già fatte):*'
+      ' *COSE DA FARE OGGI (' + pending.length + ' da completare, ' + doneCount + ' già fatte):*'
     ];
 
     if (pending.length === 0) {
-      lines.push('✅ Tutto completato! Il tuo appartamento è 100% in regola oggi.');
+      lines.push(' Tutto completato! Il tuo appartamento è 100% in regola oggi.');
     } else {
       pending.forEach(function (t, idx) {
         lines.push((idx + 1) + '. *' + t.title + '* — ' + t.desc);
       });
     }
 
-    if (pendingAlloggiati.length > 0) {
+    if (pendingAlloggiati.length >0) {
       lines.push('');
-      lines.push('🛂 *Attenzione Alloggiati Web (Polizia di Stato):* ' + pendingAlloggiati.length + ' prenotazione/i da trasmettere entro 24h dal check-in.');
+      lines.push(' *Attenzione Alloggiati Web (Polizia di Stato):* ' + pendingAlloggiati.length + ' prenotazione/i da trasmettere entro 24h dal check-in.');
     }
 
     lines.push('');
-    lines.push('👉 *Apri la tua Area Proprietario per completare in 1 tap:*');
+    lines.push(' *Apri la tua Area Proprietario per completare in 1 tap:*');
     lines.push('https://www.itadreamteam.com/app.html');
     lines.push('');
-    lines.push('💬 Supporto Firenze (09:00–23:00): +39 351 038 0392');
+    lines.push(' Supporto Firenze (09:00–23:00): +39 351 038 0392');
 
     return lines.join('\n');
   }
@@ -181,7 +181,7 @@
         apartment: payload.apartmentName,
         recipient: payload.ownerPhone + ' / ' + payload.ownerEmail,
         pendingTasks: payload.pendingTasksCount,
-        webhookStatus: webhookOk ? 'Inviato via Cloud n8n ✓' : 'Pronto / Inviato in locale ✓'
+        webhookStatus: webhookOk ? 'Inviato via Cloud n8n ' : 'Pronto / Inviato in locale '
       });
       localStorage.setItem(REPORT_LOG_KEY, JSON.stringify(logs.slice(0, 25)));
     } catch (e) {}
@@ -194,7 +194,7 @@
       if (cleanPhone.length < 8) cleanPhone = '393510380392';
       window.open('https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(reportText), '_blank');
     } else if (opts.openEmail) {
-      var subj = encodeURIComponent('☀️ Report del Giorno (08:00) — ' + payload.apartmentName + ' | itassistance');
+      var subj = encodeURIComponent('️ Report del Giorno (08:00) — ' + payload.apartmentName + ' | itassistance');
       var body = encodeURIComponent(reportText);
       window.location.href = 'mailto:' + encodeURIComponent(payload.ownerEmail || '') + '?subject=' + subj + '&body=' + body;
     }
@@ -211,7 +211,7 @@
 
       var newTask = {
         id: 'adm_task_' + Date.now(),
-        time: '🔔 Dal Team Firenze · Oggi',
+        time: ' Dal Team Firenze · Oggi',
         title: taskTitle,
         desc: taskDesc || 'Azione inserita dalla centrale operativa itassistance di Firenze.',
         done: false,
@@ -395,7 +395,7 @@
     };
   }
 
-  // Punto 3: Ricezione dati documento ospite dal Self Check-in (/ospiti.html) -> precompila Alloggiati Web in /app.html
+  // Punto 3: Ricezione dati documento ospite dal Self Check-in (/ospiti.html) ->precompila Alloggiati Web in /app.html
   async function saveGuestCheckinSubmission(guestData) {
     var g = guestData || {};
     var fullName = ((g.nome || '') + ' ' + (g.cognome || '')).trim() || 'Ospite';
@@ -451,7 +451,7 @@
         state.tasks = state.tasks || [];
         state.tasks.unshift({
           id: 't_guest_' + Date.now(),
-          time: '🛂 Documenti Ospite Ricevuti · Pronti per Alloggiati Web',
+          time: ' Documenti Ospite Ricevuti · Pronti per Alloggiati Web',
           title: 'Invia schedina Alloggiati Web per ' + fullName + ' (dati già precompilati)',
           desc: 'Documento ' + state.lastGuestDoc.docTipo + ' n. ' + state.lastGuestDoc.docNum + ' ricevuto dal link Self Check-in.',
           done: false,
@@ -567,7 +567,7 @@
     ];
   }
 
-  // Gestione Sessione Proprietario (/login.html <-> /app.html)
+  // Gestione Sessione Proprietario (/login.html <->/app.html)
   function loginOwnerSession(input) {
     var i = input || {};
     var code = (i.ownerCode || 'ITA-FIRENZE-01').toUpperCase().trim();
@@ -609,8 +609,8 @@
   // ═══════════════════════════════════════════════════════════════════════════
   // MOTORE CHANNEL MANAGER & REVENUE MANAGEMENT AUTONOMO PER GRADI (VISIONE UFFICIALE)
   // Principi non negoziabili:
-  // 1. Promesse = realtà (ciò che funziona oggi è attivo; il push API diretto OTA è etichettato "⏳ In arrivo").
-  // 2. Autonomia guadagnata con i dati (sale di livello L1 -> L2 -> L3 solo quando batte le decisioni umane in modo misurato).
+  // 1. Promesse = realtà (ciò che funziona oggi è attivo; il push API diretto OTA è etichettato " In arrivo").
+  // 2. Autonomia guadagnata con i dati (sale di livello L1 ->L2 ->L3 solo quando batte le decisioni umane in modo misurato).
   // 3. Zero overbooking (blocco rigido collisioni date), zero prezzi fuori controllo (hard clamp tra Floor e Cap).
   // 4. Meno clic possibili per i membri (routine di approvazione settimanale in 1 solo tap).
   // ═══════════════════════════════════════════════════════════════════════════
@@ -629,10 +629,10 @@
       portalMarkupAuto: true,
       lastSyncAt: 'Oggi, 08:00 (Piano Settimanale Attivo)',
       portals: {
-        airbnb: { active: true, name: 'Airbnb', icon: '🏠', markupPct: 0, liveCapability: '✅ Calcolo + iCal Anti-Overbooking + CSV', apiPushStatus: '⏳ Push API Diretto: In arrivo' },
-        booking: { active: true, name: 'Booking.com', icon: '🅱️', markupPct: 4, liveCapability: '✅ Calcolo (+4% comm.) + iCal + CSV', apiPushStatus: '⏳ Push API XML: In arrivo' },
-        vrbo: { active: false, name: 'Vrbo / Expedia', icon: '🌐', markupPct: 3, liveCapability: '✅ Calcolo (+3% comm.) + iCal + CSV', apiPushStatus: '⏳ Push API Diretto: In arrivo' },
-        direct: { active: true, name: 'Sito Diretto (0% Comm.)', icon: '💎', markupPct: -8, liveCapability: '✅ Attivo Ora (Tariffa -8% zero comm.)', apiPushStatus: '✅ Attivo su itassistance' }
+        airbnb: { active: true, name: 'Airbnb', icon: '', markupPct: 0, liveCapability: ' Calcolo + iCal Anti-Overbooking + CSV', apiPushStatus: ' Push API Diretto: In arrivo' },
+        booking: { active: true, name: 'Booking.com', icon: '🅱️', markupPct: 4, liveCapability: ' Calcolo (+4% comm.) + iCal + CSV', apiPushStatus: ' Push API XML: In arrivo' },
+        vrbo: { active: false, name: 'Vrbo / Expedia', icon: '', markupPct: 3, liveCapability: ' Calcolo (+3% comm.) + iCal + CSV', apiPushStatus: ' Push API Diretto: In arrivo' },
+        direct: { active: true, name: 'Sito Diretto (0% Comm.)', icon: '', markupPct: -8, liveCapability: ' Attivo Ora (Tariffa -8% zero comm.)', apiPushStatus: ' Attivo su itassistance' }
       },
       customDayOverrides: {}
     };
@@ -710,8 +710,8 @@
       if (!b.checkin || !b.checkout) continue;
       var bIn = new Date(b.checkin + 'T12:00:00');
       var bOut = new Date(b.checkout + 'T12:00:00');
-      // Intervalli [dIn, dOut) e [bIn, bOut) si sovrappongono se dIn < bOut && dOut > bIn
-      if (dIn < bOut && dOut > bIn) {
+      // Intervalli [dIn, dOut) e [bIn, bOut) si sovrappongono se dIn < bOut && dOut >bIn
+      if (dIn < bOut && dOut >bIn) {
         return { hasOverlap: true, invalidOrder: false, conflict: b };
       }
     }
@@ -732,11 +732,11 @@
     var startDate = new Date('2026-11-02T12:00:00');
     var dayNames = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
     var firenzeEvents = {
-      '2026-11-06': { name: '⚠️ Notte Orfana (1 notte tra 2 soggiorni)', type: 'orphan' },
-      '2026-11-13': { name: '🔥 Weekend Alta Richiesta Centro Storico', type: 'weekend_peak' },
-      '2026-11-14': { name: '🔥 Sabato Picco Domanda Internazionale', type: 'weekend_peak' },
-      '2026-11-28': { name: '🏃‍♂️ Vigilia Firenze Marathon (Picco +38%)', type: 'event' },
-      '2026-11-29': { name: '🏃‍♂️ Firenze Marathon 2026 (Alta Domanda)', type: 'event' }
+      '2026-11-06': { name: '️ Notte Orfana (1 notte tra 2 soggiorni)', type: 'orphan' },
+      '2026-11-13': { name: ' Weekend Alta Richiesta Centro Storico', type: 'weekend_peak' },
+      '2026-11-14': { name: ' Sabato Picco Domanda Internazionale', type: 'weekend_peak' },
+      '2026-11-28': { name: '‍️ Vigilia Firenze Marathon (Picco +38%)', type: 'event' },
+      '2026-11-29': { name: '‍️ Firenze Marathon 2026 (Alta Domanda)', type: 'event' }
     };
 
     var stratMod = cm.strategy === 'high_adr' ? 1.08 : (cm.strategy === 'max_occupancy' ? 0.93 : 1.0);
@@ -792,9 +792,9 @@
       var recommendedRate = cm.baseRate;
 
       if (occ) {
-        behaviorRule = '🛡️ Blocco Anti-Overbooking (' + occ.guest + ')';
+        behaviorRule = '️ Blocco Anti-Overbooking (' + occ.guest + ')';
         behaviorDetail = 'Data chiusa su tutti i portali (' + occ.channel + ') — Zero rischio doppia prenotazione.';
-        actionLabel = '🔒 CHIUSA ANTI-OVERBOOKING (' + occ.channel + ')';
+        actionLabel = ' CHIUSA ANTI-OVERBOOKING (' + occ.channel + ')';
         badgeClass = 'badge-ok';
         actionType = 'booked';
         recommendedRate = occ.nightRate || cm.baseRate;
@@ -807,7 +807,7 @@
         minStay = 1;
         orphanDaysUnlocked++;
         loweredDays++;
-        behaviorRule = '🧩 Buco Orfano (1 notte incastrata tra 2 prenotazioni)';
+        behaviorRule = ' Buco Orfano (1 notte incastrata tra 2 prenotazioni)';
         behaviorDetail = 'Con soggiorno minimo 2 notti resterebbe invisibile (0 €). Sbloccata a 1 notte (-12%) per riempirla.';
         actionLabel = '▼ SBLOCCA 1 NOTTE & RIEMPI (-12%)';
         badgeClass = 'badge-warn';
@@ -820,7 +820,7 @@
         recommendedRate = Math.round(cm.baseRate * (1 + pctDelta / 100) * stratMod);
         minStay = 1;
         loweredDays++;
-        behaviorRule = '📱 Impulso Mobile Last-Minute (0–4 gg all\'arrivo)';
+        behaviorRule = ' Impulso Mobile Last-Minute (0–4 gg all\'arrivo)';
         behaviorDetail = 'Sotto data il viaggiatore confronta da smartphone i primi 5 prezzi: ribasso controllato entro il Floor.';
         actionLabel = '▼ ABBASSA PER RIEMPIRE (' + pctDelta + '% · 1N)';
         badgeClass = 'badge-warn';
@@ -844,7 +844,7 @@
         recommendedRate = Math.round(cm.baseRate * (1 + pctDelta / 100) * stratMod);
         minStay = 2;
         raisedDays++;
-        behaviorRule = '🔥 Picco Domanda Weekend Firenze (Ven–Sab)';
+        behaviorRule = ' Picco Domanda Weekend Firenze (Ven–Sab)';
         behaviorDetail = 'Alta richiesta coppie e city-break: alza la tariffa e blocca prenotazioni da 1 sola notte.';
         actionLabel = '▲ ALZA WEEKEND (+' + pctDelta + '% · Min 2N)';
         badgeClass = 'badge-gold';
@@ -856,7 +856,7 @@
         recommendedRate = Math.round(cm.baseRate * 1.10 * stratMod);
         minStay = 2;
         raisedDays++;
-        behaviorRule = '✈️ Early Planner (> 10 gg di anticipo)';
+        behaviorRule = '️ Early Planner (>10 gg di anticipo)';
         behaviorDetail = 'Chi pianifica Firenze in anticipo privilegia posizione e recensioni rispetto al prezzo basso.';
         actionLabel = '▲ DIFENDI & ALZA (+10% · Min 2N)';
         badgeClass = 'badge-ok';
@@ -868,7 +868,7 @@
         recommendedRate = Math.round(cm.baseRate * 0.95 * stratMod);
         minStay = 2;
         loweredDays++;
-        behaviorRule = '⚖️ Finestra Core Feriale (5–9 gg)';
+        behaviorRule = '️ Finestra Core Feriale (5–9 gg)';
         behaviorDetail = 'Lieve allineamento competitivo per mantenere alto il ranking su Airbnb e Booking.';
         actionLabel = '▼ ALLINEA RANKING (-5% · Min 2N)';
         badgeClass = 'badge-neutral';
@@ -884,14 +884,14 @@
         // Grado L1 (Osservazione & Guardia): non modifica il prezzo base in automatico, mostra il consiglio a fianco
         if (cm.autonomyLevel === 1 || !cm.autoPilot) {
           recommendedRate = clampPriceToGuardrails(cm.baseRate, cm.floorRate, cm.ceilingRate);
-          actionLabel = '👁️ L1 OSSERVAZIONE (Base ' + recommendedRate + ' € · Consiglio AI: ' + engineSuggestedRate + ' €)';
+          actionLabel = '️ L1 OSSERVAZIONE (Base ' + recommendedRate + ' € · Consiglio AI: ' + engineSuggestedRate + ' €)';
         } else {
           recommendedRate = engineSuggestedRate;
         }
       }
       if (!occ && cm.customDayOverrides && cm.customDayOverrides[isoDate]) {
         recommendedRate = clampPriceToGuardrails(cm.customDayOverrides[isoDate], cm.floorRate, cm.ceilingRate);
-        actionLabel = '✍️ FISSO MEMBRO (' + recommendedRate + ' € · Entro Guardrail)';
+        actionLabel = '️ FISSO MEMBRO (' + recommendedRate + ' € · Entro Guardrail)';
         badgeClass = 'badge-gold';
       }
 
@@ -974,7 +974,7 @@
       apartments: [
         {
           id: 'apt_1',
-          shortLabel: '🏠 1. Santo Spirito',
+          shortLabel: ' 1. Santo Spirito',
           originBadge: 'Attivo su itassistance + PBA + Smartbookings',
           ownerData: {
             apartment: {
@@ -998,8 +998,8 @@
             },
             bookings: [
               { id: 'b1', guest: 'Jean Luc Martin', channel: 'Airbnb', guests: 2, checkin: '2026-11-02', checkout: '2026-11-06', nights: 4, amount: 760, alloggiatiSent: false, cleaningStatus: 'Programmata 11:00 (PBA ZTL)', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 45 },
-              { id: 'b2', guest: 'Hannah & Mark Taylor', channel: 'Booking.com', guests: 4, checkin: '2026-11-07', checkout: '2026-11-12', nights: 5, amount: 1150, alloggiatiSent: true, cleaningStatus: '✓ Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 55 },
-              { id: 'b3', guest: 'Carlos Mendoza', channel: 'Smartbookings (Diretta 0%)', guests: 2, checkin: '2026-11-14', checkout: '2026-11-17', nights: 3, amount: 540, alloggiatiSent: true, cleaningStatus: '✓ Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 45 }
+              { id: 'b2', guest: 'Hannah & Mark Taylor', channel: 'Booking.com', guests: 4, checkin: '2026-11-07', checkout: '2026-11-12', nights: 5, amount: 1150, alloggiatiSent: true, cleaningStatus: ' Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 55 },
+              { id: 'b3', guest: 'Carlos Mendoza', channel: 'Smartbookings (Diretta 0%)', guests: 2, checkin: '2026-11-14', checkout: '2026-11-17', nights: 3, amount: 540, alloggiatiSent: true, cleaningStatus: ' Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 45 }
             ],
             expenses: [
               { id: 'e1', date: '02/11/2026', title: '3. Blue Arroyo Cleaning — Turnover + Kit Bio Gratuiti + 4 Foto SHA-256', category: 'Pulizie & Biancheria 60°C', amount: 45, paid: false },
@@ -1010,7 +1010,7 @@
             autoPilot: true,
             autonomyLevel: 3, // Grado L3 Sbloccato coi dati (+18.5% vs umano, 3 settimane certificate)
             verifiedWeeksBeatingHuman: 3,
-            weeklyApprovedAt: 'Piano L3 Attivo · 3 settimane certificate (> +8%)',
+            weeklyApprovedAt: 'Piano L3 Attivo · 3 settimane certificate (>+8%)',
             strategy: 'smart_fill',
             baseRate: 165,
             floorRate: 118,
@@ -1023,8 +1023,8 @@
         },
         {
           id: 'apt_2',
-          shortLabel: '🏛️ 2. Palazzo Oltrarno',
-          originBadge: 'Gestione PM · ⚠️ 1 Buco Orfano Rilevato',
+          shortLabel: '️ 2. Palazzo Oltrarno',
+          originBadge: 'Gestione PM · ️ 1 Buco Orfano Rilevato',
           ownerData: {
             apartment: {
               name: 'Suite Palazzo Oltrarno',
@@ -1046,9 +1046,9 @@
               ownerEmail: 'info@itadreamteam.com'
             },
             bookings: [
-              { id: 'b201', guest: 'Famiglia Van Der Berg', channel: 'Booking.com', guests: 4, checkin: '2026-11-02', checkout: '2026-11-05', nights: 3, amount: 690, alloggiatiSent: true, cleaningStatus: '✓ Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 55 },
+              { id: 'b201', guest: 'Famiglia Van Der Berg', channel: 'Booking.com', guests: 4, checkin: '2026-11-02', checkout: '2026-11-05', nights: 3, amount: 690, alloggiatiSent: true, cleaningStatus: ' Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 55 },
               { id: 'b202', guest: 'Sophie & Claire Dubois', channel: 'Airbnb', guests: 2, checkin: '2026-11-06', checkout: '2026-11-10', nights: 4, amount: 840, alloggiatiSent: false, cleaningStatus: 'Programmata 11:00 (PBA ZTL)', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 55 },
-              { id: 'b203', guest: 'Dr. Richard Sterling', channel: 'Smartbookings (Diretta 0%)', guests: 2, checkin: '2026-11-11', checkout: '2026-11-15', nights: 4, amount: 880, alloggiatiSent: true, cleaningStatus: '✓ Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 55 }
+              { id: 'b203', guest: 'Dr. Richard Sterling', channel: 'Smartbookings (Diretta 0%)', guests: 2, checkin: '2026-11-11', checkout: '2026-11-15', nights: 4, amount: 880, alloggiatiSent: true, cleaningStatus: ' Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 55 }
             ],
             expenses: [
               { id: 'e201', date: '02/11/2026', title: '3. Blue Arroyo Cleaning — Turnover Suite + Biancheria 60°C + Foto SHA-256', category: 'Pulizie & Biancheria 60°C', amount: 55, paid: true }
@@ -1071,8 +1071,8 @@
         },
         {
           id: 'apt_3',
-          shortLabel: '⚜️ 3. Santa Croce Loft',
-          originBadge: '🏗️ Consegnato da 1. Toscan Costruzioni (5 SAL)',
+          shortLabel: '️ 3. Santa Croce Loft',
+          originBadge: '️ Consegnato da 1. Toscan Costruzioni (5 SAL)',
           ownerData: {
             apartment: {
               name: 'Santa Croce Design Loft',
@@ -1095,7 +1095,7 @@
             },
             bookings: [
               { id: 'b301', guest: 'Michael & Sarah O\'Connor', channel: 'Smartbookings (Diretta 0%)', guests: 2, checkin: '2026-11-03', checkout: '2026-11-06', nights: 3, amount: 480, alloggiatiSent: false, cleaningStatus: 'Programmata 11:00 (PBA ZTL)', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 45 },
-              { id: 'b302', guest: 'Elena Rostova', channel: 'Airbnb', guests: 2, checkin: '2026-11-07', checkout: '2026-11-11', nights: 4, amount: 640, alloggiatiSent: true, cleaningStatus: '✓ Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 45 }
+              { id: 'b302', guest: 'Elena Rostova', channel: 'Airbnb', guests: 2, checkin: '2026-11-07', checkout: '2026-11-11', nights: 4, amount: 640, alloggiatiSent: true, cleaningStatus: ' Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 45 }
             ],
             expenses: [
               { id: 'e301', date: '01/11/2026', title: '1. Toscan Costruzioni — Verbale Collaudo 5° SAL (DM 37/08 + APE + CIN Inclusi)', category: 'Subentro Chiavi in Mano', amount: 0, paid: true },
@@ -1126,7 +1126,7 @@
       var raw = localStorage.getItem(PM_PORTFOLIO_KEY);
       if (raw) {
         var parsed = JSON.parse(raw);
-        if (parsed && Array.isArray(parsed.apartments) && parsed.apartments.length > 0) {
+        if (parsed && Array.isArray(parsed.apartments) && parsed.apartments.length >0) {
           return parsed;
         }
       }
@@ -1181,14 +1181,14 @@
     return target;
   }
 
-  // Test interattivo Principio 2: Certifica una nuova settimana di dati in cui il motore batte l'umano (> +8%) per sbloccare Grado L3
+  // Test interattivo Principio 2: Certifica una nuova settimana di dati in cui il motore batte l'umano (>+8%) per sbloccare Grado L3
   function certifyNextAutonomyWeek() {
     var st = getChannelRevenueState();
     st.verifiedWeeksBeatingHuman = (Number(st.verifiedWeeksBeatingHuman) || 0) + 1;
     if (st.verifiedWeeksBeatingHuman >= 2 && st.autonomyLevel < 3) {
       st.autonomyLevel = 3;
       st.autoPilot = true;
-      st.weeklyApprovedAt = '✓ Grado L3 Sbloccato coi Dati (' + st.verifiedWeeksBeatingHuman + ' settimane > +8% vs umano)';
+      st.weeklyApprovedAt = ' Grado L3 Sbloccato coi Dati (' + st.verifiedWeeksBeatingHuman + ' settimane >+8% vs umano)';
     } else {
       st.weeklyApprovedAt = st.verifiedWeeksBeatingHuman + ' settimana/e certificata/e';
     }
@@ -1197,7 +1197,7 @@
     return st;
   }
 
-  // Ponte 1-Tap: Subentro Nuovo Immobile appena collaudato da 1. Toscan Costruzioni (5 SAL) -> 2. itassistance + 3. Blue Arroyo Cleaning + 4. Smartbookings
+  // Ponte 1-Tap: Subentro Nuovo Immobile appena collaudato da 1. Toscan Costruzioni (5 SAL) ->2. itassistance + 3. Blue Arroyo Cleaning + 4. Smartbookings
   function subentroToscanCollaudoOneTap(customName, customAddr) {
     var pf = saveCurrentAptIntoPortfolio();
     var idx = pf.apartments.length + 1;
@@ -1209,8 +1209,8 @@
 
     var newApt = {
       id: newId,
-      shortLabel: '🏗️ ' + idx + '. ' + aptName.split(' ').slice(0, 2).join(' '),
-      originBadge: '🏗️ Nuovo Collaudo 1. Toscan Costruzioni (5 SAL)',
+      shortLabel: '️ ' + idx + '. ' + aptName.split(' ').slice(0, 2).join(' '),
+      originBadge: '️ Nuovo Collaudo 1. Toscan Costruzioni (5 SAL)',
       ownerData: {
         apartment: {
           name: aptName,
@@ -1242,7 +1242,7 @@
             nights: 4,
             amount: 720,
             alloggiatiSent: false,
-            cleaningStatus: '✓ Allestito Suite 60°C + Kit Bio (PBA)',
+            cleaningStatus: ' Allestito Suite 60°C + Kit Bio (PBA)',
             cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)',
             cleaningCost: 45
           }
@@ -1353,7 +1353,7 @@
       var raw = localStorage.getItem(TOSCAN_CRM_KEY);
       if (raw) {
         var parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length >0) return parsed;
       }
     } catch (e) {}
     var def = [
@@ -1402,7 +1402,7 @@
       if (admRaw && Array.isArray(admRaw.leads)) {
         admRaw.leads.unshift({
           id: 'l_tc_' + Date.now(),
-          name: '🏗️ [CRM TOSCAN COSTRUZIONI] ' + entry.name,
+          name: '️ [CRM TOSCAN COSTRUZIONI] ' + entry.name,
           phone: entry.phone || entry.email || '+39 351 038 0392',
           zone: 'Real Estate · ' + entry.budgetRange,
           source: entry.goalType + ' (' + entry.source + ')',

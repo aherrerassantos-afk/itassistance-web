@@ -1165,7 +1165,7 @@
         <div id="tc-step-1">
           <h3>Simula il rientro del tuo prossimo immobile con 1. Toscan Costruzioni</h3>
           <p style="color: var(--ink-muted); margin-bottom: 16px;">
-            Usa i margini risparmiati con <strong>itassistance</strong> per frazionare o acquisire una nuova unità a Firenze con la <strong>Formula 5 SAL Garantiti</strong> (15% + 25% + 25% + 25% + 10%).
+            Usa i margini risparmiati con <strong>itassistance</strong>per frazionare o acquisire una nuova unità a Firenze con la <strong>Formula 5 SAL Garantiti</strong>(15% + 25% + 25% + 25% + 10%).
           </p>
 
           <div class="field-group">
@@ -1658,7 +1658,7 @@
       var pTitle = document.getElementById('home-priority-title');
       var pDesc = document.getElementById('home-priority-desc');
       var pBtn = document.getElementById('home-primary-cta');
-      if (pendingAw.length > 0) {
+      if (pendingAw.length >0) {
         var firstPending = pendingAw[0];
         pTitle.textContent = pendingAw.length + (pendingAw.length === 1 ? ' soggiorno da inviare in Questura' : ' soggiorni da inviare in Questura');
         pDesc.textContent = 'Prossimo invio: ' + firstPending.guest + ' (arrivo ' + firstPending.checkin + '). Tempo richiesto: 1 minuto.';
@@ -1670,12 +1670,12 @@
       }
 
       // Metriche dei 4 Blocchi in Home
-      document.getElementById('home-metric-ospiti').textContent = appState.bookings.length + ' soggiorni · ' + (pendingAw.length > 0 ? (pendingAw.length + ' da inviare') : 'Questura in regola');
+      document.getElementById('home-metric-ospiti').textContent = appState.bookings.length + ' soggiorni · ' + (pendingAw.length >0 ? (pendingAw.length + ' da inviare') : 'Questura in regola');
       document.getElementById('home-metric-fisco').textContent = 'Utile netto mese: ' + formatEur(netProfit);
 
       // Riepiloghi Livello 2
       document.getElementById('ospiti-sum-count').textContent = appState.bookings.length + ' soggiorni nel mese';
-      document.getElementById('ospiti-sum-questura').textContent = pendingAw.length > 0 ? (pendingAw.length + ' da inviare entro 24 ore') : 'Tutti inviati regolarmente';
+      document.getElementById('ospiti-sum-questura').textContent = pendingAw.length >0 ? (pendingAw.length + ' da inviare entro 24 ore') : 'Tutti inviati regolarmente';
       document.getElementById('fisco-sum-gross').textContent = formatEur(grossTotal);
       document.getElementById('fisco-sum-exp').textContent = formatEur(expTotal + 99);
       document.getElementById('fisco-sum-net').textContent = formatEur(netProfit);
@@ -1701,7 +1701,7 @@
 
     function triggerHomePrimaryAction() {
       var pendingAw = appState.bookings.filter(function (b) { return !b.alloggiatiSent; });
-      if (pendingAw.length > 0) {
+      if (pendingAw.length >0) {
         navigateToOnion('azione-alloggiati', { step: 1, bookingId: pendingAw[0].id });
       } else {
         approveSingleAptWeeklyCSV();
@@ -1866,16 +1866,16 @@
       document.getElementById('prezzi-sum-grado').textContent = levelNames[lvl] || levelNames[2];
       document.getElementById('prezzi-sum-guardrail').textContent = 'Base ' + st.baseRate + ' € · Minimo ' + st.floorRate + ' € · Massimo ' + st.ceilingRate + ' €';
       document.getElementById('prezzi-sum-uplift').textContent = '+' + kpi.estimatedMonthlyGainEur.toLocaleString('it-IT') + ' €/mese (+' + kpi.measuredBeatPct + '% rispetto al prezzo fisso)';
-      document.getElementById('prezzi-sum-orphans').textContent = kpi.orphanDaysUnlocked > 0 ? (kpi.orphanDaysUnlocked + ' notte singola aperta automaticamente') : 'Nessun buco di calendario rilevato';
+      document.getElementById('prezzi-sum-orphans').textContent = kpi.orphanDaysUnlocked >0 ? (kpi.orphanDaysUnlocked + ' notte singola aperta automaticamente') : 'Nessun buco di calendario rilevato';
 
       // Aggiorna controlli Livello 4 Guardrail
       document.getElementById('gr-current-badge').textContent = 'Grado attivo: L' + lvl;
-      document.getElementById('gr-weeks-status').textContent = kpi.verifiedWeeksBeatingHuman + ' di 2 settimane certificate (> +8%)';
+      document.getElementById('gr-weeks-status').textContent = kpi.verifiedWeeksBeatingHuman + ' di 2 settimane certificate (>+8%)';
       var btnL3 = document.getElementById('btn-set-l3');
       if (btnL3) {
         btnL3.textContent = kpi.l3UnlockedByData
           ? 'Attiva Grado L3 · Autonomia entro i Guardrail (Sbloccato coi dati)'
-          : 'Grado L3 bloccato (richiede 2 settimane certificate > +8%)';
+          : 'Grado L3 bloccato (richiede 2 settimane certificate >+8%)';
       }
       document.getElementById('gr-base-input').value = st.baseRate;
       document.getElementById('gr-floor-input').value = st.floorRate;
@@ -1893,7 +1893,7 @@
             '</div>' +
             '<p style="color:var(--ink-muted);margin-bottom:8px;">' + d.behaviorTitle + ' (' + d.actionLabel + ' · Soggiorno minimo: ' + d.minStay + ' notti)</p>' +
             '<div style="font-size:1rem;color:var(--ink-navy);">' +
-              'Direct/Smartbookings: <strong>' + d.portalRates.direct + ' €</strong> · Airbnb/Booking (+18%): <strong>' + d.portalRates.airbnb + ' €</strong>' +
+              'Direct/Smartbookings: <strong>' + d.portalRates.direct + ' €</strong>· Airbnb/Booking (+18%): <strong>' + d.portalRates.airbnb + ' €</strong>' +
             '</div>' +
           '</article>';
         });
@@ -1995,7 +1995,7 @@
       document.getElementById('aw-arrivo').value = b.checkin;
       document.getElementById('aw-giorni').value = Math.min(30, b.nights || 1);
       var parts = b.guest.toUpperCase().split(' ');
-      if (parts.length > 1) {
+      if (parts.length >1) {
         document.getElementById('aw-cognome').value = parts[parts.length - 1];
         document.getElementById('aw-nome').value = parts.slice(0, parts.length - 1).join(' ');
       } else {
