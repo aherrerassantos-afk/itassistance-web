@@ -103,10 +103,10 @@
     var pendingAlloggiati = bookings.filter(function (b) { return !b.alloggiatiSent; });
 
     var lines = [
-      '️ *REPORT DEL GIORNO — itassistance (Ore 08:00)*',
+      ' *REPORT DEL GIORNO — itassistance (Ore 08:00)*',
       ' Immobile: *' + apt.name + '* (' + apt.address + ')',
       '🆔 CIN: ' + (apt.cin || 'Non inserito'),
-      '️ Tempo stimato oggi: *~' + (pending.length >0 ? (pending.length * 2 + 1) : 1) + ' minuti*',
+      ' Tempo stimato oggi: *~' + (pending.length >0 ? (pending.length * 2 + 1) : 1) + ' minuti*',
       '',
       ' *COSE DA FARE OGGI (' + pending.length + ' da completare, ' + doneCount + ' già fatte):*'
     ];
@@ -194,7 +194,7 @@
       if (cleanPhone.length < 8) cleanPhone = '393510380392';
       window.open('https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(reportText), '_blank');
     } else if (opts.openEmail) {
-      var subj = encodeURIComponent('️ Report del Giorno (08:00) — ' + payload.apartmentName + ' | itassistance');
+      var subj = encodeURIComponent(' Report del Giorno (08:00) — ' + payload.apartmentName + ' | itassistance');
       var body = encodeURIComponent(reportText);
       window.location.href = 'mailto:' + encodeURIComponent(payload.ownerEmail || '') + '?subject=' + subj + '&body=' + body;
     }
@@ -630,7 +630,7 @@
       lastSyncAt: 'Oggi, 08:00 (Piano Settimanale Attivo)',
       portals: {
         airbnb: { active: true, name: 'Airbnb', icon: '', markupPct: 0, liveCapability: ' Calcolo + iCal Anti-Overbooking + CSV', apiPushStatus: ' Push API Diretto: In arrivo' },
-        booking: { active: true, name: 'Booking.com', icon: '🅱️', markupPct: 4, liveCapability: ' Calcolo (+4% comm.) + iCal + CSV', apiPushStatus: ' Push API XML: In arrivo' },
+        booking: { active: true, name: 'Booking.com', icon: '🅱', markupPct: 4, liveCapability: ' Calcolo (+4% comm.) + iCal + CSV', apiPushStatus: ' Push API XML: In arrivo' },
         vrbo: { active: false, name: 'Vrbo / Expedia', icon: '', markupPct: 3, liveCapability: ' Calcolo (+3% comm.) + iCal + CSV', apiPushStatus: ' Push API Diretto: In arrivo' },
         direct: { active: true, name: 'Sito Diretto (0% Comm.)', icon: '', markupPct: -8, liveCapability: ' Attivo Ora (Tariffa -8% zero comm.)', apiPushStatus: ' Attivo su itassistance' }
       },
@@ -732,11 +732,11 @@
     var startDate = new Date('2026-11-02T12:00:00');
     var dayNames = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
     var firenzeEvents = {
-      '2026-11-06': { name: '️ Notte Orfana (1 notte tra 2 soggiorni)', type: 'orphan' },
+      '2026-11-06': { name: ' Notte Orfana (1 notte tra 2 soggiorni)', type: 'orphan' },
       '2026-11-13': { name: ' Weekend Alta Richiesta Centro Storico', type: 'weekend_peak' },
       '2026-11-14': { name: ' Sabato Picco Domanda Internazionale', type: 'weekend_peak' },
-      '2026-11-28': { name: '‍️ Vigilia Firenze Marathon (Picco +38%)', type: 'event' },
-      '2026-11-29': { name: '‍️ Firenze Marathon 2026 (Alta Domanda)', type: 'event' }
+      '2026-11-28': { name: ' Vigilia Firenze Marathon (Picco +38%)', type: 'event' },
+      '2026-11-29': { name: ' Firenze Marathon 2026 (Alta Domanda)', type: 'event' }
     };
 
     var stratMod = cm.strategy === 'high_adr' ? 1.08 : (cm.strategy === 'max_occupancy' ? 0.93 : 1.0);
@@ -792,7 +792,7 @@
       var recommendedRate = cm.baseRate;
 
       if (occ) {
-        behaviorRule = '️ Blocco Anti-Overbooking (' + occ.guest + ')';
+        behaviorRule = ' Blocco Anti-Overbooking (' + occ.guest + ')';
         behaviorDetail = 'Data chiusa su tutti i portali (' + occ.channel + ') — Zero rischio doppia prenotazione.';
         actionLabel = ' CHIUSA ANTI-OVERBOOKING (' + occ.channel + ')';
         badgeClass = 'badge-ok';
@@ -856,7 +856,7 @@
         recommendedRate = Math.round(cm.baseRate * 1.10 * stratMod);
         minStay = 2;
         raisedDays++;
-        behaviorRule = '️ Early Planner (>10 gg di anticipo)';
+        behaviorRule = ' Early Planner (>10 gg di anticipo)';
         behaviorDetail = 'Chi pianifica Firenze in anticipo privilegia posizione e recensioni rispetto al prezzo basso.';
         actionLabel = '▲ DIFENDI & ALZA (+10% · Min 2N)';
         badgeClass = 'badge-ok';
@@ -868,7 +868,7 @@
         recommendedRate = Math.round(cm.baseRate * 0.95 * stratMod);
         minStay = 2;
         loweredDays++;
-        behaviorRule = '️ Finestra Core Feriale (5–9 gg)';
+        behaviorRule = ' Finestra Core Feriale (5–9 gg)';
         behaviorDetail = 'Lieve allineamento competitivo per mantenere alto il ranking su Airbnb e Booking.';
         actionLabel = '▼ ALLINEA RANKING (-5% · Min 2N)';
         badgeClass = 'badge-neutral';
@@ -884,14 +884,14 @@
         // Grado L1 (Osservazione & Guardia): non modifica il prezzo base in automatico, mostra il consiglio a fianco
         if (cm.autonomyLevel === 1 || !cm.autoPilot) {
           recommendedRate = clampPriceToGuardrails(cm.baseRate, cm.floorRate, cm.ceilingRate);
-          actionLabel = '️ L1 OSSERVAZIONE (Base ' + recommendedRate + ' € · Consiglio AI: ' + engineSuggestedRate + ' €)';
+          actionLabel = ' L1 OSSERVAZIONE (Base ' + recommendedRate + ' € · Consiglio AI: ' + engineSuggestedRate + ' €)';
         } else {
           recommendedRate = engineSuggestedRate;
         }
       }
       if (!occ && cm.customDayOverrides && cm.customDayOverrides[isoDate]) {
         recommendedRate = clampPriceToGuardrails(cm.customDayOverrides[isoDate], cm.floorRate, cm.ceilingRate);
-        actionLabel = '️ FISSO MEMBRO (' + recommendedRate + ' € · Entro Guardrail)';
+        actionLabel = ' FISSO MEMBRO (' + recommendedRate + ' € · Entro Guardrail)';
         badgeClass = 'badge-gold';
       }
 
@@ -1023,8 +1023,8 @@
         },
         {
           id: 'apt_2',
-          shortLabel: '️ 2. Palazzo Oltrarno',
-          originBadge: 'Gestione PM · ️ 1 Buco Orfano Rilevato',
+          shortLabel: ' 2. Palazzo Oltrarno',
+          originBadge: 'Gestione PM ·  1 Buco Orfano Rilevato',
           ownerData: {
             apartment: {
               name: 'Suite Palazzo Oltrarno',
@@ -1071,8 +1071,8 @@
         },
         {
           id: 'apt_3',
-          shortLabel: '️ 3. Santa Croce Loft',
-          originBadge: '️ Consegnato da 1. Toscan Costruzioni (5 SAL)',
+          shortLabel: ' 3. Santa Croce Loft',
+          originBadge: ' Consegnato da 1. Toscan Costruzioni (5 SAL)',
           ownerData: {
             apartment: {
               name: 'Santa Croce Design Loft',
@@ -1209,8 +1209,8 @@
 
     var newApt = {
       id: newId,
-      shortLabel: '️ ' + idx + '. ' + aptName.split(' ').slice(0, 2).join(' '),
-      originBadge: '️ Nuovo Collaudo 1. Toscan Costruzioni (5 SAL)',
+      shortLabel: ' ' + idx + '. ' + aptName.split(' ').slice(0, 2).join(' '),
+      originBadge: ' Nuovo Collaudo 1. Toscan Costruzioni (5 SAL)',
       ownerData: {
         apartment: {
           name: aptName,
@@ -1402,7 +1402,7 @@
       if (admRaw && Array.isArray(admRaw.leads)) {
         admRaw.leads.unshift({
           id: 'l_tc_' + Date.now(),
-          name: '️ [CRM TOSCAN COSTRUZIONI] ' + entry.name,
+          name: ' [CRM TOSCAN COSTRUZIONI] ' + entry.name,
           phone: entry.phone || entry.email || '+39 351 038 0392',
           zone: 'Real Estate · ' + entry.budgetRange,
           source: entry.goalType + ' (' + entry.source + ')',

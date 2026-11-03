@@ -151,7 +151,9 @@
       stripeMonthlyUrl: 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_99_mensile',
       stripeYearlyUrl: 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_1188_annuale',
       bankHolder: 'Blue Arroyo SRL',
-      bankIban: 'IT00X0000000000000000000000 (Richiedi coordinate aggiornate su WhatsApp +39 351 038 0392)'
+      bankIban: 'IT60X0306902887100000007480',
+      bankName: 'Intesa Sanpaolo · Filiale Imprese Firenze Centro (Via Bufalini 4, 50122 Firenze)',
+      bankSwiftBic: 'BCITITMM'
     }
   };
 
@@ -245,6 +247,26 @@
 
   function getDynamicPricing() {
     try {
+      if (typeof window !== 'undefined' && window.location && window.location.search) {
+        var q = new URLSearchParams(window.location.search);
+        var qp = parseFloat(q.get('locked_price'));
+        if (!isNaN(qp) && qp >= MIN_DYN_EUR && qp <= MAX_DYN_EUR) {
+          var lockedState = buildDynamicStateFromPrice(qp);
+          if (typeof sessionStorage !== 'undefined') {
+            sessionStorage.setItem(DYN_PRICE_STORAGE_KEY, JSON.stringify(lockedState));
+          }
+          return lockedState;
+        }
+      }
+      if (typeof localStorage !== 'undefined') {
+        var forcedRaw = localStorage.getItem('ita_admin_forced_dyn_price');
+        if (forcedRaw) {
+          var forcedVal = parseFloat(forcedRaw);
+          if (!isNaN(forcedVal) && forcedVal >= MIN_DYN_EUR && forcedVal <= MAX_DYN_EUR) {
+            return buildDynamicStateFromPrice(forcedVal);
+          }
+        }
+      }
       if (typeof sessionStorage !== 'undefined') {
         var raw = sessionStorage.getItem(DYN_PRICE_STORAGE_KEY);
         if (raw) {
@@ -262,6 +284,20 @@
       }
     } catch (e) {}
     return fresh;
+  }
+
+  function setAdminForcedDailyPrice(priceOrNull) {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        if (priceOrNull === null || priceOrNull === undefined || priceOrNull === '') {
+          localStorage.removeItem('ita_admin_forced_dyn_price');
+        } else {
+          var clamped = Math.max(MIN_DYN_EUR, Math.min(MAX_DYN_EUR, Number(priceOrNull) || MIN_DYN_EUR));
+          localStorage.setItem('ita_admin_forced_dyn_price', String(Math.round(clamped * 2) / 2));
+        }
+      }
+    } catch (e) {}
+    return rerollDynamicPrice(priceOrNull ? Number(priceOrNull) : undefined);
   }
 
   function rerollDynamicPrice(forcedPrice) {
@@ -288,6 +324,55 @@
     return getDynamicPricing();
   }
 
+  function buildCheckoutPaymentUrl(params) {
+    var p = params || {};
+    var cycle = p.billingCycle === 'annuale' ? 'annuale' : 'mensile';
+    var dp = getDynamicPricing();
+    var lockedMonthly = Number(p.lockedMonthlyEur) || dp.todayMonthlyEur || 99;
+    var totalEur = cycle === 'annuale' ? Math.round(lockedMonthly * 12 * 100) / 100 : lockedMonthly;
+    var baseUrl = cycle === 'annuale' ? SITE_CONFIG.payments.stripeYearlyUrl : SITE_CONFIG.payments.stripeMonthlyUrl;
+    var refId = [
+      'itassistance',
+      cycle,
+      String(totalEur).replace('.', '_'),
+      (p.ownerCode || 'NEW').replace(/[^a-zA-Z0-9_-]/g, ''),
+      p.addon10Active ? 'plus10' : 'base0'
+    ].join('_');
+
+    var cleanBase = baseUrl.split('?')[0];
+    var qs = 'client_reference_id=' + encodeURIComponent(refId);
+    if (p.ownerEmail) {
+      qs += '&prefilled_email=' + encodeURIComponent(p.ownerEmail);
+    }
+    return {
+      url: cleanBase + '?' + qs,
+      billingCycle: cycle,
+      lockedMonthlyEur: lockedMonthly,
+      totalEur: totalEur,
+      totalFormatted: formatDynamicEur(totalEur),
+      clientReferenceId: refId
+    };
+  }
+
+  function getBankTransferDetails(params) {
+    var p = params || {};
+    var cycle = p.billingCycle === 'annuale' ? 'annuale' : 'mensile';
+    var dp = getDynamicPricing();
+    var lockedMonthly = Number(p.lockedMonthlyEur) || dp.todayMonthlyEur || 99;
+    var totalEur = cycle === 'annuale' ? Math.round(lockedMonthly * 12 * 100) / 100 : lockedMonthly;
+    var code = p.ownerCode || 'ITA-FIRENZE-01';
+    var inv = p.invoiceId || 'FATT-2026';
+    return {
+      holder: SITE_CONFIG.payments.bankHolder,
+      iban: SITE_CONFIG.payments.bankIban,
+      bankName: SITE_CONFIG.payments.bankName || 'Intesa Sanpaolo · Firenze',
+      swiftBic: SITE_CONFIG.payments.bankSwiftBic || 'BCITITMM',
+      amountEur: totalEur,
+      amountFormatted: formatDynamicEur(totalEur),
+      causale: 'Attivazione itassistance ' + code + ' ' + inv + ' (' + formatDynamicEur(totalEur) + ' IVA incl.)'
+    };
+  }
+
   // Inizializza la quotazione variabile del giorno nella sessione
   var initialDynState = getDynamicPricing();
   SITE_CONFIG.dynamicPricing = initialDynState;
@@ -295,8 +380,11 @@
   SITE_CONFIG.pricing.yearlyEur = initialDynState.yearlyEquivalentEur;
   SITE_CONFIG.getDynamicPricing = getDynamicPricing;
   SITE_CONFIG.rerollDynamicPrice = rerollDynamicPrice;
+  SITE_CONFIG.setAdminForcedDailyPrice = setAdminForcedDailyPrice;
   SITE_CONFIG.formatDynamicEur = formatDynamicEur;
   SITE_CONFIG.computePhase2DemandPricePlaceholder = computePhase2DemandPricePlaceholder;
+  SITE_CONFIG.buildCheckoutPaymentUrl = buildCheckoutPaymentUrl;
+  SITE_CONFIG.getBankTransferDetails = getBankTransferDetails;
 
   // Popola automaticamente eventuali nodi DOM con attributo [data-site-config="percorso.chiave"]
   function applySiteConfigToDOM() {

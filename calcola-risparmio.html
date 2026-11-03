@@ -173,11 +173,16 @@
           <strong>Ultimo aggiornamento:</strong> Novembre 2026 · <strong>Autore:</strong> itassistance · Blue Arroyo SRL · <strong>Fonte dati:</strong> Centro Studi AIGAB, Idealista e Politecnico di Torino (il 75% dei proprietari gestisce senza Property Manager; l'84% possiede 1 o 2 appartamenti).
         </p>
 
-        <div style="background:var(--bg-stone);border-left:4px solid var(--gold-accent);border-radius:10px;padding:16px 20px;">
-          <strong style="color:var(--ink-navy);display:block;margin-bottom:4px;">In Breve (Risposta Rapida):</strong>
-          <p style="margin:0;color:var(--ink-navy);font-size:1rem;max-width:65ch;">
-            Su un appartamento che incassa <strong>30.000 €/anno</strong>, un Property Manager al 20% trattiene <strong>6.000 €/anno (18.000 € in 3 anni)</strong>. Con l'app <strong>itassistance</strong> paghi <strong>99 € al mese IVA inclusa (1.188 €/anno)</strong> e tieni in tasca <strong>+4.812 € ogni anno (+14.436 € in 3 anni)</strong>, gestendo tutto in 10 minuti al giorno.
-          </p>
+        <div style="background:var(--bg-stone);border-left:4px solid var(--gold-accent);border-radius:10px;padding:16px 20px;margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+            <div>
+              <strong style="color:var(--ink-navy);display:block;margin-bottom:4px;" id="calc-dyn-banner-title">Indice Giornaliero Acquisizione Immobili Firenze (Range 99,00 € – 289,50 € / mese)</strong>
+              <p style="margin:0;color:var(--ink-navy);font-size:1rem;max-width:65ch;" id="calc-dyn-banner-desc">
+                La quota mensile di ingresso varia ogni giorno in base agli slot di acquisizione disponibili su Firenze. Attivando oggi blocchi la quotazione odierna per tutta la durata dell'iscrizione.
+              </p>
+            </div>
+            <button type="button" class="btn btn-outline" style="min-height:48px;padding:10px 16px;font-size:0.9375rem;" onclick="rerollCalcPagePrice()">Simula variazione giornaliera</button>
+          </div>
         </div>
 
         <div class="sim-box">
@@ -274,6 +279,29 @@
     }
 
     function runSim() {
+      var dp = (window.SITE_CONFIG && typeof SITE_CONFIG.getDynamicPricing === 'function')
+        ? SITE_CONFIG.getDynamicPricing()
+        : { todayMonthlyEur: 99, todayFormatted: '99,00 €', yearlyEquivalentEur: 1188, yearlyFormatted: '1.188,00 €', slotsAvailable: 4, maxSlots: 6, demandLevel: 'Disponibilità alta' };
+
+      var bTitle = document.getElementById('calc-dyn-banner-title');
+      if (bTitle) {
+        bTitle.textContent = 'Quotazione di ingresso oggi: ' + dp.todayFormatted + ' / mese · Disponibilità Firenze: ' + dp.slotsAvailable + ' slot su ' + dp.maxSlots;
+      }
+      var bDesc = document.getElementById('calc-dyn-banner-desc');
+      if (bDesc) {
+        bDesc.textContent = 'Range di sistema per controllo domanda: min 99,00 € — max 289,50 € / mese (' + dp.demandLevel + '). Chi attiva oggi blocca ' + dp.todayFormatted + '/mese per sempre.';
+      }
+
+      var aptSelect = document.getElementById('sim-apts');
+      if (aptSelect && aptSelect.options.length >= 3) {
+        var m1 = SITE_CONFIG.formatDynamicEur ? SITE_CONFIG.formatDynamicEur(dp.todayMonthlyEur) : dp.todayFormatted;
+        var m2 = SITE_CONFIG.formatDynamicEur ? SITE_CONFIG.formatDynamicEur(dp.todayMonthlyEur * 2) : (dp.todayMonthlyEur * 2 + ' €');
+        var m3 = SITE_CONFIG.formatDynamicEur ? SITE_CONFIG.formatDynamicEur(dp.todayMonthlyEur * 3) : (dp.todayMonthlyEur * 3 + ' €');
+        aptSelect.options[0].textContent = '1 Appartamento (' + m1 + ' / mese IVA incl.)';
+        aptSelect.options[1].textContent = '2 Appartamenti (' + m2 + ' / mese IVA incl.)';
+        aptSelect.options[2].textContent = '3 Appartamenti (' + m3 + ' / mese IVA incl.)';
+      }
+
       var revPerApt = parseFloat(document.getElementById('sim-rev').value) || 30000;
       var apts = parseInt(document.getElementById('sim-apts').value, 10) || 1;
       var pmPct = parseInt(document.getElementById('sim-pm').value, 10) || 20;
@@ -281,7 +309,7 @@
 
       var totalGross = revPerApt * apts;
       var pmCost = totalGross * (pmPct / 100);
-      var itaBase = 1188 * apts;
+      var itaBase = dp.yearlyEquivalentEur * apts;
       var itaTotal = addon10 ? (itaBase + totalGross * 0.10) : itaBase;
       var save1y = Math.max(0, pmCost - itaTotal);
       var save3y = save1y * 3;
@@ -289,13 +317,14 @@
       document.getElementById('sim-rev-val').textContent = fmt(revPerApt) + ' / anno';
       document.getElementById('res-gross').textContent = fmt(totalGross) + ' / anno';
       document.getElementById('res-pm').textContent = fmt(pmCost) + ' / anno (' + pmPct + '%)';
-      document.getElementById('res-ita').textContent = fmt(itaTotal) + ' / anno' + (addon10 ? ' (con +10%)' : ' (0% comm.)');
+      document.getElementById('res-ita').textContent = fmt(itaTotal) + ' / anno' + (addon10 ? ' (con +10%)' : ' (0% comm. · ' + dp.todayFormatted + '/m)');
       document.getElementById('res-save-1y').textContent = '+' + fmt(save1y) + ' / anno';
       document.getElementById('res-save-3y').textContent = 'Risparmio in 3 anni: +' + fmt(save3y);
 
       var checkoutBtn = document.getElementById('btn-sim-checkout');
       if (checkoutBtn) {
         var q = new URLSearchParams();
+        q.set('locked_price', String(dp.todayMonthlyEur));
         if (addon10) q.set('extra10', '1');
         var nm = (document.getElementById('sim-name').value || '').trim();
         var ph = (document.getElementById('sim-phone').value || '').trim();
@@ -303,8 +332,18 @@
         if (ph) q.set('tel', ph);
         var qs = q.toString();
         checkoutBtn.href = '/checkout.html' + (qs ? ('?' + qs) : '');
+        checkoutBtn.textContent = 'Blocca ' + dp.todayFormatted + '/mese e attiva i 14 giorni';
       }
     }
+
+    function rerollCalcPagePrice() {
+      if (window.SITE_CONFIG && typeof SITE_CONFIG.rerollDynamicPrice === 'function') {
+        SITE_CONFIG.rerollDynamicPrice();
+      }
+      runSim();
+    }
+
+    document.addEventListener('DOMContentLoaded', runSim);
 
     async function sendSimToWhatsApp() {
       var errEl = document.getElementById('sim-err');

@@ -148,6 +148,11 @@
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     @media(max-width:760px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } }
     footer { background: var(--ink-navy); color: var(--ink-on-dark-muted); padding: 40px 0; font-size: 0.875rem; border-top: 2px solid var(--gold-accent); }
+  
+    .btn { min-height: 56px; }
+    @media (min-width: 1024px) { .btn { min-height: 48px; } }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--gold-accent, #C9A84C); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
   </style>
 </head>
 <body>

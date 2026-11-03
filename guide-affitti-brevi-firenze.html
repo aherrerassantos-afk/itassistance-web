@@ -142,6 +142,11 @@
     .guide-card p { font-size: 13.5px; color: var(--text-muted); margin-bottom: 14px; }
     .guide-link { font-size: 13.5px; font-weight: 800; color: var(--navy); text-decoration: underline; }
     footer { background: var(--navy-dark); color: #A1A1AA; padding: 36px 0; font-size: 13.5px; }
+  
+    .btn { min-height: 56px; }
+    @media (min-width: 1024px) { .btn { min-height: 48px; } }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--gold-accent, #C9A84C); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
   </style>
 </head>
 <body>
@@ -170,7 +175,7 @@
   <main class="container" style="padding-top:20px;padding-bottom:60px;">
     <div class="filter-bar">
       <button type="button" class="filter-btn active" onclick="filterGuides('all', this)">Tutte (20)</button>
-      <button type="button" class="filter-btn" onclick="filterGuides('fiscale', this)">️ Legge, CIN &amp; Fiscale</button>
+      <button type="button" class="filter-btn" onclick="filterGuides('fiscale', this)"> Legge, CIN &amp; Fiscale</button>
       <button type="button" class="filter-btn" onclick="filterGuides('firenze', this)">Firenze, Quartieri &amp; Servizi</button>
       <button type="button" class="filter-btn" onclick="filterGuides('risparmio', this)">Risparmio &amp; Revenue</button>
       <button type="button" class="filter-btn" onclick="filterGuides('operativo', this)">Operatività &amp; Ospiti</button>
@@ -207,7 +212,7 @@
 
       <article class="guide-card" data-cat="fiscale">
         <div>
-          <div class="guide-cat">️ Normativa 2026 · Checklist 5 Punti</div>
+          <div class="guide-cat"> Normativa 2026 · Checklist 5 Punti</div>
           <h2>CIN e Obblighi Affitti Brevi a Firenze: Guida Completa</h2>
           <p>Esposizione CIN, estintori e rilevatori gas/monossido, Alloggiati Web, Tassa di Soggiorno del Comune di Firenze e flussi ISTAT Ross1000.</p>
         </div>
@@ -225,7 +230,7 @@
 
       <article class="guide-card" data-cat="fiscale">
         <div>
-          <div class="guide-cat">️ Comune di Firenze · Scadenza Giorno 16</div>
+          <div class="guide-cat"> Comune di Firenze · Scadenza Giorno 16</div>
           <h2>Tassa di Soggiorno Affitti Brevi a Firenze: Calcolo e Regole</h2>
           <p>Come funziona il limite di 7 notti consecutive a Firenze, le esenzioni e l'adempimento mensile entro il giorno 16 del mese successivo.</p>
         </div>
@@ -297,7 +302,7 @@
 
       <article class="guide-card" data-cat="risparmio">
         <div>
-          <div class="guide-cat">️ Metodo 10 Minuti al Giorno</div>
+          <div class="guide-cat"> Metodo 10 Minuti al Giorno</div>
           <h2>Come Gestire un Affitto Breve Senza Property Manager</h2>
           <p>Il flusso operativo quotidiano in 4 passaggi per tenere l'appartamento in regola dal telefono senza cedere il 20% a un intermediario.</p>
         </div>
@@ -314,7 +319,7 @@
       </article>
       <article class="guide-card" data-cat="operativo">
         <div>
-          <div class="guide-cat">️ Tutela Immobile · AirCover &amp; Polizza RC</div>
+          <div class="guide-cat"> Tutela Immobile · AirCover &amp; Polizza RC</div>
           <h2>Assicurazione Affitti Brevi, Deposito Cauzionale e Danni Ospiti a Firenze</h2>
           <p>Come ottenere il rimborso danni su Airbnb e Booking con le foto al check-out, il Verbale Danni PDF e la manutenzione rapida a 30 €.</p>
         </div>

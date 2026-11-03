@@ -173,6 +173,11 @@
     details.faq-item summary { font-weight: 700; color: var(--navy); cursor: pointer; font-size: 15.5px; }
     details.faq-item p { margin: 10px 0 0; font-size: 14.5px; color: var(--text-muted); }
     footer { background: var(--navy-dark); color: #A1A1AA; padding: 36px 0; font-size: 13.5px; }
+  
+    .btn { min-height: 56px; }
+    @media (min-width: 1024px) { .btn { min-height: 48px; } }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--gold-accent, #C9A84C); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
   </style>
 </head>
 <body>
@@ -238,7 +243,7 @@
         <p>Attiva <strong>itassistance</strong>a 99 €/mese IVA inclusa (0% commissioni) con garanzia <strong>14 giorni Soddisfatto o Rimborsato</strong>.</p>
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
           <a href="/checkout.html" class="btn btn-gold">Prova l'app per 14 giorni →</a>
-          <a href="/app.html" class="btn btn-outline" style="border-color:#fff;color:#fff;">️ Apri Verbale Danni &amp; Checklist nell'App</a>
+          <a href="/app.html" class="btn btn-outline" style="border-color:#fff;color:#fff;"> Apri Verbale Danni &amp; Checklist nell'App</a>
         </div>
       </div>
     </div>

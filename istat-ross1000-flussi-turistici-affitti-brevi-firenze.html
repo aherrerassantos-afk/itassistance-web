@@ -447,6 +447,11 @@
       gap: 20px;
     }
     .footer-inner a { color: var(--gold); }
+  
+    .btn { min-height: 56px; }
+    @media (min-width: 1024px) { .btn { min-height: 48px; } }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--gold-accent, #C9A84C); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
   </style>
 </head>
 <body>
@@ -479,7 +484,7 @@
       <div class="hero-meta">
         <span>Portale: Turismo5 / Ross1000 Città Metropolitana FI</span>
         <span>Scadenza: Entro il giorno 5 del mese successivo</span>
-        <span>️ Obbligatorio anche con 0 ospiti ("Movimento Zero")</span>
+        <span> Obbligatorio anche con 0 ospiti ("Movimento Zero")</span>
       </div>
     </div>
   </section>
