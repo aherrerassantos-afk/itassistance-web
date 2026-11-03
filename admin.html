@@ -857,6 +857,9 @@
                   • <strong>DG Amministrazione:</strong> Appalti, DURC, CAR &amp; SAL<br/>
                   • <strong>DG Vendite:</strong> Acquisizione Investitori Immobiliari
                 </div>
+                <div style="font-size:11px;background:#FFFBEB;border:1px solid #F59E0B;border-radius:6px;padding:6px 8px;margin-bottom:8px;color:#92400E;" id="adm-toscan-crm-box">
+                  📡 <strong>CRM Toscan Costruzioni (DG Vendite):</strong> <span id="adm-toscan-crm-count">1</span> richieste investitori attive · <button type="button" onclick="switchTab('crm')" style="background:#B45309;color:#fff;border:none;border-radius:4px;padding:2px 6px;font-size:10px;font-weight:700;cursor:pointer;">Apri CRM →</button>
+                </div>
               </div>
               <div style="font-size:11.5px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;padding:6px 8px;color:#92400E;font-weight:700;">
                 │ Passa l'immobile nuovo e cablato a <code>2. itassistance</code> ▼
@@ -868,17 +871,17 @@
               <div>
                 <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
                   <span style="font-size:11px;font-weight:800;color:var(--navy);text-transform:uppercase;">2. LO PROTEGGE (Qui)</span>
-                  <span class="badge badge-ok" style="font-size:10.5px;">🎯 Cliente: PROPERTY MANAGER</span>
+                  <span class="badge badge-ok" style="font-size:10.5px;">🎯 Cliente: PROPRIETARI-GESTORI (75%) &amp; PM</span>
                 </div>
                 <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">🧠 2. itassistance</div>
                 <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
-                  <strong>└─► Lo rende immediatamente conforme alla legge (Questura e Comune) e ne ottimizza le tariffe dinamiche</strong> (Alloggiati 24h, ISTAT Ross1000, Tassa Soggiorno FI e Channel Manager).
+                  <strong>└─► Lo rende immediatamente conforme alla legge (Questura e Comune), ne ottimizza le tariffe e libera il tempo del proprietario (75% gestisce da solo 1–2 case)</strong> per spingerlo alla sfida successiva: investire nel prossimo immobile con <em>Toscan Costruzioni</em>.
                 </p>
                 <div style="font-size:11px;background:#fff;border:1px solid var(--gold);border-radius:6px;padding:6px 8px;margin-bottom:8px;color:var(--navy);">
                   <strong>👥 I 3 General Directors (Questa Console):</strong><br/>
                   • <strong>DG Operatività:</strong> Alloggiati, ISTAT, Channel Manager, schedine<br/>
                   • <strong>DG Amministrazione:</strong> Piani 99€/+10%, fatturazione elettronica<br/>
-                  • <strong>DG Vendite:</strong> Onboarding e mandati tecnologici PM
+                  • <strong>DG Vendite:</strong> Onboarding Proprietari-Gestori (75%) &amp; PM
                 </div>
               </div>
               <div style="font-size:11.5px;background:#fff;border:1px solid var(--navy);border-radius:6px;padding:6px 8px;color:var(--navy);font-weight:700;">
@@ -891,7 +894,7 @@
               <div>
                 <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
                   <span style="font-size:11px;font-weight:800;color:#059669;text-transform:uppercase;">3. LO ALLESTISCE</span>
-                  <span class="badge badge-info" style="font-size:10.5px;">🎯 Cliente: PROPERTY MANAGER</span>
+                  <span class="badge badge-info" style="font-size:10.5px;">🎯 Cliente: PROPRIETARI-GESTORI (75%) &amp; PM</span>
                 </div>
                 <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">🧹 3. Blue Arroyo Cleaning</div>
                 <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
@@ -2906,6 +2909,11 @@ P.IVA: 07480210488</div>
           });
           pillsBox.innerHTML = pHtml;
         }
+      }
+      if (ITACloudSync.getToscanCrmLeads) {
+        var tcLeads = ITACloudSync.getToscanCrmLeads();
+        var tcCntEl = document.getElementById('adm-toscan-crm-count');
+        if (tcCntEl) tcCntEl.textContent = tcLeads.length;
       }
     }
 

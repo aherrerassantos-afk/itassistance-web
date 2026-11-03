@@ -1315,6 +1315,8 @@
         bookingsCount: bks.length,
         grossEur: gross,
         pendingAlloggiati: pendAw,
+        pendingTasksCount: pendAw,
+        isActive: a.id === pf.activeAptId,
         autonomyLevel: cm.autonomyLevel || 2,
         verifiedWeeks: cm.verifiedWeeksBeatingHuman || 1,
         baseRate: cm.baseRate,
@@ -1334,8 +1336,86 @@
       totalPendingAlloggiati: totalPendingAlloggiati,
       totalOrphansUnlocked: totalOrphans,
       totalMonthlyUpliftEur: totalMonthlyUplift,
-      apartments: aptSummaries
+      apartments: aptSummaries,
+      rows: aptSummaries
     };
+  }
+
+  /* ────────────────────────────────────────────────────────
+     10. CRM 1. TOSCAN COSTRUZIONI — INVESTITORI REAL ESTATE & NUOVA SFIDA
+     Riceve le richieste da /index.html e /app.html e le invia al DG Vendite
+     di 1. Toscan Costruzioni + CRM centrale Blue Arroyo
+  ──────────────────────────────────────────────────────── */
+  var TOSCAN_CRM_KEY = 'ita_toscan_crm_leads_v1';
+
+  function getToscanCrmLeads() {
+    try {
+      var raw = localStorage.getItem(TOSCAN_CRM_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    var def = [
+      {
+        id: 'tc_lead_1',
+        createdAt: '2026-11-02 18:20',
+        name: 'Dott. Alessandro Moretti (Già proprietario 1 immobile)',
+        phone: '+39 335 8192011',
+        email: 'a.moretti@studiofirenze.it',
+        goalType: 'Acquisto + Ristrutturazione 2° Immobile a Reddito (Chiavi in Mano 5 SAL)',
+        budgetRange: '250.000 € – 400.000 €',
+        notes: 'Ha liberato 10h/mese con itassistance sul 1° appartamento e vuole reinvestire i flussi in un bilocale zona Oltrarno/Santa Croce.',
+        source: '/app.html (Area Membro)',
+        status: 'In studio fattibilità · DG Vendite Toscan'
+      }
+    ];
+    try {
+      localStorage.setItem(TOSCAN_CRM_KEY, JSON.stringify(def));
+    } catch (e) {}
+    return def;
+  }
+
+  async function submitToscanRealEstateLead(payload) {
+    var p = payload || {};
+    var leads = getToscanCrmLeads();
+    var entry = {
+      id: 'tc_lead_' + Date.now(),
+      createdAt: new Date().toLocaleString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+      name: (p.name || 'Proprietario Investitore Firenze').trim(),
+      phone: (p.phone || '').trim(),
+      email: (p.email || '').trim(),
+      goalType: p.goalType || 'Acquisto + Ristrutturazione Immobile a Reddito (5 SAL Garantiti)',
+      budgetRange: p.budgetRange || '250.000 € – 400.000 €',
+      notes: p.notes || 'Vuole trasformare il tempo liberato e gli incassi in un nuovo bene immobiliare chiavi in mano con 1. Toscan Costruzioni.',
+      source: p.source || '/index.html',
+      status: 'Nuova Richiesta · DG Vendite Toscan Costruzioni'
+    };
+    leads.unshift(entry);
+    try {
+      localStorage.setItem(TOSCAN_CRM_KEY, JSON.stringify(leads.slice(0, 50)));
+    } catch (e) {}
+
+    // Sincronizza subito anche nel CRM generale di /admin.html per visibilità immediata
+    try {
+      var admRaw = JSON.parse(localStorage.getItem(ADMIN_KEY) || 'null');
+      if (admRaw && Array.isArray(admRaw.leads)) {
+        admRaw.leads.unshift({
+          id: 'l_tc_' + Date.now(),
+          name: '🏗️ [CRM TOSCAN COSTRUZIONI] ' + entry.name,
+          phone: entry.phone || entry.email || '+39 351 038 0392',
+          zone: 'Real Estate · ' + entry.budgetRange,
+          source: entry.goalType + ' (' + entry.source + ')',
+          stage: 'Caldo (Pronto)',
+          notes: entry.notes
+        });
+        localStorage.setItem(ADMIN_KEY, JSON.stringify(admRaw));
+      }
+    } catch (e) {}
+
+    await syncSnapshotToSupabase('toscan_costruzioni_crm_lead', entry);
+    broadcastStateChange('toscan_lead_submitted', entry);
+    return entry;
   }
 
   root.ITACloudSync = {
@@ -1361,6 +1441,8 @@
     switchPmApartment: switchPmApartment,
     certifyNextAutonomyWeek: certifyNextAutonomyWeek,
     subentroToscanCollaudoOneTap: subentroToscanCollaudoOneTap,
-    computePortfolioGlobalSummary: computePortfolioGlobalSummary
+    computePortfolioGlobalSummary: computePortfolioGlobalSummary,
+    getToscanCrmLeads: getToscanCrmLeads,
+    submitToscanRealEstateLead: submitToscanRealEstateLead
   };
 })(typeof window !== 'undefined' ? window : this);

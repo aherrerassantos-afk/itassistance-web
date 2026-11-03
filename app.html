@@ -708,6 +708,7 @@
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <button type="button" class="btn btn-outline btn-sm" style="color:#fff;border-color:rgba(255,255,255,0.4);" onclick="togglePmGlobalOverview()">📊 Vista Globale Portafoglio</button>
+            <button type="button" class="btn btn-outline btn-sm" style="color:#A7F3D0;border-color:#10B981;" onclick="openToscanChallengeCard()">🧭 Prossima Sfida: Investi in Real Estate</button>
             <button type="button" class="btn btn-outline btn-sm" style="color:var(--gold);border-color:var(--gold);" onclick="triggerToscanHandoverInApp()">🏗️ +1-Tap Subentro da Toscan Costruzioni</button>
             <button type="button" class="btn btn-gold btn-sm" onclick="approveAllPortfolioWeeklyCSV()">⚡ 1-Tap Bulk: Approva Settimana &amp; CSV Tutti gli Immobili</button>
           </div>
@@ -1722,6 +1723,101 @@
           </div>
         </div>
 
+        <!-- ════════════════════════════════════════════════════════════════
+             ZONA DEDICATA: LA TUA PROSSIMA SFIDA PATRIMONIALE & BRIEF 1. TOSCAN COSTRUZIONI (CON INVIO DIRETTO AL CRM TOSCAN)
+        ════════════════════════════════════════════════════════════════ -->
+        <div class="panel-card" id="toscan-next-challenge-card" style="background:linear-gradient(135deg,#0F1A2E 0%,#1E293B 100%);color:#fff;border:2px solid var(--gold);">
+          <div class="panel-head" style="border-bottom:1px solid rgba(255,255,255,0.16);padding-bottom:14px;margin-bottom:16px;">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+                <span class="badge badge-gold">🧭 LA TUA PROSSIMA SFIDA PATRIMONIALE · OLTRE LA GESTIONE QUOTIDIANA</span>
+                <span class="badge badge-ok">✓ Tempo Liberato: 38 ore/anno · Risparmio Commissioni: +7.500 €/anno</span>
+              </div>
+              <div class="panel-title" style="color:#fff;font-size:20px;">🏗️ Hai liberato il tuo tempo senza rinunciare agli incassi: ora costruisci il tuo prossimo immobile con 1. Toscan Costruzioni</div>
+              <p style="font-size:13.5px;color:#CBD5E1;margin-top:4px;line-height:1.55;">
+                La mente umana ha bisogno di una <strong>sfida nuova e più grande</strong>. Ora che <strong>itassistance</strong> protegge il tuo appartamento in <strong>30 secondi a settimana</strong>, usa il tuo tempo libero e i flussi di cassa risparmiati per passare da 1 immobile a un vero portafoglio immobiliare a Firenze.
+              </p>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:18px;" class="form-grid-2">
+            <!-- BRIEF 1. TOSCAN COSTRUZIONI -->
+            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,76,0.45);border-radius:12px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;">
+              <div>
+                <div style="font-size:11.5px;font-weight:800;color:#FDE68A;text-transform:uppercase;margin-bottom:8px;">📋 Brief Ufficiale · 1. Toscan Costruzioni (Crea il Bene)</div>
+                <div style="font-size:13px;color:#E2E8F0;margin-bottom:12px;line-height:1.55;">
+                  Perché gli investitori e i proprietari-gestori del <strong>Gruppo Blue Arroyo</strong> affidano il loro prossimo immobile a <strong>1. Toscan Costruzioni</strong>:
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;font-size:12.5px;color:#CBD5E1;">
+                  <div style="background:rgba(15,26,46,0.75);padding:9px 12px;border-radius:8px;border-left:3px solid var(--gold);">
+                    <strong style="color:#FDE68A;">1. Contratto a Prezzo Fisso &amp; 5 SAL Garantiti (15+25+25+25+10%):</strong> sai al centesimo quanto investi prima di iniziare e paghi solo a stato avanzamento collaudato.
+                  </div>
+                  <div style="background:rgba(15,26,46,0.75);padding:9px 12px;border-radius:8px;border-left:3px solid #10B981;">
+                    <strong style="color:#A7F3D0;">2. Zero Riparazioni per Anni:</strong> impianti nuovi DM 37/08, cablaggio domotico per self check-in, insonorizzazione e materiali pensati per l'alta rotazione turistica.
+                  </div>
+                  <div style="background:rgba(15,26,46,0.75);padding:9px 12px;border-radius:8px;border-left:3px solid #38BDF8;">
+                    <strong style="color:#BAE6FD;">3. Subentro in 1 Tap nel tuo Portafoglio:</strong> a fine cantiere l'appartamento entra in 1 clic nella tua barra multi-immobile <strong>itassistance</strong>, allestito da <strong>Blue Arroyo Cleaning</strong> e promosso su <strong>Smartbookings</strong>.
+                  </div>
+                </div>
+              </div>
+              <div style="margin-top:12px;font-size:12px;color:#FDE68A;font-weight:700;">
+                🎯 I 3 General Directors di Toscan Costruzioni (Operatività Cantieri, Amministrazione Appalti, Vendite Investitori) seguono l'operazione dall'acquisto alla messa a reddito.
+              </div>
+            </div>
+
+            <!-- FORM PRECOMPILATO IN 1 TAP VERSO CRM TOSCAN COSTRUZIONI -->
+            <div style="background:#fff;color:var(--navy);border-radius:12px;padding:18px;border:2px solid var(--gold);">
+              <div style="font-size:11px;font-weight:800;color:#B45309;text-transform:uppercase;margin-bottom:4px;">📡 INVIO DIRETTO AL CRM DI 1. TOSCAN COSTRUZIONI</div>
+              <div style="font-size:16px;font-weight:800;color:var(--navy);margin-bottom:6px;">Scegli la tua prossima sfida e richiedi lo Studio di Fattibilità</div>
+              <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:12px;">I tuoi dati Membro sono già precompilati: ti basta scegliere l'obiettivo e cliccare Invia.</p>
+
+              <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;">
+                <button type="button" class="btn btn-outline btn-sm" id="app-tc-goal-buy" onclick="selectAppToscanGoal('buy', 'Acquisto + Ristrutturazione 2° Immobile a Reddito (Chiavi in Mano 5 SAL)')" style="justify-content:flex-start;text-align:left;border:2px solid var(--gold);background:#FFFBEB;color:var(--navy);font-weight:700;">
+                  🏛️ Acquistare e ristrutturare un 2° immobile a reddito a Firenze
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" id="app-tc-goal-split" onclick="selectAppToscanGoal('split', 'Frazionamento Immobile Attuale in 2 Unità Turistiche Indipendenti (5 SAL)')" style="justify-content:flex-start;text-align:left;color:var(--navy);">
+                  🔨 Frazionare un immobile in 2 suite per raddoppiare l'incasso netto
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" id="app-tc-goal-upgrade" onclick="selectAppToscanGoal('upgrade', 'Riqualificazione Completa Impianti & Cablaggio Domotico Zero Guasti')" style="justify-content:flex-start;text-align:left;color:var(--navy);">
+                  ⚡ Riqualificare impianti e finiture per alzare l'ADR medio di +35%/notte
+                </button>
+              </div>
+              <input type="hidden" id="app-tc-selected-goal" value="Acquisto + Ristrutturazione 2° Immobile a Reddito (Chiavi in Mano 5 SAL)"/>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+                <div class="field">
+                  <label style="font-size:11.5px;">Nome Membro / Investitore</label>
+                  <input type="text" id="app-tc-name" value="Marco Rossi (Membro Attivo)"/>
+                </div>
+                <div class="field">
+                  <label style="font-size:11.5px;">Fascia Budget / Operazione</label>
+                  <select id="app-tc-budget">
+                    <option value="Ristrutturazione / Frazionamento (50k – 120k €)">Ristrutturazione / Frazionamento (50k – 120k €)</option>
+                    <option value="Acquisto + Ristrutturazione (200k – 380k €)" selected>Acquisto + Ristrutturazione (200k – 380k €)</option>
+                    <option value="Operazione Plurilocale (> 380k €)">Operazione Plurilocale (&gt; 380k €)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+                <div class="field">
+                  <label style="font-size:11.5px;">WhatsApp Diretto</label>
+                  <input type="tel" id="app-tc-phone" value="+39 333 1234567"/>
+                </div>
+                <div class="field">
+                  <label style="font-size:11.5px;">Email per Dossier 5 SAL</label>
+                  <input type="email" id="app-tc-email" value="proprietario@firenze.it"/>
+                </div>
+              </div>
+
+              <button type="button" class="btn btn-gold" style="width:100%;justify-content:center;font-weight:800;" onclick="submitToscanLeadFromApp()">
+                🏗️ 1-Tap: Invia al CRM di 1. Toscan Costruzioni &amp; Ricevi Studio di Fattibilità →
+              </button>
+              <div id="app-tc-status-msg" style="display:none;margin-top:10px;padding:10px;border-radius:8px;background:#ECFDF5;border:1px solid #10B981;color:#065F46;font-size:12.5px;font-weight:700;"></div>
+            </div>
+          </div>
+        </div>
+
         <!-- Servizi Operativi a Richiesta su Firenze -->
         <div class="panel-card">
           <div class="panel-head">
@@ -2543,6 +2639,55 @@
       var url = window.location.origin + '/ospiti.html';
       var msg = 'Ciao! Welcome to Florence · ' + apt.name + '. Please complete the 1-minute Guest Check-in form to unlock your Check-in Instructions PDF (Wi-Fi, Door Code & Map): ' + url;
       window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+    }
+
+    function openToscanChallengeCard() {
+      switchTab('extra');
+      setTimeout(function () {
+        var el = document.getElementById('toscan-next-challenge-card');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 80);
+    }
+
+    function selectAppToscanGoal(key, label) {
+      var inp = document.getElementById('app-tc-selected-goal');
+      if (inp) inp.value = label;
+      ['buy', 'split', 'upgrade'].forEach(function (k) {
+        var btn = document.getElementById('app-tc-goal-' + k);
+        if (btn) {
+          btn.style.border = (k === key) ? '2px solid var(--gold)' : '1px solid var(--border)';
+          btn.style.background = (k === key) ? '#FFFBEB' : '#FFFFFF';
+          btn.style.fontWeight = (k === key) ? '700' : '500';
+        }
+      });
+    }
+
+    async function submitToscanLeadFromApp() {
+      var name = (document.getElementById('app-tc-name').value || '').trim() || 'Membro itassistance';
+      var phone = (document.getElementById('app-tc-phone').value || '').trim();
+      var email = (document.getElementById('app-tc-email').value || '').trim();
+      var goal = (document.getElementById('app-tc-selected-goal').value || '').trim();
+      var budget = (document.getElementById('app-tc-budget').value || '').trim();
+      var aptName = (appState && appState.apartment && appState.apartment.name) ? appState.apartment.name : 'Immobile Attivo';
+
+      if (window.ITACloudSync && typeof ITACloudSync.submitToscanRealEstateLead === 'function') {
+        await ITACloudSync.submitToscanRealEstateLead({
+          name: name + ' (' + aptName + ')',
+          phone: phone,
+          email: email,
+          goalType: goal,
+          budgetRange: budget,
+          source: '/app.html (Area Membro — Prossima Sfida Real Estate)',
+          notes: 'Membro attivo con immobile ' + aptName + '. Richiede Brief 5 SAL e studio di fattibilità a 1. Toscan Costruzioni.'
+        });
+      }
+
+      var box = document.getElementById('app-tc-status-msg');
+      if (box) {
+        box.style.display = 'block';
+        box.innerHTML = '✅ <strong>Richiesta inviata in 1 tap al CRM di 1. Toscan Costruzioni!</strong> Il General Director Vendite ti contatterà con il Brief 5 SAL e lo studio di fattibilità per: <em>' + goal + '</em>.';
+      }
+      showToast('🏗️ Richiesta inviata al CRM di 1. Toscan Costruzioni!');
     }
 
     function openAlloggiatiFor(bookingId) {
