@@ -197,11 +197,13 @@
               </div>
 
               <div class="field">
-                <label for="sim-apts"><span>2. Numero di appartamenti (84% degli host ne ha 1 o 2):</span></label>
+                <label for="sim-apts"><span>2. Numero di appartamenti (Sconto volume per 4–10 e 11+ immobili):</span></label>
                 <select id="sim-apts" onchange="runSim()">
                   <option value="1" selected>1 Appartamento (99 € / mese IVA incl.)</option>
                   <option value="2">2 Appartamenti (198 € / mese IVA incl.)</option>
                   <option value="3">3 Appartamenti (297 € / mese IVA incl.)</option>
+                  <option value="5">5 Appartamenti — Fascia Pro 4–10 imm. (79 € / mese cad.)</option>
+                  <option value="12">12 Appartamenti — Fascia Enterprise 11+ imm. (59 € / mese cad.)</option>
                 </select>
               </div>
 
@@ -307,9 +309,13 @@
       var pmPct = parseInt(document.getElementById('sim-pm').value, 10) || 20;
       var addon10 = document.getElementById('sim-addon10').checked;
 
+      var unitMonthly = dp.todayMonthlyEur;
+      if (apts >= 11) unitMonthly = 59;
+      else if (apts >= 4) unitMonthly = 79;
+
       var totalGross = revPerApt * apts;
       var pmCost = totalGross * (pmPct / 100);
-      var itaBase = dp.yearlyEquivalentEur * apts;
+      var itaBase = unitMonthly * 12 * apts;
       var itaTotal = addon10 ? (itaBase + totalGross * 0.10) : itaBase;
       var save1y = Math.max(0, pmCost - itaTotal);
       var save3y = save1y * 3;
@@ -317,14 +323,15 @@
       document.getElementById('sim-rev-val').textContent = fmt(revPerApt) + ' / anno';
       document.getElementById('res-gross').textContent = fmt(totalGross) + ' / anno';
       document.getElementById('res-pm').textContent = fmt(pmCost) + ' / anno (' + pmPct + '%)';
-      document.getElementById('res-ita').textContent = fmt(itaTotal) + ' / anno' + (addon10 ? ' (con +10%)' : ' (0% comm. · ' + dp.todayFormatted + '/m)');
+      document.getElementById('res-ita').textContent = fmt(itaTotal) + ' / anno' + (addon10 ? ' (con +10%)' : ' (0% comm. · ' + fmt(unitMonthly) + '/m cad.)');
       document.getElementById('res-save-1y').textContent = '+' + fmt(save1y) + ' / anno';
       document.getElementById('res-save-3y').textContent = 'Risparmio in 3 anni: +' + fmt(save3y);
 
       var checkoutBtn = document.getElementById('btn-sim-checkout');
       if (checkoutBtn) {
         var q = new URLSearchParams();
-        q.set('locked_price', String(dp.todayMonthlyEur));
+        q.set('locked_price', String(unitMonthly));
+        q.set('units', String(apts));
         if (addon10) q.set('extra10', '1');
         var nm = (document.getElementById('sim-name').value || '').trim();
         var ph = (document.getElementById('sim-phone').value || '').trim();
@@ -332,7 +339,9 @@
         if (ph) q.set('tel', ph);
         var qs = q.toString();
         checkoutBtn.href = '/checkout.html' + (qs ? ('?' + qs) : '');
-        checkoutBtn.textContent = 'Blocca ' + dp.todayFormatted + '/mese e attiva i 14 giorni';
+        checkoutBtn.textContent = apts > 1
+          ? ('Blocca ' + fmt(unitMonthly * apts) + '/mese (' + apts + ' imm.) e attiva i 14 giorni')
+          : ('Blocca ' + dp.todayFormatted + '/mese e attiva i 14 giorni');
       }
     }
 

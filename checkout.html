@@ -424,6 +424,18 @@
         </div>
       </div>
 
+      <div class="field-group" style="margin-bottom: 16px;">
+        <label for="co-units-select" class="field-label">Numero di appartamenti da attivare (Sconto Volume automatico per 4+ immobili)</label>
+        <select id="co-units-select" class="field-input" onchange="renderCheckoutDynamicPricing()">
+          <option value="1" selected>1 Immobile — Fascia 1–3 Immobili</option>
+          <option value="2">2 Immobili — Fascia 1–3 Immobili</option>
+          <option value="3">3 Immobili — Fascia 1–3 Immobili</option>
+          <option value="5">5 Immobili — Fascia Pro 4–10 Immobili (79,00 €/mese cad.)</option>
+          <option value="8">8 Immobili — Fascia Pro 4–10 Immobili (79,00 €/mese cad.)</option>
+          <option value="12">12 Immobili — Fascia Enterprise 11+ Immobili (59,00 €/mese cad.)</option>
+        </select>
+      </div>
+
       <button type="button" class="choice-card selected" id="opt-mensile" onclick="selectBillingCycle('mensile')">
         <span class="status-badge">Consigliato · Tariffa odierna bloccata</span>
         <div class="choice-head">
@@ -660,19 +672,43 @@
       }
     });
 
+    function getSelectedCheckoutUnits() {
+      var sel = document.getElementById('co-units-select');
+      return sel ? (parseInt(sel.value, 10) || 1) : 1;
+    }
+
     function getActiveCheckoutPricing() {
-      if (window.SITE_CONFIG && typeof SITE_CONFIG.getDynamicPricing === 'function') {
-        return SITE_CONFIG.getDynamicPricing();
+      var dp = (window.SITE_CONFIG && typeof SITE_CONFIG.getDynamicPricing === 'function')
+        ? SITE_CONFIG.getDynamicPricing()
+        : {
+            todayMonthlyEur: 99,
+            todayFormatted: '99,00 €',
+            yearlyEquivalentEur: 1188,
+            yearlyFormatted: '1.188,00 €',
+            slotsAvailable: 4,
+            maxSlots: 6,
+            demandLevel: 'Disponibilità alta'
+          };
+      var units = getSelectedCheckoutUnits();
+      if (window.SITE_CONFIG && typeof SITE_CONFIG.computePortfolioVolumeCheckout === 'function') {
+        var vol = SITE_CONFIG.computePortfolioVolumeCheckout({
+          units: units,
+          billingCycle: currentCycle,
+          lockedMonthlyEur: dp.todayMonthlyEur
+        });
+        return {
+          units: units,
+          tierLabel: vol.tierLabel,
+          todayMonthlyEur: vol.totalMonthlyEur,
+          todayFormatted: vol.totalMonthlyFormatted,
+          yearlyEquivalentEur: vol.totalYearlyEur,
+          yearlyFormatted: vol.totalYearlyFormatted,
+          slotsAvailable: dp.slotsAvailable,
+          maxSlots: dp.maxSlots,
+          demandLevel: dp.demandLevel
+        };
       }
-      return {
-        todayMonthlyEur: 99,
-        todayFormatted: '99,00 €',
-        yearlyEquivalentEur: 1188,
-        yearlyFormatted: '1.188,00 €',
-        slotsAvailable: 4,
-        maxSlots: 6,
-        demandLevel: 'Disponibilità alta'
-      };
+      return dp;
     }
 
     function renderCheckoutDynamicPricing() {
@@ -737,6 +773,27 @@
         currentCycle = 'annuale';
       } else {
         currentCycle = 'mensile';
+      }
+      var unitsParam = parseInt(params.get('units'), 10);
+      if (unitsParam && unitsParam >= 1) {
+        var uSel = document.getElementById('co-units-select');
+        if (uSel) {
+          var matched = false;
+          for (var ui = 0; ui < uSel.options.length; ui++) {
+            if (parseInt(uSel.options[ui].value, 10) === unitsParam) {
+              uSel.value = String(unitsParam);
+              matched = true;
+              break;
+            }
+          }
+          if (!matched) {
+            var opt = document.createElement('option');
+            opt.value = String(unitsParam);
+            opt.textContent = unitsParam + ' Immobili — Portafoglio personalizzato';
+            uSel.appendChild(opt);
+            uSel.value = String(unitsParam);
+          }
+        }
       }
       renderCheckoutDynamicPricing();
       ['nome', 'email', 'tel', 'cf', 'imm', 'addr'].forEach(function (k) {

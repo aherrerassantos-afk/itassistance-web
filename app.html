@@ -737,6 +737,9 @@
         <button type="button" class="btn btn-secondary" onclick="sendGuestSelfCheckinWhatsApp()">
           Invia il link documenti all'ospite su WhatsApp
         </button>
+        <button type="button" class="btn btn-secondary" onclick="sendSmartsBookingsGuestVoucherInApp()">
+          Invia voucher ri-prenotazione diretta 4. SmartsBookings.com (Cashback 15 € ospite)
+        </button>
       </div>
     </section>
 
@@ -855,8 +858,14 @@
         <button type="button" class="btn btn-secondary" onclick="activateBlueArroyoCleaningInApp()">
           Attiva 3. Blue Arroyo Cleaning (Biancheria 60°C + Kit gratuiti 232 €/mese)
         </button>
+        <button type="button" class="btn btn-secondary" onclick="openBlueArroyoDamageReportInApp()">
+          Stampa verbale 4 foto anti-danni SHA-256 (3. Blue Arroyo Cleaning)
+        </button>
         <button type="button" class="btn btn-secondary" onclick="activateSmartsBookingsInApp()">
           Attiva canale diretto 4. SmartsBookings.com (Payout 85% + Cashback 15%)
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="sendSmartsBookingsGuestVoucherInApp()">
+          Invia voucher ri-prenotazione diretta 4. SmartsBookings.com (Cashback 15 € ospite)
         </button>
         <button type="button" class="btn btn-secondary" onclick="requestFlorenceService('Check-in in presenza a Firenze (20 € IVA inclusa)')">
           Richiedi un operatore per check-in a Firenze (20 €)
@@ -2424,27 +2433,27 @@
       );
     }
 
-    function activateBlueArroyoCleaningInApp() {
+    async function activateBlueArroyoCleaningInApp() {
       if (!window.ITACloudSync || typeof ITACloudSync.activateBlueArroyoCleaningSuiteOneTap !== 'function') return;
-      var res = ITACloudSync.activateBlueArroyoCleaningSuiteOneTap(appState);
+      var res = await ITACloudSync.activateBlueArroyoCleaningSuiteOneTap(appState);
       saveState();
       renderAll();
       var el = document.getElementById('servizi-sum-bluearroyo');
       if (el) {
-        el.textContent = 'ATTIVO · Biancheria 60°C + Kit gratuiti (+' + res.monthlyKitSavingEur + ' €/mese risparmiati)';
+        el.textContent = 'ATTIVO · Biancheria 60°C + Kit gratuiti (+' + (res.monthlyKitSavingEur || 232) + ' €/mese risparmiati)';
         el.style.color = 'var(--status-ok-text)';
       }
       showConfirmationScreen(
         '3. Blue Arroyo Cleaning attivato sull\'immobile',
-        'Fornitura biancheria certificata a 60°C, kit cortesia biologici (bagno, cucina e benvenuto) inclusi gratuitamente con risparmio di ' + res.monthlyKitSavingEur + ' €/mese (' + res.annualKitSavingEur + ' €/anno) e protocollo 4 foto anti-danni SHA-256 sincronizzati con i tuoi check-out.',
+        'Fornitura biancheria certificata a 60°C, kit cortesia biologici (bagno, cucina e benvenuto) inclusi gratuitamente con risparmio di ' + (res.monthlyKitSavingEur || 232) + ' €/mese (' + (res.annualKitSavingEur || 2784) + ' €/anno) e protocollo 4 foto anti-danni SHA-256 sincronizzati con i tuoi check-out.',
         'servizi',
         'Torna a Servizi Firenze e Crescita'
       );
     }
 
-    function activateSmartsBookingsInApp() {
+    async function activateSmartsBookingsInApp() {
       if (!window.ITACloudSync || typeof ITACloudSync.activateSmartsBookingsDirectChannelOneTap !== 'function') return;
-      var res = ITACloudSync.activateSmartsBookingsDirectChannelOneTap(appState);
+      var res = await ITACloudSync.activateSmartsBookingsDirectChannelOneTap(appState);
       saveState();
       renderAll();
       var el = document.getElementById('servizi-sum-smartsbookings');
@@ -2454,9 +2463,32 @@
       }
       showConfirmationScreen(
         'Canale Diretto 4. SmartsBookings.com attivato',
-        'Prenotazione diretta senza intermediari attiva (' + res.directUrl + '). Ricevi l\'85% sul tuo conto entro le ore 12:00 del giorno di check-out e l\'ospite riceve il 15% (15 €) di cashback reale in 48 ore.',
+        'Prenotazione diretta senza intermediari attiva (' + (res.directUrl || 'https://www.smartsbookings.com') + '). Ricevi l\'85% sul tuo conto entro le ore 12:00 del giorno di check-out e l\'ospite riceve il 15% (15 €) di cashback reale in 48 ore.',
         'servizi',
         'Torna a Servizi Firenze e Crescita'
+      );
+    }
+
+    function openBlueArroyoDamageReportInApp() {
+      if (!window.ITACloudSync || typeof ITACloudSync.openBlueArroyoSha256ReportPrint !== 'function') return;
+      var rep = ITACloudSync.openBlueArroyoSha256ReportPrint(appState);
+      showConfirmationScreen(
+        'Verbale 4 Foto Anti-Danni SHA-256 generato (' + rep.reportId + ')',
+        'Il certificato ufficiale 3. Blue Arroyo Cleaning con le 4 impronte SHA-256 (Zona Giorno/Cucina, Camera 60°C, Bagno Suite, Dotazioni Sicurezza) e il rifornimento gratuito dei kit (232 €/mese) è pronto per la stampa o l\'invio ad AirCover/Booking.com.',
+        'servizi',
+        'Torna a Servizi Firenze e Crescita'
+      );
+    }
+
+    function sendSmartsBookingsGuestVoucherInApp() {
+      if (!window.ITACloudSync || typeof ITACloudSync.buildSmartsBookingsGuestRepeatVoucher !== 'function') return;
+      var v = ITACloudSync.buildSmartsBookingsGuestRepeatVoucher(appState);
+      window.open(v.whatsappUrl, '_blank');
+      showConfirmationScreen(
+        'Voucher ri-prenotazione diretta 4. SmartsBookings.com pronto (' + v.voucherCode + ')',
+        'Messaggio WhatsApp aperto per ' + v.guestName + ' con link diretto ' + v.directUrl + '. L\'ospite ottiene il 15% (15 €) di cashback reale in 48 ore e tu incassi l\'85% sul conto entro le ore 12:00 del giorno di check-out.',
+        'ospiti',
+        'Torna a Ospiti e Questura'
       );
     }
 

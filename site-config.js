@@ -373,6 +373,38 @@
     };
   }
 
+  function computePortfolioVolumeCheckout(params) {
+    var p = params || {};
+    var units = Math.max(1, parseInt(p.units, 10) || 1);
+    var cycle = p.billingCycle === 'annuale' ? 'annuale' : 'mensile';
+    var dp = getDynamicPricing();
+    var baseSingleMonthly = Number(p.lockedMonthlyEur) || dp.todayMonthlyEur || 99;
+    var unitMonthlyEur = baseSingleMonthly;
+    var tierLabel = 'Fascia 1–3 Immobili (Quotazione bloccata)';
+    if (units >= 11) {
+      unitMonthlyEur = 59;
+      tierLabel = 'Fascia Volume Enterprise 11+ Immobili (59,00 €/mese cad.)';
+    } else if (units >= 4) {
+      unitMonthlyEur = 79;
+      tierLabel = 'Fascia Volume Pro 4–10 Immobili (79,00 €/mese cad.)';
+    }
+    var totalMonthlyEur = Math.round(unitMonthlyEur * units * 100) / 100;
+    var totalYearlyEur = Math.round(totalMonthlyEur * 12 * 100) / 100;
+    var activeTotalEur = cycle === 'annuale' ? totalYearlyEur : totalMonthlyEur;
+    return {
+      units: units,
+      tierLabel: tierLabel,
+      unitMonthlyEur: unitMonthlyEur,
+      unitMonthlyFormatted: formatDynamicEur(unitMonthlyEur),
+      totalMonthlyEur: totalMonthlyEur,
+      totalMonthlyFormatted: formatDynamicEur(totalMonthlyEur),
+      totalYearlyEur: totalYearlyEur,
+      totalYearlyFormatted: formatDynamicEur(totalYearlyEur),
+      activeTotalEur: activeTotalEur,
+      activeTotalFormatted: formatDynamicEur(activeTotalEur)
+    };
+  }
+
   // Inizializza la quotazione variabile del giorno nella sessione
   var initialDynState = getDynamicPricing();
   SITE_CONFIG.dynamicPricing = initialDynState;
@@ -385,6 +417,7 @@
   SITE_CONFIG.computePhase2DemandPricePlaceholder = computePhase2DemandPricePlaceholder;
   SITE_CONFIG.buildCheckoutPaymentUrl = buildCheckoutPaymentUrl;
   SITE_CONFIG.getBankTransferDetails = getBankTransferDetails;
+  SITE_CONFIG.computePortfolioVolumeCheckout = computePortfolioVolumeCheckout;
 
   function injectEditorialGuideConversionBanner() {
     if (typeof document === 'undefined' || !document.body) return;
