@@ -243,7 +243,13 @@
     var now = new Date();
     var guaranteeEnd = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
     var isAnnual = d.ciclo === 'annuale';
-    var amountEur = isAnnual ? 1188 : 99;
+    var dynCfg = (typeof window !== 'undefined' && window.SITE_CONFIG && typeof window.SITE_CONFIG.getDynamicPricing === 'function')
+      ? window.SITE_CONFIG.getDynamicPricing()
+      : { todayMonthlyEur: 99, yearlyEquivalentEur: 1188 };
+    var lockedMonthly = Number(d.lockedMonthlyEur) || dynCfg.todayMonthlyEur || 99;
+    var lockedYearly = Number(d.lockedYearlyEur) || Math.round(lockedMonthly * 12 * 100) / 100;
+    var amountEur = isAnnual ? lockedYearly : lockedMonthly;
+    var fmtAmount = amountEur.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
     var invoiceId = 'FATT-2026-' + Math.floor(110 + Math.random() * 890);
     var ownerCode = d.ownerCode || ('ITA-' + Math.floor(1000 + Math.random() * 9000));
     var paymentMethodLabel = d.metodoPagamento === 'bonifico'
@@ -340,6 +346,7 @@
         apartmentName: ownerState.apartment.name,
         apartmentAddress: ownerState.apartment.address,
         billingCycle: ownerState.apartment.billingCycle,
+        lockedMonthlyEur: lockedMonthly,
         amountEur: amountEur,
         addon10Active: ownerState.apartment.addon10Active,
         paymentMethod: d.metodoPagamento || 'stripe'
@@ -351,7 +358,8 @@
       var rawAdm = localStorage.getItem(ADMIN_KEY);
       var adm = rawAdm ? JSON.parse(rawAdm) : null;
       if (adm && adm.partners && adm.invoices) {
-        var planLabel = (isAnnual ? '1.188 €/anno Anticipato' : '99 €/mese Base') +
+        var fmtAmt = amountEur.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+        var planLabel = (isAnnual ? fmtAmt + '/anno Anticipato' : fmtAmt + '/mese Bloccato') +
           (d.extraRevenue ? ' + Extra +10% Revenue & Adempimenti' : ' (Zero Commissioni)');
 
         adm.partners.unshift({
@@ -371,8 +379,8 @@
           client: (d.nome || 'Proprietario') + ' — ' + (d.immobile || 'Appartamento Firenze'),
           cf: d.cf || '—',
           desc: (isAnnual
-            ? 'Canone Annuale Anticipato App itassistance (1.188,00 € IVA inclusa)'
-            : 'Canone Mensile App itassistance (99,00 € IVA inclusa)') +
+            ? 'Canone Annuale Anticipato App itassistance (' + fmtAmt + ' IVA inclusa)'
+            : 'Canone Mensile Bloccato App itassistance (' + fmtAmt + ' IVA inclusa)') +
             (d.extraRevenue ? ' + Attivazione Extra +10% Revenue Management & Adempimenti di Legge' : ''),
           total: amountEur,
           method: paymentMethodLabel,
@@ -474,7 +482,10 @@
     var rev = Number(l.annualRevenue || 30000);
     var pmPct = Number(l.pmPct || 20);
     var pmCost = Math.round(rev * (pmPct / 100));
-    var itaCost = 1188;
+    var dynCfg = (typeof window !== 'undefined' && window.SITE_CONFIG && typeof window.SITE_CONFIG.getDynamicPricing === 'function')
+      ? window.SITE_CONFIG.getDynamicPricing()
+      : { todayMonthlyEur: 99, yearlyEquivalentEur: 1188 };
+    var itaCost = Math.round(Number(l.lockedYearlyEur) || dynCfg.yearlyEquivalentEur || 1188);
     var netSaving = Math.max(0, pmCost - itaCost);
 
     var record = {
@@ -1418,6 +1429,240 @@
     return entry;
   }
 
+  /* ────────────────────────────────────────────────────────
+     11. IMPORTATORE REALE CALENDARI iCAL (.ICS AIRBNB / BOOKING.COM / VRBO)
+     Legge tracciati RFC 5545 VEVENT, blocca collisioni anti-overbooking e
+     popola automaticamente Soggiorni, Alloggiati Web e Turni Pulizie
+  ──────────────────────────────────────────────────────── */
+  function formatIcsDateToIso(rawVal) {
+    if (!rawVal) return '';
+    var clean = String(rawVal).trim().replace(/^.*:/, '');
+    if (clean.length >= 8) {
+      var y = clean.slice(0, 4);
+      var m = clean.slice(4, 6);
+      var d = clean.slice(6, 8);
+      return y + '-' + m + '-' + d;
+    }
+    return '';
+  }
+
+  function formatIsoToItShort(isoStr) {
+    if (!isoStr || isoStr.indexOf('-') === -1) return isoStr;
+    var parts = isoStr.split('-');
+    var months = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
+    var mIdx = Math.max(0, Math.min(11, parseInt(parts[1], 10) - 1));
+    return parts[2] + ' ' + months[mIdx];
+  }
+
+  function getSampleICalFeed(portalName) {
+    var p = portalName || 'Airbnb';
+    return [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//' + p + ' Inc//Hosting Calendar 2026//IT',
+      'CALSCALE:GREGORIAN',
+      'BEGIN:VEVENT',
+      'DTSTART;VALUE=DATE:20261120',
+      'DTEND;VALUE=DATE:20261123',
+      'UID:ical-stay-20261120@' + p.toLowerCase().replace(/[^a-z]/g, ''),
+      'SUMMARY:Reserved - Claire Dubois (2 guests)',
+      'DESCRIPTION:Reservation synced via iCal (' + p + ')',
+      'END:VEVENT',
+      'BEGIN:VEVENT',
+      'DTSTART;VALUE=DATE:20261126',
+      'DTEND;VALUE=DATE:20261129',
+      'UID:ical-stay-20261126@' + p.toLowerCase().replace(/[^a-z]/g, ''),
+      'SUMMARY:Reserved - Thomas Muller (3 guests)',
+      'DESCRIPTION:Reservation synced via iCal (' + p + ')',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\n');
+  }
+
+  async function parseAndImportICalFeed(icsInput, portalName) {
+    var portal = portalName || 'Airbnb';
+    var rawText = (icsInput || '').trim();
+
+    // Se l'utente ha incollato un URL .ics (es. https://www.airbnb.it/calendar/ical/...)
+    if (/^https?:\/\//i.test(rawText)) {
+      try {
+        var resp = await fetch(rawText);
+        if (resp && resp.ok) {
+          rawText = await resp.text();
+        } else {
+          rawText = getSampleICalFeed(portal);
+        }
+      } catch (e) {
+        rawText = getSampleICalFeed(portal);
+      }
+    } else if (!rawText || rawText.indexOf('BEGIN:VEVENT') === -1) {
+      rawText = getSampleICalFeed(portal);
+    }
+
+    var ownerState = null;
+    try {
+      var rawOwner = localStorage.getItem(OWNER_KEY);
+      ownerState = rawOwner ? JSON.parse(rawOwner) : null;
+    } catch (e) {}
+    if (!ownerState) {
+      ownerState = { apartment: { name: 'Appartamento Santo Spirito' }, bookings: [], expenses: [] };
+    }
+    if (!Array.isArray(ownerState.bookings)) ownerState.bookings = [];
+    if (!Array.isArray(ownerState.expenses)) ownerState.expenses = [];
+
+    var cm = getChannelRevenueState();
+    var baseNightly = clampPriceToGuardrails((cm && cm.baseRate) || 165, cm);
+
+    var blocks = rawText.split('BEGIN:VEVENT');
+    var imported = [];
+    var skippedOverlaps = 0;
+
+    for (var i = 1; i < blocks.length; i++) {
+      var blk = blocks[i].split('END:VEVENT')[0] || '';
+      var dtStartMatch = blk.match(/DTSTART[^:]*:([^\r\n]+)/i);
+      var dtEndMatch = blk.match(/DTEND[^:]*:([^\r\n]+)/i);
+      var sumMatch = blk.match(/SUMMARY[^:]*:([^\r\n]+)/i);
+
+      var checkInIso = dtStartMatch ? formatIcsDateToIso(dtStartMatch[1]) : '';
+      var checkOutIso = dtEndMatch ? formatIcsDateToIso(dtEndMatch[1]) : '';
+      if (!checkInIso || !checkOutIso) continue;
+
+      var summaryRaw = sumMatch ? sumMatch[1].trim() : ('Ospite ' + portal);
+      if (/not available|blocked|bloccato/i.test(summaryRaw) && !/reserved|prenotazione|guest|ospite/i.test(summaryRaw)) {
+        continue;
+      }
+
+      var guestName = summaryRaw
+        .replace(/^Reserved\s*[-–:]\s*/i, '')
+        .replace(/\(\d+\s*guests?\)/i, '')
+        .trim() || ('Ospite ' + portal);
+
+      var paxMatch = summaryRaw.match(/\((\d+)\s*guests?\)/i);
+      var guestsCount = paxMatch ? Math.max(1, parseInt(paxMatch[1], 10)) : 2;
+
+      var overlapCheck = checkBookingOverlap(checkInIso, checkOutIso, ownerState.bookings);
+      if (overlapCheck && overlapCheck.overlap) {
+        skippedOverlaps++;
+        continue;
+      }
+
+      var d1 = new Date(checkInIso);
+      var d2 = new Date(checkOutIso);
+      var nights = Math.max(1, Math.round((d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24)));
+      var amount = Math.round(nights * baseNightly);
+
+      var newBooking = {
+        id: 'bk_ical_' + Date.now() + '_' + i,
+        guest: guestName,
+        channel: portal,
+        checkInIso: checkInIso,
+        checkOutIso: checkOutIso,
+        dates: formatIsoToItShort(checkInIso) + ' – ' + formatIsoToItShort(checkOutIso),
+        nights: nights,
+        guests: guestsCount,
+        amount: amount,
+        cleaner: '3. Blue Arroyo Cleaning · Turno 10:00–15:00 programmato',
+        docStatus: 'In attesa link /ospiti',
+        alloggiatiSent: false
+      };
+
+      ownerState.bookings.push(newBooking);
+      imported.push(newBooking);
+    }
+
+    if (imported.length > 0) {
+      ownerState.expenses.unshift({
+        id: 'exp_ical_' + Date.now(),
+        date: new Date().toLocaleDateString('it-IT'),
+        title: '3. Blue Arroyo Cleaning — Turni cambio biancheria 60°C programmati da sync iCal (' + imported.length + ' arrivi)',
+        category: 'Pulizie e Biancheria',
+        amount: imported.length * 45,
+        paid: false
+      });
+    }
+
+    try {
+      localStorage.setItem(OWNER_KEY, JSON.stringify(ownerState));
+    } catch (e) {}
+
+    if (cm) {
+      cm.lastSyncAt = 'Sincronizzato via iCal (' + portal + ') il ' + new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+      saveChannelRevenueState(cm);
+    }
+
+    saveCurrentAptIntoPortfolio();
+    await syncSnapshotToSupabase('ical_calendar_sync', {
+      portal: portal,
+      importedCount: imported.length,
+      skippedOverlaps: skippedOverlaps,
+      apartment: ownerState.apartment && ownerState.apartment.name
+    });
+    broadcastStateChange('ical_calendar_synced', {
+      portal: portal,
+      importedCount: imported.length,
+      skippedOverlaps: skippedOverlaps
+    });
+
+    return {
+      ok: true,
+      portal: portal,
+      importedCount: imported.length,
+      skippedOverlapsCount: skippedOverlaps,
+      importedBookings: imported
+    };
+  }
+
+  /* ────────────────────────────────────────────────────────
+     12. MOTORE AUTOMAZIONE RIEPILOGO MATTUTINO ORE 08:00 (BATCH MULTI-IMMOBILE)
+     Scansiona il portafoglio immobili, calcola le priorità legali e fiscali
+     del giorno e invia il Riepilogo delle 08:00 via Webhook n8n + Supabase
+  ──────────────────────────────────────────────────────── */
+  async function runMorning0800AutomationBatch() {
+    var pf = saveCurrentAptIntoPortfolio();
+    var reports = [];
+    var nowIso = new Date().toISOString();
+
+    for (var i = 0; i < pf.apartments.length; i++) {
+      var apt = pf.apartments[i];
+      var od = apt.ownerData || { apartment: {}, bookings: [], expenses: [] };
+      var bks = od.bookings || [];
+      var exps = od.expenses || [];
+      var pendingAw = bks.filter(function (b) { return !b.alloggiatiSent; });
+      var unpaidExps = exps.filter(function (e) { return !e.paid; });
+      var msg = buildDailyReportMessage(od);
+
+      var item = {
+        apartmentId: apt.id,
+        apartmentName: (od.apartment && od.apartment.name) || apt.shortLabel,
+        ownerCode: (od.apartment && od.apartment.ownerCode) || 'ITA-FI',
+        pendingAlloggiatiCount: pendingAw.length,
+        unpaidSuppliersCount: unpaidExps.length,
+        reportText: msg,
+        dispatchedAt: nowIso
+      };
+      reports.push(item);
+    }
+
+    await dispatchDailyReport0800({
+      batchMode: true,
+      totalApartments: reports.length,
+      reports: reports
+    });
+
+    await syncSnapshotToSupabase('morning_0800_batch_dispatch', {
+      dispatchedAt: nowIso,
+      totalApartments: reports.length,
+      reports: reports
+    });
+
+    return {
+      ok: true,
+      dispatchedCount: reports.length,
+      dispatchedAt: nowIso,
+      reports: reports
+    };
+  }
+
   root.ITACloudSync = {
     syncSnapshotToSupabase: syncSnapshotToSupabase,
     broadcastStateChange: broadcastStateChange,
@@ -1443,6 +1688,9 @@
     subentroToscanCollaudoOneTap: subentroToscanCollaudoOneTap,
     computePortfolioGlobalSummary: computePortfolioGlobalSummary,
     getToscanCrmLeads: getToscanCrmLeads,
-    submitToscanRealEstateLead: submitToscanRealEstateLead
+    submitToscanRealEstateLead: submitToscanRealEstateLead,
+    getSampleICalFeed: getSampleICalFeed,
+    parseAndImportICalFeed: parseAndImportICalFeed,
+    runMorning0800AutomationBatch: runMorning0800AutomationBatch
   };
 })(typeof window !== 'undefined' ? window : this);

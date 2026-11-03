@@ -171,8 +171,18 @@
               <h2 style="margin:0;">Unico piano completo per appartamento</h2>
             </div>
             <div>
-              <span class="price-num">99 €</span>
-              <span style="font-size:1rem;color:var(--ink-muted);">/ mese · IVA inclusa</span>
+              <span class="price-num" id="prz-dyn-main">99,00 €</span>
+              <span style="font-size:1rem;color:var(--ink-muted);">/ mese · IVA inclusa (Range 99,00 € – 289,50 €)</span>
+            </div>
+          </div>
+
+          <div style="margin:20px 0;padding:16px;background:var(--bg-stone);border:1.5px solid var(--ink-navy);border-radius:8px;font-size:1rem;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+              <div>
+                <strong style="color:var(--ink-navy);">Indice Giornaliero Acquisizione Nuovi Immobili Firenze (99,00 € – 289,50 € / mese):</strong><br>
+                <span id="prz-dyn-slots" style="color:var(--ink-muted);">Il canone mensile di ingresso varia ogni giorno in base agli slot di acquisizione disponibili nel sistema per controllare la domanda. Quando attivi il tuo immobile blocchi la tariffa di oggi per sempre.</span>
+              </div>
+              <button type="button" class="btn btn-outline" style="min-height:48px;padding:10px 16px;font-size:0.9375rem;" onclick="rerollPrezziPage()">Simula variazione giornaliera</button>
             </div>
           </div>
 
@@ -227,5 +237,22 @@
       <div>Blue Arroyo SRL · P.IVA 07480210488 · Via Matteo Palmieri 20r, 50122 Firenze (FI)</div>
     </div>
   </footer>
+  <script>
+    function renderPrezziDynamic() {
+      if (!window.SITE_CONFIG || typeof SITE_CONFIG.getDynamicPricing !== 'function') return;
+      var dp = SITE_CONFIG.getDynamicPricing();
+      var m = document.getElementById('prz-dyn-main');
+      if (m) m.textContent = dp.todayFormatted;
+      var s = document.getElementById('prz-dyn-slots');
+      if (s) s.textContent = 'Quotazione valida oggi: ' + dp.todayFormatted + '/mese (' + dp.yearlyFormatted + '/anno) · Disponibilità oggi a Firenze: ' + dp.slotsAvailable + ' slot su ' + dp.maxSlots + ' (' + dp.demandLevel + ').';
+    }
+    function rerollPrezziPage() {
+      if (window.SITE_CONFIG && typeof SITE_CONFIG.rerollDynamicPrice === 'function') {
+        SITE_CONFIG.rerollDynamicPrice();
+      }
+      renderPrezziDynamic();
+    }
+    document.addEventListener('DOMContentLoaded', renderPrezziDynamic);
+  </script>
 </body>
 </html>

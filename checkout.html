@@ -798,13 +798,35 @@
       if (linkEl) linkEl.href = appUrl;
       var txtEl = document.getElementById('conf-details-text');
       if (txtEl) {
-        txtEl.textContent = 'Codice Proprietario: ' + (activationResult.ownerCode || 'ITA-FIRENZE-01') + ' · Tariffa bloccata: ' + dp.todayFormatted + '/mese · Riferimento: ' + (activationResult.invoiceId || 'FATT-2026-101') + '. Ora puoi entrare nella Home di Livello 1.';
+        var bankInfo = (window.SITE_CONFIG && typeof SITE_CONFIG.getBankTransferDetails === 'function')
+          ? SITE_CONFIG.getBankTransferDetails({
+              billingCycle: currentCycle,
+              lockedMonthlyEur: dp.todayMonthlyEur,
+              ownerCode: activationResult.ownerCode || 'ITA-FIRENZE-01',
+              invoiceId: activationResult.invoiceId || 'FATT-2026-101'
+            })
+          : null;
+        txtEl.textContent = 'Codice Proprietario: ' + (activationResult.ownerCode || 'ITA-FIRENZE-01') +
+          ' · Tariffa bloccata: ' + dp.todayFormatted + '/mese · Riferimento: ' + (activationResult.invoiceId || 'FATT-2026-101') +
+          (currentPaymentMethod === 'bonifico' && bankInfo ? ' · IBAN Blue Arroyo SRL: ' + bankInfo.iban + ' · Causale: ' + bankInfo.causale : '') +
+          '. Ora puoi entrare nella Home di Livello 1.';
       }
 
       if (currentPaymentMethod === 'stripe') {
-        var targetUrl = STRIPE_LINKS[currentCycle] || STRIPE_LINKS.mensile;
-        var sep = targetUrl.indexOf('?') !== -1 ? '&' : '?';
-        window.open(targetUrl + sep + 'prefilled_email=' + encodeURIComponent(email), '_blank');
+        if (window.SITE_CONFIG && typeof SITE_CONFIG.buildCheckoutPaymentUrl === 'function') {
+          var payObj = SITE_CONFIG.buildCheckoutPaymentUrl({
+            billingCycle: currentCycle,
+            lockedMonthlyEur: dp.todayMonthlyEur,
+            ownerEmail: email,
+            ownerCode: activationResult.ownerCode || 'ITA-FIRENZE-01',
+            addon10Active: extraRevenue
+          });
+          window.open(payObj.url, '_blank');
+        } else {
+          var targetUrl = STRIPE_LINKS[currentCycle] || STRIPE_LINKS.mensile;
+          var sep = targetUrl.indexOf('?') !== -1 ? '&' : '?';
+          window.open(targetUrl + sep + 'prefilled_email=' + encodeURIComponent(email), '_blank');
+        }
       }
 
       renderCheckoutStep('conferma', true);
