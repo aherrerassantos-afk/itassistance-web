@@ -907,7 +907,7 @@
         </div>
 
         <div class="hero-meta-strip">
-          <span><strong>99 € al mese</strong>IVA inclusa</span>
+          <span><strong id="hero-dyn-price-badge">Da 99,00 € a 289,50 € / mese</strong>Quota bloccata all'ingresso</span>
           <span><strong>Zero commissioni</strong>sulle prenotazioni</span>
           <span><strong>14 giorni</strong>soddisfatto o rimborsato</span>
           <span><strong>Sede a Firenze</strong>in Via Matteo Palmieri 20r</span>
@@ -1285,17 +1285,52 @@
       </div>
     </section>
 
-    <!-- SEZIONE 8: PREZZO CHIARO, FAQ E GARANZIA 14 GIORNI -->
+    <!-- SEZIONE 8: PREZZO VARIABILE DI ACQUISIZIONE IMMOBILI (99,00 € – 289,50 €), FAQ E GARANZIA 14 GIORNI -->
     <section class="section-block section-light" id="faq">
       <div class="container">
         <div class="reveal-on-scroll" style="margin-bottom: 48px;">
-          <span class="kicker">Condizioni trasparenti e risposte chiare</span>
-          <h2>Un solo canone fisso di 99 € al mese IVA inclusa, garantito 14 giorni.</h2>
+          <span class="kicker">Controllo domanda e capacità operativa su Firenze</span>
+          <h2>Quota mensile di ingresso variabile ogni giorno tra 99,00 € e 289,50 €: blocca oggi la tua tariffa.</h2>
           <p class="lead-paragraph">
-            Con <strong>itassistance</strong>non firmi alcun mandato esclusivo: gli incassi di Airbnb, Booking e Smartbookings arrivano direttamente sul tuo conto bancario. Puoi pagare mese per mese (99 € IVA inclusa) oppure annualmente (1.188 € IVA inclusa), e se entro 14 giorni decidi che non fa per te ricevi il rimborso integrale del 100%.
+            Per garantire la qualità dell'assistenza sul campo a Firenze e controllare il flusso di ingresso di nuovi appartamenti nel sistema, il canone mensile di acquisizione varia ogni giorno tra un minimo di <strong>99,00 € al mese</strong> e un massimo di <strong>289,50 € al mese</strong> (IVA inclusa) in base agli slot operativi disponibili. Chi attiva oggi blocca la quotazione odierna per tutta la durata della propria iscrizione, con zero commissioni sulle prenotazioni e garanzia di 14 giorni soddisfatto o rimborsato.
           </p>
-          <div>
-            <a href="/checkout.html" class="btn btn-primary" onclick="trackSiteEvent('click_prova_app',{location:'footer_cta'})">Inizia la prova senza rischi</a>
+
+          <!-- PANNELLO QUOTAZIONE GIORNALIERA DI ACQUISIZIONE IMMOBILI (99,00 € - 289,50 €) -->
+          <div class="interactive-panel" style="background-color: var(--bg-stone); border-color: var(--ink-navy); margin-bottom: 32px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+              <div>
+                <div style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-text-light);">
+                  Indice Giornaliero Acquisizione Nuovi Immobili · Firenze
+                </div>
+                <div style="font-family: var(--font-display); font-size: clamp(2.1rem, 5vw, 3rem); font-weight: 700; color: var(--ink-navy); line-height: 1.1; margin-top: 4px;" id="dyn-today-price-display">
+                  99,00 € / mese
+                </div>
+                <div style="font-size: 0.9375rem; color: var(--ink-muted); margin-top: 4px;" id="dyn-today-yearly-display">
+                  Fascia di sistema: min 99,00 € / mese — max 289,50 € / mese (IVA inclusa · Tariffa bloccata all'attivazione)
+                </div>
+              </div>
+              <div style="background-color: var(--bg-light); border: 1.5px solid var(--border-control); border-radius: 8px; padding: 12px 16px;">
+                <div style="font-size: 0.875rem; color: var(--ink-muted);">Disponibilità ingresso nuovi immobili oggi</div>
+                <div style="font-size: 1.125rem; font-weight: 700; color: var(--ink-navy); margin-top: 2px;" id="dyn-slots-display">
+                  4 slot liberi su 6 a Firenze
+                </div>
+                <div style="font-size: 0.875rem; font-weight: 600; color: var(--status-ok-text); margin-top: 2px;" id="dyn-demand-label">
+                  Disponibilità alta · Finestra di ingresso agevolata
+                </div>
+              </div>
+            </div>
+
+            <!-- STRISCIA OSCILLAZIONE GIORNALIERA (5 GIORNI) -->
+            <div class="kpi-row" id="dyn-schedule-strip" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin: 16px 0 24px;"></div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+              <a href="/checkout.html" class="btn btn-primary" id="dyn-lock-cta-btn" onclick="trackSiteEvent('click_prova_app',{location:'dynamic_pricing_lock'})">
+                Blocca la tariffa di oggi e inizia i 14 giorni di prova
+              </a>
+              <button type="button" class="btn btn-secondary" onclick="simulateNewDailyAcquisitionPrice()">
+                Simula variazione giornaliera (99,00 € – 289,50 €)
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1588,6 +1623,71 @@
         statusBox.innerHTML = '<strong>Simulazione (' + Number(simCap).toLocaleString('it-IT') + ' € · Rientro ' + simYears + ') registrata nel CRM di 1. Toscan Costruzioni.</strong>Il Direttore Vendite ti invierà il capitolato 5 SAL garantiti e lo studio di rendita.';
       }
     }
+
+    /* 4. Sistema di Prezzi Variabili Giornalieri di Acquisizione Immobili (99,00 € – 289,50 € / mese) */
+    function renderDynamicAcquisitionPricing() {
+      if (!window.SITE_CONFIG || typeof SITE_CONFIG.getDynamicPricing !== 'function') return;
+      var dp = SITE_CONFIG.getDynamicPricing();
+
+      var heroBadge = document.getElementById('hero-dyn-price-badge');
+      if (heroBadge) {
+        heroBadge.textContent = 'Oggi ' + dp.todayFormatted + ' / mese (Range 99,00 € – 289,50 €)';
+      }
+
+      var pEl = document.getElementById('dyn-today-price-display');
+      if (pEl) {
+        pEl.textContent = dp.todayFormatted + ' / mese';
+      }
+
+      var yEl = document.getElementById('dyn-today-yearly-display');
+      if (yEl) {
+        yEl.textContent = 'Equivalente annuo bloccato: ' + dp.yearlyFormatted + ' / anno · Range di sistema: min 99,00 € — max 289,50 € / mese';
+      }
+
+      var sEl = document.getElementById('dyn-slots-display');
+      if (sEl) {
+        sEl.textContent = dp.slotsAvailable + ' slot liberi su ' + dp.maxSlots + ' oggi a Firenze';
+      }
+
+      var dEl = document.getElementById('dyn-demand-label');
+      if (dEl) {
+        dEl.textContent = dp.demandLevel;
+      }
+
+      var ctaBtn = document.getElementById('dyn-lock-cta-btn');
+      if (ctaBtn) {
+        ctaBtn.textContent = 'Blocca la tariffa di oggi (' + dp.todayFormatted + ' / mese) e inizia i 14 giorni';
+      }
+
+      var strip = document.getElementById('dyn-schedule-strip');
+      if (strip && dp.schedule5Days) {
+        strip.innerHTML = dp.schedule5Days.map(function (item) {
+          var formatted = SITE_CONFIG.formatDynamicEur(item.priceEur);
+          var activeStyle = item.isToday
+            ? 'background-color: var(--ink-navy); color: var(--bg-light); border: 2px solid var(--gold-accent);'
+            : 'background-color: var(--bg-light); color: var(--ink-navy); border: 1px solid var(--border-control);';
+          var labelColor = item.isToday ? 'var(--gold-accent)' : 'var(--ink-muted)';
+          var valColor = item.isToday ? 'var(--bg-light)' : 'var(--ink-navy)';
+          return '<div class="kpi-box" style="' + activeStyle + '">' +
+            '<div style="font-size: 0.875rem; font-weight: 700; color: ' + labelColor + ';">' + item.dayLabel + '</div>' +
+            '<div class="kpi-value" style="font-size: 1.45rem; color: ' + valColor + ';">' + formatted + '<span style="font-size: 0.875rem; font-weight: 500;">/m</span></div>' +
+          '</div>';
+        }).join('');
+      }
+
+      var revInput = document.getElementById('calc-number');
+      updateSavingsCalculator(revInput ? revInput.value : 30000);
+    }
+
+    function simulateNewDailyAcquisitionPrice() {
+      if (!window.SITE_CONFIG || typeof SITE_CONFIG.rerollDynamicPrice !== 'function') return;
+      SITE_CONFIG.rerollDynamicPrice();
+      renderDynamicAcquisitionPricing();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      renderDynamicAcquisitionPricing();
+    });
   </script>
 </body>
 </html>

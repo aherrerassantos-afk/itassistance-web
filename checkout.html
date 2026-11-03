@@ -407,24 +407,38 @@
     <!-- PASSAGGIO 1 DI 3: SCELTA DEL PIANO -->
     <section class="step-panel active" id="step-1" aria-labelledby="step1-heading">
       <span class="status-badge">Passaggio 1 di 3 · Scegli la formula</span>
-      <h2 id="step1-heading">Come preferisci attivare il piano da 99 € al mese?</h2>
-      <p class="step-desc">La tariffa è identica e include l'IVA. Non c'è alcun vincolo di durata.</p>
+      <h2 id="step1-heading">Blocca la quotazione di oggi per il tuo immobile.</h2>
+      <p class="step-desc">
+        Il canone di ingresso varia ogni giorno tra <strong>99,00 € e 289,50 € al mese</strong> in base agli slot di acquisizione disponibili su Firenze. Attivando oggi blocchi la tariffa odierna per sempre.
+      </p>
+
+      <div class="summary-box" style="margin-bottom: 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <div style="font-size: 0.875rem; font-weight: 700; color: var(--gold-text-light);">QUOTAZIONE DI INGRESSO VALIDA OGGI</div>
+            <div style="font-size: 1.125rem; font-weight: 700; color: var(--ink-navy);" id="co-dyn-slots-badge">Disponibilità nuovi immobili: 4 slot su 6 a Firenze</div>
+          </div>
+          <button type="button" class="btn btn-secondary" style="width: auto; margin-top: 0; min-height: 44px; padding: 8px 14px; font-size: 0.875rem;" onclick="rerollCheckoutDynamicPrice()">
+            Simula variazione giornaliera
+          </button>
+        </div>
+      </div>
 
       <button type="button" class="choice-card selected" id="opt-mensile" onclick="selectBillingCycle('mensile')">
-        <span class="status-badge">Consigliato · Massima flessibilità</span>
+        <span class="status-badge">Consigliato · Tariffa odierna bloccata</span>
         <div class="choice-head">
           <span class="choice-title">Pagamento mensile</span>
-          <span class="choice-price">99 € / mese</span>
+          <span class="choice-price" id="co-price-mensile">99,00 € / mese</span>
         </div>
-        <p style="color: var(--ink-muted);">IVA inclusa. Rinnovi mese per mese e disdici quando vuoi senza penali.</p>
+        <p style="color: var(--ink-muted);">IVA inclusa (Range sistema: 99,00 € – 289,50 €/mese). Rinnovi mese per mese e disdici quando vuoi senza penali.</p>
       </button>
 
       <button type="button" class="choice-card" id="opt-annuale" onclick="selectBillingCycle('annuale')">
         <div class="choice-head">
           <span class="choice-title">Pagamento annuale anticipato (12 mesi)</span>
-          <span class="choice-price">1.188 € / anno</span>
+          <span class="choice-price" id="co-price-annuale">1.188,00 € / anno</span>
         </div>
-        <p style="color: var(--ink-muted);">Pari a 99 € per 12 mesi IVA inclusa. Unica fattura annuale per il tuo commercialista.</p>
+        <p style="color: var(--ink-muted);" id="co-desc-annuale">Pari a 12 mensilità alla quotazione bloccata di oggi (IVA inclusa). Unica fattura annuale per il tuo commercialista.</p>
       </button>
 
       <div class="summary-box" style="margin-top: 16px;">
@@ -643,16 +657,52 @@
       }
     });
 
+    function getActiveCheckoutPricing() {
+      if (window.SITE_CONFIG && typeof SITE_CONFIG.getDynamicPricing === 'function') {
+        return SITE_CONFIG.getDynamicPricing();
+      }
+      return {
+        todayMonthlyEur: 99,
+        todayFormatted: '99,00 €',
+        yearlyEquivalentEur: 1188,
+        yearlyFormatted: '1.188,00 €',
+        slotsAvailable: 4,
+        maxSlots: 6,
+        demandLevel: 'Disponibilità alta'
+      };
+    }
+
+    function renderCheckoutDynamicPricing() {
+      var dp = getActiveCheckoutPricing();
+      var mEl = document.getElementById('co-price-mensile');
+      if (mEl) mEl.textContent = dp.todayFormatted + ' / mese';
+      var aEl = document.getElementById('co-price-annuale');
+      if (aEl) aEl.textContent = dp.yearlyFormatted + ' / anno';
+      var sBadge = document.getElementById('co-dyn-slots-badge');
+      if (sBadge) {
+        sBadge.textContent = dp.todayFormatted + '/mese · Disponibilità: ' + dp.slotsAvailable + ' slot su ' + dp.maxSlots + ' oggi a Firenze';
+      }
+      selectBillingCycle(currentCycle);
+    }
+
+    function rerollCheckoutDynamicPrice() {
+      if (window.SITE_CONFIG && typeof SITE_CONFIG.rerollDynamicPrice === 'function') {
+        SITE_CONFIG.rerollDynamicPrice();
+      }
+      renderCheckoutDynamicPricing();
+    }
+
     function selectBillingCycle(cycle) {
       currentCycle = cycle;
+      var dp = getActiveCheckoutPricing();
       document.getElementById('opt-mensile').classList.toggle('selected', cycle === 'mensile');
       document.getElementById('opt-annuale').classList.toggle('selected', cycle === 'annuale');
       if (cycle === 'annuale') {
-        document.getElementById('sum-cycle-name').textContent = 'Annuale anticipato (12 mesi)';
-        document.getElementById('sum-total').textContent = '1.188,00 € / anno';
+        document.getElementById('sum-cycle-name').textContent = 'Annuale anticipato (12 mesi bloccati)';
+        document.getElementById('sum-total').textContent = dp.yearlyFormatted + ' / anno';
       } else {
-        document.getElementById('sum-cycle-name').textContent = 'Mese per mese';
-        document.getElementById('sum-total').textContent = '99,00 € / mese';
+        document.getElementById('sum-cycle-name').textContent = 'Mese per mese (Tariffa bloccata)';
+        document.getElementById('sum-total').textContent = dp.todayFormatted + ' / mese';
       }
     }
 
@@ -681,10 +731,11 @@
     document.addEventListener('DOMContentLoaded', function () {
       var params = new URLSearchParams(window.location.search);
       if (params.get('ciclo') === 'annuale') {
-        selectBillingCycle('annuale');
+        currentCycle = 'annuale';
       } else {
-        selectBillingCycle('mensile');
+        currentCycle = 'mensile';
       }
+      renderCheckoutDynamicPricing();
       ['nome', 'email', 'tel', 'cf', 'imm', 'addr'].forEach(function (k) {
         var val = params.get(k);
         if (val) {

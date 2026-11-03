@@ -207,6 +207,20 @@ Non mostrare mai tutto subito: l'utente apre un livello alla volta e vede solo c
    - Progettato da `360px` e verificato a `320, 360, 390, 430, 768, 1024 e 1440 px` con margini laterali di `16px`, una sola colonna su telefono, tabelle trasformate in schede verticali e pannelli dal basso (`max-height: 90dvh`) con scroll interno e chiusura sempre visibile.
    - Prevedere sempre i 4 stati: **Caricamento** (struttura stabile), **Stato vuoto** (spiegazione + azione utile), **Errore** (messaggio semplice + soluzione) e **Conferma** (dopo ogni azione importante con passo successivo).
 
+---
+
+## 14. SISTEMA DI PREZZI VARIABILI GIORNALIERI DI ACQUISIZIONE IMMOBILI (99,00 € – 289,50 € / MESE)
+
+1. **Fascia Ufficiale di Quota Mensile (`99,00 € – 289,50 € / mese`):**
+   - Il canone mensile di ingresso per nuovi appartamenti in `itassistance` oscilla ogni giorno tra un minimo garantito di **99,00 € / mese** e un massimo di **289,50 € / mese** (IVA inclusa, step di `0,50 €`).
+2. **Posizionamento di Marketing (Controllo della Domanda e Slot Acquisizione Firenze):**
+   - A livello di comunicazione sul sito (`index.html`, `prezzi.html`, `checkout.html`), la variazione giornaliera è legata alla **disponibilità di slot di acquisizione di nuovi immobili a Firenze** (capacità operativa del team cittadino, Hub ZTL e code di onboarding) per controllare la domanda e garantire la qualità del servizio.
+   - Chi attiva l'abbonamento blocca la quotazione del giorno per tutta la durata dell'iscrizione (**Price Lock**).
+3. **Architettura in 2 Fasi (Startup -> Scaleup):**
+   - **Fase 1 (Attiva ora in `site-config.js`):** Generatore randomico variabile calibrato tra `99,00 €` e `289,50 €` (`SITE_CONFIG.getDynamicPricing()` e `SITE_CONFIG.rerollDynamicPrice()`), persistito nella sessione di navigazione e dotato di calcolo inverso degli slot disponibili (`1–6 slot su 6 a Firenze`) e striscia previsionale di 5 giorni.
+   - **Fase 2 (In Roadmap):** Architettura di controllo reale della domanda (`SITE_CONFIG.computePhase2DemandPricePlaceholder()`) che collegherà l'indice di prezzo al carico effettivo di nuovi immobili acquisiti su Supabase quando i volumi della startup lo richiederanno.
+
+
 
 
 

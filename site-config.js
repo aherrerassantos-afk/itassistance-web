@@ -17,21 +17,24 @@
 
     pricing: {
       monthlyEur: 99,
+      minMonthlyEur: 99.00,
+      maxMonthlyEur: 289.50,
       yearlyEur: 1188,
       currency: '€',
       currencyCode: 'EUR',
       vatIncluded: true,
       vatLabel: 'IVA inclusa',
-      monthlyFormatted: '99 €',
+      monthlyFormatted: 'da 99,00 €',
+      rangeFormatted: '99,00 € – 289,50 € / mese',
       yearlyFormatted: '1.188 €',
-      pricePerMonthLabel: '99 € / mese',
-      priceFullLabel: '99 € al mese (IVA inclusa)',
+      pricePerMonthLabel: 'da 99,00 € a 289,50 € / mese',
+      priceFullLabel: 'da 99,00 € a 289,50 € al mese (IVA inclusa)',
       commissionPct: 0,
       commissionLabel: 'Zero commissioni sulle prenotazioni (0%)',
       activationFeeEur: 0,
       activationLabel: 'Zero costi di attivazione',
       cancellationLabel: 'Disdetta libera in qualsiasi momento, senza penali',
-      paymentModesLabel: 'Paghi mese per mese (99 €/mese) oppure tutto l’anno anticipato (1.188 €/anno), non cambia nulla.',
+      paymentModesLabel: 'La quota mensile varia ogni giorno tra 99,00 € e 289,50 € in base agli slot di acquisizione disponibili su Firenze; una volta attivata resta bloccata per il tuo appartamento.',
       guaranteeDays: 14,
       guaranteeTitle: 'Garanzia 14 giorni Soddisfatto o Rimborsato',
       guaranteeText: 'Prova l’app senza rischi: se entro 14 giorni decidi che non fa per te, disdici con un clic e ti rimborsiamo il 100% di quanto versato.'
@@ -172,6 +175,128 @@
       }
     }
   } catch (e) {}
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MOTORE PREZZI VARIABILI GIORNALIERI DI ACQUISIZIONE IMMOBILI (99,00 € – 289,50 € / mese)
+  // - Marketing: La quota di ingresso per nuovi appartamenti a Firenze oscilla ogni giorno
+  //   tra 99,00 € e 289,50 € / mese in base alla disponibilità di slot di acquisizione nel sistema
+  //   (capacità operativa cittadina, squadre check-in e Hub ZTL) per controllare la domanda.
+  // - Fase 1 Startup (ATTIVA): Generazione random variabile tra 99,00 € e 289,50 € (step 0,50 €),
+  //   con persistenza nella sessione corrente e possibilità di simulare nuove estrazioni giornaliere.
+  // - Fase 2 Scala (IN ROADMAP): Architettura di controllo reale della domanda collegata al carico
+  //   effettivo di nuovi immobili acquisiti su Supabase.
+  // ═══════════════════════════════════════════════════════════════════════════
+  var DYN_PRICE_STORAGE_KEY = 'itassistance_dynamic_price_v1';
+  var MIN_DYN_EUR = 99.00;
+  var MAX_DYN_EUR = 289.50;
+
+  function formatDynamicEur(val) {
+    var num = Number(val);
+    if (isNaN(num)) num = MIN_DYN_EUR;
+    return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  function randomPriceStep50() {
+    // 99.00 to 289.50 in steps of 0.50 -> (289.50 - 99.00) * 2 = 381 steps (0..381)
+    var totalSteps = Math.round((MAX_DYN_EUR - MIN_DYN_EUR) * 2);
+    var step = Math.floor(Math.random() * (totalSteps + 1));
+    var val = MIN_DYN_EUR + (step * 0.50);
+    return Math.round(val * 100) / 100;
+  }
+
+  function buildDynamicStateFromPrice(priceVal) {
+    var p = Math.max(MIN_DYN_EUR, Math.min(MAX_DYN_EUR, Number(priceVal) || MIN_DYN_EUR));
+    p = Math.round(p * 2) / 2;
+    var ratio = (p - MIN_DYN_EUR) / (MAX_DYN_EUR - MIN_DYN_EUR); // 0.0 -> 1.0
+    var maxSlots = 6;
+    // Più alto il prezzo estratto, meno slot di acquisizione risultano liberi a livello di marketing
+    var slotsAvailable = Math.max(1, Math.min(maxSlots, Math.round(maxSlots - (ratio * (maxSlots - 1)))));
+    var demandLevel = 'Disponibilità alta · Finestra di ingresso agevolata';
+    if (p >= 215) {
+      demandLevel = 'Domanda elevata su Firenze · Ultimi slot di acquisizione disponibili oggi';
+    } else if (p >= 145) {
+      demandLevel = 'Domanda moderata · Slot di acquisizione in progressivo esaurimento';
+    }
+
+    var yearlyEq = Math.round(p * 12 * 100) / 100;
+    var schedule5Days = [
+      { dayLabel: 'Ieri', priceEur: randomPriceStep50(), isToday: false },
+      { dayLabel: 'Oggi (Bloccabile ora)', priceEur: p, isToday: true },
+      { dayLabel: 'Domani (Stima)', priceEur: randomPriceStep50(), isToday: false },
+      { dayLabel: 'Tra 2 giorni', priceEur: randomPriceStep50(), isToday: false },
+      { dayLabel: 'Soglia Max Sistema', priceEur: MAX_DYN_EUR, isToday: false }
+    ];
+
+    return {
+      minMonthlyEur: MIN_DYN_EUR,
+      maxMonthlyEur: MAX_DYN_EUR,
+      todayMonthlyEur: p,
+      todayFormatted: formatDynamicEur(p),
+      yearlyEquivalentEur: yearlyEq,
+      yearlyFormatted: formatDynamicEur(yearlyEq),
+      slotsAvailable: slotsAvailable,
+      maxSlots: maxSlots,
+      demandLevel: demandLevel,
+      schedule5Days: schedule5Days,
+      generatedDate: new Date().toISOString().slice(0, 10),
+      phase: 'Fase 1 Startup: Quotazione Variabile Random (99,00 € – 289,50 €) · Fase 2 Controllo Domanda in roadmap'
+    };
+  }
+
+  function getDynamicPricing() {
+    try {
+      if (typeof sessionStorage !== 'undefined') {
+        var raw = sessionStorage.getItem(DYN_PRICE_STORAGE_KEY);
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          if (parsed && typeof parsed.todayMonthlyEur === 'number') {
+            return parsed;
+          }
+        }
+      }
+    } catch (e) {}
+    var fresh = buildDynamicStateFromPrice(randomPriceStep50());
+    try {
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.setItem(DYN_PRICE_STORAGE_KEY, JSON.stringify(fresh));
+      }
+    } catch (e) {}
+    return fresh;
+  }
+
+  function rerollDynamicPrice(forcedPrice) {
+    var nextPrice = (typeof forcedPrice === 'number' && !isNaN(forcedPrice)) ? forcedPrice : randomPriceStep50();
+    var nextState = buildDynamicStateFromPrice(nextPrice);
+    try {
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.setItem(DYN_PRICE_STORAGE_KEY, JSON.stringify(nextState));
+      }
+    } catch (e) {}
+    SITE_CONFIG.pricing.monthlyEur = nextState.todayMonthlyEur;
+    SITE_CONFIG.pricing.yearlyEur = nextState.yearlyEquivalentEur;
+    SITE_CONFIG.pricing.monthlyFormatted = nextState.todayFormatted;
+    SITE_CONFIG.pricing.yearlyFormatted = nextState.yearlyFormatted;
+    return nextState;
+  }
+
+  // Architettura Fase 2 (Predisposta per il futuro controllo reale della domanda)
+  function computePhase2DemandPricePlaceholder(metrics) {
+    // Nella Fase 2 questo metodo calcolerà il prezzo tra 99,00 € e 289,50 € in base a:
+    // - metrics.dailyNewApartmentsCount
+    // - metrics.ztlLaundryCapacityLoadPct
+    // - metrics.activeFieldOperatorsCount
+    return getDynamicPricing();
+  }
+
+  // Inizializza la quotazione variabile del giorno nella sessione
+  var initialDynState = getDynamicPricing();
+  SITE_CONFIG.dynamicPricing = initialDynState;
+  SITE_CONFIG.pricing.monthlyEur = initialDynState.todayMonthlyEur;
+  SITE_CONFIG.pricing.yearlyEur = initialDynState.yearlyEquivalentEur;
+  SITE_CONFIG.getDynamicPricing = getDynamicPricing;
+  SITE_CONFIG.rerollDynamicPrice = rerollDynamicPrice;
+  SITE_CONFIG.formatDynamicEur = formatDynamicEur;
+  SITE_CONFIG.computePhase2DemandPricePlaceholder = computePhase2DemandPricePlaceholder;
 
   // Popola automaticamente eventuali nodi DOM con attributo [data-site-config="percorso.chiave"]
   function applySiteConfigToDOM() {
