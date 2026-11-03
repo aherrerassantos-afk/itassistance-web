@@ -137,17 +137,22 @@
 
   function renderWelcome() {
     reset();
+    var liveCfg = (typeof window !== 'undefined' && window.SITE_CONFIG) ? window.SITE_CONFIG : cfg;
+    var dp = (liveCfg && typeof liveCfg.getDynamicPricing === 'function')
+      ? liveCfg.getDynamicPricing()
+      : { todayMonthlyEur: 99, todayFormatted: '99,00 €', slotsAvailable: 4 };
+    var checkoutUrl = '/checkout.html?locked_price=' + encodeURIComponent(dp.todayMonthlyEur);
     append(
-      bot('Ciao! Con itassistance gestisci il tuo appartamento in affitto breve in 10 minuti al giorno, a 99 € al mese (IVA inclusa) e zero commissioni.'),
+      bot('Ciao! Con itassistance gestisci il tuo appartamento in affitto breve in 10 minuti al giorno. La quotazione di acquisizione di oggi su Firenze è ' + dp.todayFormatted + '/mese (IVA inclusa, range 99,00 € – 289,50 €) con zero commissioni.'),
       bot('Cosa vorresti approfondire?'),
       options([
         {
-          label: 'Provare l’app (14 gg soddisfatto o rimborsato)',
+          label: 'Blocca ' + dp.todayFormatted + '/mese (Prova 14 gg Soddisfatto o Rimborsato)',
           onclick: function () {
             if (typeof window.trackSiteEvent === 'function') {
-              window.trackSiteEvent('click_prova_app', { source: 'chat_widget' });
+              window.trackSiteEvent('click_prova_app', { source: 'chat_widget', locked_price: dp.todayMonthlyEur });
             }
-            window.location.href = '/checkout.html';
+            window.location.href = checkoutUrl;
           }
         },
         {
@@ -157,8 +162,8 @@
             append(
               bot('Ogni mattina alle 08:00 ricevi il report del giorno: vedi chi arriva, segui la guida per Alloggiati Web, approvi i fornitori e controlli le scadenze della tassa di soggiorno.'),
               options([
-                { label: 'Prova l’app (99 €/mese IVA incl.) →', onclick: function () { window.location.href = '/checkout.html'; } },
-                { label: 'Chiedi su WhatsApp', onclick: function () { openWA('Ciao itassistance, vorrei capire come funziona il report giornaliero per il mio appartamento.'); } },
+                { label: 'Blocca ' + dp.todayFormatted + '/mese (IVA incl.) →', onclick: function () { window.location.href = checkoutUrl; } },
+                { label: 'Chiedi su WhatsApp', onclick: function () { openWA('Ciao itassistance, vorrei capire come funziona il report giornaliero e bloccare la quota di oggi (' + dp.todayFormatted + '/mese) per il mio appartamento.'); } },
                 { label: '← Indietro', onclick: renderWelcome }
               ])
             );
