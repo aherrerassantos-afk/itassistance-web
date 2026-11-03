@@ -170,6 +170,23 @@ Ogni General Director ha il suo cruscotto, i suoi numeri e i suoi obiettivi auto
 | **3. Blue Arroyo Cleaning** *(Lo allestisce)* | **Proprietari-Gestori Diretti (75%) & PM** | Cleaners, turni chiusi entro le 15:00, 4 foto danni SHA-256 e 3 hub logistici ZTL | Consuntivi mensili, Fattura unica SDI 1-clic, pagamenti HR e magazzino kit gratuiti (`232 €/m` risparmio) | Contratti turnover B2B per pacchetti di alloggi dei PM |
 | **4. SmartsBookings.com** *(Lo riempie di turisti)* | **Turisti / Ospiti** | Guida mobile, Runner bagagli casa-a-casa e Concierge 7/7 | Custodia 15%, Payout 85% entro le 12:00 del check-out e Cashback 15% (15€) in 48h | Campagne Grand Tour, acquisizione turisti diretti e SEO/GEO in 5 lingue |
 
+---
+
+## 12. SETTINGS CORE — REGOLE PERMANENTI DI DESIGN EDITORIALE 2026
+
+1. **Flow 2026, non 2000:** Il sito è un racconto continuo in cui ogni sezione porta in modo naturale alla successiva. Layout editoriali, ampi spazi, tipografia forte e immagini grandi. Vietati caroselli automatici, pop-up all'ingresso, muri di testo, griglie di card tutte uguali, icone generiche, ombre pesanti, gradienti decorativi ed effetti da template.
+2. **Blocco Clean (Moderno e Pulito):** Una sola idea per sezione e una sola azione principale per schermata. Griglia coerente e spaziatura costante basata su multipli di 8 px. Massimo 2 famiglie di font (`Cormorant Garamond` e `DM Sans`). Rimuovere tutto ciò che non aiuta l'utente a capire o ad agire.
+3. **Niente Emoji:** Nessuna emoji in testi, titoli, bottoni, menu o messaggi. Usare icone solo se migliorano la comprensione e sempre nello stesso stile.
+4. **Testi Chiari:** Frasi brevi e parole semplici. Il titolo deve far capire in 3 secondi cosa offriamo e a chi. Testo base di almeno 16 px, 18 px nei paragrafi lunghi, interlinea di almeno 1,5 e massimo 70 caratteri per riga (`65ch`). Niente frasi intere in maiuscolo.
+5. **Bottoni Grandi:** Altezza minima 56 px su telefono e 48 px su desktop. Testo di almeno 16 px con un verbo chiaro (`Attiva la prova di 14 giorni`, `Richiedi lo studio di fattibilità`, non `Scopri di più`). Spazio di almeno 8 px tra elementi cliccabili. Stati `:hover`, `:focus-visible`, `:active` e `:disabled` sempre visibili.
+6. **Colori e Contrasto:** Usare solo i colori della palette definiti come variabili CSS (`--bg-light: #FAFAF8`, `--bg-stone: #F2EFE9`, `--ink-navy: #0F1A2E`, `--ink-muted: #475569`, `--ink-on-dark-muted: #CBD5E1`, `--gold-accent: #C9A84C`, `--gold-text-light: #7A5C12`, `--border-control: #64748B`, `--status-ok-bg: #ECFDF5`, `--status-ok-text: #065F46`). Contrasto minimo 4.5:1 per il testo normale e 3:1 per testo grande e bordi dei controlli. Velo di contrasto obbligatorio sopra foto e video (`rgba(15, 26, 46, 0.74)`). Il colore da solo non trasmette mai un'informazione.
+7. **Telefono Prima di Tutto:** Progettazione mobile-first testata a 320, 360, 390, 430, 768, 1024 e 1440 px senza scroll orizzontale (`overflow-x: clip`). Dimensioni fluide con `%`, `clamp()`, `flex` e `grid`. Altezze a tutto schermo in `svh` / `dvh` e rispetto delle safe area dei telefoni.
+8. **Immagini Organiche:** Foto reali da `/brand/` in formato `.webp` con dimensioni `width` e `height` dichiarate (`welcome.webp`, `staff.webp`, `window.webp`, `suv.webp`, `stationery.webp`).
+9. **Scroll, Video e Movimento:** Rivelazioni allo scroll e transizioni animate su `transform` e `opacity` a 60 fps, senza alterare la velocità naturale dello scroll. Video in autoplay solo muti con `playsinline`, `loop` e `poster`. Versione statica completa per `prefers-reduced-motion: reduce`.
+10. **Marchio e Vocabolario:** Uso strategico di `itassistance` e del glossario ufficiale (`Proprietario-Gestore`, `Riepilogo delle 08:00`, `Gradi di Autonomia`, `Guardrail di Prezzo`, `Ciclo Blue Arroyo`, `Formula 5 SAL Garantiti`).
+11. **Qualità Tecnica:** Immagini `.webp` con dimensioni dichiarate, `loading="lazy"` sotto la prima schermata, HTML semantico, testi alternativi, navigazione da tastiera e contenuto leggibile anche senza JavaScript.
+
+
 
 
 
