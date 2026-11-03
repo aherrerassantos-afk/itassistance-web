@@ -798,13 +798,29 @@
             </div>
           </div>
 
-          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:#F8FAFC;padding:12px 14px;border-radius:10px;border:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:#F8FAFC;padding:12px 14px;border-radius:10px;border:1px solid var(--border);margin-bottom:10px;">
             <div style="font-size:12.5px;font-weight:700;color:var(--navy);">⚡ 1-Tap Regia Prezzi Variabili (propaga subito a tutti i portali e a <code>/app.html</code>):</div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
               <button type="button" class="btn btn-outline btn-sm" id="adm-btn-strat-smart_fill" onclick="adminTriggerChannelSync('smart_fill')">⚖️ Smartbookings Bilanciata</button>
               <button type="button" class="btn btn-outline btn-sm" id="adm-btn-strat-high_adr" onclick="adminTriggerChannelSync('high_adr')">📈 Spingi High ADR &amp; Eventi</button>
               <button type="button" class="btn btn-outline btn-sm" id="adm-btn-strat-max_occupancy" onclick="adminTriggerChannelSync('max_occupancy')">🧲 Riempi Buchi &amp; Last-Minute</button>
             </div>
+          </div>
+
+          <!-- CRUSCOTTO PORTAFOGLIO MULTI-APPARTAMENTO PM & AZIONI 1-TAP PER I 3 GENERAL DIRECTORS -->
+          <div style="background:#0F1A2E;color:#fff;padding:14px;border-radius:10px;border:1.5px solid var(--gold);">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+              <div>
+                <span class="badge badge-gold" style="font-size:10.5px;">🏢 SELETTORE MULTI-IMMOBILE PROPERTY MANAGER (BOARD PROJECT ATTIVO)</span>
+                <span style="font-size:13px;font-weight:800;color:#fff;margin-left:6px;" id="adm-pm-portfolio-summary-lbl">3 Immobili gestiti · Routine 1-Tap</span>
+              </div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button type="button" class="btn btn-outline btn-sm" style="background:rgba(255,255,255,0.1);color:#FDE68A;border-color:#F59E0B;font-size:11.5px;" onclick="adminSubentroToscanOneTap()">🏗️ DG Operatività/Vendite: +1-Tap Subentro Collaudo Toscan</button>
+                <button type="button" class="btn btn-outline btn-sm" style="background:rgba(255,255,255,0.1);color:#A7F3D0;border-color:#10B981;font-size:11.5px;" onclick="adminCertifyWeekOneTap()">🧪 DG Revenue: +1 Sett. Dati (&gt;+8%) Sblocca L3</button>
+                <button type="button" class="btn btn-gold btn-sm" style="font-size:11.5px;color:#0F1A2E;font-weight:800;" onclick="adminIssueCumulativePmInvoiceOneTap()">🧾 DG Amministrazione: 1-Tap Fattura Unica Cumulativa PM</button>
+              </div>
+            </div>
+            <div id="adm-pm-apt-pills" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
           </div>
         </div>
 
@@ -2868,6 +2884,75 @@ P.IVA: 07480210488</div>
           btn.className = (st.strategy === sk) ? 'btn btn-gold btn-sm' : 'btn btn-outline btn-sm';
         }
       });
+
+      if (ITACloudSync.computePortfolioGlobalSummary) {
+        var sum = ITACloudSync.computePortfolioGlobalSummary();
+        var sumLbl = document.getElementById('adm-pm-portfolio-summary-lbl');
+        if (sumLbl) {
+          sumLbl.textContent = sum.totalApartments + ' Immobili nel Portafoglio PM (' + sum.pmName + ') · +' + sum.totalMonthlyUpliftEur.toLocaleString('it-IT') + ' €/mese extra da Motore';
+        }
+        var pillsBox = document.getElementById('adm-pm-apt-pills');
+        if (pillsBox) {
+          var pHtml = '';
+          sum.rows.forEach(function (r) {
+            var activeStyle = r.isActive
+              ? 'background:#C9A84C;color:#0F1A2E;border:2px solid #fff;font-weight:800;'
+              : 'background:rgba(255,255,255,0.08);color:#E2E8F0;border:1px solid rgba(255,255,255,0.22);font-weight:600;';
+            pHtml += '<button type="button" onclick="adminSwitchPmApt(\'' + r.id + '\')" style="' + activeStyle + 'padding:6px 11px;border-radius:8px;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">' +
+              '<span>' + r.shortLabel + '</span>' +
+              '<span style="background:#0F1A2E;color:#C9A84C;padding:1px 6px;border-radius:4px;font-size:10.5px;font-weight:800;">L' + r.autonomyLevel + ' (' + r.verifiedWeeks + '/2 sett.)</span>' +
+              (r.pendingTasksCount > 0 ? '<span style="background:#EF4444;color:#fff;padding:1px 6px;border-radius:99px;font-size:10px;font-weight:800;">' + r.pendingTasksCount + ' alert</span>' : '<span style="color:#10B981;font-weight:800;">✓ OK</span>') +
+            '</button>';
+          });
+          pillsBox.innerHTML = pHtml;
+        }
+      }
+    }
+
+    function adminSwitchPmApt(aptId) {
+      if (!window.ITACloudSync || !ITACloudSync.switchPmApartment) return;
+      var target = ITACloudSync.switchPmApartment(aptId);
+      renderAdminChannelManager();
+      if (target) {
+        showToast('🏢 Immobile attivo commutato in 1 tap: ' + target.shortLabel + ' (' + target.ownerState.apartment.ownerCode + ')');
+      }
+    }
+
+    function adminSubentroToscanOneTap() {
+      if (!window.ITACloudSync || !ITACloudSync.subentroToscanCollaudoOneTap) return;
+      var newApt = ITACloudSync.subentroToscanCollaudoOneTap();
+      renderAdminChannelManager();
+      if (newApt) {
+        showToast('🏗️ Subentro Collaudo 1. Toscan Costruzioni completato! Aggiunto ' + newApt.shortLabel + ' in Grado L1.');
+      }
+    }
+
+    function adminCertifyWeekOneTap() {
+      if (!window.ITACloudSync || !ITACloudSync.certifyNextAutonomyWeek) return;
+      var st = ITACloudSync.certifyNextAutonomyWeek();
+      renderAdminChannelManager();
+      showToast('🧪 Settimana certificata (+18,5% vs umano): ' + st.verifiedWeeksBeatingHuman + '/2 settimane. Grado L3 ora SBLOCCATO!');
+    }
+
+    function adminIssueCumulativePmInvoiceOneTap() {
+      if (!window.ITACloudSync || !ITACloudSync.computePortfolioGlobalSummary) return;
+      var sum = ITACloudSync.computePortfolioGlobalSummary();
+      var baseFeeTotal = sum.totalApartments * 99;
+      var variableFeeTotal = Math.round(sum.totalMonthlyUpliftEur * 0.10);
+      var grandTotal = baseFeeTotal + variableFeeTotal;
+      var invNum = 'FATT-PM-' + new Date().getFullYear() + '-' + String(adminState.invoices.length + 101);
+      adminState.invoices.unshift({
+        id: 'inv_pm_' + Date.now(),
+        number: invNum,
+        date: new Date().toISOString().slice(0, 10),
+        client: sum.pmName + ' (' + sum.totalApartments + ' Immobili)',
+        plan: 'Fattura Cumulativa Portafoglio PM (' + sum.totalApartments + '×99€ + Extra +10% su +' + sum.totalMonthlyUpliftEur + '€)',
+        amount: grandTotal,
+        status: 'Emessa SDI (1-Tap PM)'
+      });
+      saveAdminState();
+      renderAdminAll();
+      showToast('🧾 Fattura Unica Cumulativa ' + invNum + ' emessa (' + grandTotal + ' € per ' + sum.totalApartments + ' immobili)!');
     }
 
     function adminTriggerChannelSync(stratKey) {

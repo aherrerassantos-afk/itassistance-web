@@ -693,6 +693,54 @@
     <main>
 
       <!-- ════════════════════════════════════════════════════════════════
+           BARRA SELETTORE MULTI-APPARTAMENTO PROPERTY MANAGER (1-TAP SWITCHER & BULK ACTIONS)
+      ════════════════════════════════════════════════════════════════ -->
+      <div class="panel-card" id="pm-portfolio-switcher-bar" style="background:linear-gradient(135deg,#0F1A2E 0%,#1B2A4A 100%);color:#fff;border:2px solid var(--gold);padding:14px 18px;margin-bottom:18px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span class="badge badge-gold">🏛️ PORTAFOGLIO PROPERTY MANAGER (1-TAP SWITCHER)</span>
+              <span style="font-size:12px;color:#E2E8F0;" id="pm-bar-kpi-summary">3 Immobili Attivi · Incasso Portafoglio: 5.140 € · +1.298 €/m Revenue Stimato</span>
+            </div>
+            <div style="font-size:12px;color:#CBD5E1;margin-top:3px;">
+              Passa da un appartamento all'altro in <strong>1 solo tap</strong> (zero login ripetuti) oppure approva il piano prezzi settimanale di <strong>tutto il portafoglio in 1 clic</strong>.
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-outline btn-sm" style="color:#fff;border-color:rgba(255,255,255,0.4);" onclick="togglePmGlobalOverview()">📊 Vista Globale Portafoglio</button>
+            <button type="button" class="btn btn-outline btn-sm" style="color:var(--gold);border-color:var(--gold);" onclick="triggerToscanHandoverInApp()">🏗️ +1-Tap Subentro da Toscan Costruzioni</button>
+            <button type="button" class="btn btn-gold btn-sm" onclick="approveAllPortfolioWeeklyCSV()">⚡ 1-Tap Bulk: Approva Settimana &amp; CSV Tutti gli Immobili</button>
+          </div>
+        </div>
+
+        <!-- PILL SELETTORE APPARTAMENTI 1-TAP -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;" id="pm-apt-pills-container"></div>
+
+        <!-- VISTA GLOBALE RIEPILOGO PORTAFOGLIO PM (ESPANDIBILE IN 1 TAP) -->
+        <div id="pm-global-overview-box" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.2);">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+            <strong style="font-size:14px;color:var(--gold);">📊 Cruscotto Unificato Portafoglio Property Manager (Ciclo 1. Toscan → 2. itassistance → 3. PBA Cleaning → 4. Smartbookings)</strong>
+            <span style="font-size:11.5px;color:#CBD5E1;">Clicca su qualsiasi immobile per aprirlo subito</span>
+          </div>
+          <div class="table-wrap" style="background:#fff;border-radius:8px;color:var(--text);">
+            <table class="app-table">
+              <thead>
+                <tr>
+                  <th>Immobile &amp; Codice</th>
+                  <th>Origine / Stato Gruppo</th>
+                  <th>Grado Autonomia Attivo</th>
+                  <th>Guardrail Prezzi (Base / Floor–Cap)</th>
+                  <th>Incasso &amp; Schedine</th>
+                  <th>Azione Rapida 1-Tap</th>
+                </tr>
+              </thead>
+              <tbody id="pm-global-overview-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════════════════════════
            TAB 1: REPORT DEL GIORNO (LA TUA GIORNATA IN 10 MINUTI)
       ════════════════════════════════════════════════════════════════ -->
       <section class="app-view active" id="view-oggi">
@@ -1511,29 +1559,34 @@
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
               <div>
                 <strong style="font-size:13.5px;color:var(--navy);">🏆 Autonomia Guadagnata con i Dati — Confronto Misurato (Prossimi 14 Giorni):</strong>
-                <div style="font-size:12px;color:#475569;">Il sistema sale di livello di autonomia <strong>solo quando batte le decisioni umane/statiche in modo misurato</strong> (soglia sblocco L3: <code>&gt; +8%</code> per almeno 2 settimane).</div>
+                <div style="font-size:12px;color:#475569;">Il sistema sale di livello di autonomia <strong>solo quando batte le decisioni umane/statiche in modo misurato</strong> (soglia sblocco L3: <code>&gt; +8%</code> per almeno <code>2 settimane certificate</code>).</div>
               </div>
-              <div style="background:#fff;border:1px solid var(--gold);border-radius:8px;padding:6px 12px;font-size:12.5px;font-weight:800;color:var(--navy);" id="cm-autonomy-scoreboard">
-                Decisione Umana: 1.890 € vs Motore: 2.240 € (+18,5% · ✓ Sblocco L3 Guadagnato)
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <div style="background:#fff;border:1px solid var(--gold);border-radius:8px;padding:6px 12px;font-size:12.5px;font-weight:800;color:var(--navy);" id="cm-autonomy-scoreboard">
+                  Decisione Umana: 1.890 € vs Motore: 2.240 € (+18,5% · ✓ Sblocco L3 Guadagnato)
+                </div>
+                <button type="button" class="btn btn-primary btn-sm" id="btn-test-certify-week" onclick="testCertifyAutonomyWeekInApp()" title="Simula la chiusura di una settimana in cui il motore ha battuto la decisione umana di oltre +8%">
+                  🧪 Certifica +1 Sett. Dati (&gt;+8%)
+                </button>
               </div>
             </div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:8px;">
               <button type="button" class="btn btn-outline btn-sm" id="cm-lvl-1" style="justify-content:flex-start;text-align:left;padding:9px 11px;background:#fff;" onclick="setCmAutonomyLevel(1)">
                 <div>
                   <div style="font-weight:800;font-size:12.5px;color:var(--navy);">👁️ L1 · Osservazione &amp; Guardia</div>
-                  <div style="font-size:11px;color:var(--text-muted);font-weight:500;">Mostra solo i consigli e misura il confronto umano vs motore.</div>
+                  <div style="font-size:11px;color:var(--text-muted);font-weight:500;">0 modifiche automatiche: mostra i consigli a fianco del prezzo base.</div>
                 </div>
               </button>
               <button type="button" class="btn btn-outline btn-sm" id="cm-lvl-2" style="justify-content:flex-start;text-align:left;padding:9px 11px;background:#fff;" onclick="setCmAutonomyLevel(2)">
                 <div>
                   <div style="font-weight:800;font-size:12.5px;color:var(--navy);">⚡ L2 · Co-Pilota 1-Tap (2 min/sett.)</div>
-                  <div style="font-size:11px;color:var(--text-muted);font-weight:500;">Prepara prezzi e min-stay; tu approvi in 1 tap una volta a settimana.</div>
+                  <div style="font-size:11px;color:var(--text-muted);font-weight:500;">Prepara prezzi e sblocco buchi; approvi in 1 tap a settimana.</div>
                 </div>
               </button>
               <button type="button" class="btn btn-outline btn-sm" id="cm-lvl-3" style="justify-content:flex-start;text-align:left;padding:9px 11px;background:#fff;" onclick="setCmAutonomyLevel(3)">
                 <div>
                   <div style="font-weight:800;font-size:12.5px;color:var(--navy);">🤖 L3 · Autonomia entro Guardrail</div>
-                  <div style="font-size:11px;color:var(--green);font-weight:700;">✓ Sbloccato coi dati (+18% vs umano) · Decide tra Floor e Cap.</div>
+                  <div style="font-size:11px;color:var(--green);font-weight:700;" id="cm-lvl-3-sub">✓ Sbloccato coi dati (+18% vs umano) · Decide tra Floor e Cap.</div>
                 </div>
               </button>
               <button type="button" class="btn btn-outline btn-sm" id="cm-lvl-4" style="justify-content:flex-start;text-align:left;padding:9px 11px;background:#F1F5F9;opacity:0.85;" onclick="setCmAutonomyLevel(4)">
@@ -1939,6 +1992,9 @@
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
         if (window.ITACloudSync) {
+          if (ITACloudSync.saveCurrentAptIntoPortfolio) {
+            ITACloudSync.saveCurrentAptIntoPortfolio();
+          }
           ITACloudSync.syncSnapshotToSupabase('owner_app', appState);
           ITACloudSync.broadcastStateChange('owner_state_saved', { apartment: appState.apartment.name });
         }
@@ -2198,6 +2254,9 @@
       }
 
       renderChannelManager();
+      if (typeof renderPmPortfolioBar === 'function') {
+        renderPmPortfolioBar();
+      }
     }
 
     function populateCheckinFormFromState() {
@@ -2729,7 +2788,17 @@
       // Scoreboard Autonomia Guadagnata coi Dati
       var sbEl = document.getElementById('cm-autonomy-scoreboard');
       if (sbEl) {
-        sbEl.textContent = 'Umano/Fisso: ' + kpi.humanBaseline14dEur.toLocaleString('it-IT') + ' € vs Motore: ' + kpi.engineMeasured14dEur.toLocaleString('it-IT') + ' € (+' + kpi.measuredBeatPct + '% · ' + (kpi.measuredBeatPct >= 8 ? '✓ L3 Sbloccato coi dati' : 'In raccolta dati') + ')';
+        sbEl.textContent = 'Umano/Fisso: ' + kpi.humanBaseline14dEur.toLocaleString('it-IT') + ' € vs Motore: ' + kpi.engineMeasured14dEur.toLocaleString('it-IT') + ' € (+' + kpi.measuredBeatPct + '% · ' + kpi.verifiedWeeksBeatingHuman + '/2 sett. · ' + (kpi.l3UnlockedByData ? '✓ L3 Sbloccato' : '🔒 L3 Bloccato') + ')';
+      }
+      var l3Sub = document.getElementById('cm-lvl-3-sub');
+      if (l3Sub) {
+        if (kpi.l3UnlockedByData) {
+          l3Sub.style.color = 'var(--green)';
+          l3Sub.textContent = '✓ Sbloccato coi dati (+' + kpi.measuredBeatPct + '% · ' + kpi.verifiedWeeksBeatingHuman + ' sett.) · Decide tra Floor e Cap.';
+        } else {
+          l3Sub.style.color = '#B45309';
+          l3Sub.textContent = '🔒 Bloccato (' + kpi.verifiedWeeksBeatingHuman + '/2 sett. certificate). Clicca "🧪 Certifica +1 Sett." per sbloccare.';
+        }
       }
       [1, 2, 3, 4].forEach(function (n) {
         var lb = document.getElementById('cm-lvl-' + n);
@@ -2920,26 +2989,162 @@
     function setCmAutonomyLevel(levelNum) {
       if (!window.ITACloudSync) return;
       if (levelNum === 4) {
-        showToast('⏳ Livello 4 (Push API Diretto H24 sui server Airbnb/Booking) è "In arrivo". Usa ora L2 o L3 con Export CSV 1-Tap!');
+        showToast('⏳ Grado L4 (Push API Diretto H24 sui server Airbnb/Booking) è "In arrivo". Usa ora L2 o L3 con Export CSV 1-Tap!');
         return;
       }
       var matrixData = ITACloudSync.computeBehavioralCalendarMatrix();
       var st = matrixData.state;
       var kpi = matrixData.kpi;
-      if (levelNum === 3 && kpi.measuredBeatPct < 8) {
-        showToast('🔒 Principio Autonomia Guadagnata coi Dati: L3 si sblocca solo quando il motore batte la decisione umana di almeno +8%.');
+      if (levelNum === 3 && !kpi.l3UnlockedByData) {
+        showToast('🔒 Autonomia Guadagnata coi Dati: servono almeno 2 settimane certificate > +8% vs umano (ora: ' + kpi.verifiedWeeksBeatingHuman + '/2). Clicca "🧪 Certifica +1 Sett. Dati" per testare lo sblocco!');
         return;
       }
       st.autonomyLevel = levelNum;
       st.autoPilot = (levelNum >= 2);
       ITACloudSync.saveChannelRevenueState(st);
+      if (ITACloudSync.saveCurrentAptIntoPortfolio) ITACloudSync.saveCurrentAptIntoPortfolio();
       renderChannelManager();
+      renderPmPortfolioBar();
       var msgMap = {
-        1: '👁️ Livello L1 (Osservazione) attivo: il motore mostra i consigli senza modificare la tariffa base.',
-        2: '⚡ Livello L2 (Co-Pilota Settimanale 1-Tap) attivo: rivedi e approva in 2 minuti a settimana.',
-        3: '🤖 Livello L3 (Autonomia entro Guardrail) attivo: sbloccato grazie a +' + kpi.measuredBeatPct + '% vs decisione umana!'
+        1: '👁️ Grado L1 (Osservazione) attivo: il motore mantiene la tariffa base (' + st.baseRate + ' €) e mostra i consigli a fianco.',
+        2: '⚡ Grado L2 (Co-Pilota Settimanale 1-Tap) attivo: rivedi e approva in 2 minuti a settimana.',
+        3: '🤖 Grado L3 (Autonomia entro Guardrail) attivo: sbloccato grazie a +' + kpi.measuredBeatPct + '% (' + kpi.verifiedWeeksBeatingHuman + ' settimane certificate)!'
       };
-      showToast(msgMap[levelNum] || '✓ Livello autonomia aggiornato.');
+      showToast(msgMap[levelNum] || '✓ Grado autonomia aggiornato.');
+    }
+
+    function testCertifyAutonomyWeekInApp() {
+      if (!window.ITACloudSync || !ITACloudSync.certifyNextAutonomyWeek) return;
+      var st = ITACloudSync.certifyNextAutonomyWeek();
+      renderChannelManager();
+      renderPmPortfolioBar();
+      showToast('🏆 Settimana #' + st.verifiedWeeksBeatingHuman + ' certificata (> +8% vs umano)! Grado L3 (Autonomia entro Guardrail) SBLOCCATO e ATTIVO!');
+    }
+
+    function renderPmPortfolioBar() {
+      if (!window.ITACloudSync || !ITACloudSync.computePortfolioGlobalSummary) return;
+      var sum = ITACloudSync.computePortfolioGlobalSummary();
+      var kpiLbl = document.getElementById('pm-bar-kpi-summary');
+      if (kpiLbl) {
+        kpiLbl.textContent = sum.totalApartments + ' Immobili nel Portafoglio PM · Incasso Lordo: ' + sum.totalGrossEur.toLocaleString('it-IT') + ' € · Extra Revenue: +' + sum.totalMonthlyUpliftEur.toLocaleString('it-IT') + ' €/m';
+      }
+
+      var pillsEl = document.getElementById('pm-apt-pills-container');
+      var tbodyEl = document.getElementById('pm-global-overview-tbody');
+      if (pillsEl) {
+        var pillsHtml = '';
+        var rowsHtml = '';
+        var lvlBadges = {
+          1: '👁️ L1 Osservazione',
+          2: '⚡ L2 Co-Pilota 1-Tap',
+          3: '🤖 L3 Autonomo Guardrail'
+        };
+        sum.apartments.forEach(function (a) {
+          var isAct = (a.id === sum.activeAptId);
+          var degTag = lvlBadges[a.autonomyLevel] || '⚡ L2';
+          pillsHtml += '<button type="button" onclick="switchPmAptInApp(\'' + a.id + '\')" style="cursor:pointer;padding:8px 14px;border-radius:999px;font-size:12.5px;font-weight:800;border:' + (isAct ? '2px solid var(--gold)' : '1px solid rgba(255,255,255,0.3)') + ';background:' + (isAct ? 'var(--gold)' : 'rgba(255,255,255,0.1)') + ';color:' + (isAct ? '#0F1A2E' : '#fff') + ';display:inline-flex;align-items:center;gap:6px;transition:all 0.15s;">' +
+            '<span>' + a.shortLabel + '</span>' +
+            '<span style="font-size:10.5px;padding:2px 6px;border-radius:999px;background:' + (isAct ? '#0F1A2E' : 'rgba(0,0,0,0.35)') + ';color:' + (isAct ? 'var(--gold)' : '#E2E8F0') + ';">' + degTag + '</span>' +
+          '</button>';
+
+          rowsHtml += '<tr style="' + (isAct ? 'background:var(--gold-light);' : '') + '">' +
+            '<td><strong>' + a.name + '</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">' + a.address + ' · <code>' + a.ownerCode + '</code></span></td>' +
+            '<td><span class="badge badge-gold">' + a.originBadge + '</span></td>' +
+            '<td><span class="badge ' + (a.autonomyLevel === 3 ? 'badge-ok' : (a.autonomyLevel === 2 ? 'badge-gold' : 'badge-warn')) + '">' + degTag + ' (' + a.verifiedWeeks + '/2 sett.)</span></td>' +
+            '<td><strong>Base ' + a.baseRate + ' €</strong><br/><span style="font-size:11.5px;color:var(--text-muted);">Floor ' + a.floorRate + ' € – Cap ' + a.ceilingRate + ' €</span></td>' +
+            '<td><strong>' + a.grossEur.toLocaleString('it-IT') + ' €</strong> (' + a.bookingsCount + ' soggiorni)<br/><span style="font-size:11.5px;color:' + (a.pendingAlloggiati > 0 ? 'var(--amber)' : 'var(--green)') + ';font-weight:700;">' + (a.pendingAlloggiati > 0 ? '⏳ ' + a.pendingAlloggiati + ' Alloggiati da inviare' : '✓ Alloggiati 100% ok') + '</span></td>' +
+            '<td><button type="button" class="btn ' + (isAct ? 'btn-gold' : 'btn-primary') + ' btn-sm" onclick="switchPmAptInApp(\'' + a.id + '\')">' + (isAct ? '✓ Immobile Attivo' : 'Apri in 1 Tap →') + '</button></td>' +
+          '</tr>';
+        });
+        pillsEl.innerHTML = pillsHtml;
+        if (tbodyEl) tbodyEl.innerHTML = rowsHtml;
+      }
+      var codeEl = document.getElementById('hdr-owner-code');
+      if (codeEl && appState.apartment) {
+        codeEl.textContent = appState.apartment.ownerCode || 'ITA-FIRENZE-01';
+      }
+    }
+
+    function switchPmAptInApp(aptId) {
+      if (!window.ITACloudSync || !ITACloudSync.switchPmApartment) return;
+      var target = ITACloudSync.switchPmApartment(aptId);
+      if (!target) return;
+      appState = loadState();
+      populateCheckinFormFromState();
+      renderAll();
+      prefillAlloggiatiFromBooking();
+      showToast('🏠 Passato in 1 tap a: ' + target.ownerData.apartment.name + ' (Grado L' + (target.cmState.autonomyLevel || 2) + ')');
+    }
+
+    function togglePmGlobalOverview() {
+      var box = document.getElementById('pm-global-overview-box');
+      if (!box) return;
+      box.style.display = (box.style.display === 'none' || !box.style.display) ? 'block' : 'none';
+      renderPmPortfolioBar();
+    }
+
+    function triggerToscanHandoverInApp() {
+      if (!window.ITACloudSync || !ITACloudSync.subentroToscanCollaudoOneTap) return;
+      var newApt = ITACloudSync.subentroToscanCollaudoOneTap();
+      appState = loadState();
+      populateCheckinFormFromState();
+      renderAll();
+      prefillAlloggiatiFromBooking();
+      showToast('🏗️ Subentro 1-Tap da Toscan Costruzioni completato! ' + newApt.ownerData.apartment.name + ' attivo in Grado L1 (Osservazione) con PBA Cleaning e Smartbookings.');
+    }
+
+    function approveAllPortfolioWeeklyCSV() {
+      if (!window.ITACloudSync || !ITACloudSync.getPmPortfolio) return;
+      var pf = ITACloudSync.saveCurrentAptIntoPortfolio();
+      var origActiveId = pf.activeAptId;
+      var rows = [
+        ['Immobile', 'Codice Immobile', 'Grado Autonomia', 'Data ISO', 'Giorno', 'Stato Disponibilita', 'Regola Comportamentale', 'Min. Notti', 'Tariffa Base Dinamica EUR', 'Airbnb EUR', 'Booking.com EUR (+4%)', 'Vrbo EUR (+3%)', 'Smartbookings Diretto EUR (-8%)']
+      ];
+      var nowLabel = 'Approvato Bulk 1-Tap il ' + new Date().toLocaleDateString('it-IT') + ' alle ' + new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+
+      pf.apartments.forEach(function (a) {
+        ITACloudSync.switchPmApartment(a.id);
+        var m = ITACloudSync.computeBehavioralCalendarMatrix();
+        var st = m.state;
+        st.weeklyApprovedAt = nowLabel;
+        ITACloudSync.saveChannelRevenueState(st);
+        m.days.forEach(function (d) {
+          rows.push([
+            a.ownerData.apartment.name,
+            a.ownerData.apartment.ownerCode,
+            'Grado L' + (st.autonomyLevel || 2),
+            d.iso,
+            d.label,
+            d.isBooked ? 'CHIUSA ANTI-OVERBOOKING' : 'APERTA',
+            d.behaviorRule,
+            d.minStay,
+            d.baseDynamic,
+            d.portalPrices.airbnb || d.baseDynamic,
+            d.portalPrices.booking || Math.round(d.baseDynamic * 1.04),
+            d.portalPrices.vrbo || Math.round(d.baseDynamic * 1.03),
+            d.portalPrices.direct || Math.round(d.baseDynamic * 0.92)
+          ]);
+        });
+      });
+
+      // Torna all'immobile su cui stava lavorando il PM
+      ITACloudSync.switchPmApartment(origActiveId);
+      appState = loadState();
+      renderAll();
+
+      var csv = rows.map(function (r) {
+        return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(';');
+      }).join('\n');
+      var blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'Portafoglio_Completo_PM_Prezzi_itassistance_' + pf.apartments.length + '_Immobili.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('⚡ Piano settimanale approvato in 1 tap per TUTTI i ' + pf.apartments.length + ' immobili del portafoglio e .CSV unico scaricato!');
     }
 
     function approveWeeklyPlanAndExportCSV() {
@@ -3539,6 +3744,9 @@
         if (appState.apartment.ownerPhone && document.getElementById('rep-phone')) document.getElementById('rep-phone').value = appState.apartment.ownerPhone;
         if (appState.apartment.ownerEmail && document.getElementById('rep-email')) document.getElementById('rep-email').value = appState.apartment.ownerEmail;
       }
+      if (window.ITACloudSync && ITACloudSync.getPmPortfolio) {
+        ITACloudSync.getPmPortfolio();
+      }
       renderAll();
       prefillAlloggiatiFromBooking();
 
@@ -3551,6 +3759,10 @@
           } else if (msg && msg.type === 'channel_revenue_updated') {
             renderChannelManager();
             showToast('📡 Prezzi Channel Manager aggiornati in tempo reale dal Revenue Manager!');
+          } else if (msg && msg.type === 'pm_portfolio_switched') {
+            populateCheckinFormFromState();
+            renderAll();
+            showToast('🏢 Portafoglio PM sincronizzato da Direzione / altra scheda!');
           }
         });
       }

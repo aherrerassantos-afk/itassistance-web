@@ -113,13 +113,15 @@ Dopo **OGNI deploy** in produzione, la risposta all'utente deve SEMPRE concluder
 | **🤝 Vendite (CRM & Partner)** | Conversione Lead → Cliente + Fattura + Codice Immobile + WhatsApp | Mobile / Desktop | 7 clic · 2 tab · 120 sec | **1 tap · 0 campi · 1 schermata · 10 sec** | **−85% clic · −91% tempo** |
 | **🧾 Amministrazione (`billing`)** | Emissione Fattura da Cliente attivo + Download PDF | Desktop | 7 clic · 6 campi · 50 sec | **2 clic · 1 selezione · 10 sec** | **−71% clic · −80% tempo** |
 | **🧾 Amministrazione (`billing`)** | Rimborso Garanzia 14 gg + Sospensione automatica Cliente | Desktop | 5 clic · 2 tab · 40 sec | **1 tap · 0 campi · 5 sec** | **−80% clic · −87% tempo** |
+| **🧾 Amministrazione (`billing`)** | Emissione Fattura Unica Cumulativa Portafoglio Property Manager (`N × 99 €` + `+10%`) | Desktop / Mobile | 35 clic (5 fatture separate) · 25 campi · 15 min | **1 tap (`🧾 1-Tap Fattura Unica Cumulativa PM`) · 0 campi · 5 sec** | **−97% clic · −99% tempo** |
 | **👥 HR / 🧹 Fornitori** | Registrazione nuovo collaboratore o fornitore certificato Firenze | Desktop | 7 clic · 6 campi · 60 sec | **3 clic · 2 campi · 15 sec** | **−57% clic · −75% tempo** |
-| **📈 Revenue Manager (+10%)** | Regia Prezzi Variabili & Sblocco Buchi Orfani su 1–4 portali (`/admin.html`) | Mobile / Desktop | 18 clic su 3 portali · 14 campi data · 15 min | **1 tap strategia (`Smartbookings` / `High ADR` / `Riempi Buchi`) · 0 campi · 5 sec** | **−94% clic · −99% tempo** |
+| **📈 Revenue Manager (+10%)** | Regia Prezzi Variabili, Sblocco Grado `L3` coi Dati & Subentro 1-Tap da `1. Toscan Costruzioni` (`/admin.html`) | Mobile / Desktop | 18 clic su 3 portali · 14 campi data · 15 min | **1 tap strategia / 1 tap Subentro Toscan / 1 tap Certifica Dati · 0 campi · 5 sec** | **−94% clic · −99% tempo** |
 
-#### B. Ruoli Esterni (`Prospect`, `Cliente Attivo`, `Ospite`, `Partner / Fornitore`)
+#### B. Ruoli Esterni (`Prospect`, `Cliente Attivo`, `Property Manager Multi-Immobile`, `Ospite`, `Partner / Fornitore`)
 
 | Ruolo Esterno | Attività Ricorrente | Route / Dispositivo | PRIMA (Clic / Campi / Tempo) | DOPO (Clic / Campi / Tempo) | Risparmio |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| **🏢 Property Manager (3–10 Immobili)** | Passaggio tra appartamenti + Approvazione Settimanale Prezzi & Scarico Unico CSV Bulk | `/app.html` (Mobile / Desktop) | 75 clic · 5 login/logout · 45 min/settimana | **1 tap Switcher Immobile + 1 tap (`⚡ 1-Tap Bulk CSV Tutti gli Immobili`) · 0 campi · 30 sec/sett.** | **−96% clic · −98% tempo** |
 | **🔍 Prospect (Proprietario)** | Capisce problema → vede soluzione/guida → passa a Checkout precompilato | `/index.html` (Mobile / Desktop) | 6 clic · 3 campi · 90 sec | **2 tap · 1 recapito · 20 sec** | **−66% clic · −77% tempo** |
 | **💳 Prospect in Attivazione** | Attivazione Piano 99 €/mese (o 1.188 €/anno) con Garanzia 14 gg | `/checkout.html` (Mobile / Desktop) | 5 clic · 6 campi obbligatori · 90 sec | **2 tap · 3 campi essenziali · 30 sec** | **−60% clic · −50% campi · −66% tempo** |
 | **🏠 Cliente Attivo (Proprietario)** | Login + Risoluzione problema del giorno (Check-in 20€, Guasto 30€, Documenti, CSV) | `/login.html` → `/app.html` (Mobile) | 6 clic · 3 campi login · 75 sec | **1 tap login + 1 tap azione · 0 campi · 10 sec** | **−66% clic · −100% campi · −86% tempo** |

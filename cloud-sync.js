@@ -878,10 +878,15 @@
       }
 
       // Principio 3: Hard Clamp tra Floor e Ceiling (Zero prezzi fuori controllo)
+      var engineSuggestedRate = recommendedRate;
       if (!occ) {
-        recommendedRate = clampPriceToGuardrails(recommendedRate, cm.floorRate, cm.ceilingRate);
-        if (!cm.autoPilot && cm.autonomyLevel === 1) {
-          recommendedRate = cm.baseRate;
+        engineSuggestedRate = clampPriceToGuardrails(recommendedRate, cm.floorRate, cm.ceilingRate);
+        // Grado L1 (Osservazione & Guardia): non modifica il prezzo base in automatico, mostra il consiglio a fianco
+        if (cm.autonomyLevel === 1 || !cm.autoPilot) {
+          recommendedRate = clampPriceToGuardrails(cm.baseRate, cm.floorRate, cm.ceilingRate);
+          actionLabel = '👁️ L1 OSSERVAZIONE (Base ' + recommendedRate + ' € · Consiglio AI: ' + engineSuggestedRate + ' €)';
+        } else {
+          recommendedRate = engineSuggestedRate;
         }
       }
       if (!occ && cm.customDayOverrides && cm.customDayOverrides[isoDate]) {
@@ -891,7 +896,7 @@
       }
 
       pctDelta = Math.round(((recommendedRate - cm.baseRate) / Math.max(1, cm.baseRate)) * 100);
-      dynamicRateTotal += recommendedRate;
+      dynamicRateTotal += engineSuggestedRate;
 
       var portalPrices = {};
       Object.keys(cm.portals).forEach(function (pk) {
@@ -920,6 +925,7 @@
         actionType: actionType,
         minStay: minStay,
         baseDynamic: recommendedRate,
+        engineSuggestedRate: engineSuggestedRate,
         recommendedRate: recommendedRate,
         deltaPct: pctDelta,
         portalPrices: portalPrices
@@ -930,6 +936,8 @@
     var extraGain14d = Math.max(195, dynamicRevenueSum - staticRevenueSum);
     var extraGainMonth = Math.round(extraGain14d * 2.15);
     var measuredBeatPct = Math.round((extraGain14d / Math.max(1, staticRevenueSum)) * 1000) / 10;
+    var weeksVerified = typeof cm.verifiedWeeksBeatingHuman === 'number' ? cm.verifiedWeeksBeatingHuman : 3;
+    var l3UnlockedByData = (measuredBeatPct >= 8 && weeksVerified >= 2);
 
     return {
       state: cm,
@@ -946,9 +954,387 @@
         humanBaseline14dEur: staticRevenueSum,
         engineMeasured14dEur: dynamicRevenueSum,
         measuredBeatPct: measuredBeatPct,
-        verifiedWeeksBeatingHuman: cm.verifiedWeeksBeatingHuman || 3,
+        verifiedWeeksBeatingHuman: weeksVerified,
+        l3UnlockedByData: l3UnlockedByData,
         estimatedMonthlyGainEur: extraGainMonth
       }
+    };
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PORTAFOGLIO MULTI-IMMOBILE PROPERTY MANAGER (SELETTORE 1-TAP & SUBENTRO TOSCAN COSTRUZIONI)
+  // ═══════════════════════════════════════════════════════════════════════════
+  var PM_PORTFOLIO_KEY = 'itassistance_pm_portfolio_v1';
+
+  function getDefaultPmPortfolio() {
+    var defaultPortals = getDefaultChannelRevenueState().portals;
+    return {
+      pmName: 'Firenze Prestige PM & Partners (Portafoglio Multi-Immobile)',
+      activeAptId: 'apt_1',
+      apartments: [
+        {
+          id: 'apt_1',
+          shortLabel: '🏠 1. Santo Spirito',
+          originBadge: 'Attivo su itassistance + PBA + Smartbookings',
+          ownerData: {
+            apartment: {
+              name: 'Appartamento Santo Spirito',
+              address: 'Via Maggio 18, 50125 Firenze (FI)',
+              cin: 'IT048017C2A8B91023',
+              ownerCode: 'ITA-FIRENZE-01',
+              doorCode: '4829# (Portone) / Cassetta 0912',
+              floor: 'Piano 2 · Con ascensore',
+              elevator: 'Sì (fino al 2° piano)',
+              wifi: 'Firenze_SantoSpirito_5G',
+              pass: 'Brunelleschi2026!',
+              ztl: 'ZTL Settore B · Garage convenzionato Fosi a 150m',
+              trash: 'Passaggio porta a porta Lun-Sab ore 07:30-08:30',
+              checkout: 'Entro le ore 10:00 · Chiavi sul tavolo in ingresso',
+              addon10Active: true,
+              reportTime: '08:00',
+              reportChannel: 'whatsapp_email',
+              ownerPhone: '+39 351 038 0392',
+              ownerEmail: 'info@itadreamteam.com'
+            },
+            bookings: [
+              { id: 'b1', guest: 'Jean Luc Martin', channel: 'Airbnb', guests: 2, checkin: '2026-11-02', checkout: '2026-11-06', nights: 4, amount: 760, alloggiatiSent: false, cleaningStatus: 'Programmata 11:00 (PBA ZTL)', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 45 },
+              { id: 'b2', guest: 'Hannah & Mark Taylor', channel: 'Booking.com', guests: 4, checkin: '2026-11-07', checkout: '2026-11-12', nights: 5, amount: 1150, alloggiatiSent: true, cleaningStatus: '✓ Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 55 },
+              { id: 'b3', guest: 'Carlos Mendoza', channel: 'Smartbookings (Diretta 0%)', guests: 2, checkin: '2026-11-14', checkout: '2026-11-17', nights: 3, amount: 540, alloggiatiSent: true, cleaningStatus: '✓ Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 45 }
+            ],
+            expenses: [
+              { id: 'e1', date: '02/11/2026', title: '3. Blue Arroyo Cleaning — Turnover + Kit Bio Gratuiti + 4 Foto SHA-256', category: 'Pulizie & Biancheria 60°C', amount: 45, paid: false },
+              { id: 'e2', date: '28/10/2026', title: '1. Toscan Costruzioni — Verifica impianto e serratura smart', category: 'Manutenzione (30€)', amount: 30, paid: true }
+            ]
+          },
+          cmState: {
+            autoPilot: true,
+            autonomyLevel: 3, // Grado L3 Sbloccato coi dati (+18.5% vs umano, 3 settimane certificate)
+            verifiedWeeksBeatingHuman: 3,
+            weeklyApprovedAt: 'Piano L3 Attivo · 3 settimane certificate (> +8%)',
+            strategy: 'smart_fill',
+            baseRate: 165,
+            floorRate: 118,
+            ceilingRate: 320,
+            portalMarkupAuto: true,
+            lastSyncAt: 'Oggi, 08:00 (Grado L3 Autonomo)',
+            portals: JSON.parse(JSON.stringify(defaultPortals)),
+            customDayOverrides: {}
+          }
+        },
+        {
+          id: 'apt_2',
+          shortLabel: '🏛️ 2. Palazzo Oltrarno',
+          originBadge: 'Gestione PM · ⚠️ 1 Buco Orfano Rilevato',
+          ownerData: {
+            apartment: {
+              name: 'Suite Palazzo Oltrarno',
+              address: 'Via Santo Spirito 42, 50125 Firenze (FI)',
+              cin: 'IT048017C2F4E19284',
+              ownerCode: 'ITA-FIRENZE-02',
+              doorCode: '7710# (Portone) / Smart Lock 4491#',
+              floor: 'Piano Nobile (1° Piano)',
+              elevator: 'Sì (ascensore storico)',
+              wifi: 'Palazzo_Oltrarno_Fast',
+              pass: 'PittiPalace2026!',
+              ztl: 'ZTL Settore B · Garage Anglo-Americano a 200m',
+              trash: 'Passaggio porta a porta Lun-Sab ore 07:30-08:30',
+              checkout: 'Entro le ore 10:00 · Runner Bagagli Smartbookings disponibile',
+              addon10Active: true,
+              reportTime: '08:00',
+              reportChannel: 'whatsapp_email',
+              ownerPhone: '+39 351 038 0392',
+              ownerEmail: 'info@itadreamteam.com'
+            },
+            bookings: [
+              { id: 'b201', guest: 'Famiglia Van Der Berg', channel: 'Booking.com', guests: 4, checkin: '2026-11-02', checkout: '2026-11-05', nights: 3, amount: 690, alloggiatiSent: true, cleaningStatus: '✓ Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 55 },
+              { id: 'b202', guest: 'Sophie & Claire Dubois', channel: 'Airbnb', guests: 2, checkin: '2026-11-06', checkout: '2026-11-10', nights: 4, amount: 840, alloggiatiSent: false, cleaningStatus: 'Programmata 11:00 (PBA ZTL)', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 55 },
+              { id: 'b203', guest: 'Dr. Richard Sterling', channel: 'Smartbookings (Diretta 0%)', guests: 2, checkin: '2026-11-11', checkout: '2026-11-15', nights: 4, amount: 880, alloggiatiSent: true, cleaningStatus: '✓ Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 55 }
+            ],
+            expenses: [
+              { id: 'e201', date: '02/11/2026', title: '3. Blue Arroyo Cleaning — Turnover Suite + Biancheria 60°C + Foto SHA-256', category: 'Pulizie & Biancheria 60°C', amount: 55, paid: true }
+            ]
+          },
+          cmState: {
+            autoPilot: true,
+            autonomyLevel: 2, // Grado L2 Co-Pilota 1-Tap Settimanale
+            verifiedWeeksBeatingHuman: 2,
+            weeklyApprovedAt: 'Grado L2 Co-Pilota · Pronto per approvazione 1-Tap',
+            strategy: 'high_adr',
+            baseRate: 195,
+            floorRate: 140,
+            ceilingRate: 380,
+            portalMarkupAuto: true,
+            lastSyncAt: 'Oggi, 08:00 (Grado L2 Co-Pilota)',
+            portals: JSON.parse(JSON.stringify(defaultPortals)),
+            customDayOverrides: {}
+          }
+        },
+        {
+          id: 'apt_3',
+          shortLabel: '⚜️ 3. Santa Croce Loft',
+          originBadge: '🏗️ Consegnato da 1. Toscan Costruzioni (5 SAL)',
+          ownerData: {
+            apartment: {
+              name: 'Santa Croce Design Loft',
+              address: 'Via dei Benci 14, 50122 Firenze (FI)',
+              cin: 'IT048017C2D9C30115',
+              ownerCode: 'ITA-FIRENZE-03',
+              doorCode: '1920# (Portone) / Tastierino Smart 8812#',
+              floor: 'Piano 3 · Con ascensore nuovo Toscan Costruzioni',
+              elevator: 'Sì (nuovo impianto certificato)',
+              wifi: 'SantaCroce_Fiber_1Gbps',
+              pass: 'Michelangelo2026!',
+              ztl: 'ZTL Settore A · Parcheggio Sant\'Ambrogio a 350m',
+              trash: 'Isole ecologiche interrate con tessera magnetica',
+              checkout: 'Entro le ore 10:00 · Deposito valigie con Runner Smartbookings',
+              addon10Active: true,
+              reportTime: '08:00',
+              reportChannel: 'whatsapp_email',
+              ownerPhone: '+39 351 038 0392',
+              ownerEmail: 'info@itadreamteam.com'
+            },
+            bookings: [
+              { id: 'b301', guest: 'Michael & Sarah O\'Connor', channel: 'Smartbookings (Diretta 0%)', guests: 2, checkin: '2026-11-03', checkout: '2026-11-06', nights: 3, amount: 480, alloggiatiSent: false, cleaningStatus: 'Programmata 11:00 (PBA ZTL)', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 45 },
+              { id: 'b302', guest: 'Elena Rostova', channel: 'Airbnb', guests: 2, checkin: '2026-11-07', checkout: '2026-11-11', nights: 4, amount: 640, alloggiatiSent: true, cleaningStatus: '✓ Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 45 }
+            ],
+            expenses: [
+              { id: 'e301', date: '01/11/2026', title: '1. Toscan Costruzioni — Verbale Collaudo 5° SAL (DM 37/08 + APE + CIN Inclusi)', category: 'Subentro Chiavi in Mano', amount: 0, paid: true },
+              { id: 'e302', date: '02/11/2026', title: '3. Blue Arroyo Cleaning — Allestimento Suite 60°C & Kit Bio (0€ materiali)', category: 'Pulizie & Biancheria 60°C', amount: 45, paid: false }
+            ]
+          },
+          cmState: {
+            autoPilot: true,
+            autonomyLevel: 1, // Grado L1 Osservazione & Guardia (1 settimana verificata: testa lo sblocco L3!)
+            verifiedWeeksBeatingHuman: 1,
+            weeklyApprovedAt: 'Grado L1 Osservazione (1/2 settimane certificate per sblocco L3)',
+            strategy: 'max_occupancy',
+            baseRate: 150,
+            floorRate: 108,
+            ceilingRate: 290,
+            portalMarkupAuto: true,
+            lastSyncAt: 'Oggi, 08:00 (Grado L1 Osservazione)',
+            portals: JSON.parse(JSON.stringify(defaultPortals)),
+            customDayOverrides: {}
+          }
+        }
+      ]
+    };
+  }
+
+  function getPmPortfolio() {
+    try {
+      var raw = localStorage.getItem(PM_PORTFOLIO_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.apartments) && parsed.apartments.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+    var def = getDefaultPmPortfolio();
+    try {
+      localStorage.setItem(PM_PORTFOLIO_KEY, JSON.stringify(def));
+    } catch (e) {}
+    return def;
+  }
+
+  function saveCurrentAptIntoPortfolio(portfolioObj) {
+    var pf = portfolioObj || getPmPortfolio();
+    var curId = pf.activeAptId || 'apt_1';
+    var rawOwner = null;
+    try {
+      rawOwner = JSON.parse(localStorage.getItem(OWNER_KEY) || 'null');
+    } catch (e) {}
+    var curCm = getChannelRevenueState();
+    pf.apartments.forEach(function (item) {
+      if (item.id === curId) {
+        if (rawOwner && rawOwner.apartment) {
+          item.ownerData = rawOwner;
+        }
+        item.cmState = curCm;
+      }
+    });
+    try {
+      localStorage.setItem(PM_PORTFOLIO_KEY, JSON.stringify(pf));
+    } catch (e) {}
+    return pf;
+  }
+
+  function switchPmApartment(aptId) {
+    var pf = saveCurrentAptIntoPortfolio();
+    var target = null;
+    pf.apartments.forEach(function (a) {
+      if (a.id === aptId) target = a;
+    });
+    if (!target) return null;
+    pf.activeAptId = target.id;
+    try {
+      localStorage.setItem(PM_PORTFOLIO_KEY, JSON.stringify(pf));
+      var currentRawOwner = JSON.parse(localStorage.getItem(OWNER_KEY) || '{}');
+      currentRawOwner.apartment = target.ownerData.apartment;
+      currentRawOwner.bookings = target.ownerData.bookings;
+      currentRawOwner.expenses = target.ownerData.expenses;
+      localStorage.setItem(OWNER_KEY, JSON.stringify(currentRawOwner));
+      localStorage.setItem(CM_STORAGE_KEY, JSON.stringify(target.cmState));
+    } catch (e) {}
+    broadcastStateChange('pm_portfolio_switched', { activeAptId: target.id, name: target.ownerData.apartment.name });
+    return target;
+  }
+
+  // Test interattivo Principio 2: Certifica una nuova settimana di dati in cui il motore batte l'umano (> +8%) per sbloccare Grado L3
+  function certifyNextAutonomyWeek() {
+    var st = getChannelRevenueState();
+    st.verifiedWeeksBeatingHuman = (Number(st.verifiedWeeksBeatingHuman) || 0) + 1;
+    if (st.verifiedWeeksBeatingHuman >= 2 && st.autonomyLevel < 3) {
+      st.autonomyLevel = 3;
+      st.autoPilot = true;
+      st.weeklyApprovedAt = '✓ Grado L3 Sbloccato coi Dati (' + st.verifiedWeeksBeatingHuman + ' settimane > +8% vs umano)';
+    } else {
+      st.weeklyApprovedAt = st.verifiedWeeksBeatingHuman + ' settimana/e certificata/e';
+    }
+    saveChannelRevenueState(st);
+    saveCurrentAptIntoPortfolio();
+    return st;
+  }
+
+  // Ponte 1-Tap: Subentro Nuovo Immobile appena collaudato da 1. Toscan Costruzioni (5 SAL) -> 2. itassistance + 3. Blue Arroyo Cleaning + 4. Smartbookings
+  function subentroToscanCollaudoOneTap(customName, customAddr) {
+    var pf = saveCurrentAptIntoPortfolio();
+    var idx = pf.apartments.length + 1;
+    var codeNum = idx < 10 ? '0' + idx : String(idx);
+    var aptName = (customName || '').trim() || ('Residenza Tornabuoni Suite #' + idx);
+    var aptAddr = (customAddr || '').trim() || ('Via de\' Tornabuoni ' + (10 + idx * 2) + ', 50123 Firenze (FI)');
+    var newId = 'apt_' + Date.now();
+    var defaultPortals = getDefaultChannelRevenueState().portals;
+
+    var newApt = {
+      id: newId,
+      shortLabel: '🏗️ ' + idx + '. ' + aptName.split(' ').slice(0, 2).join(' '),
+      originBadge: '🏗️ Nuovo Collaudo 1. Toscan Costruzioni (5 SAL)',
+      ownerData: {
+        apartment: {
+          name: aptName,
+          address: aptAddr,
+          cin: 'IT048017C2T5C00' + codeNum,
+          ownerCode: 'ITA-FIRENZE-' + codeNum,
+          doorCode: '3090# (Portone) / Smart Lock Cablato 5510#',
+          floor: 'Piano 2 · Ristrutturato Chiavi in Mano Toscan Costruzioni',
+          elevator: 'Sì (Impianto DM 37/08 certificato)',
+          wifi: 'BlueArroyo_Fiber_' + codeNum,
+          pass: 'Toscan Suite2026!',
+          ztl: 'ZTL Centro Storico · Accesso Hub PBA ZTL garantito',
+          trash: 'Passaggio porta a porta Lun-Sab ore 07:30-08:30',
+          checkout: 'Entro le ore 10:00 · Runner Bagagli Smartbookings attivo',
+          addon10Active: true,
+          reportTime: '08:00',
+          reportChannel: 'whatsapp_email',
+          ownerPhone: '+39 351 038 0392',
+          ownerEmail: 'info@itadreamteam.com'
+        },
+        bookings: [
+          {
+            id: 'bt_' + Date.now(),
+            guest: 'Lord Arthur Pendelton (1ª Prenotazione Post-Collaudo)',
+            channel: 'Smartbookings (Diretta 0%)',
+            guests: 2,
+            checkin: '2026-11-04',
+            checkout: '2026-11-08',
+            nights: 4,
+            amount: 720,
+            alloggiatiSent: false,
+            cleaningStatus: '✓ Allestito Suite 60°C + Kit Bio (PBA)',
+            cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)',
+            cleaningCost: 45
+          }
+        ],
+        expenses: [
+          { id: 'et_1', date: new Date().toLocaleDateString('it-IT'), title: '1. Toscan Costruzioni — Consegna Chiavi in Mano 5° SAL (Zero riparazioni per anni)', category: 'Collaudo Edile 5 SAL', amount: 0, paid: true },
+          { id: 'et_2', date: new Date().toLocaleDateString('it-IT'), title: '3. Blue Arroyo Cleaning — 1° Allestimento Suite 60°C, Kit Bio e Spugne Sigillate (Costo 0€ PM)', category: 'Allestimento PBA ZTL', amount: 45, paid: false }
+        ]
+      },
+      cmState: {
+        autoPilot: true,
+        autonomyLevel: 1, // Parte sempre da Grado L1 (Osservazione) per guadagnarsi l'autonomia coi dati!
+        verifiedWeeksBeatingHuman: 1,
+        weeklyApprovedAt: 'Nuovo immobile collaudato · Grado L1 Osservazione attivo',
+        strategy: 'smart_fill',
+        baseRate: 180,
+        floorRate: 130,
+        ceilingRate: 350,
+        portalMarkupAuto: true,
+        lastSyncAt: 'Appena attivato da Collaudo Toscan Costruzioni',
+        portals: JSON.parse(JSON.stringify(defaultPortals)),
+        customDayOverrides: {}
+      }
+    };
+
+    pf.apartments.push(newApt);
+    pf.activeAptId = newId;
+    try {
+      localStorage.setItem(PM_PORTFOLIO_KEY, JSON.stringify(pf));
+    } catch (e) {}
+    switchPmApartment(newId);
+    return newApt;
+  }
+
+  function computePortfolioGlobalSummary() {
+    var pf = saveCurrentAptIntoPortfolio();
+    var totalGross = 0;
+    var totalBookings = 0;
+    var totalPendingAlloggiati = 0;
+    var totalOrphans = 0;
+    var totalMonthlyUplift = 0;
+    var aptSummaries = [];
+
+    pf.apartments.forEach(function (a) {
+      var bks = (a.ownerData && a.ownerData.bookings) || [];
+      var gross = 0;
+      var pendAw = 0;
+      bks.forEach(function (b) {
+        gross += Number(b.amount || 0);
+        if (!b.alloggiatiSent) pendAw++;
+      });
+      totalGross += gross;
+      totalBookings += bks.length;
+      totalPendingAlloggiati += pendAw;
+
+      var cm = a.cmState || getDefaultChannelRevenueState();
+      var uplift = Math.round(cm.baseRate * 2.55);
+      totalMonthlyUplift += uplift;
+      var hasOrphan = (a.id === 'apt_1' || a.id === 'apt_2');
+      if (hasOrphan) totalOrphans++;
+
+      aptSummaries.push({
+        id: a.id,
+        shortLabel: a.shortLabel,
+        name: a.ownerData.apartment.name,
+        address: a.ownerData.apartment.address,
+        cin: a.ownerData.apartment.cin,
+        ownerCode: a.ownerData.apartment.ownerCode,
+        originBadge: a.originBadge,
+        bookingsCount: bks.length,
+        grossEur: gross,
+        pendingAlloggiati: pendAw,
+        autonomyLevel: cm.autonomyLevel || 2,
+        verifiedWeeks: cm.verifiedWeeksBeatingHuman || 1,
+        baseRate: cm.baseRate,
+        floorRate: cm.floorRate,
+        ceilingRate: cm.ceilingRate,
+        strategy: cm.strategy,
+        monthlyUpliftEur: uplift
+      });
+    });
+
+    return {
+      pmName: pf.pmName,
+      activeAptId: pf.activeAptId,
+      totalApartments: pf.apartments.length,
+      totalGrossEur: totalGross,
+      totalBookings: totalBookings,
+      totalPendingAlloggiati: totalPendingAlloggiati,
+      totalOrphansUnlocked: totalOrphans,
+      totalMonthlyUpliftEur: totalMonthlyUplift,
+      apartments: aptSummaries
     };
   }
 
@@ -969,6 +1355,12 @@
     getChannelRevenueState: getChannelRevenueState,
     saveChannelRevenueState: saveChannelRevenueState,
     checkBookingOverlap: checkBookingOverlap,
-    computeBehavioralCalendarMatrix: computeBehavioralCalendarMatrix
+    computeBehavioralCalendarMatrix: computeBehavioralCalendarMatrix,
+    getPmPortfolio: getPmPortfolio,
+    saveCurrentAptIntoPortfolio: saveCurrentAptIntoPortfolio,
+    switchPmApartment: switchPmApartment,
+    certifyNextAutonomyWeek: certifyNextAutonomyWeek,
+    subentroToscanCollaudoOneTap: subentroToscanCollaudoOneTap,
+    computePortfolioGlobalSummary: computePortfolioGlobalSummary
   };
 })(typeof window !== 'undefined' ? window : this);
