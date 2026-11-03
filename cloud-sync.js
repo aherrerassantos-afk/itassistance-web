@@ -1853,6 +1853,72 @@
     };
   }
 
+  // Generatore Dossier A4 "Studio di Fattibilità 5 SAL Garantiti — 1. Toscan Costruzioni"
+  function openToscanFeasibilityStudyPrint(input) {
+    var d = input || {};
+    var cap = Number(d.capEur) || 68000;
+    var name = d.name || 'Proprietario-Gestore Firenze';
+    var goal = d.goalType || 'Acquisto / Ristrutturazione Immobile a Reddito (Chiavi in Mano 5 SAL)';
+    var payback = d.paybackLabel || '1,8 anni (22 mesi)';
+    var boost = d.annualBoostLabel || '+37.400 €/anno';
+    var s1 = Math.round(cap * 0.15).toLocaleString('it-IT');
+    var s25 = Math.round(cap * 0.25).toLocaleString('it-IT');
+    var s10 = Math.round(cap * 0.10).toLocaleString('it-IT');
+
+    var w = window.open('', '_blank');
+    if (!w) return;
+    w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Studio di Fattibilità 5 SAL — 1. Toscan Costruzioni</title>' +
+      '<style>body{font-family:sans-serif;padding:36px;color:#0F1A2E;line-height:1.5;max-width:800px;margin:0 auto}h1{font-size:24px;margin-bottom:4px}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #64748B;padding:10px;text-align:left}th{background:#F2EFE9}.box{background:#ECFDF5;border:1.5px solid #065F46;padding:14px;border-radius:8px;margin-top:16px}</style></head><body>' +
+      '<div style="font-size:12px;font-weight:700;letter-spacing:1px;color:#7A5C12;">1. TOSCAN COSTRUZIONI · GRUPPO INDUSTRIALE BLUE ARROYO SRL · FIRENZE</div>' +
+      '<h1>Dossier Studio di Fattibilità 5 SAL Garantiti a Prezzo Fisso</h1>' +
+      '<p><strong>Intestatario:</strong> ' + name + ' · <strong>Data:</strong> ' + new Date().toLocaleDateString('it-IT') + '<br/>' +
+      '<strong>Operazione:</strong> ' + goal + '</p>' +
+      '<table><thead><tr><th>Stato Avanzamento Lavori (SAL)</th><th>Quota %</th><th>Importo Garantito</th><th>Collaudo e Certificazioni</th></tr></thead><tbody>' +
+      '<tr><td>1° SAL · Avvio Cantiere, Demolizioni e Tracciamenti</td><td>15%</td><td><strong>' + s1 + ' €</strong></td><td>Verbale apertura e cronoprogramma bloccato</td></tr>' +
+      '<tr><td>2° SAL · Impianti Idrici, Elettrici e Cablaggio Smart Lock</td><td>25%</td><td><strong>' + s25 + ' €</strong></td><td>Predisposizione DM 37/08 e rete fibra</td></tr>' +
+      '<tr><td>3° SAL · Massetti, Intonaci, Infissi e Insonorizzazione</td><td>25%</td><td><strong>' + s25 + ' €</strong></td><td>Verifica acustica e termica</td></tr>' +
+      '<tr><td>4° SAL · Pavimenti, Rivestimenti e Bagni Suite</td><td>25%</td><td><strong>' + s25 + ' €</strong></td><td>Controllo qualità finiture</td></tr>' +
+      '<tr><td>5° SAL · Fine Lavori, Collaudo Finale e Subentro Ciclo Blue Arroyo</td><td>10%</td><td><strong>' + s10 + ' €</strong></td><td>Certificazioni DM 37/08, APE e ingresso in 2. itassistance + 3. Blue Arroyo Cleaning + 4. Smartbookings</td></tr>' +
+      '</tbody></table>' +
+      '<div class="box"><strong>Riepilogo Finanziario Stimato:</strong><br/>Investimento Lavori Chiavi in Mano: <strong>' + cap.toLocaleString('it-IT') + ' €</strong> · Flusso Annuo Combinato: <strong>' + boost + '</strong> · Tempo di Rientro Stimato: <strong>' + payback + '</strong>.</div>' +
+      '<p style="margin-top:24px;font-size:12px;color:#475569;">Blue Arroyo SRL · Via Matteo Palmieri 20r, 50122 Firenze (FI) · P.IVA 07480210488 · Tel. +39 351 038 0392</p>' +
+      '<script>window.onload=function(){window.print();}<\/script></body></html>');
+    w.document.close();
+  }
+
+  // Generatore Distinta / Fattura Pro-Forma con Quotazione Giornaliera Bloccata (99,00 € – 289,50 € / mese)
+  function openDynamicInvoicePrint() {
+    var act = null;
+    try {
+      act = JSON.parse(localStorage.getItem('itassistance_last_activation') || 'null');
+    } catch (e) {}
+    var dynCfg = (typeof window !== 'undefined' && window.SITE_CONFIG && typeof window.SITE_CONFIG.getDynamicPricing === 'function')
+      ? window.SITE_CONFIG.getDynamicPricing()
+      : { todayMonthlyEur: 99, todayFormatted: '99,00 €' };
+    var ownerName = (act && act.ownerName) || 'Proprietario Firenze';
+    var aptName = (act && act.apartmentName) || 'Appartamento Firenze';
+    var ownerCode = (act && act.ownerCode) || 'ITA-FIRENZE-01';
+    var invId = (act && act.invoiceId) || 'FATT-2026-101';
+    var amountEur = (act && act.amountEur) || dynCfg.todayMonthlyEur || 99;
+    var fmtAmt = Number(amountEur).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    var guaranteeUntil = (act && act.guaranteeUntil) || new Date(Date.now() + 14 * 86400000).toLocaleDateString('it-IT');
+
+    var w = window.open('', '_blank');
+    if (!w) return;
+    w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Distinta Attivazione e Tariffa Bloccata — ' + invId + '</title>' +
+      '<style>body{font-family:sans-serif;padding:36px;color:#0F1A2E;line-height:1.5;max-width:760px;margin:0 auto}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #64748B;padding:10px;text-align:left}th{background:#F2EFE9}</style></head><body>' +
+      '<div style="font-size:12px;font-weight:700;color:#7A5C12;">BLUE ARROYO SRL · VIA MATTEO PALMIERI 20R, 50122 FIRENZE (FI) · P.IVA 07480210488</div>' +
+      '<h1>Certificato di Attivazione e Blocco Tariffa (' + invId + ')</h1>' +
+      '<p><strong>Intestatario:</strong> ' + ownerName + ' · <strong>Immobile:</strong> ' + aptName + '<br/>' +
+      '<strong>Codice Proprietario Personale:</strong> ' + ownerCode + ' · <strong>Garanzia 100% Rimborso fino al:</strong> ' + guaranteeUntil + '</p>' +
+      '<table><thead><tr><th>Descrizione Servizio</th><th>Commissioni Prenotazioni</th><th>Importo Bloccato (IVA incl.)</th></tr></thead><tbody>' +
+      '<tr><td>Abbonamento Piattaforma itassistance Firenze (Price Lock Giornaliero)</td><td>0% (Zero)</td><td><strong>' + fmtAmt + '</strong></td></tr>' +
+      '</tbody></table>' +
+      '<p><strong>Coordinate Bonifico Bancario:</strong> Intestatario: <strong>Blue Arroyo SRL</strong> · Causale: <strong>' + invId + ' - ' + ownerCode + '</strong></p>' +
+      '<script>window.onload=function(){window.print();}<\/script></body></html>');
+    w.document.close();
+  }
+
   root.ITACloudSync = {
     syncSnapshotToSupabase: syncSnapshotToSupabase,
     broadcastStateChange: broadcastStateChange,
@@ -1886,6 +1952,8 @@
     computeFreedomCapitalSalProgress: computeFreedomCapitalSalProgress,
     activateBlueArroyoCleaningSuiteOneTap: activateBlueArroyoCleaningSuiteOneTap,
     activateSmartsBookingsDirectChannelOneTap: activateSmartsBookingsDirectChannelOneTap,
-    exportUnifiedICalFeed: exportUnifiedICalFeed
+    exportUnifiedICalFeed: exportUnifiedICalFeed,
+    openToscanFeasibilityStudyPrint: openToscanFeasibilityStudyPrint,
+    openDynamicInvoicePrint: openDynamicInvoicePrint
   };
 })(typeof window !== 'undefined' ? window : this);

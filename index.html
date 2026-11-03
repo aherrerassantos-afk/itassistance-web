@@ -1632,8 +1632,20 @@
       }
 
       if (statusBox) {
-        statusBox.innerHTML = '<strong>Simulazione (' + Number(simCap).toLocaleString('it-IT') + ' € · Rientro ' + simYears + ') registrata nel CRM di 1. Toscan Costruzioni.</strong>Il Direttore Vendite ti invierà il capitolato 5 SAL garantiti e lo studio di rendita.';
+        statusBox.innerHTML = '<strong>Simulazione (' + Number(simCap).toLocaleString('it-IT') + ' € · Rientro ' + simYears + ') registrata nel CRM di 1. Toscan Costruzioni.</strong>Il Direttore Vendite ti invierà il capitolato 5 SAL garantiti e lo studio di rendita.' +
+          '<div style="margin-top:12px;"><button type="button" class="btn btn-secondary" style="width:100%;" onclick="printIndexToscanFeasibility()">Stampa lo Studio di Fattibilità 5 SAL Personalizzato (A4)</button></div>';
       }
+    }
+
+    function printIndexToscanFeasibility() {
+      if (!window.ITACloudSync || typeof ITACloudSync.openToscanFeasibilityStudyPrint !== 'function') return;
+      ITACloudSync.openToscanFeasibilityStudyPrint({
+        name: (document.getElementById('tc-lead-name').value || '').trim() || 'Investitore Firenze',
+        goalType: (document.getElementById('tc-lead-goal').value || '').trim(),
+        capEur: document.getElementById('idx-sim-slider') ? document.getElementById('idx-sim-slider').value : 68000,
+        paybackLabel: document.getElementById('idx-sim-years') ? document.getElementById('idx-sim-years').textContent : '1,8 anni',
+        annualBoostLabel: document.getElementById('idx-sim-extra-cashflow') ? document.getElementById('idx-sim-extra-cashflow').textContent : '+37.400 €/a'
+      });
     }
 
     /* 4. Sistema di Prezzi Variabili Giornalieri di Acquisizione Immobili (99,00 € – 289,50 € / mese) */
