@@ -20,7 +20,7 @@
   <meta property="og:locale" content="en_US">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="/site-config.js"></script>
   <script type="application/ld+json">
   {
@@ -102,78 +102,103 @@
   </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --navy:#111111; --gold:#C9A84C; --gold-dark:#9E7E28; --gold-light:#FBF7EC; --bg:#FFFFFF; --bg-alt:#F7F7F5; --text:#1A1A1A; --text-muted:#52525B; --border:#E4E4E7; --green:#15803D; --serif:'Playfair Display',Georgia,serif; --sans:'Inter',sans-serif; }
-    body { font-family:var(--sans); color:var(--text); background:var(--bg); line-height:1.65; }
-    a { color:inherit; text-decoration:none; }
-    .container { max-width:980px; margin:0 auto; padding:0 20px; }
-    .navbar { border-bottom:1px solid var(--border); background:#fff; position:sticky; top:0; z-index:100; }
-    .navbar-inner { display:flex; justify-content:space-between; align-items:center; height:64px; gap:12px; }
-    .brand { display:inline-flex; align-items:center; gap:10px; font-weight:700; font-size:19px; color:var(--navy); }
-    .brand img { width:30px; height:30px; border-radius:6px; }
-    .btn { display:inline-flex; align-items:center; justify-content:center; padding:13px 22px; border-radius:8px; font-weight:600; font-size:14px; min-height:48px; cursor:pointer; }
-    .btn-gold { background:var(--gold); color:var(--navy); font-weight:700; }
-    .btn-outline { border:1px solid var(--navy); color:var(--navy); background:#fff; }
-    section { padding:56px 0; border-bottom:1px solid var(--border); }
-    .eyebrow { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.8px; color:var(--gold-dark); margin-bottom:10px; display:block; }
-    h1 { font-family:var(--serif); font-size:clamp(30px,4.5vw,46px); line-height:1.12; margin-bottom:16px; color:var(--navy); }
-    h2 { font-family:var(--serif); font-size:clamp(24px,3.5vw,32px); line-height:1.18; margin:24px 0 12px; color:var(--navy); }
-    p { margin-bottom:14px; color:var(--text-muted); font-size:16px; }
-    .card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:24px; margin-bottom:16px; }
-    .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:20px 0; }
-    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
-    @media(max-width:760px) { .grid-3, .grid-2 { grid-template-columns:1fr; } }
-    footer { background:#0B0B0E; color:#A1A1AA; padding:40px 0; font-size:13px; }
+    :root {
+      --bg-light: #FAFAF8;
+      --bg-stone: #F2EFE9;
+      --ink-navy: #0F1A2E;
+      --ink-muted: #475569;
+      --ink-on-dark-muted: #CBD5E1;
+      --gold-accent: #C9A84C;
+      --gold-text-light: #7A5C12;
+      --border-control: #64748B;
+      --status-ok-bg: #ECFDF5;
+      --status-ok-text: #065F46;
+      --navy: #0F1A2E;
+      --gold: #C9A84C;
+      --gold-dark: #7A5C12;
+      --gold-light: #F2EFE9;
+      --bg: #FAFAF8;
+      --bg-alt: #F2EFE9;
+      --text: #0F1A2E;
+      --text-muted: #475569;
+      --border: #64748B;
+      --green: #065F46;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+    body { font-family: var(--sans); color: var(--ink-navy); background: var(--bg-light); line-height: 1.6; overflow-x: clip; }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+    .navbar { border-bottom: 2px solid var(--gold-accent); background: var(--ink-navy); color: var(--bg-light); position: sticky; top: 0; z-index: 100; }
+    .navbar-inner { display: flex; justify-content: space-between; align-items: center; height: 64px; gap: 12px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.125rem; color: var(--bg-light); }
+    .brand img { width: 32px; height: 32px; border-radius: 6px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 24px; border-radius: 8px; font-weight: 700; font-size: 1rem; min-height: 56px; cursor: pointer; border: 2px solid transparent; }
+    @media (min-width: 1024px) { .btn { min-height: 48px; } }
+    .btn-gold { background: var(--gold-accent); color: var(--ink-navy); border-color: var(--gold-accent); }
+    .btn-outline { border: 2px solid var(--ink-navy); color: var(--ink-navy); background: #FFFFFF; }
+    section { padding: 64px 0; border-bottom: 1px solid var(--border-control); }
+    .eyebrow { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.04em; color: var(--gold-text-light); margin-bottom: 12px; display: block; }
+    h1 { font-family: var(--serif); font-size: clamp(2.1rem, 4.5vw, 3.2rem); line-height: 1.12; margin-bottom: 16px; color: var(--ink-navy); }
+    h2 { font-family: var(--serif); font-size: clamp(1.75rem, 3.5vw, 2.35rem); line-height: 1.18; margin: 24px 0 16px; color: var(--ink-navy); }
+    p { margin-bottom: 16px; color: var(--ink-muted); font-size: 1.0625rem; max-width: 65ch; }
+    .card { background: #FFFFFF; border: 1.5px solid var(--border-control); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media(max-width:760px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } }
+    footer { background: var(--ink-navy); color: var(--ink-on-dark-muted); padding: 40px 0; font-size: 0.875rem; border-top: 2px solid var(--gold-accent); }
   </style>
 </head>
 <body>
   <header class="navbar">
     <div class="container navbar-inner">
-      <a href="/en/" class="brand"><img src="/brand/logo.png" alt="itassistance logo"><span>itassistance</span></a>
+      <a href="/en/" class="brand"><img src="/brand/logo.webp" width="32" height="32" alt="itassistance logo"><span>itassistance</span></a>
       <div style="display:flex;gap:10px;align-items:center;">
-        <a href="/" class="btn btn-outline" style="min-height:38px;padding:6px 12px;font-size:12.5px;">🇮🇹 Versione Italiana</a>
-        <a href="/checkout.html" class="btn btn-gold" style="min-height:38px;padding:6px 14px;font-size:12.5px;">Start 14-Day Trial (€99/mo)</a>
+        <a href="/" class="btn btn-outline" style="min-height:44px;padding:8px 14px;font-size:0.875rem;">Versione Italiana</a>
+        <a href="/checkout.html" class="btn btn-gold" style="min-height:44px;padding:8px 16px;font-size:0.875rem;">Activate 14-Day Trial</a>
       </div>
     </div>
   </header>
 
   <section style="background:var(--bg-alt);">
     <div class="container">
-      <span class="eyebrow">For Property Owners in Florence &amp; Italy · Zero Commission</span>
+      <span class="eyebrow">For Property Owners in Florence and Italy · Zero Commission</span>
       <h1>Your apartment in Florence, under control. In 10 minutes a day.</h1>
-      <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:14px;">
-        📅 <strong>Last Updated:</strong> November 2026 · <strong>Operated by:</strong> Blue Arroyo SRL (VAT IT07480210488), Via Matteo Palmieri 20r, 50122 Florence, Italy
+      <div style="font-size:0.875rem;color:var(--text-muted);margin-bottom:16px;">
+        <strong>Last Updated:</strong> November 2026 · <strong>Operated by:</strong> Blue Arroyo SRL (VAT IT07480210488), Via Matteo Palmieri 20r, 50122 Florence, Italy
       </div>
 
       <!-- ANSWER-FIRST SUMMARY -->
-      <div style="background:var(--gold-light);border-left:4px solid var(--gold);border-radius:10px;padding:18px 20px;margin-bottom:18px;">
-        <strong style="color:var(--navy);display:block;margin-bottom:4px;">📌 Quick Summary (What is itassistance):</strong>
-        <p style="margin:0;color:var(--navy);font-size:15px;">
-          <strong>itassistance</strong> is the web app built in Florence for private short-term rental owners who want to stay <strong>100% compliant with Italian law</strong> without giving away 18–25% of their revenue to a traditional Property Manager. For a flat fee of <strong>€99 per month (VAT included, 0% commission)</strong> — backed by a <strong>14-day 100% Money-Back Guarantee</strong> — you receive an 08:00 AM daily checklist guiding you through <strong>Alloggiati Web</strong> police registration, <strong>Florence Tourist Tax</strong>, <strong>CIN &amp; ISTAT/Ross1000</strong> filings, cleaning schedules, and accountant CSV exports in 10 minutes a day.
+      <div style="background:#FFFFFF;border-left:4px solid var(--gold);border:1.5px solid var(--border-control);border-radius:10px;padding:20px;margin-bottom:24px;">
+        <strong style="color:var(--navy);display:block;margin-bottom:6px;">Quick Summary (What is itassistance):</strong>
+        <p style="margin:0;color:var(--navy);font-size:1rem;">
+          <strong>itassistance</strong> is the web app built in Florence for private short-term rental owners who want to stay <strong>100% compliant with Italian law</strong> without giving away 18–25% of their revenue to a traditional Property Manager. For a flat fee of <strong>€99 per month (VAT included, 0% commission)</strong> — backed by a <strong>14-day 100% Money-Back Guarantee</strong> — you receive an 08:00 AM daily summary guiding you through <strong>Alloggiati Web</strong> police registration, <strong>Florence Tourist Tax</strong>, <strong>CIN &amp; ISTAT/Ross1000</strong> filings, cleaning schedules, and accountant CSV exports in 10 minutes a day.
         </p>
       </div>
 
       <!-- Market Data Box -->
       <div class="grid-3">
         <div class="card" style="margin-bottom:0;">
-          <div style="font-family:var(--serif);font-size:28px;font-weight:700;color:var(--navy);">~75%</div>
-          <strong style="font-size:14px;color:var(--navy);">Self-Managed in Italy</strong>
-          <p style="font-size:13px;margin:4px 0 0;">3 out of 4 short-term rentals in Italy operate without a Property Manager to avoid 20%+ commissions (Source: AIGAB / Idealista).</p>
+          <div style="font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--navy);">~75%</div>
+          <strong style="font-size:0.9375rem;color:var(--navy);">Self-Managed in Italy</strong>
+          <p style="font-size:0.875rem;margin:4px 0 0;">3 out of 4 short-term rentals in Italy operate without a Property Manager to avoid 20%+ commissions (Source: AIGAB / Idealista).</p>
         </div>
         <div class="card" style="margin-bottom:0;">
-          <div style="font-family:var(--serif);font-size:28px;font-weight:700;color:var(--navy);">84%</div>
-          <strong style="font-size:14px;color:var(--navy);">Small Owners (1–2 Units)</strong>
-          <p style="font-size:13px;margin:4px 0 0;">84% of Italian hosts own 1 or 2 apartments and need a simple mobile workflow, not complex agency software.</p>
+          <div style="font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--navy);">84%</div>
+          <strong style="font-size:0.9375rem;color:var(--navy);">Small Owners (1–2 Units)</strong>
+          <p style="font-size:0.875rem;margin:4px 0 0;">84% of Italian hosts own 1 or 2 apartments and need a simple mobile workflow, not complex agency software.</p>
         </div>
         <div class="card" style="margin-bottom:0;">
-          <div style="font-family:var(--serif);font-size:28px;font-weight:700;color:var(--green);">+€4,812/yr</div>
-          <strong style="font-size:14px;color:var(--navy);">Saved on €30k Gross Revenue</strong>
-          <p style="font-size:13px;margin:4px 0 0;">Pay €1,188/year (€99/mo VAT incl.) instead of €6,000/year to a 20% Property Manager.</p>
+          <div style="font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--green);">+€4,812/yr</div>
+          <strong style="font-size:0.9375rem;color:var(--navy);">Saved on €30k Gross Revenue</strong>
+          <p style="font-size:0.875rem;margin:4px 0 0;">Pay €1,188/year (€99/mo VAT incl.) instead of €6,000/year to a 20% Property Manager.</p>
         </div>
       </div>
 
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;">
         <a href="/checkout.html" class="btn btn-gold">Activate €99/month Plan (14-Day Money-Back Guarantee)</a>
-        <a href="/ospiti.html" class="btn btn-outline">Preview English Guest Self Check-in Link</a>
+        <a href="/ospiti.html?lang=en" class="btn btn-outline">Preview English Guest Self Check-in Link</a>
       </div>
     </div>
   </section>
@@ -183,26 +208,26 @@
       <h2>Everything Managed in 10 Minutes a Day</h2>
       <div class="grid-2">
         <div class="card">
-          <h3 style="font-size:18px;color:var(--navy);margin-bottom:6px;">🛂 1. Alloggiati Web Police Registration (Art. 109 TULPS)</h3>
-          <p style="font-size:14.5px;margin-bottom:0;">
+          <h3 style="font-family:var(--serif);font-size:1.35rem;color:var(--navy);margin-bottom:6px;">1. Alloggiati Web Police Registration (Art. 109 TULPS)</h3>
+          <p style="font-size:0.9375rem;margin-bottom:0;">
             Send guests your personal English/Italian Self Check-in link (<code>/ospiti</code>). Guests enter their passport details in 60 seconds, unlock your 1-language Check-in PDF (Wi-Fi, Door Code, Neighborhood Map), and pre-fill your Police registration for submission within 24 hours.
           </p>
         </div>
         <div class="card">
-          <h3 style="font-size:18px;color:var(--navy);margin-bottom:6px;">🏛️ 2. Florence Tourist Tax, CIN &amp; Accountant CSV</h3>
-          <p style="font-size:14.5px;margin-bottom:0;">
+          <h3 style="font-family:var(--serif);font-size:1.35rem;color:var(--navy);margin-bottom:6px;">2. Florence Tourist Tax, CIN &amp; Accountant CSV</h3>
+          <p style="font-size:0.9375rem;margin-bottom:0;">
             Automatic calculation of Florence Tourist Tax (capped at 7 consecutive nights, monthly filing due by the 16th), ISTAT/Ross1000 reminders, and 1-click CSV export for your Italian Commercialista (21% / 26% Cedolare Secca flat tax).
           </p>
         </div>
         <div class="card">
-          <h3 style="font-size:18px;color:var(--navy);margin-bottom:6px;">🧹 3. Cleaners, Suppliers &amp; Net Profit Tracking</h3>
-          <p style="font-size:14.5px;margin-bottom:0;">
-            Sync Airbnb and Booking.com calendars, verify 11:00 AM cleaning turnovers, log supplier expenses, and see your real net profit every day.
+          <h3 style="font-family:var(--serif);font-size:1.35rem;color:var(--navy);margin-bottom:6px;">3. Cleaners, Suppliers &amp; Net Profit Tracking</h3>
+          <p style="font-size:0.9375rem;margin-bottom:0;">
+            Sync Airbnb and Booking.com calendars, verify cleaning turnovers, log supplier expenses, and see your real net profit every day.
           </p>
         </div>
-        <div class="card" style="background:var(--gold-light);border-color:var(--gold);">
-          <h3 style="font-size:18px;color:var(--navy);margin-bottom:6px;">📍 4. On-Demand Local Support in Florence (09:00–23:00)</h3>
-          <p style="font-size:14.5px;margin-bottom:0;">
+        <div class="card" style="background:var(--bg-stone);border-color:var(--gold);">
+          <h3 style="font-family:var(--serif);font-size:1.35rem;color:var(--navy);margin-bottom:6px;">4. On-Demand Local Support in Florence (09:00–23:00)</h3>
+          <p style="font-size:0.9375rem;margin-bottom:0;">
             Live abroad? Request on-the-ground help in Florence whenever you need it: <strong>In-person guest check-in (€20 VAT incl.)</strong>, <strong>Minor maintenance visit (€30 VAT incl.)</strong>, or activate the optional <strong>+10% Revenue Management &amp; Legal Compliance add-on</strong>.
           </p>
         </div>
@@ -210,14 +235,14 @@
 
       <h2>Frequently Asked Questions</h2>
       <div class="card">
-        <h3 style="font-size:17px;color:var(--navy);margin-bottom:6px;">How does billing and the 14-day guarantee work?</h3>
-        <p style="font-size:14.5px;margin-bottom:0;">
+        <h3 style="font-family:var(--serif);font-size:1.25rem;color:var(--navy);margin-bottom:6px;">How does billing and the 14-day guarantee work?</h3>
+        <p style="font-size:0.9375rem;margin-bottom:0;">
           You can pay month-to-month (<strong>€99/month VAT included</strong>) or annually upfront (<strong>€1,188/year VAT included</strong> — exact same rate). There are zero booking commissions and zero lock-in penalties. If you cancel within the first 14 days, we refund 100% of your payment with one click.
         </p>
       </div>
       <div class="card">
-        <h3 style="font-size:17px;color:var(--navy);margin-bottom:6px;">Where is your office in Florence?</h3>
-        <p style="font-size:14.5px;margin-bottom:0;">
+        <h3 style="font-family:var(--serif);font-size:1.25rem;color:var(--navy);margin-bottom:6px;">Where is your office in Florence?</h3>
+        <p style="font-size:0.9375rem;margin-bottom:0;">
           <strong>itassistance</strong> is operated by <strong>Blue Arroyo SRL</strong> (VAT IT07480210488), located in the historic center of Florence at <strong>Via Matteo Palmieri 20r, 50122 Firenze (FI), Italy</strong>. Support is available every day from 09:00 to 23:00 at <strong>+39 351 038 0392</strong> (Phone &amp; WhatsApp) and <strong>info@itadreamteam.com</strong>.
         </p>
       </div>
@@ -227,7 +252,7 @@
   <footer>
     <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
       <div>itassistance is a product of Blue Arroyo SRL · VAT IT07480210488 · Via Matteo Palmieri 20r, 50122 Florence (FI), Italy</div>
-      <div><a href="/" style="text-decoration:underline;">🇮🇹 Italiano</a> · <a href="/checkout.html" style="text-decoration:underline;">Checkout</a> · <a href="/llms.txt" style="text-decoration:underline;">llms.txt</a></div>
+      <div><a href="/" style="text-decoration:underline;">Italiano</a> · <a href="/checkout.html" style="text-decoration:underline;">Checkout</a> · <a href="/llms.txt" style="text-decoration:underline;">llms.txt</a></div>
     </div>
   </footer>
 </body>

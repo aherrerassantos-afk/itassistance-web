@@ -63,8 +63,25 @@
       color: var(--ink-navy);
       line-height: 1.5;
       min-height: 100dvh;
-      overflow-x: hidden;
-      padding-bottom: 64px;
+      overflow-x: clip;
+      padding-bottom: calc(64px + env(safe-area-inset-bottom));
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid var(--gold-accent);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
 
     .app-header {
@@ -309,10 +326,10 @@
 <body>
 
   <header class="app-header">
-    <a href="/app.html?view=ospiti" class="back-btn">
+    <button type="button" class="back-btn" id="hdr-back-btn" onclick="handleGuestBack()">
       <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-      <span>Area Ospiti</span>
-    </a>
+      <span id="hdr-back-label">Indietro</span>
+    </button>
     <div class="lang-switch" role="group" aria-label="Selettore lingua">
       <button type="button" class="lang-btn active" id="btn-lang-it" onclick="setGuestLang('it')">IT</button>
       <button type="button" class="lang-btn" id="btn-lang-en" onclick="setGuestLang('en')">EN</button>
@@ -320,15 +337,16 @@
   </header>
 
   <main class="main-wrap">
-    <span class="step-badge" id="lbl-eyebrow">REGISTRAZIONE OSPITI OBBLIGATORIA (ART. 109 TULPS)</span>
+    <span class="step-badge" id="lbl-eyebrow">Passaggio 1 di 2 · Registrazione Ospiti (Art. 109 TULPS)</span>
     <h1 id="lbl-apt-title">Check-in Online — Appartamento Santo Spirito</h1>
     <p class="lead-text" id="lbl-apt-sub">
       La legge italiana richiede a ogni struttura ricettiva di comunicare i dati del documento di identità degli ospiti alla Polizia di Stato (Alloggiati Web). Compila i 5 campi essenziali per sbloccare subito il libretto con i codici di accesso e il Wi-Fi.
     </p>
 
-    <!-- CONFERMA DOPO L'INVIO -->
+    <!-- CONFERMA DOPO L'INVIO (LIVELLO 4 - CONFERMA) -->
     <section class="success-box" id="guest-success-box" role="status">
-      <h2 id="lbl-ok-title" style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:8px;">Documenti registrati con successo</h2>
+      <span class="step-badge" style="background:#FFFFFF;color:var(--status-ok-text);border-color:var(--status-ok-text);">Registrazione Completata</span>
+      <h2 id="lbl-ok-title" style="font-family:var(--font-display);font-size:1.75rem;margin-bottom:8px;">Documenti registrati con successo</h2>
       <p id="lbl-ok-desc" style="font-size:1rem;color:var(--ink-navy);margin-bottom:16px;">
         I tuoi dati sono stati inviati al proprietario per la trasmissione su Alloggiati Web. Ora puoi scaricare il PDF con l'indirizzo, i codici di accesso e la password Wi-Fi.
       </p>
@@ -340,99 +358,112 @@
       </a>
     </section>
 
-    <!-- MODULO DOCUMENTO -->
-    <section class="card">
+    <!-- MODULO DOCUMENTO IN 2 PASSAGGI (LIVELLO 4 - AZIONE) -->
+    <section class="card" id="guest-form-card">
       <h2 id="lbl-form-title" style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:12px;">
         Dati Documento Ospite Principale
       </h2>
 
       <div id="guest-error" class="error-banner" role="alert"></div>
 
-      <div class="preset-row">
-        <button type="button" class="preset-chip" onclick="setGuestCountryPreset('ITALIA','IDENT')">Italia (Carta ID)</button>
-        <button type="button" class="preset-chip" onclick="setGuestCountryPreset('STATI UNITI','PASOR')">USA (Passport)</button>
-        <button type="button" class="preset-chip" onclick="setGuestCountryPreset('REGNO UNITO','PASOR')">UK (Passport)</button>
-        <button type="button" class="preset-chip" onclick="setGuestCountryPreset('FRANCIA','IDENT')">France (ID)</button>
-        <button type="button" class="preset-chip" onclick="setGuestCountryPreset('GERMANIA','IDENT')">Germany (ID)</button>
-      </div>
-
-      <div class="field-group">
-        <label id="lbl-f-nome" for="g-nome">Nome (come sul documento)</label>
-        <input type="text" id="g-nome" placeholder="Es. Jean Luc"/>
-      </div>
-
-      <div class="field-group">
-        <label id="lbl-f-cognome" for="g-cognome">Cognome (come sul documento)</label>
-        <input type="text" id="g-cognome" placeholder="Es. Martin"/>
-      </div>
-
-      <div class="field-group">
-        <label id="lbl-f-docnum" for="g-docnum">Numero Documento o Passaporto</label>
-        <input type="text" id="g-docnum" placeholder="Es. 22CF89102"/>
-      </div>
-
-      <div class="field-group">
-        <label id="lbl-f-nascita" for="g-nascita">Data di Nascita</label>
-        <input type="date" id="g-nascita" value="1986-04-18"/>
-      </div>
-
-      <div class="field-group">
-        <label id="lbl-f-citt" for="g-citt">Cittadinanza e Paese di Rilascio</label>
-        <input type="text" id="g-citt" value="FRANCIA" oninput="document.getElementById('g-docluogo').value=this.value"/>
-      </div>
-
-      <details class="expand-box">
-        <summary>Modifica tipo documento o numero di notti (preimpostati)</summary>
-        <div style="margin-top:12px;">
-          <div class="field-group">
-            <label id="lbl-f-doctipo" for="g-doctipo">Tipo di Documento</label>
-            <select id="g-doctipo">
-              <option value="PASOR">Passaporto (PASOR)</option>
-              <option value="IDENT">Carta d'Identità UE (IDENT)</option>
-              <option value="PATEN">Patente di Guida (PATEN)</option>
-            </select>
-          </div>
-          <div class="field-group">
-            <label id="lbl-f-sesso" for="g-sesso">Sesso</label>
-            <select id="g-sesso">
-              <option value="M">M</option>
-              <option value="F">F</option>
-            </select>
-          </div>
-          <div class="field-group">
-            <label id="lbl-f-tipo" for="g-tipo">Tipo Ospite</label>
-            <select id="g-tipo">
-              <option value="17" id="opt-family">Capofamiglia / Ospite Principale</option>
-              <option value="16" id="opt-single">Ospite Singolo</option>
-              <option value="18" id="opt-group">Capogruppo</option>
-            </select>
-          </div>
-          <div class="field-group">
-            <label id="lbl-f-pax" for="g-pax">Numero Totale Ospiti</label>
-            <input type="number" id="g-pax" value="2" min="1" max="12"/>
-          </div>
-          <div class="field-group">
-            <label id="lbl-f-arrivo" for="g-arrivo">Data di Check-in</label>
-            <input type="date" id="g-arrivo"/>
-          </div>
-          <div class="field-group">
-            <label id="lbl-f-giorni" for="g-giorni">Numero di Notti</label>
-            <input type="number" id="g-giorni" value="3" min="1" max="30"/>
-          </div>
-          <div class="field-group">
-            <label id="lbl-f-docluogo" for="g-docluogo">Stato o Comune di Rilascio Documento</label>
-            <input type="text" id="g-docluogo" value="FRANCIA"/>
-          </div>
+      <!-- PASSAGGIO 1 DI 2: PAESE & IDENTITA -->
+      <div id="guest-step-1">
+        <div class="preset-row">
+          <button type="button" class="preset-chip" onclick="setGuestCountryPreset('ITALIA','IDENT')">Italia (Carta ID)</button>
+          <button type="button" class="preset-chip" onclick="setGuestCountryPreset('STATI UNITI','PASOR')">USA (Passport)</button>
+          <button type="button" class="preset-chip" onclick="setGuestCountryPreset('REGNO UNITO','PASOR')">UK (Passport)</button>
+          <button type="button" class="preset-chip" onclick="setGuestCountryPreset('FRANCIA','IDENT')">France (ID)</button>
+          <button type="button" class="preset-chip" onclick="setGuestCountryPreset('GERMANIA','IDENT')">Germany (ID)</button>
         </div>
-      </details>
 
-      <p id="lbl-privacy" style="font-size:0.875rem;color:var(--ink-muted);margin-bottom:16px;">
-        I dati sono trattati esclusivamente per l'adempimento di legge previsto dall'art. 109 TULPS (Portale Alloggiati Web della Polizia di Stato).
-      </p>
+        <div class="field-group">
+          <label id="lbl-f-nome" for="g-nome">Nome (come sul documento)</label>
+          <input type="text" id="g-nome" placeholder="Es. Jean Luc"/>
+        </div>
 
-      <button type="button" class="btn btn-gold" onclick="submitGuestSelfCheckin()">
-        <span id="lbl-btn-submit">Invia i dati documento e sblocca le istruzioni check-in</span>
-      </button>
+        <div class="field-group">
+          <label id="lbl-f-cognome" for="g-cognome">Cognome (come sul documento)</label>
+          <input type="text" id="g-cognome" placeholder="Es. Martin"/>
+        </div>
+
+        <div class="field-group">
+          <label id="lbl-f-docnum" for="g-docnum">Numero Documento o Passaporto</label>
+          <input type="text" id="g-docnum" placeholder="Es. 22CF89102"/>
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="goGuestStep(2, true)">
+          <span id="lbl-btn-next-step">Continua al Passaggio 2 di 2</span>
+        </button>
+      </div>
+
+      <!-- PASSAGGIO 2 DI 2: NASCITA, CITTADINANZA E INVIO -->
+      <div id="guest-step-2" style="display:none;">
+        <div class="field-group">
+          <label id="lbl-f-nascita" for="g-nascita">Data di Nascita</label>
+          <input type="date" id="g-nascita" value="1986-04-18"/>
+        </div>
+
+        <div class="field-group">
+          <label id="lbl-f-citt" for="g-citt">Cittadinanza e Paese di Rilascio</label>
+          <input type="text" id="g-citt" value="FRANCIA" oninput="document.getElementById('g-docluogo').value=this.value"/>
+        </div>
+
+        <details class="expand-box">
+          <summary>Modifica tipo documento o numero di notti (preimpostati)</summary>
+          <div style="margin-top:12px;">
+            <div class="field-group">
+              <label id="lbl-f-doctipo" for="g-doctipo">Tipo di Documento</label>
+              <select id="g-doctipo">
+                <option value="PASOR">Passaporto (PASOR)</option>
+                <option value="IDENT">Carta d'Identità UE (IDENT)</option>
+                <option value="PATEN">Patente di Guida (PATEN)</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label id="lbl-f-sesso" for="g-sesso">Sesso</label>
+              <select id="g-sesso">
+                <option value="M">M</option>
+                <option value="F">F</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label id="lbl-f-tipo" for="g-tipo">Tipo Ospite</label>
+              <select id="g-tipo">
+                <option value="17" id="opt-family">Capofamiglia / Ospite Principale</option>
+                <option value="16" id="opt-single">Ospite Singolo</option>
+                <option value="18" id="opt-group">Capogruppo</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label id="lbl-f-pax" for="g-pax">Numero Totale Ospiti</label>
+              <input type="number" id="g-pax" value="2" min="1" max="12"/>
+            </div>
+            <div class="field-group">
+              <label id="lbl-f-arrivo" for="g-arrivo">Data di Check-in</label>
+              <input type="date" id="g-arrivo"/>
+            </div>
+            <div class="field-group">
+              <label id="lbl-f-giorni" for="g-giorni">Numero di Notti</label>
+              <input type="number" id="g-giorni" value="3" min="1" max="30"/>
+            </div>
+            <div class="field-group">
+              <label id="lbl-f-docluogo" for="g-docluogo">Stato o Comune di Rilascio Documento</label>
+              <input type="text" id="g-docluogo" value="FRANCIA"/>
+            </div>
+          </div>
+        </details>
+
+        <p id="lbl-privacy" style="font-size:0.875rem;color:var(--ink-muted);margin-bottom:16px;">
+          I dati sono trattati esclusivamente per l'adempimento di legge previsto dall'art. 109 TULPS (Portale Alloggiati Web della Polizia di Stato).
+        </p>
+
+        <button type="button" class="btn btn-gold" onclick="submitGuestSelfCheckin()">
+          <span id="lbl-btn-submit">Invia i dati documento e sblocca le istruzioni check-in</span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="goGuestStep(1, true)">
+          Torna al Passaggio 1
+        </button>
+      </div>
     </section>
 
     <footer style="text-align:center;font-size:0.875rem;color:var(--ink-muted);">
@@ -542,6 +573,75 @@
       document.getElementById('lbl-ok-desc').textContent = t.okDesc;
       document.getElementById('lbl-btn-pdf').textContent = t.btnPdf;
       document.getElementById('lbl-footer-support').textContent = t.footerSupport;
+      updateGuestStepBadge();
+    }
+
+    var currentGuestStep = 1;
+
+    function updateGuestStepBadge() {
+      var badge = document.getElementById('lbl-eyebrow');
+      if (!badge) return;
+      if (currentLang === 'en') {
+        badge.textContent = 'Step ' + currentGuestStep + ' of 2 · Guest ID Registration (Art. 109 TULPS)';
+      } else {
+        badge.textContent = 'Passaggio ' + currentGuestStep + ' di 2 · Registrazione Ospiti (Art. 109 TULPS)';
+      }
+      var nextBtn = document.getElementById('lbl-btn-next-step');
+      if (nextBtn) {
+        nextBtn.textContent = currentLang === 'en' ? 'Continue to Step 2 of 2' : 'Continua al Passaggio 2 di 2';
+      }
+      var backLbl = document.getElementById('hdr-back-label');
+      if (backLbl) {
+        backLbl.textContent = currentLang === 'en' ? 'Back' : 'Indietro';
+      }
+    }
+
+    function goGuestStep(stepNum, pushHistory) {
+      var errEl = document.getElementById('guest-error');
+      if (stepNum === 2) {
+        var nome = (document.getElementById('g-nome').value || '').trim();
+        var cognome = (document.getElementById('g-cognome').value || '').trim();
+        var docNum = (document.getElementById('g-docnum').value || '').trim();
+        if (!nome || !cognome || !docNum) {
+          errEl.textContent = currentLang === 'en'
+            ? 'Please enter your First Name, Last Name and Passport/ID Number.'
+            : 'Inserisci Nome, Cognome e Numero di Documento per passare al Passaggio 2.';
+          errEl.classList.add('visible');
+          return;
+        }
+      }
+      if (errEl) errEl.classList.remove('visible');
+
+      currentGuestStep = stepNum === 2 ? 2 : 1;
+      var s1 = document.getElementById('guest-step-1');
+      var s2 = document.getElementById('guest-step-2');
+      var formCard = document.getElementById('guest-form-card');
+      var okBox = document.getElementById('guest-success-box');
+
+      if (stepNum === 'conferma') {
+        if (formCard) formCard.style.display = 'none';
+        if (okBox) okBox.classList.add('show');
+      } else {
+        if (formCard) formCard.style.display = 'block';
+        if (okBox) okBox.classList.remove('show');
+        if (s1) s1.style.display = currentGuestStep === 1 ? 'block' : 'none';
+        if (s2) s2.style.display = currentGuestStep === 2 ? 'block' : 'none';
+        updateGuestStepBadge();
+      }
+
+      if (pushHistory && window.history && window.history.pushState) {
+        var url = new URL(window.location.href);
+        url.searchParams.set('step', String(stepNum));
+        window.history.pushState({ step: stepNum }, '', url.toString());
+      }
+    }
+
+    function handleGuestBack() {
+      if (currentGuestStep === 2) {
+        goGuestStep(1, true);
+      } else {
+        window.location.href = '/app.html?view=ospiti';
+      }
     }
 
     function setGuestCountryPreset(countryName, docType) {
@@ -587,21 +687,44 @@
         await ITACloudSync.saveGuestCheckinSubmission(payload);
       }
 
-      document.getElementById('guest-success-box').classList.add('show');
+      goGuestStep('conferma', true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function isCleanVal(v) {
+      if (!v) return false;
+      var s = String(v).trim();
+      return s.length > 0 && s !== 'N/A' && s !== '()' && s !== '—' && s !== '-';
     }
 
     function downloadGuestCheckinPdf() {
       if (typeof pdfMake === 'undefined') return;
       var isEN = currentLang === 'en';
-      var rows = [
-        { text: [{ text: isEN ? 'Apartment: ' : 'Appartamento: ', bold: true }, aptInfo.name], margin: [0, 0, 0, 6] },
-        { text: [{ text: isEN ? 'Address: ' : 'Indirizzo: ', bold: true }, aptInfo.address], margin: [0, 0, 0, 6] }
-      ];
-      if (aptInfo.doorCode) rows.push({ text: [{ text: isEN ? 'Access / Keybox: ' : 'Codice Accesso / Keybox: ', bold: true }, aptInfo.doorCode], margin: [0, 0, 0, 6] });
-      if (aptInfo.floor) rows.push({ text: [{ text: isEN ? 'Floor: ' : 'Piano: ', bold: true }, aptInfo.floor], margin: [0, 0, 0, 6] });
-      if (aptInfo.wifi) rows.push({ text: [{ text: 'Wi-Fi: ', bold: true }, aptInfo.wifi + (aptInfo.pass ? ' (Password: ' + aptInfo.pass + ')' : '')], margin: [0, 0, 0, 6] });
-      if (aptInfo.checkout) rows.push({ text: [{ text: 'Check-out: ', bold: true }, aptInfo.checkout], margin: [0, 0, 0, 6] });
+      var cfg = window.SITE_CONFIG || {};
+      var phone = (cfg.support && cfg.support.phoneDisplay) || '+39 351 038 0392';
+      var email = (cfg.support && cfg.support.email) || 'info@itadreamteam.com';
+      var hours = (cfg.support && cfg.support.hoursShort) || '09:00 – 23:00';
+
+      var rows = [];
+      if (isCleanVal(aptInfo.name)) {
+        rows.push({ text: [{ text: isEN ? 'Apartment: ' : 'Appartamento: ', bold: true }, aptInfo.name], margin: [0, 0, 0, 6] });
+      }
+      if (isCleanVal(aptInfo.address)) {
+        rows.push({ text: [{ text: isEN ? 'Address: ' : 'Indirizzo: ', bold: true }, aptInfo.address], margin: [0, 0, 0, 6] });
+      }
+      if (isCleanVal(aptInfo.doorCode)) {
+        rows.push({ text: [{ text: isEN ? 'Access / Keybox: ' : 'Codice Accesso / Keybox: ', bold: true }, aptInfo.doorCode], margin: [0, 0, 0, 6] });
+      }
+      if (isCleanVal(aptInfo.floor)) {
+        rows.push({ text: [{ text: isEN ? 'Floor: ' : 'Piano: ', bold: true }, aptInfo.floor], margin: [0, 0, 0, 6] });
+      }
+      if (isCleanVal(aptInfo.wifi)) {
+        var wifiStr = aptInfo.wifi + (isCleanVal(aptInfo.pass) ? ' (Password: ' + aptInfo.pass + ')' : '');
+        rows.push({ text: [{ text: 'Wi-Fi: ', bold: true }, wifiStr], margin: [0, 0, 0, 6] });
+      }
+      if (isCleanVal(aptInfo.checkout)) {
+        rows.push({ text: [{ text: 'Check-out: ', bold: true }, aptInfo.checkout], margin: [0, 0, 0, 6] });
+      }
 
       var docDef = {
         pageSize: 'A4',
@@ -612,14 +735,15 @@
           {
             margin: [0, 20, 0, 0],
             text: isEN
-              ? 'itassistance Guest Support · Florence (09:00 AM – 11:00 PM): +39 351 038 0392 · info@itadreamteam.com'
-              : 'Assistenza Ospiti itassistance · Firenze (09:00 – 23:00): +39 351 038 0392 · info@itadreamteam.com',
+              ? 'itassistance Guest Support · Florence (' + hours + '): ' + phone + ' · ' + email
+              : 'Assistenza Ospiti itassistance · Firenze (' + hours + '): ' + phone + ' · ' + email,
             fontSize: 9.5,
             color: '#475569'
           }
         ]
       };
-      pdfMake.createPdf(docDef).download((isEN ? 'Checkin_' : 'Istruzioni_') + aptInfo.name.replace(/\s+/g, '_') + '.pdf');
+      var safeName = isCleanVal(aptInfo.name) ? aptInfo.name.replace(/\s+/g, '_') : 'Firenze';
+      pdfMake.createPdf(docDef).download((isEN ? 'Checkin_' : 'Istruzioni_') + safeName + '.pdf');
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -638,6 +762,15 @@
       if (params.get('apt')) aptInfo.name = params.get('apt');
       if (params.get('lang') === 'en') setGuestLang('en');
       else setGuestLang('it');
+      var initialStep = params.get('step');
+      if (initialStep === '2') goGuestStep(2, false);
+      else if (initialStep === 'conferma') goGuestStep('conferma', false);
+
+      window.addEventListener('popstate', function (ev) {
+        var st = (ev.state && ev.state.step) || new URLSearchParams(window.location.search).get('step') || '1';
+        if (st === 'conferma') goGuestStep('conferma', false);
+        else goGuestStep(Number(st) === 2 ? 2 : 1, false);
+      });
     });
   </script>
 </body>

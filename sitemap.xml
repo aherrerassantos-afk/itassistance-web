@@ -14,8 +14,14 @@
   </url>
   <url>
     <loc>https://www.itadreamteam.com/prezzi.html</loc>
-    <lastmod>2026-11-02</lastmod>
+    <lastmod>2026-11-03</lastmod>
     <priority>0.95</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.itadreamteam.com/checkout.html</loc>
+    <lastmod>2026-11-03</lastmod>
+    <priority>0.90</priority>
     <changefreq>monthly</changefreq>
   </url>
   <url>

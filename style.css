@@ -1,68 +1,78 @@
 /* ═══════════════════════════════════════
-   IT ASSISTANCE — Allianz-inspired Design
-   Clean · Professional · Insurance style
-   by Blue Arroyo srl · Firenze
+   itassistance — Settings Core Editorial 2026
+   Clean · Modern · Editorial Flow
+   by Blue Arroyo SRL · Firenze
    ═══════════════════════════════════════ */
 
 :root {
-  --navy:        #003781;
-  --navy-mid:    #1a5fa8;
-  --navy-light:  #e8f0fb;
-  --gold:        #b8924a;
-  --gold-light:  #d4a855;
-  --white:       #ffffff;
-  --off-white:   #f4f6f9;
-  --text:        #1a1a2e;
-  --text-muted:  #5a6478;
-  --border:      #dde3ee;
-  --border-light:#edf0f6;
+  --bg-light:          #FAFAF8;
+  --bg-stone:          #F2EFE9;
+  --ink-navy:          #0F1A2E;
+  --ink-muted:         #475569;
+  --ink-on-dark-muted: #CBD5E1;
+  --gold-accent:       #C9A84C;
+  --gold-text-light:   #7A5C12;
+  --border-control:    #64748B;
+  --status-ok-bg:      #ECFDF5;
+  --status-ok-text:    #065F46;
 
-  --font-head: Arial, Helvetica, sans-serif;
-  --font-body: Arial, Helvetica, sans-serif;
+  --navy:        #0F1A2E;
+  --navy-mid:    #1E293B;
+  --navy-light:  #F2EFE9;
+  --gold:        #C9A84C;
+  --gold-light:  #F2EFE9;
+  --white:       #FAFAF8;
+  --off-white:   #F2EFE9;
+  --text:        #0F1A2E;
+  --text-muted:  #475569;
+  --border:      #64748B;
+  --border-light:#E2E8F0;
+
+  --font-head: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
   --radius:    8px;
   --radius-lg: 16px;
-  --shadow-sm: 0 2px 8px rgba(0,55,129,.08);
-  --shadow:    0 4px 20px rgba(0,55,129,.12);
-  --shadow-lg: 0 12px 40px rgba(0,55,129,.16);
+  --shadow-sm: 0 2px 8px rgba(15,26,46,.06);
+  --shadow:    0 4px 16px rgba(15,26,46,.08);
+  --shadow-lg: 0 8px 24px rgba(15,26,46,.10);
 
   --ease-out:  cubic-bezier(0.23, 1, 0.32, 1);
   --ease-io:   cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; font-size: 16px; -webkit-text-size-adjust: 100%; }
 body {
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: 1rem;
   line-height: 1.6;
-  color: var(--text);
-  background: var(--white);
+  color: var(--ink-navy);
+  background: var(--bg-light);
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 ul { list-style: none; }
-.container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
-h1,h2,h3,h4 { line-height: 1.2; }
+.container { max-width: 1140px; margin: 0 auto; padding: 0 16px; }
+h1,h2,h3,h4 { font-family: var(--font-head); line-height: 1.18; color: var(--ink-navy); }
 .eyebrow {
-  font-size: .72rem; font-weight: 700; letter-spacing: .12em;
-  text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+  font-size: .8125rem; font-weight: 700; letter-spacing: .04em;
+  color: var(--gold-text-light); margin-bottom: 10px;
   display: block;
 }
 
 /* ─── BUTTONS ─── */
 .btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 11px 26px; border-radius: var(--radius);
-  font-family: var(--font-body); font-size: .82rem; font-weight: 700;
-  letter-spacing: .06em; text-transform: uppercase;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 56px; padding: 14px 24px; border-radius: var(--radius);
+  font-family: var(--font-body); font-size: 1rem; font-weight: 700;
   cursor: pointer; border: 2px solid transparent;
-  transition: background 180ms var(--ease-out),
-              transform 160ms var(--ease-out),
-              box-shadow 160ms var(--ease-out),
-              border-color 160ms ease;
-  white-space: nowrap; will-change: transform;
+  transition: transform 160ms var(--ease-out), opacity 160ms ease;
+}
+@media (min-width: 1024px) {
+  .btn { min-height: 48px; }
 }
 .btn:active { transform: scale(0.97); }
 .btn--primary {

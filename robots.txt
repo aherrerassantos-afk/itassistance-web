@@ -45,6 +45,8 @@ Allow: /
 Disallow: /admin.html
 Disallow: /benvenuto.html
 Disallow: /login.html
+Disallow: /app.html
+Disallow: /ospiti.html
 
 Sitemap: https://www.itadreamteam.com/sitemap.xml
 # Sintesi strutturata per Motori di Risposta IA (GEO): https://www.itadreamteam.com/llms.txt

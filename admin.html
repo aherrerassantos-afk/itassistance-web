@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>Console Super Admin &amp; Fatturazione — itassistance | Blue Arroyo SRL</title>
   <meta name="description" content="Console direzionale Super Admin di itassistance per la gestione di Partners, HR, Fornitori, Proprietari e Admin Fatturazione."/>
   <meta name="robots" content="noindex, nofollow"/>
@@ -13,7 +13,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 
   <!-- Fonte Unica Dati & Sincronizzazione Cloud -->
   <script src="/site-config.js"></script>
@@ -24,41 +24,71 @@
 
   <style>
     :root {
-      --navy: #111111;
-      --navy-soft: #1C1F26;
+      --bg-light: #FAFAF8;
+      --bg-stone: #F2EFE9;
+      --ink-navy: #0F1A2E;
+      --ink-muted: #475569;
+      --ink-on-dark-muted: #CBD5E1;
+      --gold-accent: #C9A84C;
+      --gold-text-light: #7A5C12;
+      --border-control: #64748B;
+      --status-ok-bg: #ECFDF5;
+      --status-ok-text: #065F46;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      --navy: #0F1A2E;
+      --navy-soft: #16243E;
       --gold: #C9A84C;
-      --gold-dark: #9E7E28;
-      --gold-light: #FBF7EC;
-      --bg: #F3F4F6;
+      --gold-dark: #7A5C12;
+      --gold-light: #F2EFE9;
+      --bg: #FAFAF8;
       --card: #FFFFFF;
-      --text: #18181B;
-      --text-muted: #52525B;
-      --border: #E4E4E7;
-      --green: #15803D;
-      --green-bg: #DCFCE7;
-      --amber: #B45309;
+      --text: #0F1A2E;
+      --text-muted: #475569;
+      --border: #CBD5E1;
+      --green: #065F46;
+      --green-bg: #ECFDF5;
+      --amber: #92400E;
       --amber-bg: #FEF3C7;
-      --red: #B91C1C;
-      --red-bg: #FEE2E2;
-      --blue: #1D4ED8;
+      --red: #991B1B;
+      --red-bg: #FEF2F2;
+      --blue: #1E40AF;
       --blue-bg: #DBEAFE;
-      --serif: 'Playfair Display', Georgia, serif;
-      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       --radius: 12px;
-      --shadow: 0 8px 24px rgba(17, 17, 17, 0.06);
+      --shadow: none;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; font-size: 16px; -webkit-text-size-adjust: 100%; }
     body {
       font-family: var(--sans);
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg-light);
+      color: var(--ink-navy);
       line-height: 1.5;
-      padding-bottom: 84px;
-      overflow-x: hidden;
+      padding-bottom: calc(84px + env(safe-area-inset-bottom));
+      overflow-x: clip;
     }
     a { color: inherit; text-decoration: none; }
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid var(--gold-accent);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
 
     /* ═══ LOGIN SCREEN OVERLAY ═══ */
     .login-screen {
@@ -264,42 +294,77 @@
       color: var(--navy);
     }
 
-    /* Mobile Bottom Navigation */
+    /* Mobile Bottom Navigation (Sistema Cipolla: max 5 voci fisse con SVG + etichetta) */
     .mob-admin-bar {
       display: none;
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: var(--navy);
-      border-top: 2px solid var(--gold);
+      min-height: calc(64px + env(safe-area-inset-bottom));
+      background: var(--ink-navy);
+      border-top: 2px solid var(--gold-accent);
       z-index: 700;
-      padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
-      grid-template-columns: repeat(6, 1fr);
-      gap: 2px;
+      padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
     }
     .mob-admin-btn {
       background: none;
       border: none;
-      color: rgba(255, 255, 255, 0.65);
-      font-family: var(--sans);
-      font-size: 10px;
+      color: var(--ink-on-dark-muted);
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
       font-weight: 600;
+      min-height: 52px;
       padding: 6px 2px;
-      border-radius: 6px;
+      border-radius: 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 3px;
+      justify-content: center;
+      gap: 4px;
       cursor: pointer;
     }
+    .mob-admin-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
     .mob-admin-btn.active {
-      color: var(--gold);
-      background: rgba(201, 168, 76, 0.15);
+      color: var(--ink-navy);
+      background: var(--gold-accent);
+      font-weight: 700;
+    }
+
+    .adm-back-btn {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      min-height: 48px;
+      min-width: 48px;
+      padding: 0 12px 0 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid var(--gold-accent);
+      border-radius: 8px;
+      color: var(--bg-light);
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .adm-back-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--gold-accent);
+      stroke-width: 2.2;
+      fill: none;
     }
 
     @media (max-width: 980px) {
-      .admin-shell { grid-template-columns: 1fr; }
+      .admin-shell { grid-template-columns: 1fr; padding: 0 16px; }
       .admin-sidebar { display: none; }
       .mob-admin-bar { display: grid; }
     }
@@ -309,15 +374,21 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 8px;
       font-family: var(--sans);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 9px 15px;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      min-height: 48px;
+      padding: 10px 16px;
       border-radius: 8px;
       cursor: pointer;
-      border: 1px solid transparent;
-      transition: all 0.15s;
+      border: 1.5px solid transparent;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    @media (max-width: 768px) {
+      .btn:not(.btn-sm) {
+        min-height: 56px;
+      }
     }
     .btn-primary { background: var(--navy); color: #fff; }
     .btn-primary:hover { background: #27272A; }
@@ -515,7 +586,7 @@
           <span>Regia Gruppo (1→2→3→4), Broadcast 08:00 &amp; SEO/GEO</span>
         </button>
         <button type="button" class="role-preset-btn" id="preset-hr" onclick="selectLoginPreset('hr');performAdminLogin();">
-          <strong>️ 1. General Director Operatività (1 Clic)</strong>
+          <strong> 1. General Director Operatività (1 Clic)</strong>
           <span>Turni 09–23, Adempimenti, Revenue RM &amp; Interventi 20€/30€</span>
         </button>
         <button type="button" class="role-preset-btn" id="preset-billing" onclick="selectLoginPreset('billing');performAdminLogin();">
@@ -551,13 +622,17 @@
   </div>
 
   <!-- ════════════════════════════════════════════════════════════════
-       TOPBAR SUPER ADMIN
+       TOPBAR SUPER ADMIN (CON CONTROLLO CONTESTUALE INDIETRO CIPOLLA)
   ════════════════════════════════════════════════════════════════ -->
   <header class="admin-header">
     <div class="admin-header-inner">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button type="button" class="adm-back-btn" id="adm-back-btn" onclick="goBackAdminLevel()" aria-label="Torna al livello precedente">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+          <span>Indietro</span>
+        </button>
         <a href="/" class="admin-brand">
-          <img src="/brand/logo.png" alt="Logo itassistance"/>
+          <img src="/brand/logo.webp" width="34" height="34" alt="Logo itassistance"/>
           <span>itassistance</span>
         </a>
         <span class="role-badge-top" id="top-role-badge">SUPER ADMIN</span>
@@ -567,7 +642,7 @@
         <label for="quick-role-switch" style="font-size:12px;color:rgba(255,255,255,0.75);">Vista Ruolo:</label>
         <select id="quick-role-switch" class="role-switcher-select" onchange="switchActiveRole(this.value)">
           <option value="superadmin">Holding / Super Admin Gruppo</option>
-          <option value="hr">️ 1. General Director Operatività</option>
+          <option value="hr"> 1. General Director Operatività</option>
           <option value="billing">2. General Director Amministrazione</option>
           <option value="partners">3. General Director Vendite (PM &amp; Partner)</option>
         </select>
@@ -617,7 +692,7 @@
         </button>
       </nav>
       <button type="button" id="btn-toggle-all-tabs" onclick="toggleShowAllAdminTabs()" style="width:100%;margin-top:8px;padding:7px 10px;border-radius:8px;border:1px dashed var(--border);background:#fff;color:var(--text-muted);font-size:11.5px;font-weight:600;cursor:pointer;">
-        ️ Mostra tutti i reparti
+         Mostra tutti i reparti
       </button>
 
       <div style="margin-top:16px;padding:12px;border-radius:10px;background:var(--gold-light);border:1px solid rgba(201,168,76,0.4);font-size:11.5px;color:var(--navy);">
@@ -690,7 +765,7 @@
           <!-- 1. CHIUSURA UNIFICATA INTERVENTI FIELD FIRENZE (1 TAP = APP + FORNITORE + FATTURA) -->
           <div style="margin-bottom:12px;padding:12px;background:#fff;border:1.5px solid var(--gold);border-radius:10px;">
             <div style="font-size:11.5px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">
-              ️ 1. Chiusura Lavori sul Campo a Firenze (1 Tap = Notifica App + Spesa Proprietario + Saldo Fornitore + Fattura):
+               1. Chiusura Lavori sul Campo a Firenze (1 Tap = Notifica App + Spesa Proprietario + Saldo Fornitore + Fattura):
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
               <button type="button" class="btn btn-gold btn-sm" onclick="completeFieldInterventionOneTap('checkin20')">
@@ -712,7 +787,7 @@
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
               <button type="button" class="btn btn-primary btn-sm" onclick="quickDispatchPreset(' Urgente: Invia Schedina Alloggiati Web (Scadenza 24h/6h)','Documenti ospite pronti nella sezione Alloggiati Web. Trasmetti ora sul portale Polizia di Stato.','alloggiati')">Sollecito Alloggiati (24h/6h)</button>
-              <button type="button" class="btn btn-outline btn-sm" onclick="quickDispatchPreset('️ Promemoria Tassa di Soggiorno Comune di Firenze (Scadenza Giorno 16)','Conteggio mensile notti-ospite (max 7 notti) pronto per l\'invio telematico entro il giorno 16.','fiscale')">️ Scadenza Tassa Soggiorno (16)</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="quickDispatchPreset(' Promemoria Tassa di Soggiorno Comune di Firenze (Scadenza Giorno 16)','Conteggio mensile notti-ospite (max 7 notti) pronto per l\'invio telematico entro il giorno 16.','fiscale')"> Scadenza Tassa Soggiorno (16)</button>
               <button type="button" class="btn btn-outline btn-sm" onclick="quickDispatchPreset(' Chiusura Mensile ISTAT / Ross1000 Firenze (Scadenza Giorno 5)','Prospetto Arrivi e Presenze pronto in PDF (ricordati di chiudere anche se a Movimento Zero).','fiscale')">Scadenza ISTAT Ross1000 (5)</button>
             </div>
           </div>
@@ -748,7 +823,7 @@
                 <select id="adm-push-tab">
                   <option value="alloggiati">3. Alloggiati Web</option>
                   <option value="operativo">2. Operativo &amp; PDF Check-in</option>
-                  <option value="fiscale">️ 4. Tassa di Soggiorno &amp; Fiscale</option>
+                  <option value="fiscale"> 4. Tassa di Soggiorno &amp; Fiscale</option>
                   <option value="fornitori">5. Fornitori &amp; Spese</option>
                 </select>
               </div>
@@ -810,7 +885,7 @@
           <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:#F8FAFC;padding:12px 14px;border-radius:10px;border:1px solid var(--border);margin-bottom:10px;">
             <div style="font-size:12.5px;font-weight:700;color:var(--navy);">1-Tap Regia Prezzi Variabili (propaga subito a tutti i portali e a <code>/app.html</code>):</div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
-              <button type="button" class="btn btn-outline btn-sm" id="adm-btn-strat-smart_fill" onclick="adminTriggerChannelSync('smart_fill')">️ Smartbookings Bilanciata</button>
+              <button type="button" class="btn btn-outline btn-sm" id="adm-btn-strat-smart_fill" onclick="adminTriggerChannelSync('smart_fill')"> Smartbookings Bilanciata</button>
               <button type="button" class="btn btn-outline btn-sm" id="adm-btn-strat-high_adr" onclick="adminTriggerChannelSync('high_adr')">Spingi High ADR &amp; Eventi</button>
               <button type="button" class="btn btn-outline btn-sm" id="adm-btn-strat-max_occupancy" onclick="adminTriggerChannelSync('max_occupancy')">Riempi Buchi &amp; Last-Minute</button>
             </div>
@@ -824,7 +899,7 @@
                 <span style="font-size:13px;font-weight:800;color:#fff;margin-left:6px;" id="adm-pm-portfolio-summary-lbl">3 Immobili gestiti · Routine 1-Tap</span>
               </div>
               <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                <button type="button" class="btn btn-outline btn-sm" style="background:rgba(255,255,255,0.1);color:#FDE68A;border-color:#F59E0B;font-size:11.5px;" onclick="adminSubentroToscanOneTap()">️ DG Operatività/Vendite: +1-Tap Subentro Collaudo Toscan</button>
+                <button type="button" class="btn btn-outline btn-sm" style="background:rgba(255,255,255,0.1);color:#FDE68A;border-color:#F59E0B;font-size:11.5px;" onclick="adminSubentroToscanOneTap()"> DG Operatività/Vendite: +1-Tap Subentro Collaudo Toscan</button>
                 <button type="button" class="btn btn-outline btn-sm" style="background:rgba(255,255,255,0.1);color:#A7F3D0;border-color:#10B981;font-size:11.5px;" onclick="adminCertifyWeekOneTap()">DG Revenue: +1 Sett. Dati (&gt;+8%) Sblocca L3</button>
                 <button type="button" class="btn btn-gold btn-sm" style="font-size:11.5px;color:#0F1A2E;font-weight:800;" onclick="adminIssueCumulativePmInvoiceOneTap()">DG Amministrazione: 1-Tap Fattura Unica Cumulativa PM</button>
               </div>
@@ -838,7 +913,7 @@
           <div class="panel-head">
             <div>
               <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
-                <span class="badge badge-gold">️ IL CICLO VIRTUOSO DEL GRUPPO BLUE ARROYO (1 → 2 → 3 → 4)</span>
+                <span class="badge badge-gold"> IL CICLO VIRTUOSO DEL GRUPPO BLUE ARROYO (1 → 2 → 3 → 4)</span>
                 <span class="badge badge-ok">4 Aziende Autonome · 12 General Directors · Tutto il Valore Resta nel Gruppo</span>
               </div>
               <div class="panel-title">1. Crea il Bene → 2. Lo Protegge → 3. Lo Allestisce → 4. Lo Riempie di Turisti</div>
@@ -856,7 +931,7 @@
                   <span style="font-size:11px;font-weight:800;color:#B45309;text-transform:uppercase;">1. CREA IL BENE</span>
                   <span class="badge badge-gold" style="font-size:10.5px;">Cliente: INVESTITORI</span>
                 </div>
-                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">️ 1. Toscan Costruzioni</div>
+                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;"> 1. Toscan Costruzioni</div>
                 <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
                   <strong>└─► Consegna un appartamento nuovo, cablato e collaudato che non ha bisogno di riparazioni per anni</strong>(Contratto a prezzo fisso in 5 SAL garantiti + DM 37/08 + APE + Agibilità).
                 </p>
@@ -963,7 +1038,7 @@
                 </div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;">
                   <a href="/llms.txt" target="_blank" class="btn btn-outline btn-sm">Vedi /llms.txt</a>
-                  <a href="/sitemap.xml" target="_blank" class="btn btn-outline btn-sm">️ Vedi Sitemap (27 URL)</a>
+                  <a href="/sitemap.xml" target="_blank" class="btn btn-outline btn-sm"> Vedi Sitemap (27 URL)</a>
                   <button type="button" class="btn btn-gold btn-sm" onclick="pingIndexNowAllUrls()">Notifica IndexNow (Bing / ChatGPT)</button>
                 </div>
               </div>
@@ -1149,7 +1224,7 @@ P.IVA: 07480210488</div>
 
           <!-- CONFIGURATORE CREDENZIALI LIVE SENZA CODICE (STRIPE, IBAN, SUPABASE, N8N) -->
           <details style="margin-top:12px;background:#FFFDF7;border:1.5px solid var(--gold);border-radius:10px;padding:14px 18px;">
-            <summary style="cursor:pointer;font-weight:800;color:var(--navy);font-size:14px;">️ Configuratore Credenziali Live Senza Codice (Stripe Payment Links, IBAN Blue Arroyo SRL, n8n &amp; Supabase)</summary>
+            <summary style="cursor:pointer;font-weight:800;color:var(--navy);font-size:14px;"> Configuratore Credenziali Live Senza Codice (Stripe Payment Links, IBAN Blue Arroyo SRL, n8n &amp; Supabase)</summary>
             <div style="margin-top:14px;">
               <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:12px;">Aggiorna qui i link di pagamento Stripe, l'IBAN per il bonifico e il Webhook n8n: le modifiche vengono applicate istantaneamente su <code>/checkout.html</code>, <code>/app.html</code>e <code>/admin.html</code>.</p>
               <div class="form-grid">
@@ -1617,25 +1692,27 @@ P.IVA: 07480210488</div>
     </main>
   </div>
 
-  <!-- BARRA MOBILE -->
+  <!-- BARRA MOBILE FISSA (MAX 5 VOCI CON ICONA SVG ED ETICHETTA - SISTEMA CIPOLLA) -->
   <nav class="mob-admin-bar" aria-label="Menu rapido Super Admin">
     <button type="button" class="mob-admin-btn active" data-tab="overview" onclick="switchAdminTab('overview')">
-      <span></span><span>Regia</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Regia</span>
     </button>
     <button type="button" class="mob-admin-btn" data-tab="partners" onclick="switchAdminTab('partners')">
-      <span></span><span>Partners</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Partner</span>
     </button>
     <button type="button" class="mob-admin-btn" data-tab="hr" onclick="switchAdminTab('hr')">
-      <span></span><span>HR</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>Turni HR</span>
     </button>
     <button type="button" class="mob-admin-btn" data-tab="fornitori" onclick="switchAdminTab('fornitori')">
-      <span></span><span>Fornitori</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      <span>Fornitori</span>
     </button>
     <button type="button" class="mob-admin-btn" data-tab="fatturazione" onclick="switchAdminTab('fatturazione')">
-      <span></span><span>Fatture</span>
-    </button>
-    <button type="button" class="mob-admin-btn" data-tab="accounts" onclick="switchAdminTab('accounts')">
-      <span></span><span>Ruoli</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span>Fatture</span>
     </button>
   </nav>
 
@@ -1652,7 +1729,7 @@ P.IVA: 07480210488</div>
         defaultTab: 'overview'
       },
       hr: {
-        badge: '️ DG OPERATIVITÀ',
+        badge: ' DG OPERATIVITÀ',
         name: 'General Director Operatività (Assistenza, Adempimenti & RM)',
         email: 'hr@itadreamteam.com',
         defaultTab: 'overview'
@@ -2024,7 +2101,7 @@ P.IVA: 07480210488</div>
       showAllTabsOverride = !showAllTabsOverride;
       var btn = document.getElementById('btn-toggle-all-tabs');
       if (btn) {
-        btn.textContent = showAllTabsOverride ? ' Nascondi reparti non essenziali' : '️ Mostra tutti i reparti';
+        btn.textContent = showAllTabsOverride ? ' Nascondi reparti non essenziali' : ' Mostra tutti i reparti';
       }
       applyRoleVisibilityFilter(admState.currentRole || 'superadmin');
     }
@@ -2051,7 +2128,7 @@ P.IVA: 07480210488</div>
       var btnToggle = document.getElementById('btn-toggle-all-tabs');
       if (btnToggle) {
         btnToggle.style.display = (roleKey === 'superadmin') ? 'none' : 'block';
-        btnToggle.textContent = '️ Mostra tutti i reparti';
+        btnToggle.textContent = ' Mostra tutti i reparti';
       }
       saveAdminState();
 
@@ -2067,15 +2144,35 @@ P.IVA: 07480210488</div>
       showToast('Home Ruolo attiva: ' + prof.badge);
     }
 
-    function switchAdminTab(tabId) {
+    function switchAdminTab(tabId, skipPush) {
       document.querySelectorAll('.adm-view').forEach(function (v) {
         v.classList.toggle('active', v.id === 'adm-' + tabId);
       });
       document.querySelectorAll('.side-btn, .mob-admin-btn').forEach(function (b) {
         b.classList.toggle('active', b.getAttribute('data-tab') === tabId);
       });
+      var backBtn = document.getElementById('adm-back-btn');
+      if (backBtn) {
+        var homeTab = (ROLE_PROFILES[admState.currentRole || 'superadmin'] || ROLE_PROFILES.superadmin).defaultTab;
+        backBtn.style.display = (tabId !== homeTab && tabId !== 'overview') ? 'inline-flex' : 'none';
+      }
+      if (!skipPush && window.history && window.history.pushState) {
+        var url = new URL(window.location.href);
+        url.searchParams.set('view', tabId);
+        window.history.pushState({ view: tabId }, '', url.toString());
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    function goBackAdminLevel() {
+      var homeTab = (ROLE_PROFILES[admState.currentRole || 'superadmin'] || ROLE_PROFILES.superadmin).defaultTab || 'overview';
+      switchAdminTab(homeTab);
+    }
+
+    window.addEventListener('popstate', function (ev) {
+      var targetTab = (ev.state && ev.state.view) || (new URLSearchParams(window.location.search).get('view')) || 'overview';
+      switchAdminTab(targetTab, true);
+    });
 
     function toggleForm(id) {
       var el = document.getElementById(id);
@@ -2873,7 +2970,7 @@ P.IVA: 07480210488</div>
       var bEl = document.getElementById('adm-cm-status-badge');
       var lvl = st.autonomyLevel || 2;
       if (bEl) {
-        bEl.textContent = '️ Livello L' + lvl + ' · ' + kpi.activePortalCount + (kpi.activePortalCount === 1 ? ' Portale' : ' Portali');
+        bEl.textContent = ' Livello L' + lvl + ' · ' + kpi.activePortalCount + (kpi.activePortalCount === 1 ? ' Portale' : ' Portali');
       }
       var pEl = document.getElementById('adm-cm-portals');
       if (pEl) pEl.textContent = activeNames.join(' · ') || 'Airbnb';
@@ -2940,7 +3037,7 @@ P.IVA: 07480210488</div>
       var newApt = ITACloudSync.subentroToscanCollaudoOneTap();
       renderAdminChannelManager();
       if (newApt) {
-        showToast('️ Subentro Collaudo 1. Toscan Costruzioni completato! Aggiunto ' + newApt.shortLabel + ' in Grado L1.');
+        showToast(' Subentro Collaudo 1. Toscan Costruzioni completato! Aggiunto ' + newApt.shortLabel + ' in Grado L1.');
       }
     }
 
@@ -2957,19 +3054,20 @@ P.IVA: 07480210488</div>
       var baseFeeTotal = sum.totalApartments * 99;
       var variableFeeTotal = Math.round(sum.totalMonthlyUpliftEur * 0.10);
       var grandTotal = baseFeeTotal + variableFeeTotal;
-      var invNum = 'FATT-PM-' + new Date().getFullYear() + '-' + String(adminState.invoices.length + 101);
-      adminState.invoices.unshift({
-        id: 'inv_pm_' + Date.now(),
-        number: invNum,
-        date: new Date().toISOString().slice(0, 10),
+      var invNum = 'FATT-PM-' + new Date().getFullYear() + '-' + String(admState.invoices.length + 101);
+      admState.invoices.unshift({
+        id: invNum,
+        date: new Date().toLocaleDateString('it-IT'),
         client: sum.pmName + ' (' + sum.totalApartments + ' Immobili)',
-        plan: 'Fattura Cumulativa Portafoglio PM (' + sum.totalApartments + '×99€ + Extra +10% su +' + sum.totalMonthlyUpliftEur + '€)',
-        amount: grandTotal,
-        status: 'Emessa SDI (1-Tap PM)'
+        cf: 'IT04918270481',
+        desc: 'Fattura Cumulativa Portafoglio PM (' + sum.totalApartments + '×99€ + Extra +10% su +' + sum.totalMonthlyUpliftEur + '€)',
+        total: grandTotal,
+        method: 'Bonifico / SDI Cumulativo PM',
+        status: 'Pagata'
       });
       saveAdminState();
       renderAdminAll();
-      showToast(' Fattura Unica Cumulativa ' + invNum + ' emessa (' + grandTotal + ' € per ' + sum.totalApartments + ' immobili)!');
+      showToast('Fattura Unica Cumulativa ' + invNum + ' emessa (' + grandTotal + ' € per ' + sum.totalApartments + ' immobili)!');
     }
 
     function adminTriggerChannelSync(stratKey) {
@@ -2979,7 +3077,7 @@ P.IVA: 07480210488</div>
       st.autoPilot = true;
       ITACloudSync.saveChannelRevenueState(st);
       renderAdminChannelManager();
-      showToast(' Prezzi Variabili sincronizzati in 1 tap su tutti i portali collegati e inviati a /app.html!');
+      showToast('Prezzi Variabili sincronizzati in 1 tap su tutti i portali collegati e inviati a /app.html!');
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -2997,6 +3095,11 @@ P.IVA: 07480210488</div>
       if (roleParam && ROLE_PROFILES[roleParam]) {
         document.getElementById('login-screen').classList.add('hidden');
         switchActiveRole(roleParam);
+      }
+      var viewParam = params.get('view');
+      if (viewParam) {
+        document.getElementById('login-screen').classList.add('hidden');
+        switchAdminTab(viewParam, true);
       }
     });
   </script>
