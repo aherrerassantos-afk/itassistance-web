@@ -186,6 +186,28 @@ Ogni General Director ha il suo cruscotto, i suoi numeri e i suoi obiettivi auto
 10. **Marchio e Vocabolario:** Uso strategico di `itassistance` e del glossario ufficiale (`Proprietario-Gestore`, `Riepilogo delle 08:00`, `Gradi di Autonomia`, `Guardrail di Prezzo`, `Ciclo Blue Arroyo`, `Formula 5 SAL Garantiti`).
 11. **Qualità Tecnica:** Immagini `.webp` con dimensioni dichiarate, `loading="lazy"` sotto la prima schermata, HTML semantico, testi alternativi, navigazione da tastiera e contenuto leggibile anche senza JavaScript.
 
+---
+
+## 13. SETTINGS CORE — SISTEMA CIPOLLA E REGOLE PERMANENTI PER L'AREA RISERVATA DA TELEFONO
+
+Non mostrare mai tutto subito: l'utente apre un livello alla volta e vede solo ciò che gli serve in quel momento.
+
+1. **I 5 Livelli della Cipolla (`Livello 0` -> `Livello 4`):**
+   - **Livello 0 (Sito pubblico e Accesso):** Spiega cosa offriamo e porta al login (`/login.html`) o all'attivazione guidata (`/checkout.html`).
+   - **Livello 1 (Home dopo il login):** Saluto breve, una sola riga che indica lo stato o la cosa più importante da fare oggi, una sola azione principale (`56px`) e da 3 a 5 grandi blocchi (uno per area, con titolo, riga descrittiva e un dato chiave).
+   - **Livello 2 (Pagina dell'area):** Titolo chiaro, una frase che spiega a cosa serve, riepilogo essenziale e massimo 4 o 5 bottoni dedicati a quell'area.
+   - **Livello 3 (Dettaglio):** Solo le informazioni dell'elemento scelto; contenuti secondari raccolti in sezioni espandibili (`<details>`); azioni pertinenti a quel dettaglio.
+   - **Livello 4 (Azione):** Una sola attività per schermata (compilare, confermare, scaricare o pagare); moduli lunghi divisi in passaggi con indicazione `"Passaggio X di Y"`; dopo l'azione mostra una conferma chiara e il passo successivo.
+2. **Navigazione Multi-Livello e URL Propri:**
+   - Barra inferiore fissa (`min-height: 64px` + `env(safe-area-inset-bottom)`) con massimo 5 voci sempre uguali, ciascuna con icona SVG ed etichetta.
+   - Header contestuale di `56px` con titolo della pagina e freccia `<- Indietro` (`48x48px`) nei livelli interni (`Livelli 2, 3, 4`).
+   - Ogni livello/vista ha un URL proprio (`?view=...`) gestito tramite `History API` (`pushState` / `popstate`) così il tasto Indietro del telefono riporta sempre al livello precedente conservando posizione di scroll, filtri e dati inseriti.
+   - Transizioni brevi e coerenti (entrata da destra scendendo di livello, ritorno verso destra risalendo), disattivate con `prefers-reduced-motion: reduce`.
+3. **Misure da Telefono e Stati Obbligatori:**
+   - Progettato da `360px` e verificato a `320, 360, 390, 430, 768, 1024 e 1440 px` con margini laterali di `16px`, una sola colonna su telefono, tabelle trasformate in schede verticali e pannelli dal basso (`max-height: 90dvh`) con scroll interno e chiusura sempre visibile.
+   - Prevedere sempre i 4 stati: **Caricamento** (struttura stabile), **Stato vuoto** (spiegazione + azione utile), **Errore** (messaggio semplice + soluzione) e **Conferma** (dopo ogni azione importante con passo successivo).
+
+
 
 
 

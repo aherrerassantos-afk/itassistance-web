@@ -1,546 +1,645 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attiva itassistance – 99 €/mese IVA inclusa | 14 giorni Soddisfatto o Rimborsato</title>
-  <meta name="description" content="Prova l'app itassistance sul tuo appartamento in affitto breve. 99 € al mese IVA inclusa (pagamento mensile o annuale anticipato). Garanzia 14 giorni Soddisfatto o Rimborsato.">
-  <meta name="robots" content="noindex, nofollow">
-  <link rel="canonical" href="https://www.itadreamteam.com/checkout.html">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>Attiva itassistance in 3 passaggi – 99 €/mese IVA inclusa | Garanzia 14 Giorni</title>
+  <meta name="description" content="Attiva itassistance sul tuo appartamento a Firenze in 3 passaggi: 99 € al mese IVA inclusa, zero commissioni e garanzia 14 giorni soddisfatto o rimborsato."/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://www.itadreamteam.com/checkout.html"/>
+  <link rel="icon" type="image/png" href="/brand/logo.png"/>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Attiva itassistance in 3 passaggi – 99 €/mese IVA inclusa",
+    "url": "https://www.itadreamteam.com/checkout.html",
+    "description": "Attivazione guidata di itassistance per il Proprietario-Gestore a Firenze: 99 €/mese IVA inclusa, zero commissioni e garanzia 14 giorni."
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <script src="/site-config.js"></script>
   <script src="/cloud-sync.js"></script>
+
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --navy: #111111;
-      --gold: #C9A84C;
-      --gold-dark: #9E7E28;
-      --gold-light: #FBF7EC;
-      --bg: #F9FAFB;
-      --border: #E5E7EB;
-      --text: #1F2937;
-      --text-muted: #6B7280;
-      --green: #15803D;
-      --green-bg: #DCFCE7;
-      --serif: 'Playfair Display', Georgia, serif;
-      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --bg-light: #FAFAF8;
+      --bg-stone: #F2EFE9;
+      --ink-navy: #0F1A2E;
+      --ink-muted: #475569;
+      --ink-on-dark-muted: #CBD5E1;
+      --gold-accent: #C9A84C;
+      --gold-text-light: #7A5C12;
+      --border-control: #64748B;
+      --status-ok-bg: #ECFDF5;
+      --status-ok-text: #065F46;
+      --error-bg: #FEF2F2;
+      --error-text: #991B1B;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      overflow-x: clip;
+    }
+
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
+      font-family: var(--font-sans);
+      font-size: 1rem;
       line-height: 1.6;
-      padding-bottom: 60px;
+      color: var(--ink-navy);
+      background-color: var(--bg-light);
+      overflow-x: clip;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
       -webkit-font-smoothing: antialiased;
     }
-    a { text-decoration: none; color: inherit; }
 
-    .co-nav {
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      padding: 14px 24px;
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :focus-visible {
+      outline: 3px solid var(--gold-accent);
+      outline-offset: 2px;
+    }
+
+    /* Header Contestuale 56px */
+    .onion-header {
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      min-height: 56px;
+      background-color: var(--ink-navy);
+      color: var(--bg-light);
+      border-bottom: 2px solid var(--gold-accent);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-    }
-    .co-brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--navy);
-    }
-    .co-brand img {
-      width: 30px;
-      height: 30px;
-      border-radius: 6px;
-      object-fit: contain;
-    }
-    .co-secure-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: var(--green);
-      font-weight: 600;
-      background: var(--green-bg);
-      padding: 6px 12px;
-      border-radius: 999px;
     }
 
-    .co-container {
-      max-width: 980px;
-      margin: 36px auto 0;
-      padding: 0 20px;
+    .onion-header-inner {
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
     }
-    .co-header { margin-bottom: 28px; }
-    .co-eyebrow {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-      color: var(--gold-dark);
-      margin-bottom: 6px;
-      display: block;
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 48px;
+      min-width: 48px;
+      padding: 8px 12px;
+      background: transparent;
+      color: var(--bg-light);
+      border: 1px solid var(--ink-on-dark-muted);
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
     }
-    .co-title {
-      font-family: var(--serif);
-      font-size: clamp(26px, 4vw, 36px);
+
+    .header-title {
+      font-size: 1rem;
       font-weight: 700;
-      color: var(--navy);
-      line-height: 1.15;
+      color: var(--bg-light);
+      text-align: center;
+      flex: 1;
+    }
+
+    .step-indicator {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold-accent);
+      white-space: nowrap;
+    }
+
+    /* Contenitore Singola Colonna Mobile */
+    .co-shell {
+      flex: 1;
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .kicker {
+      display: inline-block;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold-text-light);
       margin-bottom: 8px;
     }
-    .co-sub {
-      font-size: 15px;
-      color: var(--text-muted);
-      max-width: 640px;
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      line-height: 1.15;
+      font-weight: 700;
+      margin-bottom: 12px;
     }
 
-    .co-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 28px;
-      align-items: start;
-    }
-    @media(max-width: 860px) {
-      .co-grid { grid-template-columns: 1fr; }
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      line-height: 1.2;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
 
-    .co-card {
-      background: #fff;
-      border: 1px solid var(--border);
+    .step-desc {
+      font-size: 1rem;
+      color: var(--ink-muted);
+      margin-bottom: 24px;
+    }
+
+    .step-panel {
+      display: none;
+      background-color: var(--bg-light);
+      border: 2px solid var(--border-control);
       border-radius: 12px;
-      padding: 28px 24px;
-      margin-bottom: 20px;
-    }
-    .co-card-title {
-      font-family: var(--serif);
-      font-size: 20px;
-      color: var(--navy);
-      margin-bottom: 16px;
+      padding: 24px 16px;
+      animation: slideInRight 0.22s ease-out;
     }
 
-    .plan-option {
-      border: 2px solid var(--border);
-      border-radius: 10px;
-      padding: 18px;
-      margin-bottom: 14px;
-      cursor: pointer;
-      position: relative;
-      transition: all 0.2s;
-    }
-    .plan-option.selected {
-      border-color: var(--gold);
-      background: var(--gold-light);
-    }
-    .plan-tag-rec {
-      position: absolute;
-      top: -11px;
-      right: 16px;
-      background: var(--navy);
-      color: var(--gold);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--gold);
-    }
-    .plan-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-    .plan-radio-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      font-size: 16px;
-      color: var(--navy);
-    }
-    .plan-radio-circle {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 2px solid #9CA3AF;
-      display: inline-block;
-      position: relative;
-    }
-    .plan-option.selected .plan-radio-circle {
-      border-color: var(--navy);
-      background: var(--navy);
-      box-shadow: inset 0 0 0 3px #fff;
-    }
-    .plan-price-tag {
-      font-family: var(--serif);
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--navy);
-    }
-    .plan-desc {
-      font-size: 13.5px;
-      color: var(--text-muted);
-      margin-left: 28px;
+    @media (min-width: 640px) {
+      .step-panel {
+        padding: 32px 24px;
+      }
     }
 
-    .co-field { margin-bottom: 14px; }
-    .co-field label {
+    .step-panel.active {
       display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--navy);
-      margin-bottom: 5px;
-    }
-    .co-field input {
-      width: 100%;
-      padding: 11px 13px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 14px;
-    }
-    .co-field-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    @media(max-width: 600px) {
-      .co-field-row { grid-template-columns: 1fr; }
     }
 
-    .order-summary-card {
-      background: #fff;
-      border: 2px solid var(--gold);
-      border-radius: 12px;
-      padding: 28px 24px;
-      position: sticky;
-      top: 24px;
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
     }
-    .os-title {
-      font-family: var(--serif);
-      font-size: 22px;
-      color: var(--navy);
+
+    @media (prefers-reduced-motion: reduce) {
+      .step-panel {
+        animation: none !important;
+      }
+    }
+
+    /* Opzioni Toccabili */
+    .choice-card {
+      width: 100%;
+      text-align: left;
+      background-color: var(--bg-light);
+      border: 2px solid var(--border-control);
+      border-radius: 10px;
+      padding: 16px;
       margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      display: block;
+      font-family: var(--font-sans);
+      color: var(--ink-navy);
+      transition: background-color 0.15s ease, border-color 0.15s ease;
     }
-    .os-row {
+
+    .choice-card.selected {
+      background-color: var(--bg-stone);
+      border-color: var(--ink-navy);
+    }
+
+    .choice-head {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 14px;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
     }
-    .os-row.total {
-      border-bottom: none;
-      padding-top: 16px;
-      font-size: 16px;
+
+    .choice-title {
+      font-size: 1.125rem;
       font-weight: 700;
-      color: var(--navy);
     }
-    .os-total-num {
-      font-family: var(--serif);
-      font-size: 34px;
-      color: var(--navy);
+
+    .choice-price {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
     }
-    .os-guarantee-box {
-      background: var(--green-bg);
-      color: #166534;
-      border-radius: 10px;
-      padding: 14px;
-      font-size: 13px;
-      margin: 16px 0;
-      line-height: 1.5;
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 700;
+      background-color: var(--status-ok-bg);
+      color: var(--status-ok-text);
+      border: 1px solid var(--status-ok-text);
+      margin-bottom: 8px;
     }
-    .btn-stripe-pay {
+
+    /* Campi Modulo >= 16px e >= 56px su Telefono */
+    .field-group {
+      margin-bottom: 16px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink-navy);
+      margin-bottom: 8px;
+    }
+
+    .field-input {
       width: 100%;
-      background: var(--navy);
-      color: #fff;
-      border: none;
+      min-height: 56px;
+      padding: 12px 16px;
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      color: var(--ink-navy);
+      background-color: var(--bg-light);
+      border: 2px solid var(--border-control);
+      border-radius: 8px;
+    }
+
+    @media (min-width: 769px) {
+      .field-input {
+        min-height: 48px;
+      }
+    }
+
+    /* Bottoni Principali >= 56px su Telefono */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 56px;
+      padding: 12px 24px;
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+
+    @media (min-width: 769px) {
+      .btn {
+        min-height: 48px;
+      }
+    }
+
+    .btn-primary {
+      background-color: var(--gold-accent);
+      color: var(--ink-navy);
+      border-color: var(--gold-accent);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--ink-navy);
+      color: var(--bg-light);
+      border-color: var(--ink-navy);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--ink-navy);
+      border-color: var(--ink-navy);
+      margin-top: 12px;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .summary-box {
+      background-color: var(--bg-stone);
+      border: 1px solid var(--border-control);
       border-radius: 8px;
       padding: 16px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      min-height: 52px;
-      transition: background 0.2s;
+      margin-bottom: 24px;
     }
-    .btn-stripe-pay:hover { background: #27272A; }
-    .stripe-badges {
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-control);
+      font-size: 1rem;
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+      font-weight: 700;
+      padding-top: 12px;
+    }
+
+    .error-banner {
+      display: none;
+      background-color: var(--error-bg);
+      color: var(--error-text);
+      border: 2px solid var(--error-text);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .site-footer {
+      padding: 24px 16px;
+      border-top: 1px solid var(--border-control);
       text-align: center;
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 12px;
+      font-size: 1rem;
+      color: var(--ink-muted);
     }
   </style>
 </head>
 <body>
-
-  <nav class="co-nav">
-    <a href="/" class="co-brand">
-      <img src="/brand/logo.png" alt="Logo itassistance" width="30" height="30">
-      <span>itassistance</span>
-    </a>
-    <div class="co-secure-badge">🔒 Pagamento sicuro · 14 gg Soddisfatto o Rimborsato</div>
-  </nav>
-
-  <div class="co-container">
-    <div class="co-header">
-      <span class="co-eyebrow">Attivazione immediata · Zero commissioni</span>
-      <h1 class="co-title">Prova l'app itassistance sul tuo appartamento.</h1>
-      <p class="co-sub">99 € al mese IVA inclusa. Scegli se pagare mese per mese oppure tutto l'anno anticipato: non cambia nulla. E se entro <strong>14 giorni</strong> non ti piace, disdici e ti rimborsiamo il 100%.</p>
+  <!-- HEADER CONTESTUALE 56PX CON FRECCIA INDIETRO -->
+  <header class="onion-header">
+    <div class="onion-header-inner">
+      <button type="button" class="back-btn" id="hdr-back-btn" onclick="handleCheckoutBack()">
+        &larr; Indietro
+      </button>
+      <div class="header-title" id="hdr-step-title">Attiva itassistance</div>
+      <div class="step-indicator" id="hdr-step-badge">Passaggio 1 di 3</div>
     </div>
+  </header>
 
-    <div class="co-grid">
-      <div class="co-main">
-        <!-- STEP 1: MODALITÀ DI PAGAMENTO -->
-        <div class="co-card">
-          <h2 class="co-card-title">1. Scegli la modalità di pagamento (stessa tariffa, IVA inclusa)</h2>
+  <main class="co-shell">
+    <span class="kicker">itassistance · Garanzia 14 giorni soddisfatto o rimborsato</span>
+    <h1>Attiva la prova sul tuo appartamento.</h1>
+    <p class="step-desc" id="main-lead-text">
+      Zero commissioni sulle prenotazioni. Se entro 14 giorni decidi che non fa per te, ricevi il rimborso integrale del 100%.
+    </p>
 
-          <!-- OPZIONE MENSILE -->
-          <div class="plan-option selected" id="opt-mensile" onclick="selectBillingCycle('mensile')">
-            <div class="plan-tag-rec">FLESSIBILE MESE A MESE</div>
-            <div class="plan-head">
-              <div class="plan-radio-label">
-                <span class="plan-radio-circle"></span>
-                Pagamento Mensile (Mese per Mese)
-              </div>
-              <div class="plan-price-tag">99 € <small style="font-size:12px;font-weight:400;color:#555">/ mese (IVA incl.)</small></div>
-            </div>
-            <p class="plan-desc">Addebito mensile di 99 € IVA inclusa. Disdici quando vuoi senza penali + Garanzia 14 giorni Soddisfatto o Rimborsato.</p>
+    <div id="co-error-box" class="error-banner" role="alert"></div>
+
+    <!-- PASSAGGIO 1 DI 3: SCELTA DEL PIANO -->
+    <section class="step-panel active" id="step-1" aria-labelledby="step1-heading">
+      <span class="status-badge">Passaggio 1 di 3 · Scegli la formula</span>
+      <h2 id="step1-heading">Come preferisci attivare il piano da 99 € al mese?</h2>
+      <p class="step-desc">La tariffa è identica e include l'IVA. Non c'è alcun vincolo di durata.</p>
+
+      <button type="button" class="choice-card selected" id="opt-mensile" onclick="selectBillingCycle('mensile')">
+        <span class="status-badge">Consigliato · Massima flessibilità</span>
+        <div class="choice-head">
+          <span class="choice-title">Pagamento mensile</span>
+          <span class="choice-price">99 € / mese</span>
+        </div>
+        <p style="color: var(--ink-muted);">IVA inclusa. Rinnovi mese per mese e disdici quando vuoi senza penali.</p>
+      </button>
+
+      <button type="button" class="choice-card" id="opt-annuale" onclick="selectBillingCycle('annuale')">
+        <div class="choice-head">
+          <span class="choice-title">Pagamento annuale anticipato (12 mesi)</span>
+          <span class="choice-price">1.188 € / anno</span>
+        </div>
+        <p style="color: var(--ink-muted);">Pari a 99 € per 12 mesi IVA inclusa. Unica fattura annuale per il tuo commercialista.</p>
+      </button>
+
+      <div class="summary-box" style="margin-top: 16px;">
+        <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;">
+          <input type="checkbox" id="chk-extra-revenue" onchange="toggleExtraRevenue()" style="width: 24px; height: 24px; margin-top: 2px; accent-color: var(--ink-navy); flex-shrink: 0;"/>
+          <span>
+            <strong>Opzionale: aggiungi delega Revenue Management e adempimenti (+10%)</strong><br/>
+            <span style="color: var(--ink-muted);">Selezionalo solo se desideri che il nostro team gestisca al posto tuo anche i prezzi dinamici e l'invio operativo delle comunicazioni.</span>
+          </span>
+        </label>
+      </div>
+
+      <button type="button" class="btn btn-primary" onclick="goToCheckoutStep(2)">
+        Vai ai tuoi dati (Passaggio 2 di 3)
+      </button>
+    </section>
+
+    <!-- PASSAGGIO 2 DI 3: DATI ESSENZIALI -->
+    <section class="step-panel" id="step-2" aria-labelledby="step2-heading">
+      <span class="status-badge">Passaggio 2 di 3 · I tuoi recapiti</span>
+      <h2 id="step2-heading">A chi intestiamo l'accesso dell'appartamento?</h2>
+      <p class="step-desc">Inserisci i tre dati essenziali per ricevere il codice proprietario e il Riepilogo delle 08:00.</p>
+
+      <div class="field-group">
+        <label for="f-nome" class="field-label">Nome e cognome (o ragione sociale) *</label>
+        <input type="text" id="f-nome" class="field-input" placeholder="Es. Marco Rossi" required/>
+      </div>
+
+      <div class="field-group">
+        <label for="f-email" class="field-label">Indirizzo email (per l'accesso e la ricevuta) *</label>
+        <input type="email" id="f-email" class="field-input" placeholder="marco.rossi@esempio.it" required/>
+      </div>
+
+      <div class="field-group">
+        <label for="f-tel" class="field-label">Numero di telefono o WhatsApp *</label>
+        <input type="tel" id="f-tel" class="field-input" placeholder="+39 333 1234567" required/>
+      </div>
+
+      <details style="margin-bottom: 24px; padding: 12px 16px; background-color: var(--bg-stone); border: 1px solid var(--border-control); border-radius: 8px;">
+        <summary style="font-weight: 700; cursor: pointer;">Dati immobile e fatturazione (opzionali ora, modificabili dopo)</summary>
+        <div style="margin-top: 16px;">
+          <div class="field-group">
+            <label for="f-imm" class="field-label">Nome dell'appartamento</label>
+            <input type="text" id="f-imm" class="field-input" placeholder="Es. Appartamento Santo Spirito"/>
           </div>
-
-          <!-- OPZIONE ANNUALE -->
-          <div class="plan-option" id="opt-annuale" onclick="selectBillingCycle('annuale')">
-            <div class="plan-head">
-              <div class="plan-radio-label">
-                <span class="plan-radio-circle"></span>
-                Pagamento Annuale Anticipato (12 mesi)
-              </div>
-              <div class="plan-price-tag">1.188 € <small style="font-size:12px;font-weight:400;color:#555">/ anno (IVA incl.)</small></div>
-            </div>
-            <p class="plan-desc">Pari a 99 € × 12 mesi (IVA inclusa). Unica fattura annuale, zero pensieri per tutto l'anno + Garanzia 14 giorni Soddisfatto o Rimborsato.</p>
+          <div class="field-group">
+            <label for="f-addr" class="field-label">Indirizzo a Firenze</label>
+            <input type="text" id="f-addr" class="field-input" placeholder="Es. Via Maggio 18, Firenze"/>
           </div>
-
-          <div style="margin-top:16px;padding:14px;background:#F8FAFC;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-muted);">
-            <strong style="color:var(--navy);">Cosa include sempre l'app itassistance (99 €/mese IVA incl.):</strong>
-            report giornaliero alle 08:00 con le cose da fare per essere in regola, guida passo passo Alloggiati Web (Polizia di Stato), scadenzario tassa di soggiorno e comunicazioni obbligatorie, calendario arrivi/pulizie, registro spese fornitori, generatore PDF istruzioni check-in e supporto del team di itassistance a Firenze (09:00–23:00).
-          </div>
-
-          <!-- EXTRA OPZIONALE +10% REVENUE MANAGEMENT & ADEMPIMENTI DI LEGGE -->
-          <div style="margin-top:14px;padding:16px;background:var(--gold-light);border:1.5px solid var(--gold);border-radius:10px;">
-            <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
-              <input type="checkbox" id="chk-extra-revenue" onchange="toggleExtraRevenue()" style="width:18px;height:18px;margin-top:3px;accent-color:var(--navy);cursor:pointer;">
-              <div>
-                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-                  <strong style="color:var(--navy);font-size:14.5px;">Aggiungi Extra: Revenue Management &amp; Adempimenti di Legge</strong>
-                  <span style="background:var(--navy);color:var(--gold);font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;">EXTRA +10%</span>
-                </div>
-                <p style="font-size:13px;color:var(--text-muted);margin-top:4px;">
-                  Opzionale: oltre al pacchetto iniziale da 99 €/mese, il nostro team gestisce per te anche l'ottimizzazione dinamica delle tariffe (Revenue Management) e l'esecuzione operativa degli adempimenti di legge (Alloggiati Web, ISTAT, dichiarazioni tassa di soggiorno) con un extra pari al <strong>+10%</strong>.
-                </p>
-              </div>
-            </label>
+          <div class="field-group" style="margin-bottom: 0;">
+            <label for="f-cf" class="field-label">Codice fiscale o Partita IVA</label>
+            <input type="text" id="f-cf" class="field-input" placeholder="Codice fiscale o Partita IVA"/>
           </div>
         </div>
+      </details>
 
-        <!-- STEP 2: DATI PROPRIETARIO (OTTIMIZZATO: SOLO 3 CAMPI ESSENZIALI) -->
-        <div class="co-card">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
-            <h2 class="co-card-title" style="margin:0;">2. I tuoi dati essenziali (Attivazione Rapida in 30 secondi)</h2>
-            <span style="font-size:11.5px;font-weight:700;background:#ECFDF5;color:#166534;padding:4px 10px;border-radius:999px;">⚡ Solo 3 campi richiesti</span>
-          </div>
+      <button type="button" class="btn btn-primary" onclick="goToCheckoutStep(3)">
+        Vai al riepilogo e conferma (Passaggio 3 di 3)
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="goToCheckoutStep(1)">
+        Torna alla scelta del piano
+      </button>
+    </section>
 
-          <div class="co-field">
-            <label for="f-nome">Nome e Cognome (o Ragione Sociale) *</label>
-            <input type="text" id="f-nome" placeholder="es. Mario Rossi" required>
-          </div>
+    <!-- PASSAGGIO 3 DI 3: RIEPILOGO E UNA SOLA AZIONE DI CONFERMA -->
+    <section class="step-panel" id="step-3" aria-labelledby="step3-heading">
+      <span class="status-badge">Passaggio 3 di 3 · Riepilogo e attivazione</span>
+      <h2 id="step3-heading">Controlla il riepilogo e attiva il tuo immobile.</h2>
+      <p class="step-desc">Scegli se attivare subito i 14 giorni di prova con bonifico/fattura oppure saldare con carta.</p>
 
-          <div class="co-field-row">
-            <div class="co-field">
-              <label for="f-email">Email (per accesso app e ricevuta) *</label>
-              <input type="email" id="f-email" placeholder="mario.rossi@email.it" required>
-            </div>
-            <div class="co-field">
-              <label for="f-tel">Telefono / WhatsApp *</label>
-              <input type="tel" id="f-tel" placeholder="+39 340 1234567" required>
-            </div>
-          </div>
-
-          <details style="margin-top:8px;background:var(--cream);border:1px dashed var(--border);border-radius:10px;padding:12px 14px;">
-            <summary style="cursor:pointer;font-size:12.5px;font-weight:700;color:var(--navy);">➕ Dati Immobile e Fatturazione (Opzionali ora — puoi inserirli o modificarli dopo nell'App)</summary>
-            <div style="margin-top:12px;">
-              <div class="co-field-row">
-                <div class="co-field">
-                  <label for="f-imm">Nome Appartamento (opzionale)</label>
-                  <input type="text" id="f-imm" placeholder="es. Appartamento Santo Spirito">
-                </div>
-                <div class="co-field">
-                  <label for="f-cf">Codice Fiscale o P.IVA (opzionale)</label>
-                  <input type="text" id="f-cf" placeholder="C.F. o Partita IVA">
-                </div>
-              </div>
-              <div class="co-field" style="margin-bottom:0;">
-                <label for="f-addr">Indirizzo dell'appartamento a Firenze (opzionale)</label>
-                <input type="text" id="f-addr" placeholder="es. Via Maggio 18, Firenze">
-              </div>
-            </div>
-          </details>
+      <button type="button" class="choice-card selected" id="pay-opt-bonifico" onclick="selectPaymentMethod('bonifico')">
+        <div class="choice-head">
+          <span class="choice-title">Attivazione immediata Prova 14 giorni (Bonifico / Fattura)</span>
+          <span style="font-weight: 700; color: var(--status-ok-text);">Accesso istantaneo</span>
         </div>
+        <p style="color: var(--ink-muted);">Entri subito nell'Area Riservata e ricevi la fattura pro-forma di Blue Arroyo SRL.</p>
+      </button>
 
-        <!-- STEP 3: METODO DI PAGAMENTO (STRIPE CARTA OPPURE BONIFICO BLUE ARROYO SRL) -->
-        <div class="co-card">
-          <h2 class="co-card-title">3. Scegli come preferisci saldare (Garanzia 14 gg inclusa su entrambi)</h2>
+      <button type="button" class="choice-card" id="pay-opt-stripe" onclick="selectPaymentMethod('stripe')">
+        <div class="choice-head">
+          <span class="choice-title">Carta di credito, debito o Apple Pay (Stripe)</span>
+          <span style="font-weight: 700; color: var(--ink-navy);">Ricevuta immediata</span>
+        </div>
+        <p style="color: var(--ink-muted);">Pagamento elettronico protetto con rimborso integrale garantito entro 14 giorni.</p>
+      </button>
 
-          <div class="plan-option selected" id="pay-opt-stripe" onclick="selectPaymentMethod('stripe')">
-            <div class="plan-head">
-              <div class="plan-radio-label">
-                <span class="plan-radio-circle"></span>
-                💳 Carta di Credito / Debito / Apple Pay (Stripe)
-              </div>
-              <span style="font-size:12px;font-weight:700;color:var(--green);">Attivazione Istantanea</span>
-            </div>
-            <p class="plan-desc">Pagamento sicuro con ricevuta immediata. Rimborso automatico 100% con 1 clic entro 14 giorni.</p>
-          </div>
-
-          <div class="plan-option" id="pay-opt-bonifico" onclick="selectPaymentMethod('bonifico')">
-            <div class="plan-head">
-              <div class="plan-radio-label">
-                <span class="plan-radio-circle"></span>
-                🏦 Bonifico Bancario / Istantaneo (Fattura Blue Arroyo SRL)
-              </div>
-              <span style="font-size:12px;font-weight:700;color:var(--navy);">Senza Carta di Credito</span>
-            </div>
-            <p class="plan-desc">L'Area Proprietario si attiva subito con i 14 giorni di prova e ricevi nella schermata successiva la fattura pro-forma PDF di <strong>Blue Arroyo SRL (P.IVA 07480210488)</strong> da saldare tramite bonifico.</p>
-          </div>
+      <div class="summary-box">
+        <div class="summary-row">
+          <span>Intestatario</span>
+          <strong id="sum-owner-name">Proprietario Firenze</strong>
+        </div>
+        <div class="summary-row">
+          <span>Formula scelta</span>
+          <strong id="sum-cycle-name">Mese per mese</strong>
+        </div>
+        <div class="summary-row">
+          <span>Delega Extra (+10%)</span>
+          <strong id="sum-extra-revenue">Non selezionata (0%)</strong>
+        </div>
+        <div class="summary-row">
+          <span>Commissioni sulle prenotazioni</span>
+          <strong style="color: var(--status-ok-text);">0% (Zero)</strong>
+        </div>
+        <div class="summary-row">
+          <span id="sum-total-label">Totale (IVA inclusa)</span>
+          <span id="sum-total" style="font-family: var(--font-display); font-size: 1.75rem;">99,00 € / mese</span>
         </div>
       </div>
 
-      <!-- RIEPILOGO -->
-      <div class="co-sidebar">
-        <div class="order-summary-card">
-          <h3 class="os-title">Riepilogo Attivazione</h3>
+      <button type="button" class="btn btn-primary" id="btn-pay" onclick="proceedToStripe()">
+        Conferma e apri la tua area riservata
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="goToCheckoutStep(2)">
+        Modifica i tuoi recapiti
+      </button>
+    </section>
 
-          <div class="os-row">
-            <span>Prodotto</span>
-            <strong style="color:var(--navy)">App itassistance</strong>
-          </div>
+    <!-- STATO DI CONFERMA FINALE -->
+    <section class="step-panel" id="step-conferma" aria-labelledby="conf-heading">
+      <span class="status-badge">Attivazione completata</span>
+      <h2 id="conf-heading">Il tuo appartamento è attivo su itassistance.</h2>
+      <p class="step-desc" id="conf-details-text">
+        Il tuo codice proprietario è stato generato e il Riepilogo delle 08:00 è pronto.
+      </p>
+      <a href="/app.html" id="conf-open-app-link" class="btn btn-primary">
+        Entra ora nella tua Home (Livello 1)
+      </a>
+    </section>
+  </main>
 
-          <div class="os-row">
-            <span>Modalità scelta</span>
-            <strong id="sum-cycle-name" style="color:var(--navy)">Mese per mese</strong>
-          </div>
-
-          <div class="os-row">
-            <span>Extra Revenue &amp; Adempimenti</span>
-            <strong id="sum-extra-revenue" style="color:var(--text-muted)">Non selezionato (0%)</strong>
-          </div>
-
-          <div class="os-row">
-            <span>Commissioni base dell'app</span>
-            <strong style="color:var(--green)">0% (Zero)</strong>
-          </div>
-
-          <div class="os-row">
-            <span>IVA</span>
-            <span>Inclusa nel prezzo</span>
-          </div>
-
-          <div class="os-row total">
-            <span id="sum-total-label">Totale oggi (IVA incl.)</span>
-            <div style="text-align:right">
-              <span class="os-total-num" id="sum-total">99,00 €</span>
-              <div style="font-size:11px;font-weight:500;color:var(--text-muted);" id="sum-total-sub">al mese · IVA inclusa</div>
-            </div>
-          </div>
-
-          <div class="os-guarantee-box">
-            🛡️ <strong>Garanzia 14 giorni Soddisfatto o Rimborsato:</strong> se entro 14 giorni dall'attivazione l'app non ti piace, disdici con un clic e ti rimborsiamo il <strong>100% dei soldi</strong> sul tuo metodo di pagamento.
-          </div>
-
-          <button type="button" class="btn-stripe-pay" id="btn-pay" onclick="proceedToStripe('stripe')">
-            Attiva e Paga in Sicurezza ➔
-          </button>
-
-          <button type="button" onclick="proceedToStripe('instant_onboarding')" style="width:100%;margin-top:10px;padding:11px 14px;border-radius:8px;background:#FBF7EC;border:1.5px solid var(--gold);color:var(--navy);font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;">
-            ⚡ Attiva subito l'immobile e apri l'Area Proprietario (Prova 14 gg) →
-          </button>
-
-          <div class="stripe-badges">
-            Pagamento sicuro Stripe · Visa · Mastercard · Amex · Apple Pay<br>
-            Assistenza proprietari Firenze (09:00–23:00): <a href="tel:+393510380392" style="text-decoration:underline;">+39 351 038 0392</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <footer style="max-width:980px;margin:48px auto 0;padding:24px 20px 0;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-    <div>Blue Arroyo SRL · P.IVA 07480210488 · Via Matteo Palmieri 20r, 50122 Firenze (FI)</div>
-    <div><a href="/contratto.html" style="text-decoration:underline;">Termini di Servizio</a> · <a href="mailto:info@itadreamteam.com">info@itadreamteam.com</a></div>
+  <footer class="site-footer">
+    Blue Arroyo SRL · Via Matteo Palmieri 20r, 50122 Firenze (FI) · P.IVA 07480210488 · Assistenza 09:00–23:00: <a href="tel:+393510380392" style="text-decoration: underline; font-weight: 700;">+39 351 038 0392</a>
   </footer>
 
   <script>
     var STRIPE_LINKS = {
-      'mensile': (window.SITE_CONFIG && window.SITE_CONFIG.payments && window.SITE_CONFIG.payments.stripeMonthlyUrl) || 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_99_mensile',
-      'annuale': (window.SITE_CONFIG && window.SITE_CONFIG.payments && window.SITE_CONFIG.payments.stripeYearlyUrl) || 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_1188_annuale'
+      mensile: (window.SITE_CONFIG && window.SITE_CONFIG.payments && window.SITE_CONFIG.payments.stripeMonthlyUrl) || 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_99_mensile',
+      annuale: (window.SITE_CONFIG && window.SITE_CONFIG.payments && window.SITE_CONFIG.payments.stripeYearlyUrl) || 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_1188_annuale'
     };
 
+    var currentStep = 1;
     var currentCycle = 'mensile';
-    var currentPaymentMethod = 'stripe';
+    var currentPaymentMethod = 'bonifico';
 
-    function selectPaymentMethod(method) {
-      currentPaymentMethod = method;
-      var sEl = document.getElementById('pay-opt-stripe');
-      var bEl = document.getElementById('pay-opt-bonifico');
-      if (sEl) sEl.classList.toggle('selected', method === 'stripe');
-      if (bEl) bEl.classList.toggle('selected', method === 'bonifico');
-      var btn = document.getElementById('btn-pay');
-      if (btn) {
-        btn.textContent = method === 'bonifico'
-          ? '🏦 Attiva con Bonifico Bancario e Scarica Fattura ➔'
-          : '💳 Attiva e Paga in Sicurezza con Carta ➔';
+    function showCheckoutError(msg) {
+      var box = document.getElementById('co-error-box');
+      if (!box) return;
+      if (!msg) {
+        box.style.display = 'none';
+        box.textContent = '';
+      } else {
+        box.style.display = 'block';
+        box.textContent = msg;
       }
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-      var params = new URLSearchParams(window.location.search);
-      var c = params.get('ciclo');
-      if (c === 'annuale') {
-        selectBillingCycle('annuale');
-      } else {
-        selectBillingCycle('mensile');
-      }
-
-      ['nome', 'email', 'tel', 'cf', 'imm', 'addr'].forEach(function (k) {
-        var val = params.get(k);
-        if (val) {
-          var el = document.getElementById('f-' + k);
-          if (el) el.value = decodeURIComponent(val);
+    function renderCheckoutStep(stepNum, pushHistory) {
+      if (stepNum === 3) {
+        var nome = (document.getElementById('f-nome').value || '').trim();
+        var email = (document.getElementById('f-email').value || '').trim();
+        var tel = (document.getElementById('f-tel').value || '').trim();
+        if (!nome || !email || !tel) {
+          showCheckoutError('Per favore compila Nome, Email e Telefono prima di procedere al Passaggio 3.');
+          return;
         }
+        document.getElementById('sum-owner-name').textContent = nome + ' (' + tel + ')';
+      }
+      showCheckoutError('');
+      currentStep = stepNum;
+
+      ['1', '2', '3', 'conferma'].forEach(function (k) {
+        var el = document.getElementById('step-' + k);
+        if (el) el.classList.toggle('active', String(stepNum) === k);
       });
 
-      if (params.get('extra10') === '1') {
-        var chk = document.getElementById('chk-extra-revenue');
-        if (chk) {
-          chk.checked = true;
-          toggleExtraRevenue();
-        }
+      var badge = document.getElementById('hdr-step-badge');
+      var title = document.getElementById('hdr-step-title');
+      if (stepNum === 'conferma') {
+        if (badge) badge.textContent = 'Completato';
+        if (title) title.textContent = 'Conferma attivazione';
+      } else {
+        if (badge) badge.textContent = 'Passaggio ' + stepNum + ' di 3';
+        var titles = { 1: 'Scegli la formula', 2: 'I tuoi recapiti', 3: 'Conferma e accesso' };
+        if (title) title.textContent = titles[stepNum] || 'Attiva itassistance';
       }
-      if (params.get('metodo') === 'bonifico') {
-        selectPaymentMethod('bonifico');
+
+      if (pushHistory !== false && window.history && window.history.pushState) {
+        var url = new URL(window.location.href);
+        url.searchParams.set('step', String(stepNum));
+        window.history.pushState({ step: stepNum }, '', url.toString());
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goToCheckoutStep(stepNum) {
+      renderCheckoutStep(stepNum, true);
+    }
+
+    function handleCheckoutBack() {
+      if (currentStep === 3) {
+        renderCheckoutStep(2, true);
+      } else if (currentStep === 2) {
+        renderCheckoutStep(1, true);
+      } else {
+        window.location.href = '/';
+      }
+    }
+
+    window.addEventListener('popstate', function (e) {
+      if (e.state && e.state.step) {
+        renderCheckoutStep(e.state.step, false);
+      } else {
+        var params = new URLSearchParams(window.location.search);
+        var s = parseInt(params.get('step'), 10);
+        renderCheckoutStep((s >= 1 && s <= 3) ? s : 1, false);
       }
     });
 
@@ -548,15 +647,12 @@
       currentCycle = cycle;
       document.getElementById('opt-mensile').classList.toggle('selected', cycle === 'mensile');
       document.getElementById('opt-annuale').classList.toggle('selected', cycle === 'annuale');
-
       if (cycle === 'annuale') {
         document.getElementById('sum-cycle-name').textContent = 'Annuale anticipato (12 mesi)';
-        document.getElementById('sum-total').textContent = '1.188,00 €';
-        document.getElementById('sum-total-sub').textContent = 'all’anno (99 €/mese) · IVA inclusa';
+        document.getElementById('sum-total').textContent = '1.188,00 € / anno';
       } else {
         document.getElementById('sum-cycle-name').textContent = 'Mese per mese';
-        document.getElementById('sum-total').textContent = '99,00 €';
-        document.getElementById('sum-total-sub').textContent = 'al mese · IVA inclusa';
+        document.getElementById('sum-total').textContent = '99,00 € / mese';
       }
     }
 
@@ -564,37 +660,70 @@
       var chk = document.getElementById('chk-extra-revenue');
       var sumExtra = document.getElementById('sum-extra-revenue');
       if (chk && chk.checked) {
-        sumExtra.textContent = 'Attivo (+10%)';
-        sumExtra.style.color = 'var(--navy)';
+        sumExtra.textContent = 'Attiva (+10%)';
       } else if (sumExtra) {
-        sumExtra.textContent = 'Non selezionato (0%)';
-        sumExtra.style.color = 'var(--text-muted)';
+        sumExtra.textContent = 'Non selezionata (0%)';
       }
     }
 
-    async function proceedToStripe(mode) {
-      var nome = document.getElementById('f-nome').value.trim();
-      var email = document.getElementById('f-email').value.trim();
-      var tel = document.getElementById('f-tel').value.trim();
-      var cf = document.getElementById('f-cf').value.trim();
-      var imm = document.getElementById('f-imm').value.trim();
-      var addr = document.getElementById('f-addr').value.trim();
+    function selectPaymentMethod(method) {
+      currentPaymentMethod = method;
+      document.getElementById('pay-opt-bonifico').classList.toggle('selected', method === 'bonifico');
+      document.getElementById('pay-opt-stripe').classList.toggle('selected', method === 'stripe');
+      var btn = document.getElementById('btn-pay');
+      if (btn) {
+        btn.textContent = (method === 'stripe')
+          ? 'Paga in sicurezza con carta e apri l’area riservata'
+          : 'Conferma e apri la tua area riservata';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('ciclo') === 'annuale') {
+        selectBillingCycle('annuale');
+      } else {
+        selectBillingCycle('mensile');
+      }
+      ['nome', 'email', 'tel', 'cf', 'imm', 'addr'].forEach(function (k) {
+        var val = params.get(k);
+        if (val) {
+          var el = document.getElementById('f-' + k);
+          if (el) el.value = decodeURIComponent(val);
+        }
+      });
+      if (params.get('extra10') === '1') {
+        var chk = document.getElementById('chk-extra-revenue');
+        if (chk) {
+          chk.checked = true;
+          toggleExtraRevenue();
+        }
+      }
+      var initStep = parseInt(params.get('step'), 10);
+      if (initStep === 2 || initStep === 3) {
+        renderCheckoutStep(initStep, false);
+      }
+    });
+
+    async function proceedToStripe() {
+      var nome = (document.getElementById('f-nome').value || '').trim();
+      var email = (document.getElementById('f-email').value || '').trim();
+      var tel = (document.getElementById('f-tel').value || '').trim();
+      var cf = (document.getElementById('f-cf').value || '').trim();
+      var imm = (document.getElementById('f-imm').value || '').trim();
+      var addr = (document.getElementById('f-addr').value || '').trim();
       var extraRevenue = document.getElementById('chk-extra-revenue') && document.getElementById('chk-extra-revenue').checked;
 
       if (!nome || !email || !tel) {
-        alert('Inserisci almeno Nome, Email e Telefono per procedere all’attivazione.');
+        renderCheckoutStep(2, true);
+        showCheckoutError('Inserisci Nome, Email e Telefono per completare l’attivazione.');
         return;
       }
 
       var btn = document.getElementById('btn-pay');
       btn.disabled = true;
-      btn.textContent = 'Configurazione appartamento e attivazione in corso...';
+      btn.textContent = 'Attivazione appartamento in corso...';
 
-      if (typeof window.trackSiteEvent === 'function') {
-        window.trackSiteEvent('begin_checkout', { cycle: currentCycle, price: currentCycle === 'annuale' ? 1188 : 99, extra_revenue_10pct: extraRevenue });
-      }
-
-      // 1. Pre-configura automaticamente /app.html e registra Cliente + Fattura in /admin.html + Supabase
       var activationResult = { ownerCode: 'ITA-FIRENZE-01', invoiceId: 'FATT-2026-101' };
       if (window.ITACloudSync && typeof ITACloudSync.activateNewOwnerFromCheckout === 'function') {
         activationResult = await ITACloudSync.activateNewOwnerFromCheckout({
@@ -610,54 +739,21 @@
         });
       }
 
-      // 2. Invia il lead al webhook n8n
-      try {
-        fetch('https://aherreras.app.n8n.cloud/webhook/leads/itassistance', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            prodotto: 'itassistance',
-            codice_proprietario: activationResult.ownerCode,
-            numero_fattura: activationResult.invoiceId,
-            metodo_pagamento: currentPaymentMethod,
-            nome: nome,
-            email: email,
-            telefono: tel,
-            cf: cf,
-            immobile: imm,
-            indirizzo: addr,
-            ciclo: currentCycle,
-            extra_revenue_adempimenti_10pct: extraRevenue ? 'SI (+10%)' : 'NO',
-            totale: currentCycle === 'annuale' ? '1188€ IVA inclusa' : '99€ IVA inclusa',
-            garanzia: '14 giorni soddisfatto o rimborsato',
-            link_area_proprietario: 'https://www.itadreamteam.com/app.html?code=' + activationResult.ownerCode,
-            link_self_checkin_ospite: 'https://www.itadreamteam.com/ospiti.html',
-            fonte: 'checkout.html'
-          })
-        }).catch(function () {});
-      } catch (e) {}
-
-      var welcomeUrl = '/benvenuto.html?ciclo=' + encodeURIComponent(currentCycle) +
-        '&code=' + encodeURIComponent(activationResult.ownerCode || 'ITA-FIRENZE-01') +
-        '&metodo=' + encodeURIComponent(currentPaymentMethod) +
-        '&nome=' + encodeURIComponent(nome) +
-        '&imm=' + encodeURIComponent(imm || 'Appartamento Firenze') +
-        '&addr=' + encodeURIComponent(addr || 'Firenze') +
-        '&extra10=' + (extraRevenue ? '1' : '0');
-
-      if (mode === 'instant_onboarding' || currentPaymentMethod === 'bonifico') {
-        window.location.href = welcomeUrl;
-        return;
+      var appUrl = '/app.html?code=' + encodeURIComponent(activationResult.ownerCode || 'ITA-FIRENZE-01');
+      var linkEl = document.getElementById('conf-open-app-link');
+      if (linkEl) linkEl.href = appUrl;
+      var txtEl = document.getElementById('conf-details-text');
+      if (txtEl) {
+        txtEl.textContent = 'Codice Proprietario assegnato: ' + (activationResult.ownerCode || 'ITA-FIRENZE-01') + ' · Fattura/Riferimento: ' + (activationResult.invoiceId || 'FATT-2026-101') + '. Ora puoi entrare nella Home di Livello 1.';
       }
 
-      var targetUrl = STRIPE_LINKS[currentCycle] || STRIPE_LINKS['mensile'];
-      var sep = targetUrl.indexOf('?') !== -1 ? '&' : '?';
-      var finalUrl = targetUrl + sep + 'prefilled_email=' + encodeURIComponent(email);
+      if (currentPaymentMethod === 'stripe') {
+        var targetUrl = STRIPE_LINKS[currentCycle] || STRIPE_LINKS.mensile;
+        var sep = targetUrl.indexOf('?') !== -1 ? '&' : '?';
+        window.open(targetUrl + sep + 'prefilled_email=' + encodeURIComponent(email), '_blank');
+      }
 
-      window.open(finalUrl, '_blank');
-      setTimeout(function () {
-        window.location.href = welcomeUrl;
-      }, 400);
+      renderCheckoutStep('conferma', true);
     }
   </script>
 </body>
