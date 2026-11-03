@@ -1323,7 +1323,7 @@
             <!-- STRISCIA OSCILLAZIONE GIORNALIERA (5 GIORNI) -->
             <div class="kpi-row" id="dyn-schedule-strip" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin: 16px 0 24px;"></div>
 
-            <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+            <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
               <a href="/checkout.html" class="btn btn-primary" id="dyn-lock-cta-btn" onclick="trackSiteEvent('click_prova_app',{location:'dynamic_pricing_lock'})">
                 Blocca la tariffa di oggi e inizia i 14 giorni di prova
               </a>
@@ -1331,6 +1331,18 @@
                 Simula variazione giornaliera (99,00 € – 289,50 €)
               </button>
             </div>
+
+            <!-- BLOCCO RAPIDO QUOTAZIONE 24 ORE SU WHATSAPP (SCAGLIONE PARETO #1) -->
+            <div style="padding-top: 16px; border-top: 1px solid var(--border-control); display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;">
+              <div style="flex: 1 1 240px;">
+                <label for="dyn-lock-phone" class="field-label" style="margin-bottom: 6px;">Vuoi congelare la quotazione di oggi per 24 ore sul tuo telefono?</label>
+                <input type="tel" id="dyn-lock-phone" class="field-input" placeholder="Inserisci il tuo numero WhatsApp (+39 333...)"/>
+              </div>
+              <button type="button" class="btn btn-secondary" style="flex: 0 0 auto;" onclick="lockDynamicPrice24hOnWhatsApp()">
+                Ricevi codice blocco 24 ore su WhatsApp
+              </button>
+            </div>
+            <p id="dyn-lock-status-msg" style="margin-top: 8px; font-weight: 700; color: var(--status-ok-text);" aria-live="polite"></p>
           </div>
         </div>
 
@@ -1683,6 +1695,41 @@
       if (!window.SITE_CONFIG || typeof SITE_CONFIG.rerollDynamicPrice !== 'function') return;
       SITE_CONFIG.rerollDynamicPrice();
       renderDynamicAcquisitionPricing();
+    }
+
+    async function lockDynamicPrice24hOnWhatsApp() {
+      var phoneEl = document.getElementById('dyn-lock-phone');
+      var statusEl = document.getElementById('dyn-lock-status-msg');
+      var phone = (phoneEl && phoneEl.value || '').trim();
+      if (!phone) {
+        alert('Inserisci il tuo numero WhatsApp per ricevere il codice di blocco quotazione valido 24 ore.');
+        return;
+      }
+      var dp = (window.SITE_CONFIG && typeof SITE_CONFIG.getDynamicPricing === 'function')
+        ? SITE_CONFIG.getDynamicPricing()
+        : { todayMonthlyEur: 99, todayFormatted: '99,00 €', slotsAvailable: 4 };
+
+      var res = { lockCode: 'LOCK-FI-2026' };
+      if (window.ITACloudSync && typeof ITACloudSync.lockDynamicPriceLead === 'function') {
+        res = await ITACloudSync.lockDynamicPriceLead({
+          phone: phone,
+          lockedMonthlyEur: dp.todayMonthlyEur
+        });
+      }
+
+      if (statusEl) {
+        statusEl.textContent = 'Quotazione ' + dp.todayFormatted + '/mese bloccata per 24 ore con codice ' + res.lockCode + '.';
+      }
+
+      var lockUrl = 'https://www.itadreamteam.com/checkout.html?locked_price=' + encodeURIComponent(dp.todayMonthlyEur) + '&tel=' + encodeURIComponent(phone);
+      var msg = [
+        'CERTIFICATO BLOCCO QUOTAZIONE 24H — itassistance Firenze',
+        'Codice Blocco: ' + res.lockCode,
+        'Quotazione congelata: ' + dp.todayFormatted + ' / mese IVA inclusa (Range sistema: 99,00 € – 289,50 €/m)',
+        'Slot acquisizione oggi a Firenze: ' + dp.slotsAvailable + ' su 6',
+        'Link diretto per completare con tariffa bloccata: ' + lockUrl
+      ].join('\n');
+      window.open('https://wa.me/393510380392?text=' + encodeURIComponent(msg), '_blank');
     }
 
     document.addEventListener('DOMContentLoaded', function () {

@@ -746,6 +746,26 @@
           </div>
         </div>
 
+        <!-- CABINA DIREZIONE VENDITE: QUOTAZIONE VARIABILE GIORNALIERA (99,00 € - 289,50 € / MESE) -->
+        <div class="panel-card" style="border:2px solid var(--navy);background:#FAFAF8;margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;">
+            <div>
+              <span class="badge badge-gold">DIREZIONE VENDITE · CONTROLLO DOMANDA FIRENZE (FASE 1 RANDOM)</span>
+              <h2 style="font-family:var(--serif);font-size:20px;margin-top:6px;color:var(--navy);">
+                Quotazione Giornaliera Acquisizione Nuovi Immobili: <span id="adm-dyn-price-lbl">99,00 € / mese</span>
+              </h2>
+              <p style="font-size:13px;color:var(--text-muted);margin-top:4px;" id="adm-dyn-slots-lbl">
+                Range sistema: min 99,00 € — max 289,50 € / mese · Disponibilità oggi a Firenze: 4 slot su 6.
+              </p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <input type="number" id="adm-force-price-inp" min="99" max="289.5" step="0.5" placeholder="Es. 179.50" style="width:120px;padding:8px 10px;border:1px solid var(--border);border-radius:7px;font-size:13.5px;"/>
+              <button type="button" class="btn btn-primary btn-sm" onclick="adminForceDailyPrice()">Imposta tariffa</button>
+              <button type="button" class="btn btn-gold btn-sm" onclick="adminRerollRandomDailyPrice()">Estrai random (99–289,50 €)</button>
+            </div>
+          </div>
+        </div>
+
         <!-- ═══ CENTRALE OPERATIVA, FIELD FIRENZE (20€/30€) & ASSISTENZA 09:00–23:00 ═══ -->
         <div class="panel-card" style="border:1.5px solid var(--gold);background:linear-gradient(180deg, #FFFFFF 0%, #FBF7EC 100%);">
           <div class="panel-head">
@@ -3080,8 +3100,40 @@ P.IVA: 07480210488</div>
       showToast('Prezzi Variabili sincronizzati in 1 tap su tutti i portali collegati e inviati a /app.html!');
     }
 
+    function renderAdminDynamicPricing() {
+      if (!window.SITE_CONFIG || typeof SITE_CONFIG.getDynamicPricing !== 'function') return;
+      var dp = SITE_CONFIG.getDynamicPricing();
+      var pLbl = document.getElementById('adm-dyn-price-lbl');
+      if (pLbl) pLbl.textContent = dp.todayFormatted + ' / mese (' + dp.yearlyFormatted + ' / anno)';
+      var sLbl = document.getElementById('adm-dyn-slots-lbl');
+      if (sLbl) sLbl.textContent = 'Range sistema: min 99,00 € — max 289,50 € / mese · Disponibilità oggi a Firenze: ' + dp.slotsAvailable + ' slot su ' + dp.maxSlots + ' (' + dp.demandLevel + ').';
+      var inp = document.getElementById('adm-force-price-inp');
+      if (inp) inp.value = dp.todayMonthlyEur;
+    }
+
+    function adminForceDailyPrice() {
+      if (!window.SITE_CONFIG || typeof SITE_CONFIG.setAdminForcedDailyPrice !== 'function') return;
+      var inp = document.getElementById('adm-force-price-inp');
+      var val = parseFloat(inp ? inp.value : 99);
+      if (isNaN(val) || val < 99 || val > 289.5) {
+        alert('Inserisci un valore compreso tra 99,00 € e 289,50 €.');
+        return;
+      }
+      var next = SITE_CONFIG.setAdminForcedDailyPrice(val);
+      renderAdminDynamicPricing();
+      showToast('Quotazione giornaliera impostata a ' + next.todayFormatted + ' / mese (' + next.slotsAvailable + ' slot su 6).');
+    }
+
+    function adminRerollRandomDailyPrice() {
+      if (!window.SITE_CONFIG || typeof SITE_CONFIG.setAdminForcedDailyPrice !== 'function') return;
+      var next = SITE_CONFIG.setAdminForcedDailyPrice(null);
+      renderAdminDynamicPricing();
+      showToast('Estratta nuova quotazione random: ' + next.todayFormatted + ' / mese (' + next.slotsAvailable + ' slot su 6).');
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
       renderAdminAll();
+      renderAdminDynamicPricing();
       renderReportLogsInAdmin();
       loadLiveConfigForm();
       if (window.ITACloudSync) {

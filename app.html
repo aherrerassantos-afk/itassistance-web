@@ -776,6 +776,9 @@
         <button type="button" class="btn btn-secondary" onclick="approveAllPortfolioWeeklyCSV()">
           Approva e scarica il listino di tutti i tuoi immobili
         </button>
+        <button type="button" class="btn btn-secondary" onclick="downloadUnifiedICalInApp()">
+          Esporta calendario .ics unificato anti-overbooking (Airbnb / Booking)
+        </button>
       </div>
     </section>
 
@@ -829,17 +832,31 @@
         </div>
         <div class="summary-row">
           <span>Allestimento 3. Blue Arroyo Cleaning</span>
-          <strong>Biancheria a 60 gradi e kit cortesia gratuiti</strong>
+          <strong id="servizi-sum-bluearroyo">Biancheria a 60 gradi e kit cortesia gratuiti (risparmio 232 €/mese)</strong>
+        </div>
+        <div class="summary-row">
+          <span>Canale diretto 4. SmartsBookings.com</span>
+          <strong id="servizi-sum-smartsbookings">85% incasso entro le 12:00 check-out · 15% cashback ospite in 48h</strong>
         </div>
         <div class="summary-row">
           <span>Sviluppo immobiliare 1. Toscan Costruzioni</span>
           <strong>Formula 5 SAL Garantiti a prezzo fisso</strong>
+        </div>
+        <div class="summary-row">
+          <span>Tesoretto Libertà accumulato (vs 20% PM + Revenue)</span>
+          <strong id="servizi-sum-tesoretto" style="color: var(--status-ok-text);">+7.032 €/anno · Copre il 69% del 1° SAL (10.200 €)</strong>
         </div>
       </div>
 
       <div class="btn-stack">
         <button type="button" class="btn btn-primary" onclick="navigateToOnion('azione-toscan', { step: 1 })">
           Simula il tuo prossimo immobile con Toscan Costruzioni
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="activateBlueArroyoCleaningInApp()">
+          Attiva 3. Blue Arroyo Cleaning (Biancheria 60°C + Kit gratuiti 232 €/mese)
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="activateSmartsBookingsInApp()">
+          Attiva canale diretto 4. SmartsBookings.com (Payout 85% + Cashback 15%)
         </button>
         <button type="button" class="btn btn-secondary" onclick="requestFlorenceService('Check-in in presenza a Firenze (20 € IVA inclusa)')">
           Richiedi un operatore per check-in a Firenze (20 €)
@@ -1700,6 +1717,18 @@
       document.getElementById('home-metric-ospiti').textContent = appState.bookings.length + ' soggiorni · ' + (pendingAw.length >0 ? (pendingAw.length + ' da inviare') : 'Questura in regola');
       document.getElementById('home-metric-fisco').textContent = 'Utile netto mese: ' + formatEur(netProfit);
 
+      if (window.ITACloudSync && typeof ITACloudSync.computeFreedomCapitalSalProgress === 'function') {
+        var salProg = ITACloudSync.computeFreedomCapitalSalProgress();
+        var srvHomeEl = document.getElementById('home-metric-servizi');
+        if (srvHomeEl) {
+          srvHomeEl.textContent = 'Tesoretto: +' + salProg.annualFreedomCapitalEur.toLocaleString('it-IT') + ' €/a (' + salProg.coveragePct + '% 1° SAL Toscan)';
+        }
+        var srvSumEl = document.getElementById('servizi-sum-tesoretto');
+        if (srvSumEl) {
+          srvSumEl.textContent = '+' + salProg.annualFreedomCapitalEur.toLocaleString('it-IT') + ' €/anno · Copre il ' + salProg.coveragePct + '% del 1° SAL (' + salProg.firstSalTargetEur.toLocaleString('it-IT') + ' €)';
+        }
+      }
+
       // Riepiloghi Livello 2
       document.getElementById('ospiti-sum-count').textContent = appState.bookings.length + ' soggiorni nel mese';
       document.getElementById('ospiti-sum-questura').textContent = pendingAw.length >0 ? (pendingAw.length + ' da inviare entro 24 ore') : 'Tutti inviati regolarmente';
@@ -2392,6 +2421,54 @@
         msg.replace(/\n/g, ' · '),
         'home',
         'Torna alla Home'
+      );
+    }
+
+    function activateBlueArroyoCleaningInApp() {
+      if (!window.ITACloudSync || typeof ITACloudSync.activateBlueArroyoCleaningSuiteOneTap !== 'function') return;
+      var res = ITACloudSync.activateBlueArroyoCleaningSuiteOneTap(appState);
+      saveState();
+      renderAll();
+      var el = document.getElementById('servizi-sum-bluearroyo');
+      if (el) {
+        el.textContent = 'ATTIVO · Biancheria 60°C + Kit gratuiti (+' + res.monthlyKitSavingEur + ' €/mese risparmiati)';
+        el.style.color = 'var(--status-ok-text)';
+      }
+      showConfirmationScreen(
+        '3. Blue Arroyo Cleaning attivato sull\'immobile',
+        'Fornitura biancheria certificata a 60°C, kit cortesia biologici (bagno, cucina e benvenuto) inclusi gratuitamente con risparmio di ' + res.monthlyKitSavingEur + ' €/mese (' + res.annualKitSavingEur + ' €/anno) e protocollo 4 foto anti-danni SHA-256 sincronizzati con i tuoi check-out.',
+        'servizi',
+        'Torna a Servizi Firenze e Crescita'
+      );
+    }
+
+    function activateSmartsBookingsInApp() {
+      if (!window.ITACloudSync || typeof ITACloudSync.activateSmartsBookingsDirectChannelOneTap !== 'function') return;
+      var res = ITACloudSync.activateSmartsBookingsDirectChannelOneTap(appState);
+      saveState();
+      renderAll();
+      var el = document.getElementById('servizi-sum-smartsbookings');
+      if (el) {
+        el.textContent = 'ATTIVO · 85% incasso entro le 12:00 check-out · Link diretto pronto';
+        el.style.color = 'var(--status-ok-text)';
+      }
+      showConfirmationScreen(
+        'Canale Diretto 4. SmartsBookings.com attivato',
+        'Prenotazione diretta senza intermediari attiva (' + res.directUrl + '). Ricevi l\'85% sul tuo conto entro le ore 12:00 del giorno di check-out e l\'ospite riceve il 15% (15 €) di cashback reale in 48 ore.',
+        'servizi',
+        'Torna a Servizi Firenze e Crescita'
+      );
+    }
+
+    function downloadUnifiedICalInApp() {
+      if (!window.ITACloudSync || typeof ITACloudSync.exportUnifiedICalFeed !== 'function') return;
+      var res = ITACloudSync.exportUnifiedICalFeed(appState);
+      downloadCSVFile(res.filename, res.icsContent);
+      showConfirmationScreen(
+        'Calendario .ics unificato anti-overbooking esportato (' + res.eventsCount + ' soggiorni)',
+        'Il file ' + res.filename + ' conforme allo standard RFC 5545 è stato scaricato. Importalo su Airbnb, Booking.com o Vrbo per bloccare automaticamente le date occupate su tutti i portali.',
+        'prezzi',
+        'Torna a Calendario e Prezzi'
       );
     }
 

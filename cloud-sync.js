@@ -1663,6 +1663,196 @@
     };
   }
 
+  // Scaglione Pareto #1: Blocco Quotazione Giornaliera (99,00 € – 289,50 €/mese) per 24 Ore su WhatsApp e CRM
+  async function lockDynamicPriceLead(input) {
+    var inp = input || {};
+    var dynCfg = (typeof window !== 'undefined' && window.SITE_CONFIG && typeof window.SITE_CONFIG.getDynamicPricing === 'function')
+      ? window.SITE_CONFIG.getDynamicPricing()
+      : { todayMonthlyEur: 99, todayFormatted: '99,00 €', yearlyEquivalentEur: 1188, slotsAvailable: 4 };
+    var lockCode = 'LOCK-FI-' + Math.floor(1000 + Math.random() * 9000);
+    var priceEur = Number(inp.lockedMonthlyEur) || dynCfg.todayMonthlyEur || 99;
+    var fmtPrice = priceEur.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+
+    var rec = {
+      id: 'lock_' + Date.now(),
+      lockCode: lockCode,
+      createdAt: new Date().toLocaleString('it-IT'),
+      name: (inp.name || 'Proprietario Firenze').trim(),
+      phone: (inp.phone || '').trim(),
+      email: (inp.email || '').trim(),
+      lockedMonthlyEur: priceEur,
+      lockedFormatted: fmtPrice,
+      slotsAvailable: dynCfg.slotsAvailable || 3,
+      annualRevenue: 30000,
+      pmPct: 20,
+      netSaving: Math.max(0, Math.round(6000 - priceEur * 12)),
+      addon10Interest: false,
+      status: 'Tariffa Bloccata 24h (' + fmtPrice + '/mese · ' + lockCode + ')'
+    };
+
+    try {
+      var list = JSON.parse(localStorage.getItem(LEADS_KEY) || '[]');
+      list.unshift(rec);
+      localStorage.setItem(LEADS_KEY, JSON.stringify(list.slice(0, 50)));
+    } catch (e) {}
+
+    await syncSnapshotToSupabase('dynamic_price_lock_24h', rec);
+    broadcastStateChange('dynamic_price_locked', rec);
+    return { ok: true, lockCode: lockCode, record: rec };
+  }
+
+  // Scaglione Pareto #2: Calcolo "Tesoretto Libertà" e Progresso 1° SAL (15% = 10.200 €) per 1. Toscan Costruzioni
+  function computeFreedomCapitalSalProgress() {
+    var pf = saveCurrentAptIntoPortfolio();
+    var aptsCount = (pf && pf.apartments && pf.apartments.length) ? pf.apartments.length : 1;
+    var dynCfg = (typeof window !== 'undefined' && window.SITE_CONFIG && typeof window.SITE_CONFIG.getDynamicPricing === 'function')
+      ? window.SITE_CONFIG.getDynamicPricing()
+      : { todayMonthlyEur: 99, yearlyEquivalentEur: 1188 };
+    var savedPmPerApt = Math.max(2400, Math.round(6400 - (dynCfg.yearlyEquivalentEur || 1188)));
+    var revenueUpliftPerApt = 1820;
+    var annualFreedomCapital = (savedPmPerApt + revenueUpliftPerApt) * aptsCount;
+    var firstSalTargetEur = 10200; // 1° SAL (15% su cantiere tipo 68.000 € di 1. Toscan Costruzioni)
+    var coveragePct = Math.min(100, Math.round((annualFreedomCapital / firstSalTargetEur) * 100));
+    return {
+      aptsCount: aptsCount,
+      annualFreedomCapitalEur: annualFreedomCapital,
+      firstSalTargetEur: firstSalTargetEur,
+      coveragePct: coveragePct
+    };
+  }
+
+  /* ────────────────────────────────────────────────────────
+     13. CHIUSURA CICLO VIRTUOSO BLUE ARROYO IN 1 TAP:
+         - 3. BLUE ARROYO CLEANING (Suite 60°C, Kit Bio gratuiti 232 €/m, 4 foto SHA-256)
+         - 4. SMARTSBOOKINGS.COM (Canale Diretto 85% Payout + 15% Cashback Ospite)
+  ──────────────────────────────────────────────────────── */
+  async function activateBlueArroyoCleaningSuiteOneTap() {
+    var ownerState = null;
+    try {
+      var raw = localStorage.getItem(OWNER_KEY);
+      ownerState = raw ? JSON.parse(raw) : null;
+    } catch (e) {}
+    if (!ownerState) ownerState = { apartment: { name: 'Appartamento Santo Spirito' }, bookings: [], expenses: [] };
+    if (!ownerState.apartment) ownerState.apartment = {};
+
+    ownerState.apartment.cleaningPartner = '3. Blue Arroyo Cleaning · Suite 60°C + Kit Bio Gratuiti (Risparmio 232 €/mese)';
+    ownerState.apartment.sha256DamagePhotosActive = true;
+
+    if (Array.isArray(ownerState.bookings)) {
+      ownerState.bookings.forEach(function (b) {
+        b.cleaner = '3. Blue Arroyo Cleaning · Turno garantito 10:00–15:00 + 4 foto SHA-256';
+      });
+    }
+
+    try {
+      localStorage.setItem(OWNER_KEY, JSON.stringify(ownerState));
+    } catch (e) {}
+    saveCurrentAptIntoPortfolio();
+
+    var record = {
+      id: 'bac_' + Date.now(),
+      apartmentName: ownerState.apartment.name || 'Appartamento Firenze',
+      ownerCode: ownerState.apartment.ownerCode || 'ITA-FIRENZE-01',
+      monthlyKitSavingEur: 232,
+      protocol: 'Biancheria 60°C + Kit Bio e Spugne Sigillate 0€ PM + 4 Foto Danni SHA-256',
+      activatedAt: new Date().toISOString()
+    };
+
+    await syncSnapshotToSupabase('blue_arroyo_cleaning_activated', record);
+    broadcastStateChange('blue_arroyo_cleaning_activated', record);
+    return { ok: true, record: record };
+  }
+
+  async function activateSmartsBookingsDirectChannelOneTap() {
+    var ownerState = null;
+    try {
+      var raw = localStorage.getItem(OWNER_KEY);
+      ownerState = raw ? JSON.parse(raw) : null;
+    } catch (e) {}
+    if (!ownerState) ownerState = { apartment: { name: 'Appartamento Santo Spirito' }, bookings: [], expenses: [] };
+    if (!ownerState.apartment) ownerState.apartment = {};
+
+    ownerState.apartment.smartsBookingsDirectActive = true;
+    try {
+      localStorage.setItem(OWNER_KEY, JSON.stringify(ownerState));
+    } catch (e) {}
+
+    var cm = getChannelRevenueState();
+    if (cm && Array.isArray(cm.portals)) {
+      cm.portals.forEach(function (p) {
+        if (/smart/i.test(p.name || p.id)) {
+          p.connected = true;
+          p.statusLabel = 'Attivo · Payout 85% + Cashback 15% Ospite';
+        }
+      });
+      saveChannelRevenueState(cm);
+    }
+    saveCurrentAptIntoPortfolio();
+
+    var record = {
+      id: 'sb_' + Date.now(),
+      apartmentName: ownerState.apartment.name || 'Appartamento Firenze',
+      ownerCode: ownerState.apartment.ownerCode || 'ITA-FIRENZE-01',
+      ownerPayoutPct: 85,
+      guestCashbackPct: 15,
+      guestCashbackEur: 15,
+      activatedAt: new Date().toISOString()
+    };
+
+    await syncSnapshotToSupabase('smartsbookings_channel_activated', record);
+    broadcastStateChange('smartsbookings_channel_activated', record);
+    return { ok: true, record: record };
+  }
+
+  /* ────────────────────────────────────────────────────────
+     14. ESPORTAZIONE CALENDARIO .ICS UNIFICATO BIDIREZIONALE
+         Genera tracciato RFC 5545 VCALENDAR di uscita per Airbnb/Booking/Vrbo
+  ──────────────────────────────────────────────────────── */
+  function exportUnifiedICalFeed() {
+    var ownerState = null;
+    try {
+      var raw = localStorage.getItem(OWNER_KEY);
+      ownerState = raw ? JSON.parse(raw) : null;
+    } catch (e) {}
+    var aptName = (ownerState && ownerState.apartment && ownerState.apartment.name) || 'Appartamento Firenze';
+    var ownerCode = (ownerState && ownerState.apartment && ownerState.apartment.ownerCode) || 'ITA-FIRENZE-01';
+    var bks = (ownerState && Array.isArray(ownerState.bookings)) ? ownerState.bookings : [];
+
+    var lines = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//itassistance Blue Arroyo SRL//Unified Anti-Overbooking Calendar 2026//IT',
+      'CALSCALE:GREGORIAN',
+      'X-WR-CALNAME:' + aptName + ' (' + ownerCode + ')'
+    ];
+
+    for (var i = 0; i < bks.length; i++) {
+      var b = bks[i];
+      var ci = (b.checkInIso || b.checkin || '2026-11-12').replace(/-/g, '');
+      var co = (b.checkOutIso || b.checkout || '2026-11-15').replace(/-/g, '');
+      lines.push('BEGIN:VEVENT');
+      lines.push('UID:' + (b.id || ('bk_' + i)) + '@itadreamteam.com');
+      lines.push('DTSTART;VALUE=DATE:' + ci);
+      lines.push('DTEND;VALUE=DATE:' + co);
+      lines.push('SUMMARY:Reserved - ' + (b.guest || 'Ospite') + ' (' + (b.channel || 'itassistance') + ')');
+      lines.push('DESCRIPTION:Blocco anti-overbooking certificato itassistance · ' + aptName);
+      lines.push('END:VEVENT');
+    }
+
+    lines.push('END:VCALENDAR');
+    var icsContent = lines.join('\r\n');
+    var icsFeedUrl = 'https://www.itadreamteam.com/ical/' + encodeURIComponent(ownerCode) + '.ics';
+
+    return {
+      ok: true,
+      ownerCode: ownerCode,
+      apartmentName: aptName,
+      eventsCount: bks.length,
+      icsFeedUrl: icsFeedUrl,
+      icsContent: icsContent
+    };
+  }
+
   root.ITACloudSync = {
     syncSnapshotToSupabase: syncSnapshotToSupabase,
     broadcastStateChange: broadcastStateChange,
@@ -1691,6 +1881,11 @@
     submitToscanRealEstateLead: submitToscanRealEstateLead,
     getSampleICalFeed: getSampleICalFeed,
     parseAndImportICalFeed: parseAndImportICalFeed,
-    runMorning0800AutomationBatch: runMorning0800AutomationBatch
+    runMorning0800AutomationBatch: runMorning0800AutomationBatch,
+    lockDynamicPriceLead: lockDynamicPriceLead,
+    computeFreedomCapitalSalProgress: computeFreedomCapitalSalProgress,
+    activateBlueArroyoCleaningSuiteOneTap: activateBlueArroyoCleaningSuiteOneTap,
+    activateSmartsBookingsDirectChannelOneTap: activateSmartsBookingsDirectChannelOneTap,
+    exportUnifiedICalFeed: exportUnifiedICalFeed
   };
 })(typeof window !== 'undefined' ? window : this);
