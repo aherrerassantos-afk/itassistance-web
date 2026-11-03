@@ -21,7 +21,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet"/>
 
   <script src="/site-config.js"></script>
   <script src="/cloud-sync.js"></script>
@@ -30,20 +30,20 @@
 
   <style>
     :root {
-      --bg-light: #FAFAF8;
-      --bg-stone: #F2EFE9;
-      --ink-navy: #0F1A2E;
-      --ink-muted: #475569;
-      --ink-on-dark-muted: #CBD5E1;
-      --gold-accent: #C9A84C;
-      --gold-text-light: #7A5C12;
-      --border-control: #64748B;
+      --bg-light: #FFFFFF;
+      --bg-stone: #F5F3FF;
+      --ink-navy: #1E1035;
+      --ink-muted: #4C3D63;
+      --ink-on-dark-muted: #DDD6FE;
+      --gold-accent: #C4B5FD;
+      --gold-text-light: #5B21B6;
+      --border-control: #7C3AED;
       --status-ok-bg: #ECFDF5;
       --status-ok-text: #065F46;
       --error-bg: #FEF2F2;
       --error-text: #991B1B;
-      --font-display: 'Cormorant Garamond', Georgia, serif;
-      --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     *, *::before, *::after {
@@ -244,7 +244,7 @@
       font-family: var(--font-sans);
       font-size: 1rem;
       font-weight: 700;
-      border-radius: 8px;
+      border-radius: 15px;
       cursor: pointer;
       text-decoration: none;
       border: 2px solid transparent;
@@ -730,7 +730,7 @@
         pageSize: 'A4',
         pageMargins: [40, 40, 40, 40],
         content: [
-          { text: isEN ? 'CHECK-IN INSTRUCTIONS · FLORENCE' : 'ISTRUZIONI DI CHECK-IN · FIRENZE', fontSize: 16, bold: true, color: '#0F1A2E', margin: [0, 0, 0, 12] },
+          { text: isEN ? 'CHECK-IN INSTRUCTIONS · FLORENCE' : 'ISTRUZIONI DI CHECK-IN · FIRENZE', fontSize: 16, bold: true, color: '#1E1035', margin: [0, 0, 0, 12] },
           { stack: rows, fontSize: 11 },
           {
             margin: [0, 20, 0, 0],
@@ -738,7 +738,7 @@
               ? 'itassistance Guest Support · Florence (' + hours + '): ' + phone + ' · ' + email
               : 'Assistenza Ospiti itassistance · Firenze (' + hours + '): ' + phone + ' · ' + email,
             fontSize: 9.5,
-            color: '#475569'
+            color: '#4C3D63'
           }
         ]
       };

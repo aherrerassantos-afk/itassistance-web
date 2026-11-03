@@ -13,7 +13,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet"/>
 
   <!-- Fonte Unica Dati & Sincronizzazione Cloud -->
   <script src="/site-config.js"></script>
@@ -24,29 +24,29 @@
 
   <style>
     :root {
-      --bg-light: #FAFAF8;
-      --bg-stone: #F2EFE9;
-      --ink-navy: #0F1A2E;
-      --ink-muted: #475569;
-      --ink-on-dark-muted: #CBD5E1;
-      --gold-accent: #C9A84C;
-      --gold-text-light: #7A5C12;
-      --border-control: #64748B;
+      --bg-light: #FFFFFF;
+      --bg-stone: #F5F3FF;
+      --ink-navy: #1E1035;
+      --ink-muted: #4C3D63;
+      --ink-on-dark-muted: #DDD6FE;
+      --gold-accent: #C4B5FD;
+      --gold-text-light: #5B21B6;
+      --border-control: #7C3AED;
       --status-ok-bg: #ECFDF5;
       --status-ok-text: #065F46;
-      --font-display: 'Cormorant Garamond', Georgia, serif;
-      --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
-      --navy: #0F1A2E;
-      --navy-soft: #16243E;
-      --gold: #C9A84C;
-      --gold-dark: #7A5C12;
-      --gold-light: #F2EFE9;
-      --bg: #FAFAF8;
+      --navy: #1E1035;
+      --navy-soft: #2E1065;
+      --gold: #C4B5FD;
+      --gold-dark: #5B21B6;
+      --gold-light: #F5F3FF;
+      --bg: #FFFFFF;
       --card: #FFFFFF;
-      --text: #0F1A2E;
-      --text-muted: #475569;
-      --border: #CBD5E1;
+      --text: #1E1035;
+      --text-muted: #4C3D63;
+      --border: #DDD6FE;
       --green: #065F46;
       --green-bg: #ECFDF5;
       --amber: #92400E;
@@ -55,8 +55,8 @@
       --red-bg: #FEF2F2;
       --blue: #1E40AF;
       --blue-bg: #DBEAFE;
-      --serif: 'Cormorant Garamond', Georgia, serif;
-      --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --serif: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --radius: 12px;
       --shadow: none;
     }
@@ -205,7 +205,7 @@
     .role-switcher-select {
       background: rgba(255, 255, 255, 0.1);
       color: #fff;
-      border: 1px solid rgba(201, 168, 76, 0.5);
+      border: 1px solid rgba(196, 181, 253, 0.55);
       border-radius: 8px;
       padding: 7px 10px;
       font-family: var(--sans);
@@ -380,7 +380,7 @@
       font-weight: 700;
       min-height: 48px;
       padding: 10px 16px;
-      border-radius: 8px;
+      border-radius: 15px;
       cursor: pointer;
       border: 1.5px solid transparent;
       transition: transform 0.15s ease, opacity 0.15s ease;
@@ -412,7 +412,7 @@
     .badge-warn { background: var(--amber-bg); color: var(--amber); }
     .badge-err { background: var(--red-bg); color: var(--red); }
     .badge-info { background: var(--blue-bg); color: var(--blue); }
-    .badge-gold { background: var(--gold-light); color: var(--gold-dark); border: 1px solid rgba(201,168,76,0.45); }
+    .badge-gold { background: var(--gold-light); color: var(--gold-dark); border: 1px solid rgba(196,181,253,0.50); }
 
     .adm-view { display: none; }
     .adm-view.active { display: block; }
@@ -695,7 +695,7 @@
          Mostra tutti i reparti
       </button>
 
-      <div style="margin-top:16px;padding:12px;border-radius:10px;background:var(--gold-light);border:1px solid rgba(201,168,76,0.4);font-size:11.5px;color:var(--navy);">
+      <div style="margin-top:16px;padding:12px;border-radius:10px;background:var(--gold-light);border:1px solid rgba(196,181,253,0.45);font-size:11.5px;color:var(--navy);">
         <strong>Dati Fiscali Emittente</strong><br/>
         Blue Arroyo SRL<br/>
         P.IVA 07480210488<br/>
@@ -747,7 +747,7 @@
         </div>
 
         <!-- CABINA DIREZIONE VENDITE: QUOTAZIONE VARIABILE GIORNALIERA (99,00 € - 289,50 € / MESE) -->
-        <div class="panel-card" style="border:2px solid var(--navy);background:#FAFAF8;margin-bottom:18px;">
+        <div class="panel-card" style="border:2px solid var(--navy);background:#FFFFFF;margin-bottom:18px;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;">
             <div>
               <span class="badge badge-gold">DIREZIONE VENDITE · CONTROLLO DOMANDA FIRENZE (FASE 1 RANDOM)</span>
@@ -767,7 +767,7 @@
         </div>
 
         <!-- ═══ CENTRALE OPERATIVA, FIELD FIRENZE (20€/30€) & ASSISTENZA 09:00–23:00 ═══ -->
-        <div class="panel-card" style="border:1.5px solid var(--gold);background:linear-gradient(180deg, #FFFFFF 0%, #FBF7EC 100%);">
+        <div class="panel-card" style="border:1.5px solid var(--gold);background:linear-gradient(180deg, #FFFFFF 0%, #F5F3FF 100%);">
           <div class="panel-head">
             <div>
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -912,7 +912,7 @@
           </div>
 
           <!-- CRUSCOTTO PORTAFOGLIO MULTI-APPARTAMENTO PM & AZIONI 1-TAP PER I 3 GENERAL DIRECTORS -->
-          <div style="background:#0F1A2E;color:#fff;padding:14px;border-radius:10px;border:1.5px solid var(--gold);">
+          <div style="background:#1E1035;color:#fff;padding:14px;border-radius:10px;border:1.5px solid var(--gold);">
             <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
               <div>
                 <span class="badge badge-gold" style="font-size:10.5px;">SELETTORE MULTI-IMMOBILE PROPERTY MANAGER (BOARD PROJECT ATTIVO)</span>
@@ -921,7 +921,7 @@
               <div style="display:flex;gap:6px;flex-wrap:wrap;">
                 <button type="button" class="btn btn-outline btn-sm" style="background:rgba(255,255,255,0.1);color:#FDE68A;border-color:#F59E0B;font-size:11.5px;" onclick="adminSubentroToscanOneTap()"> DG Operatività/Vendite: +1-Tap Subentro Collaudo Toscan</button>
                 <button type="button" class="btn btn-outline btn-sm" style="background:rgba(255,255,255,0.1);color:#A7F3D0;border-color:#10B981;font-size:11.5px;" onclick="adminCertifyWeekOneTap()">DG Revenue: +1 Sett. Dati (&gt;+8%) Sblocca L3</button>
-                <button type="button" class="btn btn-gold btn-sm" style="font-size:11.5px;color:#0F1A2E;font-weight:800;" onclick="adminIssueCumulativePmInvoiceOneTap()">DG Amministrazione: 1-Tap Fattura Unica Cumulativa PM</button>
+                <button type="button" class="btn btn-gold btn-sm" style="font-size:11.5px;color:#1E1035;font-weight:800;" onclick="adminIssueCumulativePmInvoiceOneTap()">DG Amministrazione: 1-Tap Fattura Unica Cumulativa PM</button>
               </div>
             </div>
             <div id="adm-pm-apt-pills" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
@@ -1243,7 +1243,7 @@ P.IVA: 07480210488</div>
           </details>
 
           <!-- CONFIGURATORE CREDENZIALI LIVE SENZA CODICE (STRIPE, IBAN, SUPABASE, N8N) -->
-          <details style="margin-top:12px;background:#FFFDF7;border:1.5px solid var(--gold);border-radius:10px;padding:14px 18px;">
+          <details style="margin-top:12px;background:#FFFFFF;border:1.5px solid var(--gold);border-radius:10px;padding:14px 18px;">
             <summary style="cursor:pointer;font-weight:800;color:var(--navy);font-size:14px;"> Configuratore Credenziali Live Senza Codice (Stripe Payment Links, IBAN Blue Arroyo SRL, n8n &amp; Supabase)</summary>
             <div style="margin-top:14px;">
               <p style="font-size:12.5px;color:var(--text-muted);margin-bottom:12px;">Aggiorna qui i link di pagamento Stripe, l'IBAN per il bonifico e il Webhook n8n: le modifiche vengono applicate istantaneamente su <code>/checkout.html</code>, <code>/app.html</code>e <code>/admin.html</code>.</p>
@@ -1286,7 +1286,7 @@ P.IVA: 07480210488</div>
       ══════════════════════════════════════════════════ -->
       <section class="adm-view" id="adm-partners">
         <!-- IN CIMA PER IL RUOLO VENDITE: LEAD DA CONTATTARE E ATTIVARE IN 1 CLIC -->
-        <div class="panel-card" style="border:1.5px solid var(--gold);background:linear-gradient(180deg, #FFFFFF 0%, #FBF7EC 100%);">
+        <div class="panel-card" style="border:1.5px solid var(--gold);background:linear-gradient(180deg, #FFFFFF 0%, #F5F3FF 100%);">
           <div class="panel-head">
             <div>
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -2721,7 +2721,7 @@ P.IVA: 07480210488</div>
               }
             ]
           },
-          { canvas: [{ type: 'rect', x: 0, y: 0, w: 515, h: 2, color: '#C9A84C' }], margin: [0, 14, 0, 18] },
+          { canvas: [{ type: 'rect', x: 0, y: 0, w: 515, h: 2, color: '#C4B5FD' }], margin: [0, 14, 0, 18] },
           { text: 'DESTINATARIO (PROPRIETARIO / PARTNER):', fontSize: 9, bold: true, color: '#52525B', margin: [0, 0, 0, 4] },
           { text: inv.client, fontSize: 12, bold: true },
           { text: 'C.F. / P.IVA: ' + inv.cf, fontSize: 10, margin: [0, 2, 0, 18] },
@@ -3027,11 +3027,11 @@ P.IVA: 07480210488</div>
           var pHtml = '';
           sum.rows.forEach(function (r) {
             var activeStyle = r.isActive
-              ? 'background:#C9A84C;color:#0F1A2E;border:2px solid #fff;font-weight:800;'
+              ? 'background:#C4B5FD;color:#1E1035;border:2px solid #fff;font-weight:800;'
               : 'background:rgba(255,255,255,0.08);color:#E2E8F0;border:1px solid rgba(255,255,255,0.22);font-weight:600;';
             pHtml += '<button type="button" onclick="adminSwitchPmApt(\'' + r.id + '\')" style="' + activeStyle + 'padding:6px 11px;border-radius:8px;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">' +
               '<span>' + r.shortLabel + '</span>' +
-              '<span style="background:#0F1A2E;color:#C9A84C;padding:1px 6px;border-radius:4px;font-size:10.5px;font-weight:800;">L' + r.autonomyLevel + ' (' + r.verifiedWeeks + '/2 sett.)</span>' +
+              '<span style="background:#1E1035;color:#C4B5FD;padding:1px 6px;border-radius:4px;font-size:10.5px;font-weight:800;">L' + r.autonomyLevel + ' (' + r.verifiedWeeks + '/2 sett.)</span>' +
               (r.pendingTasksCount >0 ? '<span style="background:#EF4444;color:#fff;padding:1px 6px;border-radius:99px;font-size:10px;font-weight:800;">' + r.pendingTasksCount + ' alert</span>' : '<span style="color:#10B981;font-weight:800;">OK</span>') +
             '</button>';
           });

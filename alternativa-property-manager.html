@@ -55,38 +55,38 @@
   </script>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg-light: #FAFAF8;
-      --bg-stone: #F2EFE9;
-      --ink-navy: #0F1A2E;
-      --ink-muted: #475569;
-      --ink-on-dark-muted: #CBD5E1;
-      --gold-accent: #C9A84C;
-      --gold-text-light: #7A5C12;
-      --border-control: #64748B;
+      --bg-light: #FFFFFF;
+      --bg-stone: #F5F3FF;
+      --ink-navy: #1E1035;
+      --ink-muted: #4C3D63;
+      --ink-on-dark-muted: #DDD6FE;
+      --gold-accent: #C4B5FD;
+      --gold-text-light: #5B21B6;
+      --border-control: #7C3AED;
       --status-ok-bg: #ECFDF5;
       --status-ok-text: #065F46;
-      --navy: #0F1A2E;
-      --navy-dark: #0F1A2E;
-      --gold: #C9A84C;
-      --gold-dark: #7A5C12;
-      --gold-hover: #7A5C12;
-      --gold-light: #F2EFE9;
-      --bg: #FAFAF8;
-      --bg-light-alt: #F2EFE9;
-      --bg-alt: #F2EFE9;
+      --navy: #1E1035;
+      --navy-dark: #1E1035;
+      --gold: #C4B5FD;
+      --gold-dark: #5B21B6;
+      --gold-hover: #5B21B6;
+      --gold-light: #F5F3FF;
+      --bg: #FFFFFF;
+      --bg-light-alt: #F5F3FF;
+      --bg-alt: #F5F3FF;
       --card: #FFFFFF;
       --white: #FFFFFF;
-      --text: #0F1A2E;
-      --text-muted: #475569;
-      --border: #64748B;
+      --text: #1E1035;
+      --text-muted: #4C3D63;
+      --border: #7C3AED;
       --green: #065F46;
       --green-bg: #ECFDF5;
-      --serif: 'Cormorant Garamond', Georgia, serif;
-      --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --serif: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     html { font-size: 16px; -webkit-text-size-adjust: 100%; }
     body { font-family: var(--sans) !important; background-color: var(--bg-light); color: var(--ink-navy); overflow-x: clip; }
@@ -98,7 +98,7 @@
     .navbar-inner { display:flex; justify-content:space-between; align-items:center; height:64px; }
     .brand { display:inline-flex; align-items:center; gap:10px; font-weight:700; font-size:19px; color:var(--navy); }
     .brand img { width:30px; height:30px; border-radius:6px; }
-    .btn { display:inline-flex; align-items:center; justify-content:center; padding:13px 22px; border-radius:8px; font-weight:600; font-size:14px; min-height:48px; cursor:pointer; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; padding:13px 22px; border-radius: 15px; font-weight:600; font-size:14px; min-height:48px; cursor:pointer; }
     .btn-gold { background:var(--gold); color:var(--navy); font-weight:700; }
     .btn-outline { border:1px solid var(--navy); color:var(--navy); background:#fff; }
     section { padding:64px 0; border-bottom:1px solid var(--border); }
@@ -113,7 +113,7 @@
   
     .btn { min-height: 56px; }
     @media (min-width: 1024px) { .btn { min-height: 48px; } }
-    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--gold-accent, #C9A84C); outline-offset: 2px; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--gold-accent, #C4B5FD); outline-offset: 2px; }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
   </style>
 </head>
@@ -135,7 +135,7 @@
       <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:14px;">
          <strong>Ultimo aggiornamento:</strong>Novembre 2026 · <strong>Autore:</strong>Redazione Tecnica <a href="/chi-siamo.html" style="text-decoration:underline;">itassistance (Blue Arroyo SRL, Firenze)</a>
       </div>
-      <div style="background:#FBF7EC;border-left:4px solid #C9A84C;border-radius:10px;padding:18px 20px;margin-bottom:18px;">
+      <div style="background:#F5F3FF;border-left:4px solid #C4B5FD;border-radius:10px;padding:18px 20px;margin-bottom:18px;">
         <strong style="color:var(--navy);display:block;margin-bottom:4px;">In Breve (Risposta Rapida):</strong>
         <p style="margin:0;color:var(--navy);font-size:15px;">
           Su un appartamento che incassa 30.000 € l'anno, un property manager al 20% trattiene <strong>6.000 €/anno</strong>. L'alternativa a canone fisso è <strong>itassistance</strong>: costa <strong>99 € al mese IVA inclusa (1.188 €/anno)</strong>con <strong>zero commissioni (0%)</strong>, ti fa risparmiare <strong>4.812 €/anno</strong>e ti guida in 10 minuti al giorno su Alloggiati Web, tassa di soggiorno e fornitori (con opzione <strong>+10%</strong>se desideri delegare anche Revenue Management e adempimenti).
@@ -184,7 +184,7 @@
         </tbody>
       </table>
 
-      <div style="background:#FBF7EC;border:1px solid #C9A84C;border-radius:12px;padding:24px;margin-top:24px;">
+      <div style="background:#F5F3FF;border:1px solid #C4B5FD;border-radius:12px;padding:24px;margin-top:24px;">
         <h3 style="font-size:18px;color:var(--navy);margin-bottom:8px;">Perché il 75% dei proprietari italiani sceglie di non avere un Property Manager</h3>
         <p style="margin:0;font-size:15px;">
           I dati del <strong>Centro Studi AIGAB</strong>, <strong>Idealista</strong>e <strong>Politecnico di Torino</strong>mostrano che in Italia circa il <strong>75% degli immobili in affitto breve è gestito direttamente dal proprietario</strong>e l'<strong>84% dei proprietari ha 1 o 2 appartamenti</strong>. Allo stesso tempo, il 25% degli immobili seguiti con strumenti professionali e ottimizzazione delle tariffe genera il <strong>37–38% del fatturato totale</strong>. Con <strong>itassistance</strong>hai il controllo diretto e il risparmio del canone fisso (<strong>99 €/mese IVA inclusa</strong>), e se vuoi anche l'ottimizzazione dinamica dei prezzi e l'esecuzione degli adempimenti di legge puoi attivare l'extra opzionale del <strong>+10%</strong>.

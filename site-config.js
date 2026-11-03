@@ -418,6 +418,147 @@
   SITE_CONFIG.buildCheckoutPaymentUrl = buildCheckoutPaymentUrl;
   SITE_CONFIG.getBankTransferDetails = getBankTransferDetails;
   SITE_CONFIG.computePortfolioVolumeCheckout = computePortfolioVolumeCheckout;
+  SITE_CONFIG.designSystem = {
+    name: 'Structural Resonance - Centered Architect (itassistance Violet & White Edition)',
+    sourceUrl: 'https://www.aura.build/design-systems/structural-resonance-centered-architect',
+    colors: {
+      primary: '#6D28D9',
+      primaryHover: '#5B21B6',
+      secondary: '#FFFFFF',
+      accent: '#C4B5FD',
+      background: '#FFFFFF',
+      backgroundDark: '#1E1035',
+      surface: '#F5F3FF',
+      textPrimary: '#1E1035',
+      textSecondary: '#4C3D63',
+      textOnDark: '#FFFFFF',
+      textSecondaryOnDark: '#E9D5FF',
+      border: '#DDD6FE',
+      borderStrong: '#7C3AED'
+    },
+    typography: {
+      display: 'Inter',
+      body: 'Inter',
+      mono: 'JetBrains Mono'
+    },
+    rounded: {
+      card: '15px',
+      control: '15px',
+      pill: '9999px'
+    }
+  };
+
+  function injectAuraVioletWhiteDesignSystem() {
+    if (typeof document === 'undefined' || !document.head) return;
+    if (!document.getElementById('ita-aura-fonts')) {
+      var fontLink = document.createElement('link');
+      fontLink.id = 'ita-aura-fonts';
+      fontLink.rel = 'stylesheet';
+      fontLink.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap';
+      document.head.appendChild(fontLink);
+    }
+    if (document.getElementById('ita-aura-violet-white-ds')) return;
+    var style = document.createElement('style');
+    style.id = 'ita-aura-violet-white-ds';
+    style.textContent = [
+      ':root {',
+      '  --bg-light: #FFFFFF;',
+      '  --bg-stone: #F5F3FF;',
+      '  --ink-navy: #1E1035;',
+      '  --ink-muted: #4C3D63;',
+      '  --ink-on-dark-muted: #E9D5FF;',
+      '  --gold-accent: #C4B5FD;',
+      '  --gold-text-light: #5B21B6;',
+      '  --border-control: #7C3AED;',
+      '  --brand-violet: #6D28D9;',
+      '  --brand-violet-hover: #5B21B6;',
+      '  --brand-violet-soft: #EDE9FE;',
+      '  --brand-border-soft: #DDD6FE;',
+      '  --overlay-hero: rgba(30, 16, 53, 0.84);',
+      '  --font-display: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;',
+      '  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;',
+      '  --font-mono: "JetBrains Mono", monospace;',
+      '  --navy: #1E1035;',
+      '  --navy-soft: #2E1065;',
+      '  --gold: #C4B5FD;',
+      '  --gold-dark: #5B21B6;',
+      '  --gold-light: #F5F3FF;',
+      '  --bg: #FFFFFF;',
+      '  --card: #FFFFFF;',
+      '  --text: #1E1035;',
+      '  --text-muted: #4C3D63;',
+      '  --border: #DDD6FE;',
+      '  --serif: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;',
+      '  --sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;',
+      '  --radius: 15px;',
+      '}',
+      'body {',
+      '  font-family: var(--font-sans);',
+      '  background-color: var(--bg-light);',
+      '  color: var(--ink-navy);',
+      '  letter-spacing: -0.005em;',
+      '}',
+      'h1, h2, h3, h4 {',
+      '  font-family: var(--font-display);',
+      '  letter-spacing: -0.025em;',
+      '}',
+      '.kicker, .badge, code, [id*="lock-code"], [id*="dyn-slots"], .mono-label {',
+      '  font-family: var(--font-mono);',
+      '}',
+      '.btn, button.btn, a.btn {',
+      '  border-radius: 15px;',
+      '  transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;',
+      '}',
+      '.btn-primary, a.btn-primary, button.btn-primary {',
+      '  background: linear-gradient(135deg, #6D28D9 0%, #5B21B6 100%) !important;',
+      '  color: #FFFFFF !important;',
+      '  border-color: #6D28D9 !important;',
+      '  box-shadow: 0 8px 22px -6px rgba(109, 40, 217, 0.42);',
+      '}',
+      '.btn-primary:hover, a.btn-primary:hover, button.btn-primary:hover {',
+      '  background: linear-gradient(135deg, #5B21B6 0%, #4C1D95 100%) !important;',
+      '  color: #FFFFFF !important;',
+      '  transform: translateY(-1px);',
+      '}',
+      '.section-dark .btn-primary, .hero-section .btn-primary {',
+      '  background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%) !important;',
+      '  color: #FFFFFF !important;',
+      '  border: 2px solid #C4B5FD !important;',
+      '  box-shadow: 0 10px 28px -6px rgba(196, 181, 253, 0.35);',
+      '}',
+      '.card, .step-card, .feature-card, .price-card, .faq-item, .onion-block, .area-card, .panel-card {',
+      '  border-radius: 15px;',
+      '  box-shadow: 0 10px 30px -12px rgba(91, 33, 182, 0.08);',
+      '}',
+      '.site-header, header {',
+      '  border-bottom-color: #DDD6FE;',
+      '}',
+      '.bottom-nav, .mob-bottom-nav, .cipolla-bottom-bar {',
+      '  background: rgba(255, 255, 255, 0.96) !important;',
+      '  backdrop-filter: blur(12px);',
+      '  border-top: 1.5px solid #DDD6FE !important;',
+      '}',
+      '.pba-chat__toggle {',
+      '  background: linear-gradient(135deg, #6D28D9 0%, #4C1D95 100%) !important;',
+      '  color: #FFFFFF !important;',
+      '  border: 1.5px solid #C4B5FD !important;',
+      '  border-radius: 9999px !important;',
+      '}',
+      '.pba-chat__header {',
+      '  background: #1E1035 !important;',
+      '  color: #FFFFFF !important;',
+      '}',
+      '.pba-option {',
+      '  border-color: #7C3AED !important;',
+      '  color: #4C1D95 !important;',
+      '  background: #F5F3FF !important;',
+      '  border-radius: 12px !important;',
+      '}'
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
+  injectAuraVioletWhiteDesignSystem();
 
   function injectEditorialGuideConversionBanner() {
     if (typeof document === 'undefined' || !document.body) return;
@@ -435,21 +576,21 @@
     var section = document.createElement('section');
     section.id = 'ita-guide-dyn-conversion-banner';
     section.setAttribute('aria-label', 'Attivazione rapida quota bloccata di oggi');
-    section.style.cssText = 'background:#F2EFE9;border-top:2px solid #C9A84C;border-bottom:2px solid #C9A84C;padding:48px 16px;';
+    section.style.cssText = 'background:#F5F3FF;border-top:2px solid #7C3AED;border-bottom:2px solid #7C3AED;padding:48px 16px;';
 
     var wrap = document.createElement('div');
-    wrap.style.cssText = 'max-width:960px;margin:0 auto;background:#0F1A2E;color:#FAFAF8;border:2px solid #C9A84C;border-radius:16px;padding:32px 24px;';
+    wrap.style.cssText = 'max-width:960px;margin:0 auto;background:#1E1035;color:#FFFFFF;border:2px solid #C4B5FD;border-radius:15px;padding:32px 24px;box-shadow:0 16px 36px -12px rgba(30,16,53,0.35);';
 
     var badge = document.createElement('span');
-    badge.style.cssText = 'display:inline-block;background:rgba(201,168,76,0.18);color:#C9A84C;border:1px solid #C9A84C;padding:4px 12px;border-radius:999px;font-size:0.8125rem;font-weight:700;margin-bottom:12px;';
+    badge.style.cssText = 'display:inline-block;background:rgba(196,181,253,0.16);color:#C4B5FD;border:1px solid #C4B5FD;padding:4px 12px;border-radius:999px;font-family:"JetBrains Mono",monospace;font-size:0.75rem;font-weight:600;margin-bottom:12px;';
     badge.textContent = 'Quotazione Acquisizione Firenze di Oggi · ' + dp.slotsAvailable + ' slot disponibili su ' + dp.maxSlots;
 
     var h2 = document.createElement('h2');
-    h2.style.cssText = 'font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.75rem,3.5vw,2.35rem);line-height:1.15;color:#FAFAF8;margin:0 0 12px 0;';
+    h2.style.cssText = 'font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(1.65rem,3.2vw,2.25rem);font-weight:700;letter-spacing:-0.025em;line-height:1.12;color:#FFFFFF;margin:0 0 12px 0;';
     h2.textContent = 'Metti in regola il tuo appartamento in 10 minuti al giorno: blocca ora la quota di ' + dp.todayFormatted + '/mese.';
 
     var p = document.createElement('p');
-    p.style.cssText = 'font-size:1rem;color:#CBD5E1;line-height:1.55;max-width:65ch;margin:0 0 20px 0;';
+    p.style.cssText = 'font-size:1rem;color:#E9D5FF;line-height:1.6;max-width:65ch;margin:0 0 20px 0;';
     p.textContent = 'La quota di ingresso oscilla ogni giorno tra 99,00 € e 289,50 €/mese in base agli slot operativi disponibili su Firenze. Attivando adesso blocchi per sempre la tariffa di oggi (' + dp.todayFormatted + '/mese IVA inclusa, zero commissioni sulle prenotazioni) protetta dalla Garanzia 14 giorni Soddisfatto o Rimborsato.';
 
     var btnRow = document.createElement('div');
@@ -457,12 +598,12 @@
 
     var cta = document.createElement('a');
     cta.href = '/checkout.html?locked_price=' + encodeURIComponent(dp.todayMonthlyEur);
-    cta.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:14px 24px;background:#C9A84C;color:#0F1A2E;font-weight:700;font-size:1rem;border-radius:8px;text-decoration:none;border:2px solid #C9A84C;';
+    cta.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:14px 24px;background:linear-gradient(135deg,#7C3AED 0%,#5B21B6 100%);color:#FFFFFF;font-weight:700;font-size:1rem;border-radius:15px;text-decoration:none;border:2px solid #C4B5FD;';
     cta.textContent = 'Blocca ' + dp.todayFormatted + '/mese e attiva la prova di 14 giorni';
 
     var secLink = document.createElement('a');
     secLink.href = '/calcola-risparmio.html';
-    secLink.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:14px 20px;background:transparent;color:#FAFAF8;font-weight:700;font-size:0.9375rem;border-radius:8px;text-decoration:none;border:1.5px solid #CBD5E1;';
+    secLink.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:14px 20px;background:transparent;color:#FFFFFF;font-weight:700;font-size:0.9375rem;border-radius:15px;text-decoration:none;border:1.5px solid #C4B5FD;';
     secLink.textContent = 'Calcola il tuo risparmio rispetto al 20% di un Property Manager';
 
     btnRow.appendChild(cta);
@@ -496,6 +637,11 @@
       if (val !== null && val !== undefined) {
         el.textContent = String(val);
       }
+    }
+    injectAuraVioletWhiteDesignSystem();
+    var dsStyle = document.getElementById('ita-aura-violet-white-ds');
+    if (dsStyle && document.head && document.head.lastElementChild !== dsStyle) {
+      document.head.appendChild(dsStyle);
     }
     injectEditorialGuideConversionBanner();
   }

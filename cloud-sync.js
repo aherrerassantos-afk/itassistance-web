@@ -1904,8 +1904,8 @@
       rowsHtml += '<tr><td><strong>' + p.slot + '</strong></td><td>' + p.status + '</td><td style="font-family:monospace;font-size:11px;word-break:break-all;">' + p.sha256 + '</td></tr>';
     }
     w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Verbale 4 Foto Anti-Danni SHA-256 — ' + rep.reportId + '</title>' +
-      '<style>body{font-family:sans-serif;padding:36px;color:#0F1A2E;line-height:1.5;max-width:820px;margin:0 auto}h1{font-size:22px;margin-bottom:6px}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #64748B;padding:10px;text-align:left;vertical-align:top}th{background:#F2EFE9}.box{background:#ECFDF5;border:1.5px solid #065F46;padding:14px;border-radius:8px;margin-top:16px}</style></head><body>' +
-      '<div style="font-size:12px;font-weight:700;letter-spacing:1px;color:#7A5C12;">3. BLUE ARROYO CLEANING · VERBALE ISPEZIONE E SANIFICAZIONE 60°C · FIRENZE</div>' +
+      '<style>body{font-family:sans-serif;padding:36px;color:#1E1035;line-height:1.5;max-width:820px;margin:0 auto}h1{font-size:22px;margin-bottom:6px}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #7C3AED;padding:10px;text-align:left;vertical-align:top}th{background:#F5F3FF}.box{background:#ECFDF5;border:1.5px solid #065F46;padding:14px;border-radius:8px;margin-top:16px}</style></head><body>' +
+      '<div style="font-size:12px;font-weight:700;letter-spacing:1px;color:#5B21B6;">3. BLUE ARROYO CLEANING · VERBALE ISPEZIONE E SANIFICAZIONE 60°C · FIRENZE</div>' +
       '<h1>Certificato 4 Foto Anti-Danni SHA-256 e Rifornimento Kit (' + rep.reportId + ')</h1>' +
       '<p><strong>Immobile:</strong> ' + rep.apartmentName + ' · <strong>CIN:</strong> ' + rep.cin + ' · <strong>Codice Proprietario:</strong> ' + rep.ownerCode + '<br/>' +
       '<strong>Soggiorno verificato:</strong> ' + rep.guestName + ' (' + rep.channel + ') · <strong>Finestra operativa:</strong> Ore 11:00 – 14:00</p>' +
@@ -1913,7 +1913,7 @@
       rowsHtml +
       '</tbody></table>' +
       '<div class="box"><strong>Fornitura Kit Cortesia Inclusa (0 € di ricarico PM):</strong> Kit Bagno Biologico, Kit Cucina con spugna sigillata e Kit Benvenuto riforniti gratuitamente per ogni soggiorno. Risparmio medio certificato per il proprietario: <strong>' + rep.monthlyKitSavingEur + ' €/mese (' + rep.annualKitSavingEur + ' €/anno)</strong>.</div>' +
-      '<p style="margin-top:24px;font-size:12px;color:#475569;">Blue Arroyo SRL · Via Matteo Palmieri 20r, 50122 Firenze (FI) · P.IVA 07480210488 · Tel. +39 351 038 0392</p>' +
+      '<p style="margin-top:24px;font-size:12px;color:#4C3D63;">Blue Arroyo SRL · Via Matteo Palmieri 20r, 50122 Firenze (FI) · P.IVA 07480210488 · Tel. +39 351 038 0392</p>' +
       '<script>window.onload=function(){window.print();}<\/script></body></html>');
     w.document.close();
     return rep;
@@ -1971,8 +1971,8 @@
     var w = window.open('', '_blank');
     if (!w) return;
     w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Studio di Fattibilità 5 SAL — 1. Toscan Costruzioni</title>' +
-      '<style>body{font-family:sans-serif;padding:36px;color:#0F1A2E;line-height:1.5;max-width:800px;margin:0 auto}h1{font-size:24px;margin-bottom:4px}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #64748B;padding:10px;text-align:left}th{background:#F2EFE9}.box{background:#ECFDF5;border:1.5px solid #065F46;padding:14px;border-radius:8px;margin-top:16px}</style></head><body>' +
-      '<div style="font-size:12px;font-weight:700;letter-spacing:1px;color:#7A5C12;">1. TOSCAN COSTRUZIONI · GRUPPO INDUSTRIALE BLUE ARROYO SRL · FIRENZE</div>' +
+      '<style>body{font-family:sans-serif;padding:36px;color:#1E1035;line-height:1.5;max-width:800px;margin:0 auto}h1{font-size:24px;margin-bottom:4px}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #7C3AED;padding:10px;text-align:left}th{background:#F5F3FF}.box{background:#ECFDF5;border:1.5px solid #065F46;padding:14px;border-radius:8px;margin-top:16px}</style></head><body>' +
+      '<div style="font-size:12px;font-weight:700;letter-spacing:1px;color:#5B21B6;">1. TOSCAN COSTRUZIONI · GRUPPO INDUSTRIALE BLUE ARROYO SRL · FIRENZE</div>' +
       '<h1>Dossier Studio di Fattibilità 5 SAL Garantiti a Prezzo Fisso</h1>' +
       '<p><strong>Intestatario:</strong> ' + name + ' · <strong>Data:</strong> ' + new Date().toLocaleDateString('it-IT') + '<br/>' +
       '<strong>Operazione:</strong> ' + goal + '</p>' +
@@ -1984,7 +1984,7 @@
       '<tr><td>5° SAL · Fine Lavori, Collaudo Finale e Subentro Ciclo Blue Arroyo</td><td>10%</td><td><strong>' + s10 + ' €</strong></td><td>Certificazioni DM 37/08, APE e ingresso in 2. itassistance + 3. Blue Arroyo Cleaning + 4. Smartbookings</td></tr>' +
       '</tbody></table>' +
       '<div class="box"><strong>Riepilogo Finanziario Stimato:</strong><br/>Investimento Lavori Chiavi in Mano: <strong>' + cap.toLocaleString('it-IT') + ' €</strong> · Flusso Annuo Combinato: <strong>' + boost + '</strong> · Tempo di Rientro Stimato: <strong>' + payback + '</strong>.</div>' +
-      '<p style="margin-top:24px;font-size:12px;color:#475569;">Blue Arroyo SRL · Via Matteo Palmieri 20r, 50122 Firenze (FI) · P.IVA 07480210488 · Tel. +39 351 038 0392</p>' +
+      '<p style="margin-top:24px;font-size:12px;color:#4C3D63;">Blue Arroyo SRL · Via Matteo Palmieri 20r, 50122 Firenze (FI) · P.IVA 07480210488 · Tel. +39 351 038 0392</p>' +
       '<script>window.onload=function(){window.print();}<\/script></body></html>');
     w.document.close();
   }
@@ -2009,8 +2009,8 @@
     var w = window.open('', '_blank');
     if (!w) return;
     w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Distinta Attivazione e Tariffa Bloccata — ' + invId + '</title>' +
-      '<style>body{font-family:sans-serif;padding:36px;color:#0F1A2E;line-height:1.5;max-width:760px;margin:0 auto}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #64748B;padding:10px;text-align:left}th{background:#F2EFE9}</style></head><body>' +
-      '<div style="font-size:12px;font-weight:700;color:#7A5C12;">BLUE ARROYO SRL · VIA MATTEO PALMIERI 20R, 50122 FIRENZE (FI) · P.IVA 07480210488</div>' +
+      '<style>body{font-family:sans-serif;padding:36px;color:#1E1035;line-height:1.5;max-width:760px;margin:0 auto}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #7C3AED;padding:10px;text-align:left}th{background:#F5F3FF}</style></head><body>' +
+      '<div style="font-size:12px;font-weight:700;color:#5B21B6;">BLUE ARROYO SRL · VIA MATTEO PALMIERI 20R, 50122 FIRENZE (FI) · P.IVA 07480210488</div>' +
       '<h1>Certificato di Attivazione e Blocco Tariffa (' + invId + ')</h1>' +
       '<p><strong>Intestatario:</strong> ' + ownerName + ' · <strong>Immobile:</strong> ' + aptName + '<br/>' +
       '<strong>Codice Proprietario Personale:</strong> ' + ownerCode + ' · <strong>Garanzia 100% Rimborso fino al:</strong> ' + guaranteeUntil + '</p>' +
