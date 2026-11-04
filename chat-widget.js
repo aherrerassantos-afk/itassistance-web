@@ -8,6 +8,144 @@
   var EMAIL_ADDR = (cfg && cfg.support && cfg.support.email) ? cfg.support.email : 'info@itadreamteam.com';
   var STORAGE_KEY = 'ita_chat_seen_v2';
 
+  function injectChatStyles() {
+    if (document.getElementById('pba-chat-styles')) return;
+    var st = document.createElement('style');
+    st.id = 'pba-chat-styles';
+    st.textContent = [
+      '.pba-chat {',
+      '  width: 100%;',
+      '  max-width: 1200px;',
+      '  margin: 0 auto;',
+      '  padding: 16px max(16px, env(safe-area-inset-right)) 16px max(16px, env(safe-area-inset-left));',
+      '  display: flex;',
+      '  justify-content: flex-end;',
+      '}',
+      '.pba-chat__toggle {',
+      '  display: inline-flex;',
+      '  align-items: center;',
+      '  justify-content: center;',
+      '  gap: 10px;',
+      '  min-height: 48px;',
+      '  min-width: 48px;',
+      '  padding: 10px 18px;',
+      '  font-family: var(--font-sans, "Inter", sans-serif);',
+      '  font-size: 0.9375rem;',
+      '  font-weight: 700;',
+      '  cursor: pointer;',
+      '  max-width: 100%;',
+      '}',
+      '.pba-chat__toggle-mark {',
+      '  display: inline-flex;',
+      '  align-items: center;',
+      '  justify-content: center;',
+      '  width: 28px;',
+      '  height: 28px;',
+      '  border-radius: 50%;',
+      '  background: rgba(255, 255, 255, 0.18);',
+      '  font-weight: 800;',
+      '  flex-shrink: 0;',
+      '}',
+      '.pba-chat__panel {',
+      '  display: none;',
+      '  position: fixed;',
+      '  left: max(16px, env(safe-area-inset-left));',
+      '  right: max(16px, env(safe-area-inset-right));',
+      '  bottom: max(16px, env(safe-area-inset-bottom));',
+      '  margin-left: auto;',
+      '  width: auto;',
+      '  max-width: 420px;',
+      '  max-height: 85dvh;',
+      '  background: #FFFFFF;',
+      '  color: #1E1035;',
+      '  border: 2px solid #7C3AED;',
+      '  border-radius: 15px;',
+      '  box-shadow: 0 20px 48px rgba(30, 16, 53, 0.32);',
+      '  z-index: 850;',
+      '  flex-direction: column;',
+      '  overflow: hidden;',
+      '}',
+      '.pba-chat[data-state="open"] .pba-chat__panel {',
+      '  display: flex;',
+      '}',
+      '.pba-chat__header {',
+      '  display: flex;',
+      '  align-items: center;',
+      '  justify-content: space-between;',
+      '  gap: 12px;',
+      '  padding: 12px 16px;',
+      '  background: #1E1035;',
+      '  color: #FFFFFF;',
+      '  flex-shrink: 0;',
+      '}',
+      '.pba-chat__title {',
+      '  min-width: 0;',
+      '}',
+      '.pba-chat__brand {',
+      '  font-weight: 800;',
+      '  font-size: 1rem;',
+      '  color: #FFFFFF;',
+      '  margin: 0;',
+      '}',
+      '.pba-chat__brand-sub {',
+      '  font-size: 0.8125rem;',
+      '  color: #E9D5FF;',
+      '  margin: 2px 0 0;',
+      '}',
+      '.pba-chat__close {',
+      '  min-width: 48px;',
+      '  min-height: 48px;',
+      '  border-radius: 10px;',
+      '  border: 1.5px solid #C4B5FD;',
+      '  background: rgba(255, 255, 255, 0.12);',
+      '  color: #FFFFFF;',
+      '  font-size: 1.25rem;',
+      '  font-weight: 700;',
+      '  cursor: pointer;',
+      '  display: inline-flex;',
+      '  align-items: center;',
+      '  justify-content: center;',
+      '  flex-shrink: 0;',
+      '}',
+      '.pba-chat__body {',
+      '  padding: 16px;',
+      '  overflow-y: auto;',
+      '  flex: 1 1 auto;',
+      '  display: flex;',
+      '  flex-direction: column;',
+      '  gap: 10px;',
+      '}',
+      '.pba-msg__bubble {',
+      '  padding: 10px 14px;',
+      '  border-radius: 12px;',
+      '  background: #F5F3FF;',
+      '  color: #1E1035;',
+      '  font-size: 0.9375rem;',
+      '  line-height: 1.5;',
+      '}',
+      '.pba-msg--user .pba-msg__bubble {',
+      '  background: #1E1035;',
+      '  color: #FFFFFF;',
+      '}',
+      '.pba-options {',
+      '  display: flex;',
+      '  flex-direction: column;',
+      '  gap: 8px;',
+      '}',
+      '.pba-option {',
+      '  width: 100%;',
+      '  min-height: 48px;',
+      '  padding: 10px 14px;',
+      '  text-align: left;',
+      '  font-family: inherit;',
+      '  font-size: 0.875rem;',
+      '  font-weight: 700;',
+      '  cursor: pointer;',
+      '}'
+    ].join('\n');
+    document.head.appendChild(st);
+  }
+
   function el(tag, props) {
     var e = document.createElement(tag);
     var children = Array.prototype.slice.call(arguments, 2);
@@ -34,6 +172,7 @@
   }
 
   function buildShell() {
+    injectChatStyles();
     var root = el('div', { id: 'pba-chat', class: 'pba-chat', 'data-state': 'closed' });
 
     var toggle = el('button', {
@@ -62,14 +201,19 @@
           type: 'button',
           'aria-label': 'Chiudi chat',
           onclick: function () { closeChat(); }
-        }, '×')
+        }, 'Chiudi')
       ),
       el('div', { class: 'pba-chat__body', id: 'pba-chat-body' })
     );
 
     root.appendChild(toggle);
     root.appendChild(panel);
-    document.body.appendChild(root);
+    var footer = document.querySelector('footer');
+    if (footer && footer.parentNode) {
+      footer.parentNode.insertBefore(root, footer);
+    } else {
+      document.body.appendChild(root);
+    }
 
     return root;
   }

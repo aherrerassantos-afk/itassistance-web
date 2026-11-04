@@ -4,7 +4,8 @@
   "private": true,
   "description": "itassistance — Piattaforma per il Proprietario-Gestore e Property Manager a Firenze (Blue Arroyo SRL)",
   "scripts": {
-    "check:layout": "node scripts/check-layout.js"
+    "check:layout": "node scripts/check-layout.js",
+    "check:mobile": "node scripts/check-mobile.js"
   },
   "devDependencies": {
     "axe-core": "^4.10.2",

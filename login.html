@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Accedi al tuo appartamento — itassistance</title>
   <meta name="description" content="Accedi all'Area Riservata di itassistance per aprire il Riepilogo delle 08:00, inviare i dati alla Questura e gestire i Gradi di Autonomia a Firenze."/>
   <meta name="robots" content="noindex, follow"/>
@@ -48,7 +48,7 @@
 
     html {
       -webkit-text-size-adjust: 100%;
-      overflow-x: clip;
+      
     }
 
     body {
@@ -60,7 +60,7 @@
       min-height: 100svh;
       display: flex;
       flex-direction: column;
-      overflow-x: clip;
+      
     }
 
     a {
@@ -237,9 +237,9 @@
 <body>
   <header class="onion-header">
     <div class="onion-header-inner">
-      <a href="/" class="back-link">&larr; Sito pubblico</a>
+      <a href="/" class="back-link">&larr; Home</a>
       <strong class="onion-header-brand">itassistance</strong>
-      <a href="/checkout.html" style="color: var(--gold-accent); font-weight: 700; white-space: nowrap;">Attiva prova</a>
+      <a href="/checkout.html" style="color: var(--gold-accent); font-weight: 700; white-space: nowrap; font-size: 0.9375rem;">Attiva prova</a>
     </div>
   </header>
 
@@ -283,9 +283,65 @@
         Attiva prova 14 giorni
       </a>
     </div>
+
+    <!-- ACCESSO DIREZIONE / SUPER ADMIN — PANNELLO DI CONTROLLO (/admin.html) -->
+    <div class="login-card" style="margin-top: 24px; background-color: var(--bg-stone); border-color: var(--ink-navy);">
+      <span class="kicker">Direzione Blue Arroyo SRL · Console Centrale</span>
+      <h2 style="font-family: var(--font-display); font-size: 1.5rem; line-height: 1.2; margin-bottom: 8px; color: var(--ink-navy);">
+        Account Super Admin — Pannello di Controllo
+      </h2>
+      <p class="sub" style="margin-bottom: 16px; font-size: 0.9375rem;">
+        Accesso riservato alla Presidenza e ai General Director per governare la quotazione giornaliera (99,00 € – 289,50 €), i 4 Gradi di Autonomia, la fatturazione e i lead di Toscan Costruzioni.
+      </p>
+
+      <div style="padding: 12px 14px; background-color: var(--bg-light); border: 1.5px solid var(--border-control); border-radius: 10px; margin-bottom: 16px; font-size: 0.875rem;">
+        <div style="font-weight: 700; color: var(--ink-navy);">Credenziali Super Admin preconfigurate:</div>
+        <div style="color: var(--ink-muted); margin-top: 4px;">
+          Utente: <strong>Julian Herrera (Presidente &amp; Super Admin)</strong><br/>
+          Email / Codice: <code>superadmin@itadreamteam.com</code> oppure <code>SUPERADMIN</code> · PIN: <code>2026</code>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary" onclick="doSuperAdminLogin('superadmin')">
+        Apri Pannello Super Admin
+      </button>
+
+      <details style="margin-top: 14px; padding: 12px 16px; background-color: var(--bg-light); border: 1px solid var(--border-control); border-radius: 8px;">
+        <summary style="font-weight: 700; cursor: pointer; font-size: 0.9375rem;">Accedi con Ruolo Specifico o PIN Direzione</summary>
+        <div style="margin-top: 14px;">
+          <div class="field-group">
+            <label for="sa-role" class="field-label">Ruolo Direzione</label>
+            <select id="sa-role" class="field-input" onchange="syncSuperAdminRoleEmail(this.value)">
+              <option value="superadmin" selected>Holding / Super Admin (Accesso Totale)</option>
+              <option value="hr">1. General Director Operatività (Turni 09–23 &amp; RM)</option>
+              <option value="billing">2. General Director Amministrazione (Fatture &amp; Rimborsi 14gg)</option>
+              <option value="partners">3. General Director Vendite (PM, Lead &amp; Partner)</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="sa-email" class="field-label">Email Account Admin</label>
+            <input type="email" id="sa-email" class="field-input" value="superadmin@itadreamteam.com"/>
+          </div>
+          <div class="field-group">
+            <label for="sa-pin" class="field-label">Codice PIN Direzione</label>
+            <input type="password" id="sa-pin" class="field-input" value="2026" placeholder="2026"/>
+          </div>
+          <button type="button" class="btn btn-secondary" style="margin-top: 4px;" onclick="doSuperAdminLogin()">
+            Entra nel Pannello di Controllo
+          </button>
+        </div>
+      </details>
+    </div>
   </main>
 
   <script>
+    var ADMIN_ROLE_EMAILS = {
+      superadmin: 'superadmin@itadreamteam.com',
+      hr: 'hr@itadreamteam.com',
+      billing: 'fatturazione@itadreamteam.com',
+      partners: 'fornitori@itadreamteam.com'
+    };
+
     document.addEventListener('DOMContentLoaded', function () {
       if (window.ITACloudSync && typeof ITACloudSync.getOwnerSession === 'function') {
         var s = ITACloudSync.getOwnerSession();
@@ -296,6 +352,27 @@
         if (s && s.apartmentName) document.getElementById('lg-apt').value = s.apartmentName;
       }
     });
+
+    function syncSuperAdminRoleEmail(roleKey) {
+      var emailEl = document.getElementById('sa-email');
+      if (emailEl && ADMIN_ROLE_EMAILS[roleKey]) {
+        emailEl.value = ADMIN_ROLE_EMAILS[roleKey];
+      }
+    }
+
+    function doSuperAdminLogin(forcedRole) {
+      var roleSel = document.getElementById('sa-role');
+      var role = forcedRole || (roleSel ? roleSel.value : 'superadmin') || 'superadmin';
+      try {
+        var raw = localStorage.getItem('itassistance_superadmin_v1');
+        var st = raw ? JSON.parse(raw) : {};
+        st.loggedIn = true;
+        st.currentRole = role;
+        st.lastLoginAt = new Date().toISOString();
+        localStorage.setItem('itassistance_superadmin_v1', JSON.stringify(st));
+      } catch (e) {}
+      window.location.href = '/admin.html?role=' + encodeURIComponent(role);
+    }
 
     function doOwnerLogin() {
       var rawInput = (document.getElementById('lg-code').value || '').trim();
@@ -308,6 +385,31 @@
         return;
       }
       if (errBox) errBox.style.display = 'none';
+
+      var lower = rawInput.toLowerCase();
+      if (
+        lower === 'superadmin' ||
+        lower === 'admin' ||
+        lower === 'superadmin@itadreamteam.com' ||
+        lower === 'admin@itadreamteam.com' ||
+        lower === 'julian@itadreamteam.com' ||
+        lower === 'info@itadreamteam.com'
+      ) {
+        doSuperAdminLogin('superadmin');
+        return;
+      }
+      if (lower === 'fatturazione@itadreamteam.com') {
+        doSuperAdminLogin('billing');
+        return;
+      }
+      if (lower === 'hr@itadreamteam.com') {
+        doSuperAdminLogin('hr');
+        return;
+      }
+      if (lower === 'fornitori@itadreamteam.com') {
+        doSuperAdminLogin('partners');
+        return;
+      }
 
       var isEmailInput = rawInput.indexOf('@') !== -1;
       var code = isEmailInput ? 'ITA-FIRENZE-01' : rawInput.toUpperCase();

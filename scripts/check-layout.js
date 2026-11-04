@@ -465,10 +465,13 @@ async function runLayoutChecks() {
           allErrors.push(`${label} -> [#7 axe-core ${v.id}] ${v.nodes.join(' | ')}`);
         }
 
-        // Salva gli screenshot per la home in tutte le larghezze (inclusi 390, 1440, 2560 px richiesti)
+        // Salva gli screenshot per la home in tutte le larghezze (inclusi 390, 1440, 2560 px richiesti) e per login
         if (pageCfg.name === 'home-it') {
           const shotPath = path.join(ARTIFACT_DIR, `after_${width}px.png`);
           await page.screenshot({ path: shotPath, fullPage: false });
+        } else if (pageCfg.name === 'login') {
+          const loginShot = path.join(ARTIFACT_DIR, `login_${width}px.png`);
+          await page.screenshot({ path: loginShot, fullPage: true });
         }
 
         // Se siamo su mobile (width < 1024) e sulla home-it, testiamo anche lo stato aperto del menu a tutto schermo
