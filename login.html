@@ -74,7 +74,7 @@
     }
 
     .onion-header {
-      min-height: 56px;
+      min-height: 64px;
       background-color: var(--ink-navy);
       color: var(--bg-light);
       border-bottom: 2px solid var(--gold-accent);
@@ -84,24 +84,33 @@
 
     .onion-header-inner {
       width: 100%;
-      max-width: 560px;
+      max-width: 1360px;
       margin: 0 auto;
-      padding: 0 16px;
-      display: flex;
-      justify-content: space-between;
+      padding: 0 clamp(16px, 3vw, 40px);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
+    }
+
+    .onion-header-brand {
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.125rem;
+      white-space: nowrap;
     }
 
     .back-link {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      min-height: 48px;
-      padding: 8px 12px;
-      border: 1px solid var(--ink-on-dark-muted);
-      border-radius: 8px;
-      font-weight: 600;
+      min-height: 44px;
+      padding: 8px 14px;
+      border: 1.5px solid var(--ink-on-dark-muted);
+      border-radius: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .wrap {
@@ -179,15 +188,16 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      min-height: 56px;
-      padding: 12px 24px;
+      min-height: 52px;
+      padding: 10px 20px;
       font-family: var(--font-sans);
-      font-size: 1rem;
+      font-size: 0.9375rem;
       font-weight: 700;
       border-radius: 15px;
       border: 2px solid transparent;
       cursor: pointer;
       text-align: center;
+      white-space: nowrap;
     }
 
     @media (min-width: 769px) {
@@ -228,8 +238,8 @@
   <header class="onion-header">
     <div class="onion-header-inner">
       <a href="/" class="back-link">&larr; Sito pubblico</a>
-      <strong>itassistance</strong>
-      <a href="/checkout.html" style="color: var(--gold-accent); font-weight: 700;">Attiva prova</a>
+      <strong class="onion-header-brand">itassistance</strong>
+      <a href="/checkout.html" style="color: var(--gold-accent); font-weight: 700; white-space: nowrap;">Attiva prova</a>
     </div>
   </header>
 
@@ -263,11 +273,14 @@
       </details>
 
       <button type="button" class="btn btn-primary" onclick="doOwnerLogin()">
-        Apri la tua area riservata
+        Apri area riservata
       </button>
 
-      <a href="/checkout.html" class="btn btn-secondary">
-        Non hai ancora un codice? Attiva la prova di 14 giorni
+      <p style="margin-top: 16px; margin-bottom: 6px; font-size: 0.9375rem; color: var(--ink-muted); text-align: center;">
+        Non hai ancora un codice proprietario?
+      </p>
+      <a href="/checkout.html" class="btn btn-secondary" style="margin-top: 0;">
+        Attiva prova 14 giorni
       </a>
     </div>
   </main>

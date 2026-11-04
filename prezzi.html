@@ -89,47 +89,54 @@
       color: var(--bg-light);
       position: sticky;
       top: 0;
-      z-index: 100;
-      height: 56px;
+      z-index: 500;
+      min-height: 64px;
       display: flex;
       align-items: center;
     }
     .navbar-inner {
       width: 100%;
-      display: flex;
-      justify-content: space-between;
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 3vw, 40px);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
       gap: 12px;
     }
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      font-size: 1.125rem;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 1.1rem;
       color: var(--bg-light);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
-    .brand img { width: 30px; height: 30px; border-radius: 6px; }
+    .brand img { width: 30px; height: 26px; object-fit: contain; flex-shrink: 0; }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 14px 24px;
+      padding: 10px 18px;
       border-radius: 15px;
       font-weight: 700;
-      font-size: 1rem;
-      min-height: 56px;
+      font-size: 0.9375rem;
+      min-height: 52px;
       cursor: pointer;
       border: 2px solid transparent;
       text-align: center;
+      white-space: nowrap;
+      max-width: 100%;
     }
     @media (min-width: 1024px) {
       .btn { min-height: 48px; }
     }
     .btn-gold { background: var(--gold-accent); color: var(--ink-navy); border-color: var(--gold-accent); }
     .btn-outline { border-color: var(--ink-navy); color: var(--ink-navy); background: #FFFFFF; }
-    .btn-header { min-height: 40px; padding: 8px 14px; font-size: 0.875rem; }
+    .btn-header { min-height: 42px; padding: 6px 12px; font-size: 0.8125rem; white-space: nowrap; }
 
     section { padding: 56px 0; border-bottom: 1px solid var(--border-control); }
     h1 { font-family: var(--font-display); font-size: clamp(2.15rem, 5vw, 3.25rem); line-height: 1.12; margin-bottom: 16px; color: var(--ink-navy); }
@@ -146,11 +153,12 @@
 </head>
 <body>
   <header class="navbar">
-    <div class="container navbar-inner">
-      <a href="/" class="brand"><img src="/brand/logo.webp" width="30" height="30" alt="Logo itassistance"><span>itassistance</span></a>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <a href="/" class="btn btn-outline btn-header" style="background:transparent;color:var(--bg-light);border-color:var(--gold-accent);">Torna alla Home</a>
-        <a href="/checkout.html" class="btn btn-gold btn-header">Attiva la prova di 14 giorni</a>
+    <div class="navbar-inner">
+      <a href="/" class="brand"><img src="/brand/logo.webp" width="30" height="26" alt="Logo itassistance"><span>itassistance</span></a>
+      <div></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
+        <a href="/" class="btn btn-outline btn-header" style="background:transparent;color:var(--bg-light);border-color:var(--gold-accent);">Home</a>
+        <a href="/checkout.html" class="btn btn-gold btn-header">Prova 14 giorni</a>
       </div>
     </div>
   </header>
@@ -161,7 +169,7 @@
         <span class="eyebrow">Prezzo unico e trasparente · Firenze</span>
         <h1>99 € al mese IVA inclusa.<br>Zero commissioni sulle prenotazioni.</h1>
         <p style="max-width:65ch;color:var(--ink-muted);font-size:1.125rem;margin-bottom:16px;">
-          Con <strong>itassistance</strong> resti il Proprietario-Gestore del tuo appartamento (come il <strong>75% dei proprietari italiani</strong>, di cui l'<strong>84% con 1 o 2 unità</strong> — <em>Fonte: Centro Studi AIGAB / Idealista</em>), tieni il 100% degli incassi sul tuo conto e gestisci tutto in 10 minuti al giorno.Ultimo aggiornamento: Novembre 2026.
+          Con <strong>itassistance</strong> resti il Proprietario-Gestore del tuo appartamento (come il <strong>75% dei proprietari italiani</strong>, di cui l'<strong>84% con 1 o 2 unità</strong> — <em>Fonte: Centro Studi AIGAB / Idealista</em>), tieni il 100% degli incassi sul tuo conto e gestisci tutto in 10 minuti al giorno. Ultimo aggiornamento: Novembre 2026.
         </p>
 
         <div class="price-card">
@@ -223,8 +231,8 @@
           </div>
 
           <div style="display:grid;grid-template-columns:1fr;gap:12px;">
-            <a href="/checkout.html" class="btn btn-gold">Attiva la prova di 14 giorni (Soddisfatto o Rimborsato)</a>
-            <a href="/calcola-risparmio.html" class="btn btn-outline">Calcola il tuo risparmio rispetto al 20% di un Property Manager</a>
+            <a href="/checkout.html" class="btn btn-gold">Attiva prova 14 giorni</a>
+            <a href="/calcola-risparmio.html" class="btn btn-outline">Calcola il tuo risparmio</a>
           </div>
         </div>
       </div>
@@ -233,7 +241,7 @@
 
   <footer>
     <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-      <div>itassistance · Assistenza tutti i giorni 09:00–23:00 · Tel/WhatsApp: <a href="tel:+393510380392" style="color:var(--bg-light);text-decoration:underline;">+39 351 038 0392</a> · <a href="mailto:info@itadreamteam.com" style="color:var(--bg-light);text-decoration:underline;">info@itadreamteam.com</a></div>
+      <div>itassistance · Assistenza tutti i giorni 09:00–23:00 · Telefono e WhatsApp: <a href="tel:+393510380392" style="color:var(--bg-light);text-decoration:underline;">+39 351 038 0392</a> · <a href="mailto:info@itadreamteam.com" style="color:var(--bg-light);text-decoration:underline;">info@itadreamteam.com</a></div>
       <div>Blue Arroyo SRL · P.IVA 07480210488 · Via Matteo Palmieri 20r, 50122 Firenze (FI)</div>
     </div>
   </footer>

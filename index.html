@@ -178,15 +178,23 @@
       --bg-stone: #F5F3FF;
       --ink-navy: #1E1035;
       --ink-muted: #4C3D63;
-      --ink-on-dark-muted: #DDD6FE;
+      --ink-on-dark-muted: #EDE9FE;
       --gold-accent: #C4B5FD;
       --gold-text-light: #5B21B6;
       --border-control: #7C3AED;
       --status-ok-bg: #ECFDF5;
       --status-ok-text: #065F46;
-      --overlay-hero: rgba(30, 16, 53, 0.84);
+      --overlay-hero: linear-gradient(135deg, rgba(20, 10, 38, 0.92) 0%, rgba(30, 16, 53, 0.88) 55%, rgba(46, 16, 101, 0.84) 100%);
       --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --z-content: 1;
+      --z-header: 500;
+      --z-fixed-bar: 600;
+      --z-floating: 650;
+      --z-panel: 700;
+      --z-modal: 800;
+      --z-toast: 900;
     }
 
     *, *::before, *::after {
@@ -197,6 +205,7 @@
 
     html {
       scroll-behavior: smooth;
+      scroll-padding-top: 88px;
       -webkit-text-size-adjust: 100%;
       overflow-x: clip;
     }
@@ -279,22 +288,27 @@
     /* Scala Tipografica */
     .kicker {
       display: inline-block;
-      font-family: var(--font-sans);
-      font-size: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
       font-weight: 700;
       color: var(--gold-text-light);
       margin-bottom: 16px;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.02em;
     }
 
-    .section-dark .kicker {
-      color: var(--gold-accent);
+    .section-dark .kicker,
+    .hero-editorial .kicker {
+      color: #FFFFFF;
+      background-color: rgba(109, 40, 217, 0.78);
+      border: 1.5px solid #C4B5FD;
+      padding: 6px 14px;
+      border-radius: 9999px;
     }
 
     h1 {
       font-family: var(--font-display);
-      font-size: clamp(2.25rem, 4.8vw, 3.75rem);
-      line-height: 1.12;
+      font-size: clamp(2.15rem, 4.6vw, 3.65rem);
+      line-height: 1.1;
       font-weight: 700;
       max-width: 22ch;
       margin-bottom: 24px;
@@ -302,8 +316,8 @@
 
     h2 {
       font-family: var(--font-display);
-      font-size: clamp(1.875rem, 3.6vw, 2.75rem);
-      line-height: 1.16;
+      font-size: clamp(1.85rem, 3.5vw, 2.65rem);
+      line-height: 1.14;
       font-weight: 700;
       max-width: 26ch;
       margin-bottom: 24px;
@@ -323,10 +337,19 @@
       max-width: 65ch;
       color: var(--ink-muted);
       margin-bottom: 32px;
+      opacity: 1;
     }
 
-    .section-dark .lead-paragraph {
-      color: var(--ink-on-dark-muted);
+    .section-dark .lead-paragraph,
+    .hero-editorial .lead-paragraph {
+      color: #F5F3FF;
+      opacity: 1;
+    }
+
+    .hero-editorial .lead-paragraph strong,
+    .section-dark .lead-paragraph strong {
+      color: #FFFFFF;
+      font-weight: 700;
     }
 
     p {
@@ -341,16 +364,18 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      min-height: 56px;
-      padding: 12px 24px;
+      min-height: 52px;
+      padding: 10px 18px;
       font-family: var(--font-sans);
-      font-size: 1rem;
+      font-size: 0.9375rem;
       font-weight: 700;
       line-height: 1.25;
       border-radius: 15px;
       border: 2px solid transparent;
       cursor: pointer;
       text-align: center;
+      white-space: nowrap;
+      max-width: 100%;
       transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
     }
 
@@ -413,68 +438,232 @@
       transform: none;
     }
 
-    /* Header & Navigazione */
+    /* Header & Navigazione a 3 Zone con Grid (Regola Anti-Sovrapposizione) */
     .site-header {
       position: sticky;
       top: 0;
-      z-index: 500;
-      background-color: var(--bg-light);
-      border-bottom: 1px solid var(--border-control);
+      z-index: var(--z-header, 500);
+      background-color: #FFFFFF;
+      border-bottom: 1.5px solid #DDD6FE;
     }
 
     .header-inner {
-      display: flex;
+      width: 100%;
+      max-width: 1360px;
+      margin: 0 auto;
+      padding-left: clamp(16px, 3vw, 40px);
+      padding-right: clamp(16px, 3vw, 40px);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
       align-items: center;
-      justify-content: space-between;
       min-height: 72px;
-      gap: 16px;
+      gap: clamp(12px, 2vw, 28px);
     }
 
     .brand-mark {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       font-family: var(--font-sans);
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-size: 1.2rem;
+      font-weight: 800;
       color: var(--ink-navy);
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .brand-mark img {
-      width: 40px;
-      height: 34px;
+      width: 38px;
+      height: 32px;
       object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .primary-nav {
+      min-width: 0;
+      display: flex;
+      justify-content: center;
     }
 
     .nav-links {
       display: none;
       align-items: center;
-      gap: 24px;
+      justify-content: center;
+      gap: clamp(6px, 1.2vw, 20px);
       list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links li {
+      flex-shrink: 0;
     }
 
     .nav-links a {
-      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      font-size: clamp(0.875rem, 1vw, 0.95rem);
       font-weight: 600;
       color: var(--ink-navy);
-      padding: 8px 4px;
+      padding: 8px clamp(6px, 0.9vw, 10px);
+      border-radius: 10px;
+      white-space: nowrap;
+      transition: background-color 0.15s ease, color 0.15s ease;
     }
 
     .nav-links a:hover {
       color: var(--gold-text-light);
-      text-decoration: underline;
+      background-color: var(--bg-stone);
     }
 
     .header-actions {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 12px;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
-    @media (min-width: 960px) {
+    .header-lang-link {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 8px 12px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--ink-navy);
+      background-color: var(--bg-stone);
+      border: 1.5px solid #DDD6FE;
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+
+    .header-login-btn {
+      min-height: 44px !important;
+      padding: 8px 16px !important;
+      font-size: 0.9375rem !important;
+      white-space: nowrap !important;
+      flex-shrink: 0;
+    }
+
+    .mobile-menu-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 44px;
+      min-width: 48px;
+      padding: 8px 12px;
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--ink-navy);
+      background-color: var(--bg-stone);
+      border: 2px solid var(--ink-navy);
+      border-radius: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 380px) {
+      .header-inner {
+        padding-left: 10px;
+        padding-right: 10px;
+        gap: 6px;
+      }
+      .brand-mark {
+        font-size: 1.02rem;
+        gap: 6px;
+      }
+      .brand-mark img {
+        width: 28px;
+        height: 24px;
+      }
+      .header-actions {
+        gap: 6px;
+      }
+      .header-login-btn {
+        padding: 6px 10px !important;
+        font-size: 0.8125rem !important;
+      }
+      .mobile-menu-toggle {
+        padding: 6px 10px;
+        min-width: 44px;
+        font-size: 0.8125rem;
+      }
+    }
+
+    @media (min-width: 640px) {
+      .header-lang-link {
+        display: inline-flex;
+      }
+    }
+
+    @media (min-width: 1024px) {
       .nav-links {
         display: flex;
       }
+      .mobile-menu-toggle {
+        display: none !important;
+      }
+      .header-login-btn {
+        min-height: 44px !important;
+        padding: 8px 16px !important;
+      }
+    }
+
+    /* Menu Mobile a Tutto Schermo */
+    .mobile-fullscreen-menu {
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-modal, 800);
+      background-color: #FFFFFF;
+      color: var(--ink-navy);
+      padding: 16px clamp(16px, 5vw, 32px) calc(32px + env(safe-area-inset-bottom, 0px));
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+    }
+
+    .mobile-fullscreen-menu[data-open="true"] {
+      display: flex;
+    }
+
+    .mobile-menu-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 56px;
+      border-bottom: 1.5px solid #DDD6FE;
+      padding-bottom: 12px;
+    }
+
+    .mobile-menu-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .mobile-menu-list a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 56px;
+      padding: 12px 16px;
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: var(--ink-navy);
+      background-color: var(--bg-stone);
+      border: 1.5px solid #DDD6FE;
+      border-radius: 15px;
     }
 
     /* 1. HERO EDITORIALE A TUTTO SCHERMO (100svh) */
@@ -520,22 +709,47 @@
     .hero-content {
       position: relative;
       z-index: 3;
-      max-width: 760px;
+      max-width: 960px;
+      min-width: 0;
     }
 
     .hero-meta-strip {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(196, 181, 253, 0.45);
+      font-size: 0.9375rem;
+      color: #EDE9FE;
+    }
+
+    @media (min-width: 600px) {
+      .hero-meta-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 960px) {
+      .hero-meta-strip {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .hero-meta-item {
       display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 32px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border-control);
-      font-size: 1rem;
-      color: var(--ink-on-dark-muted);
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 14px;
+      background-color: rgba(30, 16, 53, 0.76);
+      border: 1px solid rgba(196, 181, 253, 0.42);
+      border-radius: 12px;
+      min-width: 0;
     }
 
     .hero-meta-strip strong {
-      color: var(--bg-light);
+      color: #FFFFFF;
+      font-weight: 700;
     }
 
     /* Griglie Editoriali Asimmetriche */
@@ -838,8 +1052,8 @@
     }
 
     .js-motion-ready .reveal-on-scroll:not(.is-visible) {
-      opacity: 0;
-      transform: translateY(20px);
+      opacity: 1;
+      transform: translateY(10px);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -861,39 +1075,62 @@
 <body>
   <a href="#contenuto-principale" class="skip-link">Salta al contenuto principale</a>
 
-  <!-- HEADER PRINCIPALE -->
+  <!-- HEADER PRINCIPALE (3 Zone: Logo, Navigazione max 5 voci, Azioni) -->
   <header class="site-header">
-    <div class="container header-inner">
+    <div class="header-inner">
       <a href="/" class="brand-mark" aria-label="itassistance - Torna alla pagina iniziale">
-        <img src="/brand/logo.webp" width="40" height="34" alt="Marchio itassistance"/>
+        <img src="/brand/logo.webp" width="38" height="32" alt="Marchio itassistance"/>
         <span>itassistance</span>
       </a>
 
-      <nav aria-label="Navigazione principale">
+      <nav class="primary-nav" aria-label="Navigazione principale">
         <ul class="nav-links">
-          <li><a href="#routine-mattina">Riepilogo delle 08:00</a></li>
-          <li><a href="#calcolatore">Calcola il risparmio</a></li>
-          <li><a href="#gradi-autonomia">Gradi di Autonomia</a></li>
-          <li><a href="#ciclo-blue-arroyo">Ciclo Blue Arroyo</a></li>
-          <li><a href="#investi-toscan-costruzioni">Toscan Costruzioni</a></li>
+          <li><a href="#routine-mattina">Ore 08:00</a></li>
+          <li><a href="#calcolatore">Risparmio</a></li>
+          <li><a href="#gradi-autonomia">Autonomia</a></li>
+          <li><a href="#ciclo-blue-arroyo">Blue Arroyo</a></li>
           <li><a href="/guide-affitti-brevi-firenze.html">Guide Firenze</a></li>
-          <li><a href="/en/">English</a></li>
         </ul>
       </nav>
 
       <div class="header-actions">
-        <a href="/login.html" class="btn btn-secondary">Accedi</a>
+        <a href="/en/" class="header-lang-link" aria-label="English version">EN</a>
+        <a href="/login.html" class="btn btn-secondary header-login-btn">Accedi</a>
+        <button type="button" class="mobile-menu-toggle" id="mobile-menu-open-btn" aria-expanded="false" aria-controls="mobile-fullscreen-menu" onclick="toggleMobileFullscreenMenu(true)">Menu</button>
       </div>
     </div>
   </header>
+
+  <!-- MENU MOBILE A TUTTO SCHERMO -->
+  <div class="mobile-fullscreen-menu" id="mobile-fullscreen-menu" data-open="false" role="dialog" aria-modal="true" aria-label="Menu di navigazione">
+    <div class="mobile-menu-top">
+      <a href="/" class="brand-mark" onclick="toggleMobileFullscreenMenu(false)">
+        <img src="/brand/logo.webp" width="38" height="32" alt="Marchio itassistance"/>
+        <span>itassistance</span>
+      </a>
+      <button type="button" class="mobile-menu-toggle" onclick="toggleMobileFullscreenMenu(false)" aria-label="Chiudi menu di navigazione">Chiudi</button>
+    </div>
+    <ul class="mobile-menu-list">
+      <li><a href="#routine-mattina" onclick="toggleMobileFullscreenMenu(false)"><span>Riepilogo delle 08:00</span><span>→</span></a></li>
+      <li><a href="#calcolatore" onclick="toggleMobileFullscreenMenu(false)"><span>Calcola il risparmio</span><span>→</span></a></li>
+      <li><a href="#gradi-autonomia" onclick="toggleMobileFullscreenMenu(false)"><span>Gradi di Autonomia</span><span>→</span></a></li>
+      <li><a href="#ciclo-blue-arroyo" onclick="toggleMobileFullscreenMenu(false)"><span>Ciclo Blue Arroyo</span><span>→</span></a></li>
+      <li><a href="#investi-toscan-costruzioni" onclick="toggleMobileFullscreenMenu(false)"><span>Toscan Costruzioni (5 SAL)</span><span>→</span></a></li>
+      <li><a href="/guide-affitti-brevi-firenze.html"><span>Guide Affitti Brevi Firenze</span><span>→</span></a></li>
+      <li><a href="/prezzi.html"><span>Quotazione Giornaliera e Prezzi</span><span>→</span></a></li>
+      <li><a href="/en/"><span>English Version</span><span>EN</span></a></li>
+    </ul>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-top:auto;padding-top:16px;border-top:1.5px solid #DDD6FE;">
+      <a href="/checkout.html" class="btn btn-primary" style="width:100%;">Attiva prova 14 giorni</a>
+      <a href="/login.html" class="btn btn-secondary" style="width:100%;">Area Proprietario</a>
+    </div>
+  </div>
 
   <main id="contenuto-principale">
     <!-- SEZIONE 1: HERO EDITORIALE (100svh) -->
     <section class="hero-editorial is-visible" id="hero">
       <div class="hero-media-wrap" aria-hidden="true">
-        <video autoplay muted playsinline loop poster="/brand/welcome.webp" width="1024" height="1024">
-          <img src="/brand/welcome.webp" width="1024" height="1024" alt="Interno reale di un appartamento gestito con itassistance a Firenze"/>
-        </video>
+        <img src="/brand/hero-clean.webp" width="1024" height="1024" alt="Interno reale di un appartamento a Firenze con vista sui tetti"/>
       </div>
       <div class="hero-contrast-veil" aria-hidden="true"></div>
 
@@ -901,17 +1138,29 @@
         <span class="kicker">itassistance · Firenze · Blue Arroyo SRL</span>
         <h1>Gestisci il tuo appartamento a Firenze in 10 minuti al giorno, senza cedere il 20% alle agenzie.</h1>
         <p class="lead-paragraph">
-          Il 75% dei proprietari gestisce il proprio immobile in prima persona: noi lo chiamiamo <strong>Proprietario-Gestore</strong>. Con <strong>itassistance</strong>mantieni il 100% degli incassi sul tuo conto bancario, assolvi agli obblighi di Questura e Comune in pochi tocchi e paghi solo 99 € al mese IVA inclusa.
+          Il 75% dei proprietari gestisce il proprio immobile in prima persona: noi lo chiamiamo <strong>Proprietario-Gestore</strong>. Con <strong>itassistance</strong> mantieni il 100% degli incassi sul tuo conto bancario, assolvi agli obblighi di Questura e Comune in pochi tocchi e paghi solo 99 € al mese IVA inclusa.
         </p>
         <div>
-          <a href="/checkout.html" class="btn btn-primary" onclick="trackSiteEvent('click_prova_app',{location:'hero'})">Attiva la prova di 14 giorni</a>
+          <a href="/checkout.html" class="btn btn-primary" onclick="trackSiteEvent('click_prova_app',{location:'hero'})">Attiva prova 14 giorni</a>
         </div>
 
         <div class="hero-meta-strip">
-          <span><strong id="hero-dyn-price-badge">Da 99,00 € a 289,50 € / mese</strong>Quota bloccata all'ingresso</span>
-          <span><strong>Zero commissioni</strong>sulle prenotazioni</span>
-          <span><strong>14 giorni</strong>soddisfatto o rimborsato</span>
-          <span><strong>Sede a Firenze</strong>in Via Matteo Palmieri 20r</span>
+          <div class="hero-meta-item">
+            <strong id="hero-dyn-price-badge">Oggi 99,00 € / mese</strong>
+            <span>Quota bloccata (99–289,50 €)</span>
+          </div>
+          <div class="hero-meta-item">
+            <strong>Zero commissioni</strong>
+            <span>Sulle prenotazioni (0%)</span>
+          </div>
+          <div class="hero-meta-item">
+            <strong>14 giorni garantiti</strong>
+            <span>Soddisfatto o rimborsato</span>
+          </div>
+          <div class="hero-meta-item">
+            <strong>Sede a Firenze</strong>
+            <span>Via Matteo Palmieri 20r</span>
+          </div>
         </div>
       </div>
     </section>
@@ -929,7 +1178,7 @@
             <img src="/brand/window.webp" width="1024" height="1024" loading="lazy" alt="Vetrina su strada della sede itassistance in Via Matteo Palmieri 20r a Firenze"/>
             <figcaption class="figure-caption">Sede operativa di itassistance (Blue Arroyo SRL) in Via Matteo Palmieri 20r, Firenze.</figcaption>
           </figure>
-          <a href="#calcolatore" class="btn btn-secondary">Calcola quanto risparmi ogni anno</a>
+          <a href="#calcolatore" class="btn btn-secondary">Calcola il tuo risparmio</a>
         </div>
 
         <div class="chapter-list">
@@ -953,7 +1202,7 @@
             <span class="chapter-num">Passo 03</span>
             <h3>Imprevisti fisici in appartamento quando sei lontano</h3>
             <p>
-              Un ospite che arriva in ritardo o un guasto serale richiedono una persona fidata sul posto. Con <strong>itassistance</strong>mantieni il comando diretto sul tuo immobile e attivi un operatore a Firenze solo quando serve: 20 € per un check-in in presenza o 30 € per una piccola manutenzione.
+              Un ospite che arriva in ritardo o un guasto serale richiedono una persona fidata sul posto. Con <strong>itassistance</strong> mantieni il comando diretto sul tuo immobile e attivi un operatore a Firenze solo quando serve: 20 € per un check-in in presenza o 30 € per una piccola manutenzione.
             </p>
           </article>
         </div>
@@ -968,7 +1217,7 @@
             <span class="chapter-num">Ore 08:00</span>
             <h3>Il Riepilogo delle 08:00 apre la tua giornata</h3>
             <p>
-              Il <strong>Riepilogo delle 08:00</strong>è il bollettino mattutino di <strong>itassistance</strong>che arriva sul tuo telefono: elenca chi entra, chi esce, lo stato delle pulizie e le sole azioni da confermare oggi. Se hai più appartamenti, passi da un immobile all'altro in un solo tocco.
+              Il <strong>Riepilogo delle 08:00</strong> è il bollettino mattutino di <strong>itassistance</strong> che arriva sul tuo telefono: elenca chi entra, chi esce, lo stato delle pulizie e le sole azioni da confermare oggi. Se hai più appartamenti, passi da un immobile all'altro in un solo tocco.
             </p>
           </article>
 
@@ -999,7 +1248,7 @@
             <img src="/brand/staff.webp" width="1024" height="1024" loading="lazy" alt="Operatori reali del team itassistance al lavoro a Firenze"/>
             <figcaption class="figure-caption">Il team operativo di Firenze attivo tutti i giorni dalle 09:00 alle 23:00.</figcaption>
           </figure>
-          <a href="/app.html" class="btn btn-primary">Prova l'area membro dal vivo</a>
+          <a href="/app.html" class="btn btn-primary">Prova l'area membro</a>
         </div>
       </div>
     </section>
@@ -1011,7 +1260,7 @@
           <span class="kicker">Trasparenza matematica</span>
           <h2>Confronta il canone fisso di 99 € al mese con la commissione di un intermediario.</h2>
           <p class="lead-paragraph">
-            Un gestore tradizionale trattiene in media il 20% del tuo incasso lordo annuo. Con <strong>itassistance</strong>il canone resta fisso a 99 € al mese IVA inclusa (1.188 € all'anno), qualunque sia il tuo fatturato.
+            Un gestore tradizionale trattiene in media il 20% del tuo incasso lordo annuo. Con <strong>itassistance</strong> il canone resta fisso a 99 € al mese IVA inclusa (1.188 € all'anno), qualunque sia il tuo fatturato.
           </p>
           <p style="color: var(--ink-muted); margin-bottom: 24px;">
             Muovi il cursore per verificare quanto capitale netto rimane sul tuo conto corrente ogni anno e ricevi la diagnosi scritta sul tuo telefono.
@@ -1068,7 +1317,7 @@
           </div>
 
           <button type="button" class="btn btn-primary" style="width: 100%;" onclick="submitSavingsDiagnosisLead()">
-            Ricevi la diagnosi sul tuo telefono
+            Ricevi la diagnosi
           </button>
           <p id="lead-diag-status" style="margin-top: 12px; font-weight: 600; color: var(--status-ok-text);" aria-live="polite"></p>
         </div>
@@ -1082,7 +1331,7 @@
           <span class="kicker">Autonomia guadagnata con i dati</span>
           <h2>I 4 Gradi di Autonomia del motore prezzi e i tuoi Guardrail di Prezzo.</h2>
           <p class="lead-paragraph">
-            I <strong>Gradi di Autonomia</strong>sono i quattro livelli progressivi con cui il motore tariffario di <strong>itassistance</strong>governa il calendario senza mai superare i tuoi <strong>Guardrail di Prezzo</strong>(la tariffa minima e massima invalicabili che stabilisci tu). Il sistema sale al livello autonomo solo quando dimostra coi numeri di battere la tariffa fissa di oltre l'8% per almeno due settimane certificate.
+            I <strong>Gradi di Autonomia</strong> sono i quattro livelli progressivi con cui il motore tariffario di <strong>itassistance</strong> governa il calendario senza mai superare i tuoi <strong>Guardrail di Prezzo</strong> (la tariffa minima e massima invalicabili che stabilisci tu). Il sistema sale al livello autonomo solo quando dimostra coi numeri di battere la tariffa fissa di oltre l'8% per almeno due settimane certificate.
           </p>
         </div>
 
@@ -1121,7 +1370,7 @@
         </div>
 
         <div>
-          <a href="/app.html?tab=extra" class="btn btn-primary">Configura i tuoi limiti di prezzo</a>
+          <a href="/app.html?tab=extra" class="btn btn-primary">Configura limiti di prezzo</a>
         </div>
       </div>
     </section>
@@ -1133,13 +1382,13 @@
           <span class="kicker">Un gruppo industriale a Firenze</span>
           <h2>Il Ciclo Blue Arroyo: quattro aziende autonome che fanno crescere il tuo bene.</h2>
           <p class="lead-paragraph">
-            Il <strong>Ciclo Blue Arroyo</strong>unisce quattro società fiorentine specializzate, ciascuna guidata da tre direttori dedicati a operatività, amministrazione e vendite. Ogni azienda risolve un problema preciso, mantenendo tutto il valore all'interno del tuo patrimonio.
+            Il <strong>Ciclo Blue Arroyo</strong> unisce quattro società fiorentine specializzate, ciascuna guidata da tre direttori dedicati a operatività, amministrazione e vendite. Ogni azienda risolve un problema preciso, mantenendo tutto il valore all'interno del tuo patrimonio.
           </p>
           <figure class="editorial-figure" style="margin-bottom: 24px;">
             <img src="/brand/suv.webp" width="1024" height="1024" loading="lazy" alt="Mezzo operativo del gruppo Blue Arroyo a Firenze"/>
             <figcaption class="figure-caption">Logistica cittadina integrata tra cantieri, assistenza e allestimento alberghiero a Firenze.</figcaption>
           </figure>
-          <a href="/chi-siamo.html" class="btn btn-secondary">Esplora il ciclo industriale</a>
+          <a href="/chi-siamo.html" class="btn btn-secondary">Il ciclo industriale</a>
         </div>
 
         <div class="chapter-list">
@@ -1185,7 +1434,7 @@
           <span class="kicker">Oltre la gestione quotidiana · Toscan Costruzioni</span>
           <h2>Hai liberato il tuo tempo senza rinunciare agli incassi: ora costruisci il tuo prossimo immobile a Firenze.</h2>
           <p class="lead-paragraph">
-            La mente umana ha bisogno di uno scopo e di una sfida più alta. Quando <strong>itassistance</strong>riduce la burocrazia a 30 secondi a settimana e ti fa risparmiare oltre 4.800 € all'anno di commissioni, il tempo e la liquidità accumulati possono finanziare il tuo secondo appartamento o il frazionamento del tuo immobile con la <strong>Formula 5 SAL Garantiti</strong>di <strong>1. Toscan Costruzioni</strong>(contratto a prezzo fisso suddiviso in cinque stati di avanzamento lavori collaudati: 15%, 25%, 25%, 25% e 10%).
+            La mente umana ha bisogno di uno scopo e di una sfida più alta. Quando <strong>itassistance</strong> riduce la burocrazia a 30 secondi a settimana e ti fa risparmiare oltre 4.800 € all'anno di commissioni, il tempo e la liquidità accumulati possono finanziare il tuo secondo appartamento o il frazionamento del tuo immobile con la <strong>Formula 5 SAL Garantiti</strong> di <strong>1. Toscan Costruzioni</strong> (contratto a prezzo fisso suddiviso in cinque stati di avanzamento lavori collaudati: 15%, 25%, 25%, 25% e 10%).
           </p>
 
           <figure class="editorial-figure" style="margin-bottom: 24px; border-color: var(--gold-accent);">
@@ -1223,7 +1472,7 @@
             </div>
 
             <p id="idx-sim-sal-breakdown" style="font-size: 1rem; color: var(--ink-navy);">
-              <strong>Piano 5 SAL Garantiti (68.000 €):</strong>1° SAL (15%): <strong>10.200 €</strong>· 2° SAL (25%): <strong>17.000 €</strong>· 3° SAL (25%): <strong>17.000 €</strong>· 4° SAL (25%): <strong>17.000 €</strong>· 5° Fine Lavori e Collaudo (10%): <strong>6.800 €</strong>.
+              <strong>Piano 5 SAL Garantiti (68.000 €):</strong> 1° SAL (15%): <strong>10.200 €</strong> · 2° SAL (25%): <strong>17.000 €</strong> · 3° SAL (25%): <strong>17.000 €</strong> · 4° SAL (25%): <strong>17.000 €</strong> · 5° Fine Lavori e Collaudo (10%): <strong>6.800 €</strong>.
             </p>
           </div>
         </div>
@@ -1278,7 +1527,7 @@
           </div>
 
           <button type="button" class="btn btn-primary" style="width: 100%;" onclick="submitToscanLeadFromIndex()">
-            Richiedi lo studio di fattibilità
+            Richiedi fattibilità
           </button>
 
           <div id="tc-lead-status-box" style="display: none; margin-top: 16px; padding: 16px; border-radius: 8px; background-color: var(--status-ok-bg); border: 1px solid var(--status-ok-text); color: var(--status-ok-text); font-weight: 600;" aria-live="polite"></div>
@@ -1326,10 +1575,10 @@
 
             <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
               <a href="/checkout.html" class="btn btn-primary" id="dyn-lock-cta-btn" onclick="trackSiteEvent('click_prova_app',{location:'dynamic_pricing_lock'})">
-                Blocca la tariffa di oggi e inizia i 14 giorni di prova
+                Blocca la tariffa di oggi
               </a>
               <button type="button" class="btn btn-secondary" onclick="simulateNewDailyAcquisitionPrice()">
-                Simula variazione giornaliera (99,00 € – 289,50 €)
+                Simula variazione prezzo
               </button>
             </div>
 
@@ -1340,7 +1589,7 @@
                 <input type="tel" id="dyn-lock-phone" class="field-input" placeholder="Inserisci il tuo numero WhatsApp (+39 333...)"/>
               </div>
               <button type="button" class="btn btn-secondary" style="flex: 0 0 auto;" onclick="lockDynamicPrice24hOnWhatsApp()">
-                Ricevi codice blocco 24 ore su WhatsApp
+                Blocca 24h su WhatsApp
               </button>
             </div>
             <p id="dyn-lock-status-msg" style="margin-top: 8px; font-weight: 700; color: var(--status-ok-text);" aria-live="polite"></p>
@@ -1351,14 +1600,14 @@
           <details class="faq-item" open>
             <summary>Devo sapere usare il computer?</summary>
             <p>
-              No. <strong>itassistance</strong>è progettata prima di tutto per il telefono. Ogni mattina ricevi il <strong>Riepilogo delle 08:00</strong>con le sole azioni da confermare, spiegate in italiano semplice.
+              No. <strong>itassistance</strong> è progettata prima di tutto per il telefono. Ogni mattina ricevi il <strong>Riepilogo delle 08:00</strong> con le sole azioni da confermare, spiegate in italiano semplice.
             </p>
           </details>
 
           <details class="faq-item">
             <summary>Chi registra gli ospiti in Questura e come funziona l'opzione +10%?</summary>
             <p>
-              Nel piano base da 99 € al mese IVA inclusa (zero commissioni), <strong>itassistance</strong>raccoglie in anticipo i documenti degli ospiti e prepara il file pronto per l'invio su Alloggiati Web della Polizia di Stato entro 24 ore. Se desideri delegare a noi anche l'ottimizzazione dinamica dei prezzi e gli adempimenti operativi, puoi attivare l'opzione dedicata pari al +10%.
+              Nel piano base da 99 € al mese IVA inclusa (zero commissioni), <strong>itassistance</strong> raccoglie in anticipo i documenti degli ospiti e prepara il file pronto per l'invio su Alloggiati Web della Polizia di Stato entro 24 ore. Se desideri delegare a noi anche l'ottimizzazione dinamica dei prezzi e gli adempimenti operativi, puoi attivare l'opzione dedicata pari al +10%.
             </p>
           </details>
 
@@ -1372,7 +1621,7 @@
           <details class="faq-item">
             <summary>itassistance sostituisce il commercialista?</summary>
             <p>
-              No. <strong>itassistance</strong>guida la gestione quotidiana (Alloggiati Web, tassa di soggiorno del Comune di Firenze, ISTAT Ross1000 e registro spese fornitori) e prepara a fine mese e fine anno il prospetto ordinato per il tuo commercialista.
+              No. <strong>itassistance</strong> guida la gestione quotidiana (Alloggiati Web, tassa di soggiorno del Comune di Firenze, ISTAT Ross1000 e registro spese fornitori) e prepara a fine mese e fine anno il prospetto ordinato per il tuo commercialista.
             </p>
           </details>
         </div>
@@ -1436,11 +1685,36 @@
 
   <!-- BARRA FISSA TELEFONO (UNICA AZIONE PRINCIPALE) -->
   <div class="mobile-action-bar">
-    <a href="/checkout.html" class="btn btn-primary" onclick="trackSiteEvent('click_prova_app',{location:'mobile_sticky'})">Attiva la prova di 14 giorni</a>
+    <a href="/checkout.html" class="btn btn-primary" onclick="trackSiteEvent('click_prova_app',{location:'mobile_sticky'})">Attiva prova 14 giorni</a>
   </div>
 
   <script>
-    /* 1. Rivelazione fluida allo scroll (60fps su transform e opacity, rispetta prefers-reduced-motion) */
+    /* 0. Menu Mobile a Tutto Schermo + Chiusura automatica al ridimensionamento o tasto Esc */
+    function toggleMobileFullscreenMenu(open) {
+      var menu = document.getElementById('mobile-fullscreen-menu');
+      var btn = document.getElementById('mobile-menu-open-btn');
+      if (!menu) return;
+      var isOpen = Boolean(open);
+      menu.setAttribute('data-open', isOpen ? 'true' : 'false');
+      if (btn) {
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      }
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        toggleMobileFullscreenMenu(false);
+      }
+    });
+
+    window.addEventListener('resize', function () {
+      if (window.innerWidth >= 1024) {
+        toggleMobileFullscreenMenu(false);
+      }
+    });
+
+    /* 1. Rivelazione fluida allo scroll (60fps su transform, testo sempre a opacità 100%, rispetta prefers-reduced-motion) */
     (function initEditorialMotion() {
       var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (prefersReduced || !('IntersectionObserver' in window)) {
@@ -1595,7 +1869,7 @@
       var s10 = Math.round(cap * 0.10).toLocaleString('it-IT');
       var salEl = document.getElementById('idx-sim-sal-breakdown');
       if (salEl) {
-        salEl.innerHTML = '<strong>Piano 5 SAL Garantiti (' + cap.toLocaleString('it-IT') + ' €):</strong>1° SAL (15%): <strong>' + s1 + ' €</strong>· 2° SAL (25%): <strong>' + s25 + ' €</strong>· 3° SAL (25%): <strong>' + s25 + ' €</strong>· 4° SAL (25%): <strong>' + s25 + ' €</strong>· 5° Fine Lavori e Collaudo (10%): <strong>' + s10 + ' €</strong>.';
+        salEl.innerHTML = '<strong>Piano 5 SAL Garantiti (' + cap.toLocaleString('it-IT') + ' €):</strong> 1° SAL (15%): <strong>' + s1 + ' €</strong> · 2° SAL (25%): <strong>' + s25 + ' €</strong> · 3° SAL (25%): <strong>' + s25 + ' €</strong> · 4° SAL (25%): <strong>' + s25 + ' €</strong> · 5° Fine Lavori e Collaudo (10%): <strong>' + s10 + ' €</strong>.';
       }
     }
 
@@ -1633,8 +1907,8 @@
       }
 
       if (statusBox) {
-        statusBox.innerHTML = '<strong>Simulazione (' + Number(simCap).toLocaleString('it-IT') + ' € · Rientro ' + simYears + ') registrata nel CRM di 1. Toscan Costruzioni.</strong>Il Direttore Vendite ti invierà il capitolato 5 SAL garantiti e lo studio di rendita.' +
-          '<div style="margin-top:12px;"><button type="button" class="btn btn-secondary" style="width:100%;" onclick="printIndexToscanFeasibility()">Stampa lo Studio di Fattibilità 5 SAL Personalizzato (A4)</button></div>';
+        statusBox.innerHTML = '<strong>Simulazione (' + Number(simCap).toLocaleString('it-IT') + ' € · Rientro ' + simYears + ') registrata nel CRM di 1. Toscan Costruzioni.</strong> Il Direttore Vendite ti invierà il capitolato 5 SAL garantiti e lo studio di rendita.' +
+          '<div style="margin-top:12px;"><button type="button" class="btn btn-secondary" style="width:100%;" onclick="printIndexToscanFeasibility()">Stampa Studio 5 SAL (A4)</button></div>';
       }
     }
 
@@ -1656,7 +1930,7 @@
 
       var heroBadge = document.getElementById('hero-dyn-price-badge');
       if (heroBadge) {
-        heroBadge.textContent = 'Oggi ' + dp.todayFormatted + ' / mese (Range 99,00 € – 289,50 €)';
+        heroBadge.textContent = 'Oggi ' + dp.todayFormatted + ' / mese';
       }
 
       var pEl = document.getElementById('dyn-today-price-display');
@@ -1681,7 +1955,7 @@
 
       var ctaBtn = document.getElementById('dyn-lock-cta-btn');
       if (ctaBtn) {
-        ctaBtn.textContent = 'Blocca la tariffa di oggi (' + dp.todayFormatted + ' / mese) e inizia i 14 giorni';
+        ctaBtn.textContent = 'Blocca tariffa (' + dp.todayFormatted + ')';
       }
 
       var strip = document.getElementById('dyn-schedule-strip');

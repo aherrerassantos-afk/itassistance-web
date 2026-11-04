@@ -220,6 +220,138 @@ Non mostrare mai tutto subito: l'utente apre un livello alla volta e vede solo c
    - **Fase 1 (Attiva ora in `site-config.js`):** Generatore randomico variabile calibrato tra `99,00 €` e `289,50 €` (`SITE_CONFIG.getDynamicPricing()` e `SITE_CONFIG.rerollDynamicPrice()`), persistito nella sessione di navigazione e dotato di calcolo inverso degli slot disponibili (`1–6 slot su 6 a Firenze`) e striscia previsionale di 5 giorni.
    - **Fase 2 (In Roadmap):** Architettura di controllo reale della domanda (`SITE_CONFIG.computePhase2DemandPricePlaceholder()`) che collegherà l'indice di prezzo al carico effettivo di nuovi immobili acquisiti su Supabase quando i volumi della startup lo richiederanno.
 
+---
+
+## 15. SETTINGS CORE — REGOLE PERMANENTI ANTI-SOVRAPPOSIZIONE, SPAZIATURA E CONTROLLO AUTOMATICO (`npm run check:layout`)
+
+Nessun elemento deve mai sovrapporsi, tagliarsi o uscire dallo schermo, né da PC né da telefono. Queste regole vanno applicate dopo ogni variazione.
+
+### 15.1 Layout Anti-Sovrapposizione
+- Usa `flex` e `grid` con `gap`. Lascia che il contenuto determini lo spazio.
+- Non usare `position: absolute` per disporre testi, logo, menu o bottoni. È ammesso solo per elementi decorativi senza contenuto (`aria-hidden="true"`).
+- Non usare margini negativi per correggere il layout.
+- Non impostare altezze fisse (`height`) su contenitori con testo: usa sempre `min-height`.
+- Sui figli di `flex` e `grid` che contengono testo usa `min-width: 0`.
+- Non usare `overflow: hidden` per nascondere un elemento che sborda.
+- Definisci una sola scala di `z-index` nei token globali (`:root` in `site-config.js` e `index.html`):
+  - `--z-content: 1` (contenuto)
+  - `--z-header: 500` (header fisso)
+  - `--z-fixed-bar: 600` (barra azione mobile / barra cipolla)
+  - `--z-floating: 650` (bottone supporto/AI)
+  - `--z-panel: 700` (pannelli laterali/inferiori)
+  - `--z-modal: 800` (finestre/menu a tutto schermo)
+  - `--z-toast: 900` (avvisi)
+
+### 15.2 Header e Menu
+- Struttura a 3 zone con `display: grid; grid-template-columns: auto 1fr auto`: **logo**, **navigazione**, **azioni**.
+- Logo (`.brand-mark`) e bottone `Accedi` (`.header-login-btn`) hanno `flex-shrink: 0` e `white-space: nowrap` e restano sempre su una sola riga.
+- Ogni voce di menu resta su una sola riga (`white-space: nowrap`), con etichette brevi.
+- Massimo **5 voci principali** da PC (`Riepilogo 08:00`, `Risparmio`, `Autonomia`, `Gruppo Blue Arroyo`, `Guide Firenze`).
+- Il menu mobile si attiva prima che le voci manchino di spazio (`1024px`).
+- Su telefono: logo, azione principale e bottone `Menu`. Tutte le voci vanno nel menu a tutto schermo (`#mobile-fullscreen-menu`).
+- L'header ha una larghezza massima adatta al suo contenuto (`max-width: 1360px`), mai più stretta.
+- Con header fisso, `html { scroll-padding-top: 88px; }` garantisce che i titoli delle ancore non finiscano mai sotto l'header.
+
+### 15.3 Testi e Spazi
+- Parole, numeri e simboli devono mantenere gli spazi in ogni lingua. È vietato attaccare tag inline (`<strong>`, `<em>`, `<a>`, `<span>`) alle parole adiacenti senza spazio.
+- Non affidare lo spazio tra testi a elementi separati senza `gap`.
+- Per i dati (`.hero-meta-strip`, `.kpi-row`), usa valore e descrizione in un unico testo oppure su due righe con `display: flex; flex-direction: column; gap: 4px`.
+- Il testo va a capo senza tagli. Usa `overflow-wrap: anywhere` solo per parole o codici lunghi.
+
+### 15.4 Testo sopra Immagini e Video
+- Le immagini di sfondo non devono mai contenere testo, logo o numeri di telefono nell'area dei contenuti (`/brand/hero-clean.webp`, `/brand/welcome.webp`, `/brand/window.webp`).
+- Velo scuro obbligatorio (`--overlay-hero: linear-gradient(180deg, rgba(20, 10, 38, 0.90) 0%, rgba(30, 16, 53, 0.88) 55%, rgba(20, 10, 38, 0.94) 100%)`) capace di garantire leggibilità in ogni punto.
+- Testo normale: contrasto minimo **4.5:1**. Testo grande e icone: minimo **3:1**.
+- Il testo non deve mai restare semitrasparente nello stato finale né dipendere da JavaScript per diventare visibile (`opacity: 1` garantita anche su `.reveal-on-scroll:not(.is-visible)`).
+
+### 15.5 Elementi Fissi
+- Bottone AI/Supporto (`#pba-chat`), barre fisse mobile (`.mobile-action-bar`, `.cipolla-bottom-bar`) hanno posizioni riservate e non si sovrappongono tra loro.
+- Su telefono viene aggiunto spazio in fondo alla pagina (`padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px))`).
+- Quando un campo `input`, `textarea` o `select` riceve il focus (`body.is-editing-field`), gli elementi fissi inferiori e flottanti si nascondono automaticamente per non coprire mai testi, campi o comandi con la tastiera aperta.
+
+### 15.6 Controllo Automatico Obbligatorio (`npm run check:layout`)
+- Prima di ogni pubblicazione va eseguito `npm run check:layout` (Playwright + axe-core) sulle larghezze:
+  - **PC:** `1024, 1280, 1440, 1920, 2560 px`
+  - **Telefono e Tablet:** `320, 360, 390, 430, 768 px`
+- Il controllo fallisce se rileva: (1) scroll orizzontale, (2) elementi visibili fuori schermo, (3) intersezioni tra testi/logo/bottoni/link, (4) voci di menu o bottoni su più righe quando non previsto, (5) elementi fissi che coprono testi o comandi, (6) testo tagliato dal contenitore, (7) contrasto non conforme, (8) errori di spaziatura (`minuscolaMaiuscola`, simboli `€/%/)` attaccati a lettere o parole del glossario incollate).
+
+---
+
+## 16. REGOLA BASE PERMANENTE — IL DESIGN NON SI TAGLIA MAI
+
+Questa regola vale per ogni progetto, pagina, componente e modifica, e ha priorità su qualsiasi scelta estetica. Va riletta prima di ogni intervento.
+
+### OBIETTIVO
+Su ogni schermo devono restare completamente visibili e utilizzabili: logo, menu hamburger, bottoni, testi, bordi, schede, immagini importanti, tabelle e finestre.
+
+Se un elemento non entra, il layout deve adattarsi: va a capo, si impila o passa al livello successivo della cipolla. Non deve mai essere tagliato, rimpicciolito fino a diventare illeggibile o spinto fuori schermo.
+
+### FASE 1 — CONTROLLO INIZIALE
+Prima di modificare il codice:
+1. Apri il progetto alle larghezze indicate sotto.
+2. Trova ogni elemento che esce dallo schermo o viene tagliato.
+3. Identifica la causa nel codice.
+4. Correggi la causa nel componente condiviso, non con eccezioni pagina per pagina.
+
+### BASE TECNICA OBBLIGATORIA
+- Meta viewport: `width=device-width, initial-scale=1, viewport-fit=cover`.
+- Imposta `box-sizing: border-box` su tutti gli elementi.
+- Progetta prima per il telefono, poi amplia per schermi maggiori.
+- Usa `flex` e `grid` con `gap`, `min-width: 0` sui figli e dimensioni fluide.
+- Immagini, video, iframe e SVG: `max-width: 100%`.
+- Margini laterali della pagina: `max(16px, env(safe-area-inset-left))` a sinistra e `max(16px, env(safe-area-inset-right))` a destra.
+- Rispetta anche le aree sicure in alto e in basso.
+- Altezze a schermo intero: usa `dvh` o `svh`.
+
+### VIETATO
+- Usare `100vw` per la larghezza dei contenitori.
+- Impostare `width` o `min-width` fissi che superano lo schermo.
+- Usare margini negativi o `transform` che portano contenuti fuori dallo schermo.
+- Usare `overflow: hidden` o `overflow-x: hidden` (o `clip`) su `html` e `body` per nascondere il problema.
+- Usare `white-space: nowrap` su testi lunghi senza verificare che entrino.
+- Posizionare header, menu o bottoni con coordinate fisse o `position: absolute`.
+- Bloccare lo zoom con `user-scalable=no` o `maximum-scale=1`.
+
+### HEADER E MENU HAMBURGER
+- Struttura consigliata: `grid-template-columns: auto minmax(0, 1fr) auto`.
+- Hamburger: area di almeno `48 x 48 px`, sempre interamente visibile e con `flex-shrink: 0`.
+- Logo: si adatta allo spazio disponibile senza spingere l'hamburger fuori.
+- Header e icone rispettano i margini laterali e le aree sicure.
+- Il menu aperto occupa la larghezza disponibile e scorre verticalmente se le voci sono tante.
+- Il bottone di chiusura e tutte le voci restano raggiungibili anche con schermo basso o in orizzontale.
+
+### BORDI, SCHEDE E COMPONENTI LARGHI
+- Schede e pannelli: `width: 100%`, `max-width: 100%`. Tutti e quattro i bordi devono restare visibili.
+- Le ombre non devono essere tagliate dai contenitori.
+- Tabelle: su telefono diventano schede. Se una tabella deve restare tale, solo la tabella scorre dentro il proprio contenitore.
+- Calendari, tab e filtri: adattali al telefono oppure rendi chiaro lo scorrimento interno, senza far scorrere la pagina.
+- Finestre e pannelli: larghezza entro lo schermo, altezza massima `90dvh`, scroll interno e chiusura sempre visibile.
+- Testi lunghi, URL e codici: usa `overflow-wrap: anywhere` dove serve.
+- Immagini importanti: non usare `object-fit: cover` se taglia volti, prodotti o testi. Prevedi un'inquadratura per telefono o usa `object-fit: contain`.
+
+### TEST OBBLIGATORI DOPO OGNI MODIFICA (`npm run check:mobile`)
+Crea ed esegui il comando `npm run check:mobile` con Playwright su tutte le pagine pubbliche e interne, con menu e finestre sia chiusi sia aperti, in ogni lingua e ruolo disponibile.
+
+Dimensioni:
+- `320 x 568`
+- `360 x 800`
+- `390 x 844`
+- `430 x 932`
+- `768 x 1024`
+- `844 x 390` (telefono orizzontale)
+
+Motori:
+- Chromium con profilo telefono Android
+- WebKit con profilo iPhone
+
+Il test deve fallire se:
+1. `document.documentElement.scrollWidth` è maggiore di `clientWidth`.
+2. Un elemento visibile ha `left < 0` oppure `right > larghezza dello schermo`, salvo contenuti dentro uno scroller intenzionale.
+3. Hamburger, logo o bottoni principali non sono interamente visibili.
+4. Un testo o controllo risulta tagliato dal contenitore.
+5. Un elemento cliccabile è coperto da un altro.
+
+
 
 
 

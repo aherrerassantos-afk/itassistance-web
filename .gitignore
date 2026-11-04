@@ -1,3 +1,4 @@
 .vercel
 .env*
 .credentials.md
+node_modules/

@@ -462,6 +462,13 @@
     style.id = 'ita-aura-violet-white-ds';
     style.textContent = [
       ':root {',
+      '  --z-content: 1;',
+      '  --z-header: 500;',
+      '  --z-fixed-bar: 600;',
+      '  --z-floating: 650;',
+      '  --z-panel: 700;',
+      '  --z-modal: 800;',
+      '  --z-toast: 900;',
       '  --bg-light: #FFFFFF;',
       '  --bg-stone: #F5F3FF;',
       '  --ink-navy: #1E1035;',
@@ -492,11 +499,31 @@
       '  --sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;',
       '  --radius: 15px;',
       '}',
+      'html {',
+      '  scroll-padding-top: 88px;',
+      '  overflow-x: clip;',
+      '}',
       'body {',
       '  font-family: var(--font-sans);',
       '  background-color: var(--bg-light);',
       '  color: var(--ink-navy);',
       '  letter-spacing: -0.005em;',
+      '  overflow-x: clip;',
+      '}',
+      'body.is-editing-field .mobile-action-bar,',
+      'body.is-editing-field .bottom-nav,',
+      'body.is-editing-field .mob-bottom-nav,',
+      'body.is-editing-field .cipolla-bottom-bar,',
+      'body.is-editing-field #pba-chat {',
+      '  display: none !important;',
+      '}',
+      '#pba-chat {',
+      '  z-index: var(--z-floating, 650) !important;',
+      '}',
+      '@media (max-width: 768px) {',
+      '  #pba-chat {',
+      '    bottom: calc(92px + env(safe-area-inset-bottom, 0px)) !important;',
+      '  }',
       '}',
       'h1, h2, h3, h4 {',
       '  font-family: var(--font-display);',
@@ -598,13 +625,13 @@
 
     var cta = document.createElement('a');
     cta.href = '/checkout.html?locked_price=' + encodeURIComponent(dp.todayMonthlyEur);
-    cta.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:14px 24px;background:linear-gradient(135deg,#7C3AED 0%,#5B21B6 100%);color:#FFFFFF;font-weight:700;font-size:1rem;border-radius:15px;text-decoration:none;border:2px solid #C4B5FD;';
-    cta.textContent = 'Blocca ' + dp.todayFormatted + '/mese e attiva la prova di 14 giorni';
+    cta.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:10px 20px;background:linear-gradient(135deg,#7C3AED 0%,#5B21B6 100%);color:#FFFFFF;font-weight:700;font-size:0.9375rem;border-radius:15px;text-decoration:none;border:2px solid #C4B5FD;white-space:nowrap;';
+    cta.textContent = 'Blocca ' + dp.todayFormatted + '/mese';
 
     var secLink = document.createElement('a');
     secLink.href = '/calcola-risparmio.html';
-    secLink.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:14px 20px;background:transparent;color:#FFFFFF;font-weight:700;font-size:0.9375rem;border-radius:15px;text-decoration:none;border:1.5px solid #C4B5FD;';
-    secLink.textContent = 'Calcola il tuo risparmio rispetto al 20% di un Property Manager';
+    secLink.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:10px 20px;background:transparent;color:#FFFFFF;font-weight:700;font-size:0.9375rem;border-radius:15px;text-decoration:none;border:1.5px solid #C4B5FD;white-space:nowrap;';
+    secLink.textContent = 'Calcola il tuo risparmio';
 
     btnRow.appendChild(cta);
     btnRow.appendChild(secLink);
@@ -644,6 +671,23 @@
       document.head.appendChild(dsStyle);
     }
     injectEditorialGuideConversionBanner();
+    if (!document.documentElement.dataset.itaAntiOverlapBound) {
+      document.documentElement.dataset.itaAntiOverlapBound = '1';
+      document.addEventListener('focusin', function (e) {
+        var t = e.target && e.target.tagName ? e.target.tagName.toLowerCase() : '';
+        if (t === 'input' || t === 'textarea' || t === 'select') {
+          if (document.body) document.body.classList.add('is-editing-field');
+        }
+      });
+      document.addEventListener('focusout', function () {
+        setTimeout(function () {
+          var a = document.activeElement && document.activeElement.tagName ? document.activeElement.tagName.toLowerCase() : '';
+          if (a !== 'input' && a !== 'textarea' && a !== 'select') {
+            if (document.body) document.body.classList.remove('is-editing-field');
+          }
+        }, 120);
+      });
+    }
   }
 
   // Helper per tracciamento eventi (rispetta eventuale consenso cookie / dataLayer / gtag)
