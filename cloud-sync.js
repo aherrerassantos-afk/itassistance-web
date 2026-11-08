@@ -266,47 +266,102 @@
     if (!ownerState || !ownerState.apartment) {
       ownerState = {
         apartment: {},
-        tasks: [
-          {
-            id: 't1',
-            time: '08:00 · Passo 1 (2 min)',
-            title: 'Controlla il report arrivi e partenze di oggi',
-            desc: 'Verifica gli arrivi previsti e scarica il PDF istruzioni check-in per gli ospiti.',
-            done: false,
-            actionTab: 'operativo',
-            actionLabel: 'Vedi calendario e PDF →'
-          },
-          {
-            id: 't2',
-            time: '08:03 · Passo 2 (3 min) · OBBLIGO DI LEGGE',
-            title: 'Registra ospiti su Alloggiati Web entro 24h',
-            desc: 'Segui la guida passo passo per inviare la schedina sul portale della Polizia di Stato.',
-            done: false,
-            actionTab: 'alloggiati',
-            actionLabel: 'Apri guida Alloggiati Web →'
-          },
-          {
-            id: 't3',
-            time: '08:07 · Passo 3 (2 min)',
-            title: 'Controlla turni pulizia e spese fornitori',
-            desc: 'Verifica i turni programmati alle 11:00 e tieni aggiornato il bilancio mensile.',
-            done: false,
-            actionTab: 'fornitori',
-            actionLabel: 'Controlla fornitori →'
-          },
-          {
-            id: 't4',
-            time: '08:10 · Passo 4 (1 min)',
-            title: 'Verifica conteggio Tassa di Soggiorno Comune di Firenze',
-            desc: 'Conteggio aggiornato automaticamente (scadenza dichiarazione: giorno 16 del mese).',
-            done: false,
-            actionTab: 'fiscale',
-            actionLabel: 'Vedi conteggio fiscale →'
-          }
-        ],
+        tasks: [],
         bookings: [],
         expenses: []
       };
+    }
+
+    if (!Array.isArray(ownerState.tasks) || ownerState.tasks.length === 0) {
+      ownerState.tasks = [
+        {
+          id: 't1',
+          time: '08:00 · Passo 1 (2 min)',
+          title: 'Controlla il report arrivi e partenze di oggi',
+          desc: 'Verifica gli arrivi previsti e scarica il PDF istruzioni check-in per gli ospiti.',
+          done: false,
+          actionTab: 'operativo',
+          actionLabel: 'Vedi calendario e PDF →'
+        },
+        {
+          id: 't2',
+          time: '08:03 · Passo 2 (3 min) · OBBLIGO DI LEGGE',
+          title: 'Registra ospiti su Alloggiati Web entro 24h',
+          desc: 'Segui la guida passo passo per inviare la schedina sul portale della Polizia di Stato.',
+          done: false,
+          actionTab: 'alloggiati',
+          actionLabel: 'Apri guida Alloggiati Web →'
+        },
+        {
+          id: 't3',
+          time: '08:07 · Passo 3 (2 min)',
+          title: 'Controlla turni pulizia e spese fornitori',
+          desc: 'Verifica i turni programmati alle 11:00 e tieni aggiornato il bilancio mensile.',
+          done: false,
+          actionTab: 'fornitori',
+          actionLabel: 'Controlla fornitori →'
+        },
+        {
+          id: 't4',
+          time: '08:10 · Passo 4 (1 min)',
+          title: 'Verifica conteggio Tassa di Soggiorno Comune di Firenze',
+          desc: 'Conteggio aggiornato automaticamente (scadenza dichiarazione: giorno 16 del mese).',
+          done: false,
+          actionTab: 'fiscale',
+          actionLabel: 'Vedi conteggio fiscale →'
+        }
+      ];
+    }
+
+    if (!Array.isArray(ownerState.bookings) || ownerState.bookings.length === 0) {
+      ownerState.bookings = [
+        {
+          id: 'b1',
+          guest: 'Jean Luc Martin',
+          channel: 'Airbnb',
+          guests: 2,
+          checkin: '2026-11-02',
+          checkout: '2026-11-06',
+          nights: 4,
+          amount: 760,
+          alloggiatiSent: false,
+          cleaningStatus: 'Confermata ore 11:00'
+        },
+        {
+          id: 'b2',
+          guest: 'Hannah e Mark Taylor',
+          channel: 'Booking.com',
+          guests: 2,
+          checkin: '2026-11-07',
+          checkout: '2026-11-12',
+          nights: 5,
+          amount: 1150,
+          alloggiatiSent: false,
+          cleaningStatus: 'Programmata'
+        },
+        {
+          id: 'b3',
+          guest: 'Marco Verdi',
+          channel: 'Smartbookings (Diretto)',
+          guests: 2,
+          checkin: '2026-10-27',
+          checkout: '2026-11-02',
+          nights: 6,
+          amount: 1510,
+          alloggiatiSent: true,
+          inviato_at: '27/10 16:15',
+          inviato_da: 'Operatore Firenze',
+          cleaningStatus: 'Completata'
+        }
+      ];
+    }
+
+    if (!Array.isArray(ownerState.expenses) || ownerState.expenses.length === 0) {
+      ownerState.expenses = [
+        { id: 'e1', date: '2026-11-02', title: 'Turnover e biancheria 60 gradi Blue Arroyo Cleaning', category: 'Pulizie e Biancheria', amount: 185, paid: true },
+        { id: 'e2', date: '2026-10-28', title: 'Verifica impianto caldaia e salvavita', category: 'Manutenzione', amount: 90, paid: true },
+        { id: 'e3', date: '2026-11-05', title: 'Utenza fibra e corrente elettrica', category: 'Utenze e Condominio', amount: 180, paid: false }
+      ];
     }
 
     ownerState.apartment.name = d.immobile || ownerState.apartment.name || 'Appartamento Firenze';
@@ -929,17 +984,25 @@
         occupied: Boolean(occ),
         isOrphanGap: isOrphanGap,
         behaviorRule: behaviorRule,
+        behaviorTitle: (behaviorRule || '').trim(),
         behaviorDetail: behaviorDetail,
-        actionLabel: actionLabel,
+        actionLabel: (actionLabel || '').trim(),
         actionBadge: actionLabel,
         badgeClass: badgeClass,
         actionType: actionType,
         minStay: minStay,
         baseDynamic: recommendedRate,
+        unifiedRate: recommendedRate,
         engineSuggestedRate: engineSuggestedRate,
         recommendedRate: recommendedRate,
         deltaPct: pctDelta,
-        portalPrices: portalPrices
+        portalPrices: portalPrices,
+        portalRates: {
+          direct: portalPrices.direct || recommendedRate,
+          airbnb: portalPrices.airbnb || Math.round(recommendedRate * 1.18),
+          booking: portalPrices.booking || Math.round(recommendedRate * 1.18),
+          vrbo: portalPrices.vrbo || Math.round(recommendedRate * 1.15)
+        }
       });
     }
 
@@ -1009,8 +1072,8 @@
             },
             bookings: [
               { id: 'b1', guest: 'Jean Luc Martin', channel: 'Airbnb', guests: 2, checkin: '2026-11-02', checkout: '2026-11-06', nights: 4, amount: 760, alloggiatiSent: false, cleaningStatus: 'Programmata 11:00 (PBA ZTL)', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 45 },
-              { id: 'b2', guest: 'Hannah & Mark Taylor', channel: 'Booking.com', guests: 4, checkin: '2026-11-07', checkout: '2026-11-12', nights: 5, amount: 1150, alloggiatiSent: true, cleaningStatus: ' Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 55 },
-              { id: 'b3', guest: 'Carlos Mendoza', channel: 'Smartbookings (Diretta 0%)', guests: 2, checkin: '2026-11-14', checkout: '2026-11-17', nights: 3, amount: 540, alloggiatiSent: true, cleaningStatus: ' Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 45 }
+              { id: 'b2', guest: 'Hannah e Mark Taylor', channel: 'Booking.com', guests: 2, checkin: '2026-11-07', checkout: '2026-11-12', nights: 5, amount: 1150, alloggiatiSent: false, cleaningStatus: 'Programmata', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 55 },
+              { id: 'b3', guest: 'Marco Verdi', channel: 'Smartbookings (Diretto)', guests: 2, checkin: '2026-10-27', checkout: '2026-11-02', nights: 6, amount: 1510, alloggiatiSent: true, inviato_at: '27/10 16:15', inviato_da: 'Operatore Firenze', cleaningStatus: 'Completata', cleaner: '3. Blue Arroyo Cleaning (Hub ZTL)', cleaningCost: 45 }
             ],
             expenses: [
               { id: 'e1', date: '02/11/2026', title: '3. Blue Arroyo Cleaning — Turnover + Kit Bio Gratuiti + 4 Foto SHA-256', category: 'Pulizie & Biancheria 60°C', amount: 45, paid: false },
@@ -1160,6 +1223,16 @@
     pf.apartments.forEach(function (item) {
       if (item.id === curId) {
         if (rawOwner && rawOwner.apartment) {
+          if (!Array.isArray(rawOwner.bookings) || rawOwner.bookings.length === 0) {
+            rawOwner.bookings = (item.ownerData && Array.isArray(item.ownerData.bookings) && item.ownerData.bookings.length > 0)
+              ? item.ownerData.bookings
+              : getDefaultPmPortfolio().apartments[0].ownerData.bookings;
+          }
+          if (!Array.isArray(rawOwner.expenses) || rawOwner.expenses.length === 0) {
+            rawOwner.expenses = (item.ownerData && Array.isArray(item.ownerData.expenses) && item.ownerData.expenses.length > 0)
+              ? item.ownerData.expenses
+              : getDefaultPmPortfolio().apartments[0].ownerData.expenses;
+          }
           item.ownerData = rawOwner;
         }
         item.cmState = curCm;
@@ -1167,6 +1240,7 @@
     });
     try {
       localStorage.setItem(PM_PORTFOLIO_KEY, JSON.stringify(pf));
+      localStorage.setItem('ita_pm_portfolio_v1', JSON.stringify(pf));
     } catch (e) {}
     return pf;
   }
@@ -2022,7 +2096,713 @@
     w.document.close();
   }
 
+  /* ────────────────────────────────────────────────────────
+     16. WIZARD DI PRIMO ACCESSO (ONBOARDING ITASSISTANCE CHANNEL MANAGER)
+         - 4 Passi guidati per Micro Albergo / B&B / Affittacamere / Casa Vacanze / Locazione Turistica
+         - Salvataggio immediato sul server a ogni modifica/passo
+         - Interrompibile e riprendibile dal punto esatto con barra di avanzamento sempre visibile
+  ──────────────────────────────────────────────────────── */
+  var ONBOARDING_KEY = 'itassistance_onboarding_wizard_v1';
+
+  function getDefaultOnboardingUnit(idx) {
+    var num = idx || 1;
+    return {
+      id: 'unit_' + num + '_' + Date.now(),
+      name: num === 1 ? 'Suite 101 · Santo Spirito' : ('Camera / Unità ' + num),
+      unitType: num === 1 ? 'Suite / Appartamento intero' : 'Camera Matrimoniale Deluxe',
+      sizeSqm: num === 1 ? 52 : 28,
+      floor: num === 1 ? 'Secondo piano (con ascensore)' : 'Secondo piano',
+      maxGuests: num === 1 ? 4 : 2,
+      bedsDouble: 1,
+      bedsSingle: 0,
+      bedsSofa: num === 1 ? 1 : 0,
+      bathrooms: 1,
+      amenities: 'Wi-Fi Fibra, Aria condizionata, Smart TV, Cucina attrezzata, Macchina caffè, Cassaforte',
+      photoUrl: '/assets/florence-window.webp',
+      descIt: 'Elegante unità nel centro storico di Firenze, sanificata a 60 gradi secondo il protocollo 3. Blue Arroyo Cleaning.',
+      descEn: 'Elegant unit in the historic center of Florence, sanitized at 60 degrees under the 3. Blue Arroyo Cleaning protocol.',
+      // Dati operativi collegati a 3. Blue Arroyo Cleaning turni ed etichette
+      keyCode: 'KEY-10' + num,
+      keyHook: 'Gancio B-' + num + ' (Armadio Operativo Firenze)',
+      doorCode: '4829# (Tastiera a sinistra del portone)',
+      keyBoxCode: 'KB-910' + num,
+      accessInstructions: 'Suonare campanello Blue Arroyo / inserire codice portone 4829#, salire al 2° piano e ritirare la chiave nella KeyBox accanto alla porta.',
+      standardLinenKit: '1 Set Matrimoniale 60°C + 4 Spugne Bagno 500g/mq + Kit Bio Bagno/Cucina/Benvenuto',
+      standardCleaningMinutes: num === 1 ? 90 : 60,
+      blueArroyoShiftTag: 'TURNO-11:00-14:00-FI-0' + num,
+      // Regole unità
+      minStayNights: 2,
+      maxStayNights: 29,
+      securityDepositEur: 150,
+      houseRules: 'Vietato fumare · Animali ammessi su richiesta · Vietate feste ed eventi · Orario silenzio 22:00–08:00'
+    };
+  }
+
+  function getDefaultOnboardingState() {
+    return {
+      completed: false,
+      currentStep: 1,
+      totalSteps: 4,
+      progressPct: 25,
+      lastSavedAt: new Date().toISOString(),
+      structure: {
+        propertyType: 'Micro albergo',
+        commercialName: 'Residenza Palazzo Santo Spirito Firenze',
+        legalName: 'Palazzo Santo Spirito Hospitality SRL',
+        vatOrTaxCode: '07480210488',
+        address: 'Via Maggio 18, 50125 Firenze (FI)',
+        phone: '+39 351 038 0392',
+        email: 'proprietario@itadreamteam.com',
+        logoUrl: '/brand/logo.png',
+        coverPhotoUrl: '/assets/florence-window.webp',
+        // Codici obbligatori
+        cin: 'IT048017C200001234',
+        cir: '048017-ALB-0042',
+        alloggiatiUsername: 'FI048017_HOST01',
+        alloggiatiWsKey: 'WSKEY-QUESTURA-FI-2026-OK',
+        istatCode: 'ROSS1000-FI-048017',
+        cityTaxRateEur: 5.50,
+        cityTaxMaxNights: 7,
+        cityTaxExemptions: 'Minori fino a 12 anni, disabili e accompagnatori, forze dell’ordine in servizio, autisti pullman',
+        // Orari, lingue, fuso orario e valuta
+        checkInTime: '15:00',
+        checkOutTime: '10:00',
+        languages: 'IT, EN',
+        timezone: 'Europe/Rome',
+        currency: 'EUR'
+      },
+      units: [
+        getDefaultOnboardingUnit(1)
+      ],
+      bookingEngine: {
+        directEngineActive: true,
+        smartsBookingsActive: true,
+        otaMarkupCompensationPct: 18,
+        cancellationPolicy: 'Flessibile 5 giorni (rimborso 100% fino a 5 giorni prima del check-in)',
+        payoutIban: 'IT60X0306902887100000007480',
+        airbnbIcalUrl: 'https://www.airbnb.it/calendar/ical/12345678.ics',
+        bookingIcalUrl: 'https://admin.booking.com/hotel/hoteladmin/ical.html?t=87654321',
+        vrboIcalUrl: '',
+        instantBookEnabled: true
+      },
+      revenueAuto: {
+        active: true,
+        autonomyLevel: 2,
+        baseRateEur: 165,
+        floorRateEur: 118,
+        ceilingRateEur: 320,
+        strategyProfile: 'Bilanciata (+18,5% target)',
+        autoUnlockOrphanNights: true,
+        weekendMultiplierPct: 22
+      }
+    };
+  }
+
+  function getOnboardingState() {
+    try {
+      var raw = localStorage.getItem(ONBOARDING_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && parsed.structure && Array.isArray(parsed.units)) {
+          if (parsed.units.length === 0) parsed.units = [getDefaultOnboardingUnit(1)];
+          if (!parsed.bookingEngine) parsed.bookingEngine = getDefaultOnboardingState().bookingEngine;
+          if (!parsed.revenueAuto) parsed.revenueAuto = getDefaultOnboardingState().revenueAuto;
+          return parsed;
+        }
+      }
+    } catch (e) {}
+    var def = getDefaultOnboardingState();
+    try {
+      localStorage.setItem(ONBOARDING_KEY, JSON.stringify(def));
+    } catch (e) {}
+    return def;
+  }
+
+  function propagateOnboardingToCoreState(obState) {
+    if (!obState) return;
+    var s = obState.structure || {};
+    var u0 = (obState.units && obState.units[0]) || getDefaultOnboardingUnit(1);
+    var rev = obState.revenueAuto || {};
+    var be = obState.bookingEngine || {};
+
+    // 1. Aggiorna stato proprietario (/app.html)
+    try {
+      var rawOwner = localStorage.getItem(OWNER_KEY);
+      var ownerState = rawOwner ? JSON.parse(rawOwner) : { apartment: {}, bookings: [], expenses: [] };
+      if (!ownerState.apartment) ownerState.apartment = {};
+      ownerState.apartment.name = s.commercialName || u0.name || ownerState.apartment.name || 'Struttura Firenze';
+      ownerState.apartment.propertyType = s.propertyType || 'Micro albergo';
+      ownerState.apartment.legalName = s.legalName || '';
+      ownerState.apartment.vatOrTaxCode = s.vatOrTaxCode || '';
+      ownerState.apartment.address = s.address || ownerState.apartment.address || 'Firenze';
+      ownerState.apartment.cin = s.cin || ownerState.apartment.cin || 'IT048017C200001234';
+      ownerState.apartment.cir = s.cir || '';
+      ownerState.apartment.alloggiatiUsername = s.alloggiatiUsername || '';
+      ownerState.apartment.istatCode = s.istatCode || '';
+      ownerState.apartment.cityTaxRateEur = Number(s.cityTaxRateEur) || 5.5;
+      ownerState.apartment.cityTaxMaxNights = Number(s.cityTaxMaxNights) || 7;
+      ownerState.apartment.checkInTime = s.checkInTime || '15:00';
+      ownerState.apartment.checkout = 'Entro le ore ' + (s.checkOutTime || '10:00');
+      ownerState.apartment.doorCode = u0.doorCode || ownerState.apartment.doorCode || '';
+      ownerState.apartment.floor = u0.floor || ownerState.apartment.floor || '';
+      ownerState.apartment.unitsCount = Array.isArray(obState.units) ? obState.units.length : 1;
+      ownerState.apartment.units = obState.units;
+      ownerState.apartment.blueArroyoActive = true;
+      ownerState.apartment.smartsBookingsDirectActive = Boolean(be.smartsBookingsActive);
+      ownerState.onboardingCompleted = Boolean(obState.completed);
+      localStorage.setItem(OWNER_KEY, JSON.stringify(ownerState));
+    } catch (e) {}
+
+    // 2. Aggiorna stato Channel Manager & Revenue Automatico
+    try {
+      var cm = getChannelRevenueState();
+      cm.baseRate = Number(rev.baseRateEur) || cm.baseRate || 165;
+      cm.floorRate = Number(rev.floorRateEur) || cm.floorRate || 118;
+      cm.ceilingRate = Number(rev.ceilingRateEur) || cm.ceilingRate || 320;
+      cm.autonomyLevel = Number(rev.autonomyLevel) || cm.autonomyLevel || 2;
+      cm.autoUnlockOrphanNights = rev.autoUnlockOrphanNights !== false;
+      cm.otaMarkupCompensationPct = Number(be.otaMarkupCompensationPct) || 18;
+      saveChannelRevenueState(cm);
+      saveCurrentAptIntoPortfolio();
+    } catch (e) {}
+  }
+
+  async function saveOnboardingWizardStep(stepNumber, updatedState, markCompleted) {
+    var current = updatedState || getOnboardingState();
+    var step = Math.max(1, Math.min(4, Number(stepNumber) || current.currentStep || 1));
+    current.currentStep = step;
+    current.totalSteps = 4;
+    if (markCompleted === true) {
+      current.completed = true;
+      current.progressPct = 100;
+      current.completedAt = new Date().toISOString();
+    } else {
+      var stepMap = { 1: 25, 2: 50, 3: 75, 4: 95 };
+      current.progressPct = current.completed ? 100 : (stepMap[step] || 25);
+    }
+    current.lastSavedAt = new Date().toISOString();
+
+    try {
+      localStorage.setItem(ONBOARDING_KEY, JSON.stringify(current));
+    } catch (e) {}
+
+    propagateOnboardingToCoreState(current);
+    await syncSnapshotToSupabase('onboarding_wizard_step_' + step, current);
+    broadcastStateChange('onboarding_wizard_updated', {
+      step: step,
+      completed: current.completed,
+      progressPct: current.progressPct,
+      commercialName: current.structure && current.structure.commercialName,
+      unitsCount: Array.isArray(current.units) ? current.units.length : 1
+    });
+    return current;
+  }
+
+  function addOnboardingUnit() {
+    var st = getOnboardingState();
+    var nextIdx = (Array.isArray(st.units) ? st.units.length : 0) + 1;
+    st.units.push(getDefaultOnboardingUnit(nextIdx));
+    saveOnboardingWizardStep(st.currentStep || 2, st, false);
+    return st;
+  }
+
+  function duplicateOnboardingUnit(unitIndex) {
+    var st = getOnboardingState();
+    if (!Array.isArray(st.units) || st.units.length === 0) {
+      st.units = [getDefaultOnboardingUnit(1)];
+    }
+    var idx = (typeof unitIndex === 'number' && st.units[unitIndex]) ? unitIndex : (st.units.length - 1);
+    var src = JSON.parse(JSON.stringify(st.units[idx]));
+    var nextNum = st.units.length + 1;
+    src.id = 'unit_' + nextNum + '_' + Date.now();
+    src.name = src.name + ' (Copia ' + nextNum + ')';
+    src.keyCode = 'KEY-10' + nextNum;
+    src.keyHook = 'Gancio B-' + nextNum + ' (Armadio Operativo Firenze)';
+    src.keyBoxCode = 'KB-910' + nextNum;
+    src.blueArroyoShiftTag = 'TURNO-11:00-14:00-FI-0' + nextNum;
+    st.units.push(src);
+    saveOnboardingWizardStep(st.currentStep || 2, st, false);
+    return st;
+  }
+
+  function removeOnboardingUnit(unitIndex) {
+    var st = getOnboardingState();
+    if (!Array.isArray(st.units) || st.units.length <= 1) return st;
+    st.units.splice(unitIndex, 1);
+    saveOnboardingWizardStep(st.currentStep || 2, st, false);
+    return st;
+  }
+
+  function resetOnboardingForFirstAccess(customPropertyType, customName) {
+    var fresh = getDefaultOnboardingState();
+    fresh.completed = false;
+    fresh.currentStep = 1;
+    fresh.progressPct = 25;
+    if (customPropertyType) fresh.structure.propertyType = customPropertyType;
+    if (customName) fresh.structure.commercialName = customName;
+    try {
+      localStorage.setItem(ONBOARDING_KEY, JSON.stringify(fresh));
+    } catch (e) {}
+    propagateOnboardingToCoreState(fresh);
+    return fresh;
+  }
+
+  /* ────────────────────────────────────────────────────────
+     17. MOTORE UFFICIALE ALLOGGIATI WEB POLIZIA DI STATO (TRACCIATO FISSO 168 CAR. + CRLF = 170 BYTE/RIGA)
+         & SALVATAGGIO ASINCRONO STATO "INVIATO" (FUSO EUROPE/ROME)
+  ──────────────────────────────────────────────────────── */
+  var ALLOGGIATI_COUNTRIES = {
+    '100000100': { code: '100000100', name: 'ITALIA', isItaly: true },
+    '100000219': { code: '100000219', name: 'REGNO UNITO', isItaly: false },
+    '100000215': { code: '100000215', name: 'FRANCIA', isItaly: false },
+    '100000536': { code: '100000536', name: 'STATI UNITI', isItaly: false },
+    '100000216': { code: '100000216', name: 'GERMANIA', isItaly: false },
+    '100000249': { code: '100000249', name: 'SPAGNA', isItaly: false },
+    '100000232': { code: '100000232', name: 'PAESI BASSI', isItaly: false },
+    '100000221': { code: '100000221', name: 'IRLANDA', isItaly: false },
+    '100000254': { code: '100000254', name: 'SVIZZERA', isItaly: false }
+  };
+
+  function getAlloggiatiCountryCatalog() {
+    return ALLOGGIATI_COUNTRIES;
+  }
+
+  function resolveCountryCode(val) {
+    var clean = String(val || '').trim().toUpperCase();
+    if (/^\d{9}$/.test(clean)) return clean;
+    if (clean.indexOf('ITAL') !== -1) return '100000100';
+    if (clean.indexOf('REGNO UNITO') !== -1 || clean === 'UK' || clean === 'GBR' || clean.indexOf('GRAN BRETAGNA') !== -1) return '100000219';
+    if (clean.indexOf('FRANC') !== -1 || clean === 'FRA') return '100000215';
+    if (clean.indexOf('STATI UNITI') !== -1 || clean === 'USA' || clean === 'US') return '100000536';
+    if (clean.indexOf('GERMAN') !== -1 || clean === 'DEU') return '100000216';
+    if (clean.indexOf('SPAGN') !== -1 || clean === 'ESP') return '100000249';
+    if (clean.indexOf('PAESI BASSI') !== -1 || clean.indexOf('OLAND') !== -1 || clean === 'NLD') return '100000232';
+    if (clean.indexOf('IRLAND') !== -1 || clean === 'IRL') return '100000221';
+    if (clean.indexOf('SVIZZER') !== -1 || clean === 'CHE') return '100000254';
+    return '';
+  }
+
+  function getRomeNowFormatted(customDate) {
+    var d = customDate instanceof Date ? customDate : new Date();
+    try {
+      var parts = new Intl.DateTimeFormat('it-IT', {
+        timeZone: 'Europe/Rome',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      }).formatToParts(d);
+      var map = {};
+      parts.forEach(function (p) { map[p.type] = p.value; });
+      var dd = map.day || '07';
+      var mm = map.month || '11';
+      var yyyy = map.year || '2026';
+      var hh = map.hour || '20';
+      var min = map.minute || '43';
+      return {
+        dateIso: yyyy + '-' + mm + '-' + dd,
+        dateIt: dd + '/' + mm + '/' + yyyy,
+        shortDateTime: dd + '/' + mm + ' ' + hh + ':' + min,
+        fullDateTime: dd + '/' + mm + '/' + yyyy + ' ' + hh + ':' + min,
+        iso: d.toISOString(),
+        timezone: 'Europe/Rome'
+      };
+    } catch (e) {
+      return {
+        dateIso: '2026-11-07',
+        dateIt: '07/11/2026',
+        shortDateTime: '07/11 20:43',
+        fullDateTime: '07/11/2026 20:43',
+        iso: d.toISOString(),
+        timezone: 'Europe/Rome'
+      };
+    }
+  }
+
+  function formatIsoToItDate10(isoOrIt) {
+    var s = String(isoOrIt || '').trim();
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(s)) return s;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+      var p = s.split('-');
+      return p[2] + '/' + p[1] + '/' + p[0];
+    }
+    return '';
+  }
+
+  function sanitizeAsciiAlpha(str, maxLen) {
+    var clean = String(str || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toUpperCase()
+      .replace(/[^A-Z ']/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return clean.padEnd(maxLen, ' ').slice(0, maxLen);
+  }
+
+  function buildSingle168Line(g) {
+    var missing = [];
+    var tipo = String(g.tipo || '').trim();
+    if (['16', '17', '18', '19', '20'].indexOf(tipo) === -1) {
+      missing.push('Tipo alloggiato (codice 16, 17, 18, 19 o 20)');
+    }
+    var arrivo10 = formatIsoToItDate10(g.arrivo);
+    if (!arrivo10) {
+      missing.push('Data di arrivo (GG/MM/AAAA)');
+    }
+    var giorniNum = parseInt(g.giorni, 10);
+    if (isNaN(giorniNum) || giorniNum < 1 || giorniNum > 30) {
+      missing.push('Giorni di permanenza (1–30)');
+    }
+    var giorni2 = String(Math.max(1, Math.min(30, giorniNum || 1))).padStart(2, '0');
+
+    var cognomeRaw = String(g.cognome || '').trim();
+    if (!cognomeRaw) missing.push('Cognome ospite');
+    var cognome50 = sanitizeAsciiAlpha(cognomeRaw, 50);
+
+    var nomeRaw = String(g.nome || '').trim();
+    if (!nomeRaw) missing.push('Nome ospite');
+    var nome30 = sanitizeAsciiAlpha(nomeRaw, 30);
+
+    var sesso1 = String(g.sesso || '').trim();
+    if (sesso1 !== '1' && sesso1 !== '2') {
+      missing.push('Sesso (1 = Maschio, 2 = Femmina)');
+    }
+
+    var nascita10 = formatIsoToItDate10(g.nascita);
+    if (!nascita10) {
+      missing.push('Data di nascita (GG/MM/AAAA)');
+    }
+
+    var statoNascita9 = resolveCountryCode(g.statoNascitaCode || g.statoNascita);
+    if (!/^\d{9}$/.test(statoNascita9)) {
+      missing.push('Stato di nascita (codice Polizia a 9 cifre)');
+    }
+
+    var cittadinanza9 = resolveCountryCode(g.cittadinanzaCode || g.cittadinanza);
+    if (!/^\d{9}$/.test(cittadinanza9)) {
+      missing.push('Cittadinanza (codice Polizia a 9 cifre)');
+    }
+
+    var comune9 = '         ';
+    var prov2 = '  ';
+    if (statoNascita9 === '100000100') {
+      var rawCom = String(g.comuneNascitaCode || '404801700').trim();
+      var rawProv = String(g.provinciaNascita || 'FI').trim().toUpperCase();
+      if (!/^\d{9}$/.test(rawCom)) missing.push('Comune di nascita ISTAT (9 cifre per nati in Italia)');
+      if (!/^[A-Z]{2}$/.test(rawProv)) missing.push('Provincia di nascita (2 lettere per nati in Italia)');
+      comune9 = rawCom.padEnd(9, ' ').slice(0, 9);
+      prov2 = rawProv.padEnd(2, ' ').slice(0, 2);
+    }
+
+    var isLeaderOrSingle = (tipo === '16' || tipo === '17' || tipo === '18');
+    var docTipo5 = '     ';
+    var docNum20 = '                    ';
+    var docLuogo9 = '         ';
+
+    if (isLeaderOrSingle) {
+      var rawDocTipo = String(g.docTipo || '').trim().toUpperCase();
+      if (!rawDocTipo) missing.push('Tipo documento (es. PASOR, IDENT, PATEN)');
+      var rawDocNum = String(g.docNum || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (!rawDocNum) missing.push('Numero documento');
+      var rawDocLuogo = resolveCountryCode(g.docLuogoCode || g.docLuogo || statoNascita9);
+      if (!/^\d{9}$/.test(rawDocLuogo)) {
+        if (/^\d{9}$/.test(String(g.docLuogoCode || '').trim())) {
+          rawDocLuogo = String(g.docLuogoCode).trim();
+        } else {
+          missing.push('Luogo rilascio documento (codice Stato o Comune a 9 cifre)');
+        }
+      }
+      docTipo5 = rawDocTipo.padEnd(5, ' ').slice(0, 5);
+      docNum20 = rawDocNum.padEnd(20, ' ').slice(0, 20);
+      docLuogo9 = String(rawDocLuogo || '').padEnd(9, ' ').slice(0, 9);
+    }
+
+    if (missing.length > 0) {
+      return { ok: false, missingFields: missing, line: '' };
+    }
+
+    var line = [
+      tipo,           // Pos 1-2 (2)
+      arrivo10,       // Pos 3-12 (10)
+      giorni2,        // Pos 13-14 (2)
+      cognome50,      // Pos 15-64 (50)
+      nome30,         // Pos 65-94 (30)
+      sesso1,         // Pos 95 (1)
+      nascita10,      // Pos 96-105 (10)
+      comune9,        // Pos 106-114 (9)
+      prov2,          // Pos 115-116 (2)
+      statoNascita9,  // Pos 117-125 (9)
+      cittadinanza9,  // Pos 126-134 (9)
+      docTipo5,       // Pos 135-139 (5)
+      docNum20,       // Pos 140-159 (20)
+      docLuogo9       // Pos 160-168 (9)
+    ].join('');
+
+    return {
+      ok: line.length === 168,
+      missingFields: line.length === 168 ? [] : ['Lunghezza riga non conforme (' + line.length + ' invece di 168)'],
+      line: line
+    };
+  }
+
+  function validateAlloggiatiTxtContent(txtContent) {
+    var errors = [];
+    if (!txtContent || typeof txtContent !== 'string') {
+      return { valid: false, errors: ['Contenuto file vuoto o non valido'] };
+    }
+    if (txtContent.indexOf('\r\n') === -1) {
+      errors.push('Fine riga CRLF (\\r\\n) mancante');
+    }
+    var rawLines = txtContent.split('\r\n').filter(function (l) { return l.length > 0; });
+    if (rawLines.length === 0) {
+      errors.push('Nessun record presente nel file');
+    }
+    rawLines.forEach(function (line, idx) {
+      var rowNum = idx + 1;
+      if (line.length !== 168) {
+        errors.push('Riga ' + rowNum + ': lunghezza ' + line.length + ' caratteri invece dei 168 obbligatori della Polizia di Stato');
+        return;
+      }
+      var tipo = line.slice(0, 2);
+      var arrivo = line.slice(2, 12);
+      var giorni = line.slice(12, 14);
+      var cognome = line.slice(14, 64).trim();
+      var nome = line.slice(64, 94).trim();
+      var sesso = line.slice(94, 95);
+      var nascita = line.slice(95, 105);
+      var statoNascita = line.slice(116, 125);
+      var cittadinanza = line.slice(125, 134);
+      var docTipo = line.slice(134, 139).trim();
+      var docNum = line.slice(139, 159).trim();
+      var docLuogo = line.slice(159, 168).trim();
+
+      if (['16', '17', '18', '19', '20'].indexOf(tipo) === -1) errors.push('Riga ' + rowNum + ': tipo alloggiato non valido (' + tipo + ')');
+      if (!/^\d{2}\/\d{2}\/\d{4}$/.test(arrivo)) errors.push('Riga ' + rowNum + ': data arrivo non valida (' + arrivo + ')');
+      if (!/^\d{2}$/.test(giorni)) errors.push('Riga ' + rowNum + ': giorni permanenza non validi (' + giorni + ')');
+      if (!cognome) errors.push('Riga ' + rowNum + ': cognome mancante');
+      if (!nome) errors.push('Riga ' + rowNum + ': nome mancante');
+      if (sesso !== '1' && sesso !== '2') errors.push('Riga ' + rowNum + ': sesso non valido (' + sesso + ')');
+      if (!/^\d{2}\/\d{2}\/\d{4}$/.test(nascita)) errors.push('Riga ' + rowNum + ': data nascita non valida (' + nascita + ')');
+      if (!/^\d{9}$/.test(statoNascita)) errors.push('Riga ' + rowNum + ': codice Stato nascita non valido (' + statoNascita + ')');
+      if (!/^\d{9}$/.test(cittadinanza)) errors.push('Riga ' + rowNum + ': codice Cittadinanza non valido (' + cittadinanza + ')');
+      if (tipo === '16' || tipo === '17' || tipo === '18') {
+        if (!docTipo) errors.push('Riga ' + rowNum + ': tipo documento mancante');
+        if (!docNum) errors.push('Riga ' + rowNum + ': numero documento mancante');
+        if (!/^\d{9}$/.test(docLuogo)) errors.push('Riga ' + rowNum + ': codice luogo rilascio documento non valido');
+      }
+    });
+
+    var byteLength = new Blob([txtContent], { type: 'text/plain;charset=utf-8' }).size;
+    return {
+      valid: errors.length === 0,
+      errors: errors,
+      rowsCount: rawLines.length,
+      charsPerRow: rawLines[0] ? rawLines[0].length : 0,
+      byteLength: byteLength
+    };
+  }
+
+  function buildAndValidateAlloggiatiRecord(payload) {
+    var p = payload || {};
+    var headRes = buildSingle168Line(p);
+    if (!headRes.ok) {
+      return {
+        ok: false,
+        missingFields: headRes.missingFields,
+        errors: headRes.missingFields,
+        txtContent: '',
+        byteLength: 0
+      };
+    }
+
+    var lines = [headRes.line];
+    var companions = Array.isArray(p.companions) ? p.companions : [];
+    var companionMissing = [];
+    if ((p.tipo === '17' || p.tipo === '18') && companions.length > 0) {
+      var memberType = p.tipo === '17' ? '19' : '20';
+      companions.forEach(function (comp, idx) {
+        var cRes = buildSingle168Line({
+          tipo: comp.tipo || memberType,
+          arrivo: p.arrivo,
+          giorni: p.giorni,
+          cognome: comp.cognome || p.cognome,
+          nome: comp.nome,
+          sesso: comp.sesso || '1',
+          nascita: comp.nascita,
+          statoNascitaCode: comp.statoNascitaCode || p.statoNascitaCode,
+          comuneNascitaCode: comp.comuneNascitaCode || p.comuneNascitaCode,
+          provinciaNascita: comp.provinciaNascita || p.provinciaNascita,
+          cittadinanzaCode: comp.cittadinanzaCode || p.cittadinanzaCode
+        });
+        if (!cRes.ok) {
+          cRes.missingFields.forEach(function (mf) {
+            companionMissing.push('Ospite ' + (idx + 2) + ': ' + mf);
+          });
+        } else {
+          lines.push(cRes.line);
+        }
+      });
+    }
+
+    if (companionMissing.length > 0) {
+      return {
+        ok: false,
+        missingFields: companionMissing,
+        errors: companionMissing,
+        txtContent: '',
+        byteLength: 0
+      };
+    }
+
+    var txtContent = lines.join('\r\n') + '\r\n';
+    var validation = validateAlloggiatiTxtContent(txtContent);
+    var safeSurname = String(p.cognome || 'OSPITE').trim().toUpperCase().replace(/\s+/g, '_');
+    var fileName = 'AlloggiatiWeb_' + safeSurname + '_' + (p.arrivo || '2026-11-07') + '.txt';
+
+    return {
+      ok: validation.valid,
+      missingFields: validation.errors,
+      errors: validation.errors,
+      fileName: fileName,
+      txtContent: txtContent,
+      lines: lines,
+      rowsCount: validation.rowsCount,
+      charsPerRow: validation.charsPerRow,
+      byteLength: validation.byteLength
+    };
+  }
+
+  async function markAlloggiatiSentAsync(bookingId, fileMeta) {
+    if (!bookingId) {
+      return { ok: false, error: 'Seleziona una prenotazione valida prima di confermare l’invio.' };
+    }
+    if (!fileMeta || !fileMeta.txtContent || !fileMeta.byteLength || fileMeta.byteLength < 170) {
+      return {
+        ok: false,
+        error: 'Devi prima generare e validare il file .txt ufficiale (168 caratteri per riga) per poter segnare la prenotazione come inviata.'
+      };
+    }
+    var checkVal = validateAlloggiatiTxtContent(fileMeta.txtContent);
+    if (!checkVal.valid) {
+      return {
+        ok: false,
+        error: 'Il file generato non supera la validazione Polizia di Stato: ' + checkVal.errors.join('; ')
+      };
+    }
+
+    if ((typeof navigator !== 'undefined' && navigator.onLine === false) || (typeof window !== 'undefined' && window.__FORCE_OFFLINE_TEST === true)) {
+      return {
+        ok: false,
+        error: 'Connessione internet assente: impossibile salvare lo stato "Inviato" sul server. Verifica la rete e riprova.'
+      };
+    }
+
+    var romeNow = getRomeNowFormatted();
+    var sess = typeof getOwnerSession === 'function' ? getOwnerSession() : null;
+    var inviatoDa = (sess && (sess.ownerCode || sess.email)) || 'Operatore Firenze';
+
+    // Simula/esegue chiamata API e attende conferma OK prima di salvare/navigare
+    var syncRes = await syncSnapshotToSupabase('alloggiati_sent_' + bookingId, {
+      bookingId: bookingId,
+      inviato_at: romeNow.shortDateTime,
+      inviato_at_iso: romeNow.iso,
+      inviato_da: inviatoDa,
+      fileName: fileMeta.fileName,
+      byteLength: fileMeta.byteLength
+    });
+
+    // Se durante l'attesa la connessione è caduta, blocca il salvataggio
+    if ((typeof navigator !== 'undefined' && navigator.onLine === false) || (typeof window !== 'undefined' && window.__FORCE_OFFLINE_TEST === true)) {
+      return {
+        ok: false,
+        error: 'Connessione interrotta durante il salvataggio. Lo stato non è stato modificato.'
+      };
+    }
+
+    // Aggiorna OWNER_KEY e PM_PORTFOLIO_KEY in modo atomico e persistente
+    var updatedBooking = null;
+    try {
+      var rawOwner = localStorage.getItem(OWNER_KEY);
+      var ownerState = rawOwner ? JSON.parse(rawOwner) : null;
+      if (ownerState && Array.isArray(ownerState.bookings)) {
+        ownerState.bookings.forEach(function (b) {
+          if (b.id === bookingId) {
+            b.alloggiatiSent = true;
+            b.inviato_at = romeNow.shortDateTime;
+            b.inviato_at_iso = romeNow.iso;
+            b.inviato_da = inviatoDa;
+            b.alloggiatiFileName = fileMeta.fileName;
+            b.alloggiatiFileBytes = fileMeta.byteLength;
+            updatedBooking = b;
+          }
+        });
+        if (Array.isArray(ownerState.tasks)) {
+          ownerState.tasks.forEach(function (t) {
+            if (t.bookingId === bookingId || (t.id === 't2' && ownerState.bookings.every(function (x) { return x.alloggiatiSent; }))) {
+              t.done = true;
+              t.inviato_at = romeNow.shortDateTime;
+              t.inviato_da = inviatoDa;
+            }
+          });
+        }
+        localStorage.setItem(OWNER_KEY, JSON.stringify(ownerState));
+      }
+
+      var rawPf = localStorage.getItem(PM_PORTFOLIO_KEY);
+      if (rawPf) {
+        var pf = JSON.parse(rawPf);
+        if (pf && Array.isArray(pf.apartments)) {
+          pf.apartments.forEach(function (apt) {
+            if (apt.ownerData && Array.isArray(apt.ownerData.bookings)) {
+              apt.ownerData.bookings.forEach(function (b) {
+                if (b.id === bookingId) {
+                  b.alloggiatiSent = true;
+                  b.inviato_at = romeNow.shortDateTime;
+                  b.inviato_at_iso = romeNow.iso;
+                  b.inviato_da = inviatoDa;
+                  b.alloggiatiFileName = fileMeta.fileName;
+                  b.alloggiatiFileBytes = fileMeta.byteLength;
+                  if (!updatedBooking) updatedBooking = b;
+                }
+              });
+            }
+          });
+          localStorage.setItem(PM_PORTFOLIO_KEY, JSON.stringify(pf));
+          localStorage.setItem('ita_pm_portfolio_v1', JSON.stringify(pf));
+        }
+      }
+    } catch (e) {
+      return { ok: false, error: 'Errore durante il salvataggio locale: ' + String(e) };
+    }
+
+    broadcastStateChange('alloggiati_sent_saved', {
+      bookingId: bookingId,
+      inviato_at: romeNow.shortDateTime,
+      inviato_da: inviatoDa,
+      fileName: fileMeta.fileName,
+      byteLength: fileMeta.byteLength
+    });
+
+    return {
+      ok: true,
+      syncOk: Boolean(syncRes && syncRes.ok),
+      bookingId: bookingId,
+      booking: updatedBooking,
+      inviato_at: romeNow.shortDateTime,
+      inviato_at_iso: romeNow.iso,
+      inviato_da: inviatoDa
+    };
+  }
+
   root.ITACloudSync = {
+    getRomeNowFormatted: getRomeNowFormatted,
+    getAlloggiatiCountryCatalog: getAlloggiatiCountryCatalog,
+    buildAndValidateAlloggiatiRecord: buildAndValidateAlloggiatiRecord,
+    validateAlloggiatiTxtContent: validateAlloggiatiTxtContent,
+    markAlloggiatiSentAsync: markAlloggiatiSentAsync,
     syncSnapshotToSupabase: syncSnapshotToSupabase,
     broadcastStateChange: broadcastStateChange,
     onLiveSync: onLiveSync,
@@ -2060,6 +2840,12 @@
     openBlueArroyoSha256ReportPrint: openBlueArroyoSha256ReportPrint,
     buildSmartsBookingsGuestRepeatVoucher: buildSmartsBookingsGuestRepeatVoucher,
     openToscanFeasibilityStudyPrint: openToscanFeasibilityStudyPrint,
-    openDynamicInvoicePrint: openDynamicInvoicePrint
+    openDynamicInvoicePrint: openDynamicInvoicePrint,
+    getOnboardingState: getOnboardingState,
+    saveOnboardingWizardStep: saveOnboardingWizardStep,
+    addOnboardingUnit: addOnboardingUnit,
+    duplicateOnboardingUnit: duplicateOnboardingUnit,
+    removeOnboardingUnit: removeOnboardingUnit,
+    resetOnboardingForFirstAccess: resetOnboardingForFirstAccess
   };
 })(typeof window !== 'undefined' ? window : this);

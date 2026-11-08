@@ -135,6 +135,7 @@
 
     .hdr-center-title {
       flex: 1;
+      min-width: 0;
       text-align: center;
       font-size: 1rem;
       font-weight: 700;
@@ -143,6 +144,14 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       padding: 0 4px;
+    }
+
+    @media (max-width: 380px) {
+      .hdr-left-action,
+      .hdr-right-action {
+        padding: 6px 10px;
+        font-size: 0.875rem;
+      }
     }
 
     /* CONTENITORE PRINCIPALE (Margini 16px su Telefono) */
@@ -302,22 +311,22 @@
     @keyframes onionForward {
       from {
         opacity: 0;
-        transform: translateX(18px);
+        transform: translateY(6px);
       }
       to {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(0);
       }
     }
 
     @keyframes onionBack {
       from {
         opacity: 0;
-        transform: translateX(-18px);
+        transform: translateY(6px);
       }
       to {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(0);
       }
     }
 
@@ -595,6 +604,209 @@
       background-color: var(--gold-accent);
       font-weight: 700;
     }
+
+    /* ================================================================
+       WIZARD DI PRIMO ACCESSO (ONBOARDING ITASSISTANCE CHANNEL MANAGER)
+       ================================================================ */
+    .onboarding-resume-banner {
+      background-color: var(--bg-stone);
+      border: 2px solid var(--border-control);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .onboarding-resume-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .onboarding-progress-track {
+      width: 100%;
+      height: 12px;
+      background-color: #E5E7EB;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid var(--border-control);
+    }
+
+    .onboarding-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6D28D9 0%, #5B21B6 100%);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    .wizard-steps-nav {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .wizard-steps-nav {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    .wizard-step-tab {
+      min-height: 48px;
+      padding: 8px 12px;
+      border: 2px solid var(--border-control);
+      border-radius: 10px;
+      background-color: var(--bg-light);
+      color: var(--ink-navy);
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .wizard-step-tab.active {
+      background-color: var(--ink-navy);
+      color: var(--bg-light);
+      border-color: var(--ink-navy);
+    }
+
+    .wizard-step-tab.done {
+      background-color: var(--status-ok-bg);
+      color: var(--status-ok-text);
+      border-color: var(--status-ok-text);
+    }
+
+    .wizard-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    @media (min-width: 640px) {
+      .wizard-grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .wizard-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    @media (min-width: 640px) {
+      .wizard-grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .wizard-section-card {
+      background-color: var(--bg-light);
+      border: 2px solid var(--border-control);
+      border-radius: 12px;
+      padding: 18px 16px;
+      margin-bottom: 16px;
+    }
+
+    .wizard-unit-card {
+      background-color: var(--bg-stone);
+      border: 2px solid var(--border-control);
+      border-radius: 12px;
+      padding: 18px 16px;
+      margin-bottom: 16px;
+    }
+
+    .server-save-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background-color: var(--status-ok-bg);
+      color: var(--status-ok-text);
+      border: 1.5px solid var(--status-ok-text);
+      font-size: 0.8125rem;
+      font-weight: 700;
+    }
+
+    /* Stato BLU "Inviato ✓" Alloggiati Web e Toast di Conferma */
+    .btn-sent-blue {
+      background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+      background-color: #1D4ED8 !important;
+      color: #FFFFFF !important;
+      border-color: #1E40AF !important;
+    }
+
+    .btn-sent-blue:hover {
+      background-color: #1E40AF !important;
+      color: #FFFFFF !important;
+    }
+
+    .status-pill.sent-blue {
+      background-color: #DBEAFE !important;
+      color: #1E40AF !important;
+      border: 1.5px solid #1D4ED8 !important;
+      font-weight: 700;
+    }
+
+    .todo-item-row {
+      background-color: var(--bg-light);
+      border: 1.5px solid var(--border-control);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .todo-item-row.todo-done-blue {
+      background-color: #EFF6FF;
+      border-color: #2563EB;
+    }
+
+    .app-toast-banner {
+      position: fixed;
+      bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+      left: max(16px, env(safe-area-inset-left));
+      right: max(16px, env(safe-area-inset-right));
+      max-width: 560px;
+      margin: 0 auto;
+      background-color: #1D4ED8;
+      color: #FFFFFF;
+      border: 2px solid #93C5FD;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      z-index: 350;
+      display: none;
+      box-shadow: 0 10px 25px rgba(29, 78, 216, 0.35);
+    }
+
+    .aw-record-preview {
+      background-color: #1E1035;
+      color: #F5F3FF;
+      border: 1.5px solid #7C3AED;
+      border-radius: 10px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 0.8125rem;
+      overflow-x: auto;
+      white-space: pre;
+      max-width: 100%;
+      margin-bottom: 12px;
+    }
   </style>
 </head>
 <body>
@@ -616,6 +828,29 @@
     <div class="level-Context-bar">
       <span class="level-tag" id="context-level-badge">Livello 1 · Home</span>
       <span class="apt-active-pill" id="context-apt-label">Appartamento Santo Spirito</span>
+    </div>
+
+    <!-- BARRA DI AVANZAMENTO ONBOARDING SEMPRE VISIBILE (Interrompibile e Riprendibile) -->
+    <div id="onboarding-persistent-bar" class="onboarding-resume-banner" role="region" aria-label="Avanzamento configurazione guidata struttura">
+      <div class="onboarding-resume-head">
+        <div>
+          <strong id="ob-bar-title" style="display: block; font-size: 1rem; color: var(--ink-navy);">
+            Procedura Guidata Primo Accesso · Passo 1 di 4 (25%)
+          </strong>
+          <span id="ob-bar-sub" style="font-size: 0.875rem; color: var(--ink-muted);">
+            Completa anagrafica struttura, schede camere/unità, motore di prenotazione e revenue automatico.
+          </span>
+        </div>
+        <span class="server-save-pill" id="ob-bar-sync-badge">Salvato sul server</span>
+      </div>
+      <div class="onboarding-progress-track" aria-hidden="true">
+        <div class="onboarding-progress-fill" id="ob-bar-progress-fill" style="width: 25%;"></div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <button type="button" class="btn btn-primary" id="ob-bar-resume-btn" style="flex: 1; min-width: 220px;" onclick="openOnboardingWizardAtSavedStep()">
+          Riprendi configurazione guidata
+        </button>
+      </div>
     </div>
 
     <!-- UNICO H1 DINAMICO PER PAGINA (Regola SEO/GEO + Chiarezza in 3 secondi) -->
@@ -643,6 +878,20 @@
         <button type="button" class="btn btn-secondary" style="margin-top: 10px; background: rgba(255,255,255,0.12); color: var(--bg-light); border-color: var(--gold-accent);" onclick="triggerMorning0800DispatchInApp()">
           Invia ora il Riepilogo delle 08:00 su WhatsApp e Cloud
         </button>
+      </div>
+
+      <!-- TO-DO LIST DI OGGI (Fuso Europe/Rome, Utente Loggato, Stato Aggiornato) -->
+      <div class="item-card" id="home-today-todo-section" style="margin-bottom: 24px;">
+        <div class="item-card-head" style="margin-bottom: 12px;">
+          <div>
+            <h2 style="font-size: 1.35rem; margin-bottom: 4px;">To-Do List di Oggi</h2>
+            <p id="home-today-meta" style="color: var(--ink-muted); font-size: 0.9375rem;">
+              Data: 07/11/2026 (Europe/Rome) · Utente: ITA-FIRENZE-01
+            </p>
+          </div>
+          <span class="status-pill" id="home-today-counter">4 attività oggi</span>
+        </div>
+        <div id="home-today-todo-list" class="cards-list" style="margin-bottom: 0;"></div>
       </div>
 
       <!-- Ricerca rapida tra soggiorni, spese e sezioni -->
@@ -938,81 +1187,200 @@
          ================================================================ -->
     <section class="onion-screen" id="screen-azione-alloggiati" data-level="4">
       <div class="item-card">
-        <span class="status-pill" id="aw-step-indicator" style="margin-bottom: 12px;">Passaggio 1 di 2 · Verifica ospite</span>
+        <div class="item-card-head" style="margin-bottom: 12px;">
+          <span class="status-pill" id="aw-step-indicator">Passaggio 1 di 2 · Verifica ospite</span>
+          <span class="status-pill pending" id="aw-booking-status-badge">Da inviare</span>
+        </div>
+
+        <div id="aw-inline-error" class="error-state-box" role="alert" style="display: none; margin-bottom: 16px;"></div>
+
+        <div class="field-group">
+          <label for="aw-booking-select" class="field-label">Soggiorno da registrare</label>
+          <select id="aw-booking-select" class="field-select" onchange="onAlloggiatiBookingChange()"></select>
+        </div>
 
         <div id="aw-step-1">
-          <h3>Seleziona il soggiorno e controlla i dati anagrafici</h3>
+          <h3>Seleziona il soggiorno e controlla i dati anagrafici obbligatori</h3>
           <p style="color: var(--ink-muted); margin-bottom: 16px;">
-            I dati provengono dalla prenotazione e dal modulo compilato dall'ospite.
+            Tutti i campi richiesti dal tracciato record della Polizia di Stato (168 caratteri fissi per riga + CRLF) vengono verificati prima della generazione.
           </p>
 
-          <div class="field-group">
-            <label for="aw-booking-select" class="field-label">Soggiorno da registrare</label>
-            <select id="aw-booking-select" class="field-select" onchange="prefillAlloggiatiFromBooking()"></select>
+          <div class="wizard-grid-2">
+            <div class="field-group">
+              <label for="aw-cognome" class="field-label">Cognome ospite *</label>
+              <input type="text" id="aw-cognome" class="field-input" value="TAYLOR" oninput="onAlloggiatiFieldEdit()"/>
+            </div>
+
+            <div class="field-group">
+              <label for="aw-nome" class="field-label">Nome ospite *</label>
+              <input type="text" id="aw-nome" class="field-input" value="HANNAH" oninput="onAlloggiatiFieldEdit()"/>
+            </div>
+
+            <div class="field-group">
+              <label for="aw-sesso" class="field-label">Sesso (1 = M, 2 = F) *</label>
+              <select id="aw-sesso" class="field-select" onchange="onAlloggiatiFieldEdit()">
+                <option value="1">1 · Maschio (M)</option>
+                <option value="2" selected>2 · Femmina (F)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="aw-nascita" class="field-label">Data di nascita *</label>
+              <input type="date" id="aw-nascita" class="field-input" value="1986-08-22" onchange="onAlloggiatiFieldEdit()"/>
+            </div>
+
+            <div class="field-group">
+              <label for="aw-stato-nascita" class="field-label">Stato di nascita (Codice Polizia 9 cifre) *</label>
+              <select id="aw-stato-nascita" class="field-select" onchange="onAlloggiatiCountryChange()">
+                <option value="100000219" selected>REGNO UNITO (100000219)</option>
+                <option value="100000215">FRANCIA (100000215)</option>
+                <option value="100000100">ITALIA (100000100)</option>
+                <option value="100000536">STATI UNITI (100000536)</option>
+                <option value="100000216">GERMANIA (100000216)</option>
+                <option value="100000249">SPAGNA (100000249)</option>
+                <option value="100000232">PAESI BASSI (100000232)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="aw-cittadinanza" class="field-label">Cittadinanza (Codice Polizia 9 cifre) *</label>
+              <select id="aw-cittadinanza" class="field-select" onchange="onAlloggiatiFieldEdit()">
+                <option value="100000219" selected>REGNO UNITO (100000219)</option>
+                <option value="100000215">FRANCIA (100000215)</option>
+                <option value="100000100">ITALIA (100000100)</option>
+                <option value="100000536">STATI UNITI (100000536)</option>
+                <option value="100000216">GERMANIA (100000216)</option>
+                <option value="100000249">SPAGNA (100000249)</option>
+                <option value="100000232">PAESI BASSI (100000232)</option>
+              </select>
+            </div>
           </div>
 
-          <div class="field-group">
-            <label for="aw-cognome" class="field-label">Cognome ospite *</label>
-            <input type="text" id="aw-cognome" class="field-input" value="MARTIN"/>
+          <div id="aw-italy-birth-fields" class="wizard-grid-2" style="display: none;">
+            <div class="field-group">
+              <label for="aw-comune-nascita" class="field-label">Comune di nascita ISTAT (9 cifre) *</label>
+              <input type="text" id="aw-comune-nascita" class="field-input" value="404801700" maxlength="9" oninput="onAlloggiatiFieldEdit()"/>
+            </div>
+            <div class="field-group">
+              <label for="aw-prov-nascita" class="field-label">Provincia di nascita (2 lettere) *</label>
+              <input type="text" id="aw-prov-nascita" class="field-input" value="FI" maxlength="2" oninput="onAlloggiatiFieldEdit()"/>
+            </div>
           </div>
 
-          <div class="field-group">
-            <label for="aw-nome" class="field-label">Nome ospite *</label>
-            <input type="text" id="aw-nome" class="field-input" value="JEAN LUC"/>
+          <div class="wizard-grid-2">
+            <div class="field-group">
+              <label for="aw-arrivo" class="field-label">Data di arrivo *</label>
+              <input type="date" id="aw-arrivo" class="field-input" value="2026-11-07" onchange="onAlloggiatiFieldEdit()"/>
+            </div>
+
+            <div class="field-group">
+              <label for="aw-giorni" class="field-label">Giorni di permanenza (massimo 30) *</label>
+              <input type="number" id="aw-giorni" class="field-input" value="5" min="1" max="30" oninput="onAlloggiatiFieldEdit()"/>
+            </div>
           </div>
 
-          <div class="field-group">
-            <label for="aw-arrivo" class="field-label">Data di arrivo *</label>
-            <input type="date" id="aw-arrivo" class="field-input" value="2026-11-02"/>
-          </div>
-
-          <div class="field-group">
-            <label for="aw-giorni" class="field-label">Giorni di permanenza (massimo 30) *</label>
-            <input type="number" id="aw-giorni" class="field-input" value="4" min="1" max="30"/>
-          </div>
-
-          <button type="button" class="btn btn-primary" onclick="goToAlloggiatiStep(2)">
+          <button type="button" class="btn btn-primary" id="btn-aw-goto-step2" onclick="goToAlloggiatiStep(2)">
             Vai ai dati del documento (Passaggio 2 di 2)
           </button>
         </div>
 
         <div id="aw-step-2" style="display: none;">
-          <h3>Controlla gli estremi del documento e scarica il file</h3>
+          <h3>Controlla gli estremi del documento, genera il file .txt (168 car./riga) e segna come inviato</h3>
           <p style="color: var(--ink-muted); margin-bottom: 16px;">
-            Il file generato rispetta il tracciato record ufficiale della Polizia di Stato.
+            Il file viene generato secondo il tracciato record ufficiale della Polizia di Stato (168 caratteri fissi + CRLF = 170 byte per riga ospite).
           </p>
 
-          <div class="field-group">
-            <label for="aw-tipo" class="field-label">Tipo alloggiato</label>
-            <select id="aw-tipo" class="field-select">
-              <option value="16">Ospite singolo (Codice 16)</option>
-              <option value="17" selected>Capofamiglia (Codice 17)</option>
-              <option value="18">Capogruppo (Codice 18)</option>
-            </select>
+          <div class="wizard-grid-2">
+            <div class="field-group">
+              <label for="aw-tipo" class="field-label">Tipo alloggiato *</label>
+              <select id="aw-tipo" class="field-select" onchange="onAlloggiatiFieldEdit()">
+                <option value="16">Ospite singolo (Codice 16)</option>
+                <option value="17" selected>Capofamiglia (Codice 17 + Familiari 19)</option>
+                <option value="18">Capogruppo (Codice 18 + Membri 20)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="aw-doc-tipo" class="field-label">Tipo documento *</label>
+              <select id="aw-doc-tipo" class="field-select" onchange="onAlloggiatiFieldEdit()">
+                <option value="PASOR" selected>Passaporto ordinario (PASOR)</option>
+                <option value="IDENT">Carta di identità (IDENT)</option>
+                <option value="PATEN">Patente di guida (PATEN)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="aw-doc-num" class="field-label">Numero documento *</label>
+              <input type="text" id="aw-doc-num" class="field-input" value="UK77492018" oninput="onAlloggiatiFieldEdit()"/>
+            </div>
+
+            <div class="field-group">
+              <label for="aw-doc-luogo" class="field-label">Luogo rilascio documento (9 cifre) *</label>
+              <select id="aw-doc-luogo" class="field-select" onchange="onAlloggiatiFieldEdit()">
+                <option value="100000219" selected>REGNO UNITO (100000219)</option>
+                <option value="100000215">FRANCIA (100000215)</option>
+                <option value="404801700">FIRENZE · ITALIA (404801700)</option>
+                <option value="100000100">ITALIA (100000100)</option>
+                <option value="100000536">STATI UNITI (100000536)</option>
+                <option value="100000216">GERMANIA (100000216)</option>
+                <option value="100000249">SPAGNA (100000249)</option>
+              </select>
+            </div>
           </div>
 
-          <div class="field-group">
-            <label for="aw-doc-tipo" class="field-label">Tipo documento</label>
-            <select id="aw-doc-tipo" class="field-select">
-              <option value="PASOR" selected>Passaporto ordinario (PASOR)</option>
-              <option value="IDENT">Carta di identità (IDENT)</option>
-              <option value="PATEN">Patente di guida (PATEN)</option>
-            </select>
+          <!-- Secondo Ospite (Familiare Codice 19 / Membro Gruppo 20) -->
+          <div id="aw-companion-section" class="wizard-unit-card" style="margin-top: 8px; margin-bottom: 16px;">
+            <strong style="display: block; margin-bottom: 8px; color: var(--ink-navy);">
+              2° Ospite Accompagnatore (Codice 19 Familiare / Codice 20 Membro)
+            </strong>
+            <div class="wizard-grid-2">
+              <div class="field-group">
+                <label for="aw-comp-cognome" class="field-label">Cognome 2° ospite *</label>
+                <input type="text" id="aw-comp-cognome" class="field-input" value="TAYLOR" oninput="onAlloggiatiFieldEdit()"/>
+              </div>
+              <div class="field-group">
+                <label for="aw-comp-nome" class="field-label">Nome 2° ospite *</label>
+                <input type="text" id="aw-comp-nome" class="field-input" value="MARK" oninput="onAlloggiatiFieldEdit()"/>
+              </div>
+              <div class="field-group">
+                <label for="aw-comp-sesso" class="field-label">Sesso 2° ospite *</label>
+                <select id="aw-comp-sesso" class="field-select" onchange="onAlloggiatiFieldEdit()">
+                  <option value="1" selected>1 · Maschio (M)</option>
+                  <option value="2">2 · Femmina (F)</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label for="aw-comp-nascita" class="field-label">Data di nascita 2° ospite *</label>
+                <input type="date" id="aw-comp-nascita" class="field-input" value="1984-03-11" onchange="onAlloggiatiFieldEdit()"/>
+              </div>
+            </div>
           </div>
 
-          <div class="field-group">
-            <label for="aw-doc-num" class="field-label">Numero documento *</label>
-            <input type="text" id="aw-doc-num" class="field-input" value="FR98234112"/>
+          <!-- Validatore Tracciato Record Polizia di Stato (168 caratteri/riga + CRLF) -->
+          <div class="summary-strip" style="margin-bottom: 12px;">
+            <div class="summary-row">
+              <span>Stato Tracciato Polizia di Stato (168 car./riga + CRLF)</span>
+              <strong id="aw-validator-summary" style="color: var(--status-ok-text);">Pronto per generazione (340 byte · 2 righe da 168 car.)</strong>
+            </div>
+            <div class="summary-row">
+              <span>File generato per questa prenotazione</span>
+              <strong id="aw-generated-file-label">Non ancora scaricato</strong>
+            </div>
           </div>
-
-          <input type="hidden" id="aw-sesso" value="1"/>
-          <input type="hidden" id="aw-nascita" value="1982-05-14"/>
-          <input type="hidden" id="aw-cittadinanza" value="FRANCIA"/>
-          <input type="hidden" id="aw-doc-luogo" value="FRANCIA"/>
+          <div id="aw-record-preview-box" class="aw-record-preview" aria-label="Anteprima tracciato Alloggiati Web 168 caratteri"></div>
 
           <div class="btn-stack">
-            <button type="button" class="btn btn-primary" onclick="completeAlloggiatiAction()">
-              Scarica il file per la Questura e segna come inviato
+            <button type="button" class="btn btn-secondary" id="btn-aw-generate-file" onclick="generateAndDownloadAlloggiatiTxt(false)">
+              1. Genera e scarica file .txt (Tracciato 168 car.)
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn-aw-share-file" onclick="generateAndDownloadAlloggiatiTxt(true)">
+              Condividi / Salva file .txt su iPhone (senza uscire dalla pagina)
+            </button>
+            <button type="button" class="btn btn-primary" id="btn-aw-mark-sent" onclick="confirmAndMarkAlloggiatiSent()">
+              Continua e segna come inviato
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn-aw-goto-todo" onclick="navigateToOnion('home')">
+              Torna alla To-Do List di oggi
             </button>
             <button type="button" class="btn btn-secondary" onclick="goToAlloggiatiStep(1)">
               Torna ai dati anagrafici (Passaggio 1 di 2)
@@ -1308,6 +1676,388 @@
         </div>
       </div>
     </section>
+
+    <!-- ================================================================
+         LIVELLO 4: WIZARD DI PRIMO ACCESSO (ONBOARDING CHANNEL MANAGER)
+         (?view=onboarding)
+         ================================================================ -->
+    <section class="onion-screen" id="screen-onboarding" data-level="4">
+      <!-- Navigazione 4 Passi + Stato Salvataggio Automatico -->
+      <div class="wizard-steps-nav" role="tablist" aria-label="Passi configurazione struttura">
+        <button type="button" class="wizard-step-tab active" id="wiz-tab-1" onclick="goToOnboardingStep(1)">
+          <span>Passo 1 di 4</span>
+          <strong>1. Struttura e Codici</strong>
+        </button>
+        <button type="button" class="wizard-step-tab" id="wiz-tab-2" onclick="goToOnboardingStep(2)">
+          <span>Passo 2 di 4</span>
+          <strong>2. Camere e Unità</strong>
+        </button>
+        <button type="button" class="wizard-step-tab" id="wiz-tab-3" onclick="goToOnboardingStep(3)">
+          <span>Passo 3 di 4</span>
+          <strong>3. Motore e Canali</strong>
+        </button>
+        <button type="button" class="wizard-step-tab" id="wiz-tab-4" onclick="goToOnboardingStep(4)">
+          <span>Passo 4 di 4</span>
+          <strong>4. Revenue Automatico</strong>
+        </button>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
+        <span class="server-save-pill" id="wiz-live-save-status">
+          Ogni modifica si salva subito sul server
+        </span>
+        <button type="button" class="btn btn-secondary" style="width: auto; min-height: 44px; padding: 8px 14px;" onclick="pauseOnboardingAndReturnHome()">
+          Interrompi e riprendi dopo
+        </button>
+      </div>
+
+      <!-- ============================================================
+           PASSO 1 — STRUTTURA (ANAGRAFICA, CODICI OBBLIGATORI, ORARI)
+           ============================================================ -->
+      <div id="wiz-panel-1" class="wizard-step-panel">
+        <div class="wizard-section-card">
+          <span class="status-pill" style="margin-bottom: 10px;">Passo 1 di 4 · Anagrafica Struttura Ricettiva</span>
+          <h3>Dati della struttura, contatti, logo e foto</h3>
+          <p style="color: var(--ink-muted); margin-bottom: 16px;">
+            Configura i dati generali della tua struttura ricettiva per il Channel Manager di <strong>itassistance</strong>.
+          </p>
+
+          <div class="wizard-grid-2">
+            <div class="field-group">
+              <label for="ob-s-type" class="field-label">Tipo struttura *</label>
+              <select id="ob-s-type" class="field-select" onchange="autoSaveOnboardingFromDOM(1)">
+                <option value="Micro albergo">Micro albergo / Boutique Hotel</option>
+                <option value="B&amp;B">Bed &amp; Breakfast (B&amp;B)</option>
+                <option value="Affittacamere">Affittacamere / Guest House</option>
+                <option value="Casa vacanze">Casa vacanze (CAV)</option>
+                <option value="Locazione turistica">Locazione turistica (Affitto breve)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-comm-name" class="field-label">Nome commerciale struttura *</label>
+              <input type="text" id="ob-s-comm-name" class="field-input" placeholder="Es. Residenza Palazzo Santo Spirito Firenze" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-legal-name" class="field-label">Ragione sociale o Nome e Cognome titolare *</label>
+              <input type="text" id="ob-s-legal-name" class="field-input" placeholder="Es. Palazzo Santo Spirito Hospitality SRL" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-vat" class="field-label">Partita IVA / Codice Fiscale *</label>
+              <input type="text" id="ob-s-vat" class="field-input" placeholder="Es. 07480210488" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-address" class="field-label">Indirizzo completo struttura *</label>
+              <input type="text" id="ob-s-address" class="field-input" placeholder="Es. Via Maggio 18, 50125 Firenze (FI)" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-phone" class="field-label">Telefono / WhatsApp struttura *</label>
+              <input type="tel" id="ob-s-phone" class="field-input" placeholder="+39 351 038 0392" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-email" class="field-label">Email ufficiale struttura *</label>
+              <input type="email" id="ob-s-email" class="field-input" placeholder="info@strutturafirenze.it" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-logo" class="field-label">URL Logo e Foto copertina struttura</label>
+              <input type="text" id="ob-s-logo" class="field-input" placeholder="/brand/logo.png · /assets/florence-window.webp" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="wizard-section-card">
+          <h3>Codici obbligatori e credenziali istituzionali</h3>
+          <p style="color: var(--ink-muted); margin-bottom: 16px;">
+            Questi codici alimentano in automatico Alloggiati Web Polizia di Stato, ISTAT Ross1000, il calcolo dell'imposta di soggiorno e il cartello sicurezza obbligatorio.
+          </p>
+
+          <div class="wizard-grid-2">
+            <div class="field-group">
+              <label for="ob-s-cin" class="field-label">Codice CIN (Codice Identificativo Nazionale) *</label>
+              <input type="text" id="ob-s-cin" class="field-input" placeholder="Es. IT048017C200001234" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-cir" class="field-label">Codice CIR / Codice Regionale *</label>
+              <input type="text" id="ob-s-cir" class="field-input" placeholder="Es. 048017-ALB-0042" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-aw-user" class="field-label">Utente Alloggiati Web (Polizia di Stato) *</label>
+              <input type="text" id="ob-s-aw-user" class="field-input" placeholder="Es. FI048017_HOST01" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-aw-key" class="field-label">Chiave Web Service / Certificato Alloggiati Web</label>
+              <input type="text" id="ob-s-aw-key" class="field-input" placeholder="Es. WSKEY-QUESTURA-FI-2026" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-istat" class="field-label">Codice ISTAT / Turismo5 / Ross1000 *</label>
+              <input type="text" id="ob-s-istat" class="field-input" placeholder="Es. ROSS1000-FI-048017" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-tax-rate" class="field-label">Imposta di soggiorno del Comune (€/notte a ospite) *</label>
+              <input type="number" id="ob-s-tax-rate" class="field-input" step="0.50" min="0" max="15" value="5.50" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-tax-max" class="field-label">Massimo notti imponibili (es. 7 a Firenze)</label>
+              <input type="number" id="ob-s-tax-max" class="field-input" min="1" max="30" value="7" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-tax-ex" class="field-label">Esenzioni imposta di soggiorno applicate</label>
+              <input type="text" id="ob-s-tax-ex" class="field-input" placeholder="Minori fino a 12 anni, disabili, autisti, forze dell'ordine" oninput="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="wizard-section-card">
+          <h3>Orari di check-in e check-out, lingue, fuso orario e valuta</h3>
+          <div class="wizard-grid-3">
+            <div class="field-group">
+              <label for="ob-s-checkin" class="field-label">Orario standard Check-in *</label>
+              <input type="time" id="ob-s-checkin" class="field-input" value="15:00" onchange="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-checkout" class="field-label">Orario limite Check-out *</label>
+              <input type="time" id="ob-s-checkout" class="field-input" value="10:00" onchange="autoSaveOnboardingFromDOM(1)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-langs" class="field-label">Lingue comunicazione ospiti</label>
+              <select id="ob-s-langs" class="field-select" onchange="autoSaveOnboardingFromDOM(1)">
+                <option value="IT, EN" selected>Italiano e Inglese (IT / EN)</option>
+                <option value="IT">Solo Italiano (IT)</option>
+                <option value="EN">Solo Inglese (EN)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-tz" class="field-label">Fuso orario struttura</label>
+              <input type="text" id="ob-s-tz" class="field-input" value="Europe/Rome" readonly/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-s-curr" class="field-label">Valuta predefinita</label>
+              <input type="text" id="ob-s-curr" class="field-input" value="EUR" readonly/>
+            </div>
+          </div>
+
+          <div class="btn-stack" style="margin-top: 8px;">
+            <button type="button" class="btn btn-primary" onclick="saveAndAdvanceOnboarding(2)">
+              Salva e vai a Camere e Unità
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           PASSO 2 — SCHEDE APPARTAMENTO / CAMERE (UNA PER UNITÀ, DUPLICABILE)
+           ============================================================ -->
+      <div id="wiz-panel-2" class="wizard-step-panel" style="display: none;">
+        <div class="wizard-section-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+            <div>
+              <span class="status-pill" style="margin-bottom: 8px;">Passo 2 di 4 · Schede Appartamento / Camere</span>
+              <h3>Configura ogni unità o camera della struttura (<span id="ob-units-count-lbl">1 unità</span>)</h3>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <button type="button" class="btn btn-secondary" style="width: auto; min-height: 44px; padding: 8px 14px;" onclick="handleDuplicateUnitWizard()">
+                Duplica scheda
+              </button>
+              <button type="button" class="btn btn-primary" style="width: auto; min-height: 44px; padding: 8px 14px;" onclick="handleAddUnitWizard()">
+                + Aggiungi unità
+              </button>
+            </div>
+          </div>
+          <p style="color: var(--ink-muted); margin-bottom: 16px;">
+            Ogni scheda include caratteristiche fisiche, descrizione IT/EN, codici di accesso, regole di soggiorno e il collegamento diretto ai turni ed etichette di <strong>3. Blue Arroyo Cleaning</strong>. Puoi duplicare una scheda in un clic per creare camere gemelle.
+          </p>
+
+          <div id="ob-units-list-container"></div>
+
+          <div class="btn-stack" style="margin-top: 16px;">
+            <button type="button" class="btn btn-primary" onclick="saveAndAdvanceOnboarding(3)">
+              Salva e vai a Motore e Canali
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="goToOnboardingStep(1)">
+              Torna a Passo 1 · Struttura
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           PASSO 3 — MOTORE DI PRENOTAZIONE & CANALI OTA (CHANNEL MANAGER)
+           ============================================================ -->
+      <div id="wiz-panel-3" class="wizard-step-panel" style="display: none;">
+        <div class="wizard-section-card">
+          <span class="status-pill" style="margin-bottom: 10px;">Passo 3 di 4 · Motore di Prenotazione e Channel Manager</span>
+          <h3>Collega i portali OTA e attiva il Motore di Prenotazione Diretta</h3>
+          <p style="color: var(--ink-muted); margin-bottom: 16px;">
+            Sincronizza i calendari anti-overbooking con Airbnb, Booking.com e Vrbo e attiva il canale diretto <strong>4. Smartbookings</strong> (0% commissioni OTA, 85% accreditato entro le ore 12:00 del check-out e 15% cashback ospite).
+          </p>
+
+          <div class="wizard-grid-2">
+            <div class="field-group">
+              <label for="ob-be-direct" class="field-label">Motore di prenotazione diretta 4. Smartbookings</label>
+              <select id="ob-be-direct" class="field-select" onchange="autoSaveOnboardingFromDOM(3)">
+                <option value="true" selected>Attivo (0% commissioni OTA · Payout 85% entro le 12:00 check-out)</option>
+                <option value="false">Disattivato (usa solo portali esterni)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-be-markup" class="field-label">Compensazione automatica commissioni OTA (%)</label>
+              <input type="number" id="ob-be-markup" class="field-input" value="18" min="0" max="35" oninput="autoSaveOnboardingFromDOM(3)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-be-cancel" class="field-label">Politica di cancellazione predefinita *</label>
+              <select id="ob-be-cancel" class="field-select" onchange="autoSaveOnboardingFromDOM(3)">
+                <option value="Flessibile 5 giorni (rimborso 100% fino a 5 giorni prima del check-in)">Flessibile 5 giorni (rimborso 100% fino a 5 gg prima)</option>
+                <option value="Moderata 14 giorni (rimborso 100% fino a 14 giorni prima del check-in)">Moderata 14 giorni (rimborso 100% fino a 14 gg prima)</option>
+                <option value="Rigida non rimborsabile (-10% sconto tariffa diretta)">Rigida non rimborsabile (-10% sconto diretto)</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-be-iban" class="field-label">IBAN accredito incassi diretti proprietario *</label>
+              <input type="text" id="ob-be-iban" class="field-input" placeholder="IT60X0306902887100000007480" oninput="autoSaveOnboardingFromDOM(3)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-be-airbnb" class="field-label">Link Calendario iCal Airbnb (.ics)</label>
+              <input type="url" id="ob-be-airbnb" class="field-input" placeholder="https://www.airbnb.it/calendar/ical/12345678.ics" oninput="autoSaveOnboardingFromDOM(3)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-be-booking" class="field-label">Link Calendario iCal Booking.com (.ics)</label>
+              <input type="url" id="ob-be-booking" class="field-input" placeholder="https://admin.booking.com/hotel/hoteladmin/ical.html?t=..." oninput="autoSaveOnboardingFromDOM(3)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-be-vrbo" class="field-label">Link Calendario iCal Vrbo / Expedia (.ics)</label>
+              <input type="url" id="ob-be-vrbo" class="field-input" placeholder="https://www.vrbo.com/icalendar/..." oninput="autoSaveOnboardingFromDOM(3)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-be-instant" class="field-label">Modalità conferma prenotazioni</label>
+              <select id="ob-be-instant" class="field-select" onchange="autoSaveOnboardingFromDOM(3)">
+                <option value="true" selected>Prenotazione immediata con blocco anti-overbooking</option>
+                <option value="false">Su richiesta (approvazione manuale entro 12 ore)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="btn-stack" style="margin-top: 12px;">
+            <button type="button" class="btn btn-primary" onclick="saveAndAdvanceOnboarding(4)">
+              Salva e vai a Revenue Automatico
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="goToOnboardingStep(2)">
+              Torna a Passo 2 · Camere e Unità
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           PASSO 4 — ATTIVAZIONE REVENUE AUTOMATICO E GUARDRAIL DI PREZZO
+           ============================================================ -->
+      <div id="wiz-panel-4" class="wizard-step-panel" style="display: none;">
+        <div class="wizard-section-card">
+          <span class="status-pill" style="margin-bottom: 10px;">Passo 4 di 4 · Attivazione Revenue Automatico</span>
+          <h3>Imposta i tuoi Guardrail di Prezzo e attiva il Revenue Automatico</h3>
+          <p style="color: var(--ink-muted); margin-bottom: 16px;">
+            Fissa la tariffa base, il prezzo minimo invalicabile (Floor) e il prezzo massimo eventi (Cap). Il motore comportamentale ottimizza tariffe, weekend e notti singole orfane senza mai uscire dai tuoi limiti.
+          </p>
+
+          <div class="wizard-grid-3">
+            <div class="field-group">
+              <label for="ob-rev-base" class="field-label">Tariffa Base (€/notte) *</label>
+              <input type="number" id="ob-rev-base" class="field-input" value="165" min="40" max="2000" oninput="autoSaveOnboardingFromDOM(4)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-rev-floor" class="field-label">Guardrail Minimo Floor (€/notte) *</label>
+              <input type="number" id="ob-rev-floor" class="field-input" value="118" min="35" max="1500" oninput="autoSaveOnboardingFromDOM(4)"/>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-rev-cap" class="field-label">Guardrail Massimo Cap (€/notte) *</label>
+              <input type="number" id="ob-rev-cap" class="field-input" value="320" min="60" max="5000" oninput="autoSaveOnboardingFromDOM(4)"/>
+            </div>
+          </div>
+
+          <div class="wizard-grid-2">
+            <div class="field-group">
+              <label for="ob-rev-level" class="field-label">Grado di Autonomia iniziale *</label>
+              <select id="ob-rev-level" class="field-select" onchange="autoSaveOnboardingFromDOM(4)">
+                <option value="1">Grado L1 · Osservazione (suggerisce i prezzi senza modificarli)</option>
+                <option value="2" selected>Grado L2 · Co-Pilota Settimanale in 1 Tap (Consigliato)</option>
+                <option value="3">Grado L3 · Autonomia entro Guardrail di Prezzo</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-rev-strategy" class="field-label">Strategia Revenue Management</label>
+              <select id="ob-rev-strategy" class="field-select" onchange="autoSaveOnboardingFromDOM(4)">
+                <option value="Bilanciata (+18,5% target)" selected>Bilanciata · Equilibrio occupazione e tariffa media (+18,5%)</option>
+                <option value="Prudente (Alta Occupazione)">Prudente · Massimizza il tasso di occupazione</option>
+                <option value="Massimizzazione ADR (Eventi e Alta Stagione)">Massimizzazione ADR · Difende il prezzo alto nei weekend ed eventi</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-rev-orphans" class="field-label">Sblocco automatico notti singole orfane (buchi da 1 notte)</label>
+              <select id="ob-rev-orphans" class="field-select" onchange="autoSaveOnboardingFromDOM(4)">
+                <option value="true" selected>Attivo · Apre automaticamente a 1 notte i buchi tra due soggiorni</option>
+                <option value="false">Disattivato · Mantieni sempre il soggiorno minimo standard</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="ob-rev-weekend" class="field-label">Rialzo automatico Weekend Venerdì–Sabato (%)</label>
+              <input type="number" id="ob-rev-weekend" class="field-input" value="22" min="0" max="60" oninput="autoSaveOnboardingFromDOM(4)"/>
+            </div>
+          </div>
+
+          <div class="summary-strip" style="margin-top: 8px; margin-bottom: 16px;">
+            <div class="summary-row">
+              <span>Riepilogo Struttura e Unità configurate</span>
+              <strong id="ob-final-summary-structure">Residenza Palazzo Santo Spirito Firenze · 1 unità</strong>
+            </div>
+            <div class="summary-row">
+              <span>Collegamento Turni ed Etichette 3. Blue Arroyo Cleaning</span>
+              <strong style="color: var(--status-ok-text);">Attivo su tutte le camere / unità</strong>
+            </div>
+            <div class="summary-row">
+              <span>Motore Prenotazione e Revenue Automatico</span>
+              <strong id="ob-final-summary-revenue" style="color: var(--status-ok-text);">Grado L2 · Base 165 € (Floor 118 € – Cap 320 €)</strong>
+            </div>
+          </div>
+
+          <div class="btn-stack">
+            <button type="button" class="btn btn-primary" onclick="completeFullOnboardingWizard()">
+              Completa e Attiva Revenue Auto
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="goToOnboardingStep(3)">
+              Torna a Passo 3 · Motore e Canali
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- PANNELLO DAL BASSO (BOTTOM SHEET MAX 90DVH) PER SELEZIONE IMMOBILE DEL PORTAFOGLIO -->
@@ -1361,8 +2111,39 @@
     </div>
   </nav>
 
+  <!-- TOAST DI CONFERMA BLU ALLOGGIATI WEB -->
+  <div id="app-toast-banner" class="app-toast-banner" role="status" aria-live="polite"></div>
+
   <script>
     var STORAGE_KEY = 'itassistance_owner_app_v1';
+    var AW_DRAFT_KEY = 'itassistance_aw_active_draft_v1';
+
+    function showAppToast(msg, isError) {
+      var t = document.getElementById('app-toast-banner');
+      if (!t) return;
+      t.textContent = msg;
+      t.style.backgroundColor = isError ? '#991B1B' : '#1D4ED8';
+      t.style.borderColor = isError ? '#FCA5A5' : '#93C5FD';
+      t.style.display = 'block';
+      if (window.__toastTimer) clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(function () {
+        t.style.display = 'none';
+      }, 4500);
+    }
+
+    function showAwInlineError(msg) {
+      var box = document.getElementById('aw-inline-error');
+      if (box) {
+        if (!msg) {
+          box.style.display = 'none';
+          box.textContent = '';
+        } else {
+          box.style.display = 'block';
+          box.textContent = msg;
+        }
+      }
+      showOnionError(msg);
+    }
 
     function getDefaultState() {
       return {
@@ -1412,6 +2193,8 @@
             nights: 6,
             amount: 1510,
             alloggiatiSent: true,
+            inviato_at: '27/10 16:15',
+            inviato_da: 'Operatore Firenze',
             cleaningStatus: 'Completata'
           }
         ],
@@ -1424,17 +2207,23 @@
     }
 
     function loadState() {
+      var def = getDefaultState();
       try {
         var raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
           var parsed = JSON.parse(raw);
-          if (parsed && parsed.apartment && Array.isArray(parsed.bookings)) {
-            if (!Array.isArray(parsed.expenses)) parsed.expenses = getDefaultState().expenses;
+          if (parsed && parsed.apartment) {
+            if (!Array.isArray(parsed.bookings) || parsed.bookings.length === 0) {
+              parsed.bookings = def.bookings;
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+            }
+            if (!Array.isArray(parsed.expenses) || parsed.expenses.length === 0) {
+              parsed.expenses = def.expenses;
+            }
             return parsed;
           }
         }
       } catch (e) {}
-      var def = getDefaultState();
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(def)); } catch (e) {}
       return def;
     }
@@ -1586,6 +2375,14 @@
         hdrTitle: 'Conferma operazione',
         h1: 'Operazione completata',
         sub: 'Il dato è stato registrato una sola volta e propagato a tutte le aree.'
+      },
+      'onboarding': {
+        level: 4,
+        nav: 'home',
+        parent: 'home',
+        hdrTitle: 'Configurazione Struttura',
+        h1: 'Configurazione guidata primo accesso',
+        sub: 'Imposta anagrafica struttura, schede appartamento/camere e motore di prenotazione fino al revenue automatico.'
       }
     };
 
@@ -1629,17 +2426,23 @@
         navBtns[j].classList.toggle('active', navBtns[j].getAttribute('data-nav') === nextMeta.nav);
       }
 
-      if (opts && opts.step) {
-        if (viewKey === 'azione-alloggiati') goToAlloggiatiStep(opts.step);
-        if (viewKey === 'azione-prenotazione') goToBookingStep(opts.step);
-        if (viewKey === 'azione-toscan') goToToscanStep(opts.step);
-      }
       if (opts && opts.bookingId && viewKey === 'azione-alloggiati') {
         var sel = document.getElementById('aw-booking-select');
         if (sel) {
           sel.value = opts.bookingId;
+          saveAwDraftState({ activeBookingId: opts.bookingId });
           prefillAlloggiatiFromBooking();
         }
+      }
+
+      if (opts && opts.step) {
+        if (viewKey === 'azione-alloggiati') goToAlloggiatiStep(opts.step);
+        if (viewKey === 'azione-prenotazione') goToBookingStep(opts.step);
+        if (viewKey === 'azione-toscan') goToToscanStep(opts.step);
+        if (viewKey === 'onboarding') goToOnboardingStep(opts.step, true);
+      } else if (viewKey === 'onboarding') {
+        var obSt = (window.ITACloudSync && ITACloudSync.getOnboardingState) ? ITACloudSync.getOnboardingState() : null;
+        goToOnboardingStep((obSt && obSt.currentStep) || 1, true);
       }
 
       if (pushHistory !== false && window.history && window.history.pushState) {
@@ -1649,6 +2452,12 @@
           url.searchParams.set('step', String(opts.step));
         } else {
           url.searchParams.delete('step');
+        }
+        var activeBkId = (opts && opts.bookingId) || (viewKey === 'azione-alloggiati' && document.getElementById('aw-booking-select') ? document.getElementById('aw-booking-select').value : '');
+        if (viewKey === 'azione-alloggiati' && activeBkId) {
+          url.searchParams.set('bookingId', activeBkId);
+        } else {
+          url.searchParams.delete('bookingId');
         }
         window.history.pushState({ view: viewKey, opts: opts || {} }, '', url.toString());
       }
@@ -1747,22 +2556,109 @@
       document.getElementById('fisco-sum-net').textContent = formatEur(netProfit);
       document.getElementById('fisco-sum-tax').textContent = formatEur(cityTax);
 
-      // Popola select Alloggiati
+      // Popola select Alloggiati preservando la prenotazione attiva (es. TAYLOR dopo anteprima file su iPhone)
       var sel = document.getElementById('aw-booking-select');
       if (sel) {
-        var curVal = sel.value;
+        var paramsNow = new URLSearchParams(window.location.search);
+        var draftSt = getAwDraftState();
+        var curVal = sel.value || paramsNow.get('bookingId') || (draftSt && draftSt.activeBookingId) || '';
         var optHtml = '';
         appState.bookings.forEach(function (b) {
-          optHtml += '<option value="' + b.id + '">' + b.guest + ' · Arrivo ' + b.checkin + (b.alloggiatiSent ? ' (Già inviato)' : ' (Da inviare)') + '</option>';
+          var statusSuffix = b.alloggiatiSent
+            ? (' (Inviato ✓ ' + (b.inviato_at || 'OK') + ')')
+            : ' (Da inviare)';
+          optHtml += '<option value="' + b.id + '">' + b.guest + ' · Arrivo ' + b.checkin + statusSuffix + '</option>';
         });
         sel.innerHTML = optHtml;
-        if (curVal) sel.value = curVal;
+        if (curVal && appState.bookings.some(function (x) { return x.id === curVal; })) {
+          sel.value = curVal;
+        }
       }
 
+      renderTodayTodoList();
       renderBookingsCards();
       renderExpensesCards();
       renderPricesAndCalendar();
       renderPortfolioSheetItems();
+      renderOnboardingPersistentBar();
+      updateAlloggiatiLivePreviewAndStatus();
+    }
+
+    function renderTodayTodoList() {
+      var listEl = document.getElementById('home-today-todo-list');
+      var metaEl = document.getElementById('home-today-meta');
+      var cntEl = document.getElementById('home-today-counter');
+      if (!listEl) return;
+
+      var romeInfo = (window.ITACloudSync && typeof ITACloudSync.getRomeNowFormatted === 'function')
+        ? ITACloudSync.getRomeNowFormatted()
+        : { dateIt: '07/11/2026', shortDateTime: '07/11 20:43', timezone: 'Europe/Rome' };
+      var sess = (window.ITACloudSync && typeof ITACloudSync.getOwnerSession === 'function')
+        ? ITACloudSync.getOwnerSession()
+        : null;
+      var loggedUser = (sess && (sess.ownerCode || sess.email)) || (appState.apartment && appState.apartment.ownerCode) || 'ITA-FIRENZE-01';
+
+      if (metaEl) {
+        metaEl.textContent = 'Data: ' + romeInfo.dateIt + ' (Fuso Europe/Rome) · Utente: ' + loggedUser;
+      }
+
+      var items = [];
+      // Ordina mostrando prima i soggiorni di oggi / da inviare (incluso TAYLOR 2026-11-07)
+      var sortedBookings = appState.bookings.slice().sort(function (a, b) {
+        if (a.id === 'b2') return -1;
+        if (b.id === 'b2') return 1;
+        return String(b.checkin).localeCompare(String(a.checkin));
+      });
+
+      sortedBookings.forEach(function (b) {
+        var sentLabel = b.alloggiatiSent
+          ? ('Inviato ✓ ' + (b.inviato_at || romeInfo.shortDateTime))
+          : 'Da inviare entro 24h';
+        var pillHtml = b.alloggiatiSent
+          ? '<span class="status-pill sent-blue" data-todo-status="' + b.id + '">' + sentLabel + '</span>'
+          : '<span class="status-pill pending" data-todo-status="' + b.id + '">Da fare oggi</span>';
+        var btnClass = b.alloggiatiSent ? 'btn btn-sent-blue' : 'btn btn-primary';
+        var btnText = b.alloggiatiSent
+          ? ('Inviato ✓ ' + (b.inviato_at || romeInfo.shortDateTime) + ' · ' + (b.inviato_da || loggedUser))
+          : ('Apri Alloggiati Web · ' + b.guest);
+
+        items.push(
+          '<article class="todo-item-row' + (b.alloggiatiSent ? ' todo-done-blue' : '') + '" data-todo-booking="' + b.id + '">' +
+            '<div class="item-card-head">' +
+              '<div>' +
+                '<h3 style="font-size:1.1rem;margin-bottom:2px;">' + (b.alloggiatiSent ? '✓ ' : '') + 'Alloggiati Web: ' + b.guest + '</h3>' +
+                '<p style="color:var(--ink-muted);font-size:0.9375rem;">Check-in ' + b.checkin + ' · ' + b.channel + ' (' + b.guests + ' ospiti)' +
+                  (b.alloggiatiSent ? (' · Inviato il ' + (b.inviato_at || '') + ' da ' + (b.inviato_da || loggedUser)) : '') +
+                '</p>' +
+              '</div>' +
+              pillHtml +
+            '</div>' +
+            '<button type="button" class="' + btnClass + '" onclick="navigateToOnion(\'azione-alloggiati\', { step: ' + (b.alloggiatiSent ? 2 : 1) + ', bookingId: \'' + b.id + '\' })">' +
+              btnText +
+            '</button>' +
+          '</article>'
+        );
+      });
+
+      // Attività operative giornaliere aggiuntive (mai lista vuota)
+      items.push(
+        '<article class="todo-item-row">' +
+          '<div class="item-card-head">' +
+            '<div>' +
+              '<h3 style="font-size:1.1rem;margin-bottom:2px;">Controllo turno pulizie 3. Blue Arroyo Cleaning (ore 11:00)</h3>' +
+              '<p style="color:var(--ink-muted);font-size:0.9375rem;">Biancheria certificata a 60°C e protocollo 4 foto SHA-256</p>' +
+            '</div>' +
+            '<span class="status-pill">Programmata oggi</span>' +
+          '</div>' +
+          '<button type="button" class="btn btn-secondary" onclick="navigateToOnion(\'dettaglio-spese\')">Verifica turni e fornitori</button>' +
+        '</article>'
+      );
+
+      if (cntEl) {
+        var doneCount = sortedBookings.filter(function (b) { return b.alloggiatiSent; }).length;
+        cntEl.textContent = items.length + ' attività oggi (' + doneCount + ' completate)';
+      }
+      listEl.innerHTML = items.join('');
     }
 
     function triggerHomePrimaryAction() {
@@ -1850,8 +2746,12 @@
       var html = '';
       list.forEach(function (b) {
         var pill = b.alloggiatiSent
-          ? '<span class="status-pill">Questura inviata</span>'
+          ? '<span class="status-pill sent-blue">Inviato ✓ ' + (b.inviato_at || 'OK') + '</span>'
           : '<span class="status-pill pending">Questura da inviare</span>';
+        var btnCls = b.alloggiatiSent ? 'btn btn-sent-blue' : 'btn btn-primary';
+        var btnLbl = b.alloggiatiSent
+          ? ('Inviato ✓ ' + (b.inviato_at || '') + ' (' + (b.inviato_da || 'Operatore') + ') · Rivedi file')
+          : 'Prepara e scarica file Alloggiati Web';
         html += '<article class="item-card">' +
           '<div class="item-card-head">' +
             '<div>' +
@@ -1865,8 +2765,8 @@
             '<div class="summary-row"><span>Incasso lordo</span><strong>' + formatEur(b.amount) + '</strong></div>' +
             '<div class="summary-row"><span>Pulizie cambio ospite</span><strong>' + (b.cleaningStatus || 'Programmata') + '</strong></div>' +
           '</div>' +
-          '<button type="button" class="btn ' + (b.alloggiatiSent ? 'btn-secondary' : 'btn-primary') + '" onclick="navigateToOnion(\'azione-alloggiati\', { step: 1, bookingId: \'' + b.id + '\' })">' +
-            (b.alloggiatiSent ? 'Rivedi o riscarica file Alloggiati Web' : 'Prepara e scarica file Alloggiati Web') +
+          '<button type="button" class="' + btnCls + '" onclick="navigateToOnion(\'azione-alloggiati\', { step: ' + (b.alloggiatiSent ? 2 : 1) + ', bookingId: \'' + b.id + '\' })">' +
+            btnLbl +
           '</button>' +
         '</article>';
       });
@@ -2514,6 +3414,477 @@
       );
     }
 
+    function downloadCSVFile(filename, content) {
+      var blob = new Blob([content], { type: 'text/calendar;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename || 'calendario-itassistance.ics';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    /* ================================================================
+       WIZARD DI PRIMO ACCESSO (ONBOARDING ITASSISTANCE CHANNEL MANAGER)
+       ================================================================ */
+    function escapeAttr(val) {
+      return String(val == null ? '' : val)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function renderOnboardingPersistentBar() {
+      if (!window.ITACloudSync || typeof ITACloudSync.getOnboardingState !== 'function') return;
+      var st = ITACloudSync.getOnboardingState();
+      var bar = document.getElementById('onboarding-persistent-bar');
+      var titleEl = document.getElementById('ob-bar-title');
+      var subEl = document.getElementById('ob-bar-sub');
+      var fillEl = document.getElementById('ob-bar-progress-fill');
+      var btnEl = document.getElementById('ob-bar-resume-btn');
+      var badgeEl = document.getElementById('ob-bar-sync-badge');
+      if (!bar) return;
+
+      var stepNames = {
+        1: 'Passo 1 di 4 · Anagrafica Struttura e Codici Obbligatori',
+        2: 'Passo 2 di 4 · Schede Appartamento / Camere (' + (st.units ? st.units.length : 1) + ' unità)',
+        3: 'Passo 3 di 4 · Motore di Prenotazione e Canali OTA',
+        4: 'Passo 4 di 4 · Attivazione Revenue Automatico'
+      };
+      var pct = st.completed ? 100 : (st.progressPct || 25);
+      if (fillEl) fillEl.style.width = pct + '%';
+
+      var timeStr = st.lastSavedAt ? new Date(st.lastSavedAt).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) : 'ora';
+      if (badgeEl) badgeEl.textContent = 'Salvato sul server (' + timeStr + ')';
+
+      if (st.completed) {
+        if (titleEl) titleEl.textContent = 'Struttura configurata al 100% (' + (st.structure.commercialName || 'Struttura') + ' · ' + (st.units ? st.units.length : 1) + ' unità)';
+        if (subEl) subEl.textContent = 'Anagrafica, schede camere/unità, motore di prenotazione e revenue automatico sono attivi.';
+        if (btnEl) {
+          btnEl.textContent = 'Apri impostazioni struttura';
+          btnEl.className = 'btn btn-secondary';
+        }
+      } else {
+        var curStep = st.currentStep || 1;
+        if (titleEl) titleEl.textContent = 'Configurazione Primo Accesso · ' + (stepNames[curStep] || stepNames[1]) + ' (' + pct + '%)';
+        if (subEl) subEl.textContent = 'Puoi interrompere in ogni momento e riprendere da dove eri rimasto: ogni passo è salvato sul server.';
+        if (btnEl) {
+          btnEl.textContent = (_currentView === 'onboarding')
+            ? ('Passo ' + curStep + ' di 4 in corso')
+            : ('Riprendi dal Passo ' + curStep + ' di 4');
+          btnEl.className = 'btn btn-primary';
+        }
+      }
+    }
+
+    function populateOnboardingDOMFromState() {
+      if (!window.ITACloudSync || typeof ITACloudSync.getOnboardingState !== 'function') return;
+      var st = ITACloudSync.getOnboardingState();
+      var s = st.structure || {};
+      var be = st.bookingEngine || {};
+      var rev = st.revenueAuto || {};
+
+      var setVal = function (id, val) {
+        var el = document.getElementById(id);
+        if (el && val !== undefined && val !== null) el.value = String(val);
+      };
+
+      // Passo 1
+      setVal('ob-s-type', s.propertyType || 'Micro albergo');
+      setVal('ob-s-comm-name', s.commercialName || '');
+      setVal('ob-s-legal-name', s.legalName || '');
+      setVal('ob-s-vat', s.vatOrTaxCode || '');
+      setVal('ob-s-address', s.address || '');
+      setVal('ob-s-phone', s.phone || '');
+      setVal('ob-s-email', s.email || '');
+      setVal('ob-s-logo', s.logoUrl || '/brand/logo.png');
+      setVal('ob-s-cin', s.cin || '');
+      setVal('ob-s-cir', s.cir || '');
+      setVal('ob-s-aw-user', s.alloggiatiUsername || '');
+      setVal('ob-s-aw-key', s.alloggiatiWsKey || '');
+      setVal('ob-s-istat', s.istatCode || '');
+      setVal('ob-s-tax-rate', s.cityTaxRateEur != null ? s.cityTaxRateEur : 5.5);
+      setVal('ob-s-tax-max', s.cityTaxMaxNights != null ? s.cityTaxMaxNights : 7);
+      setVal('ob-s-tax-ex', s.cityTaxExemptions || '');
+      setVal('ob-s-checkin', s.checkInTime || '15:00');
+      setVal('ob-s-checkout', s.checkOutTime || '10:00');
+      setVal('ob-s-langs', s.languages || 'IT, EN');
+      setVal('ob-s-tz', s.timezone || 'Europe/Rome');
+      setVal('ob-s-curr', s.currency || 'EUR');
+
+      // Passo 2
+      renderOnboardingUnitsDOM(st);
+
+      // Passo 3
+      setVal('ob-be-direct', String(be.smartsBookingsActive !== false));
+      setVal('ob-be-markup', be.otaMarkupCompensationPct != null ? be.otaMarkupCompensationPct : 18);
+      setVal('ob-be-cancel', be.cancellationPolicy || 'Flessibile 5 giorni (rimborso 100% fino a 5 giorni prima del check-in)');
+      setVal('ob-be-iban', be.payoutIban || 'IT60X0306902887100000007480');
+      setVal('ob-be-airbnb', be.airbnbIcalUrl || '');
+      setVal('ob-be-booking', be.bookingIcalUrl || '');
+      setVal('ob-be-vrbo', be.vrboIcalUrl || '');
+      setVal('ob-be-instant', String(be.instantBookEnabled !== false));
+
+      // Passo 4
+      setVal('ob-rev-base', rev.baseRateEur != null ? rev.baseRateEur : 165);
+      setVal('ob-rev-floor', rev.floorRateEur != null ? rev.floorRateEur : 118);
+      setVal('ob-rev-cap', rev.ceilingRateEur != null ? rev.ceilingRateEur : 320);
+      setVal('ob-rev-level', String(rev.autonomyLevel || 2));
+      setVal('ob-rev-strategy', rev.strategyProfile || 'Bilanciata (+18,5% target)');
+      setVal('ob-rev-orphans', String(rev.autoUnlockOrphanNights !== false));
+      setVal('ob-rev-weekend', rev.weekendMultiplierPct != null ? rev.weekendMultiplierPct : 22);
+
+      updateOnboardingFinalSummary(st);
+    }
+
+    function renderOnboardingUnitsDOM(stInput) {
+      var st = stInput || (window.ITACloudSync && ITACloudSync.getOnboardingState ? ITACloudSync.getOnboardingState() : null);
+      if (!st) return;
+      var units = Array.isArray(st.units) ? st.units : [];
+      var countLbl = document.getElementById('ob-units-count-lbl');
+      if (countLbl) countLbl.textContent = units.length + (units.length === 1 ? ' unità configurata' : ' unità configurate');
+
+      var box = document.getElementById('ob-units-list-container');
+      if (!box) return;
+
+      var html = '';
+      units.forEach(function (u, idx) {
+        var num = idx + 1;
+        html += '<div class="wizard-unit-card" data-unit-idx="' + idx + '">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;">' +
+            '<div>' +
+              '<span class="status-pill" style="margin-bottom:4px;">Scheda Unità / Camera ' + num + ' di ' + units.length + '</span>' +
+              '<h4 style="font-size:1.15rem;margin-top:4px;">' + escapeAttr(u.name || ('Unità ' + num)) + '</h4>' +
+            '</div>' +
+            '<div style="display:flex;flex-wrap:wrap;gap:8px;">' +
+              '<button type="button" class="btn btn-secondary" style="width:auto;min-height:40px;padding:6px 12px;font-size:0.875rem;" onclick="handleDuplicateUnitWizard(' + idx + ')">Duplica questa scheda</button>' +
+              (units.length > 1
+                ? '<button type="button" class="btn btn-secondary" style="width:auto;min-height:40px;padding:6px 12px;font-size:0.875rem;color:var(--error-text);border-color:var(--error-text);" onclick="handleRemoveUnitWizard(' + idx + ')">Rimuovi</button>'
+                : '') +
+            '</div>' +
+          '</div>' +
+
+          '<div class="wizard-grid-3">' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-name-' + idx + '">Nome unità / camera *</label>' +
+              '<input type="text" id="u-name-' + idx + '" class="field-input" value="' + escapeAttr(u.name) + '" oninput="updateUnitFieldWizard(' + idx + ', \'name\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-type-' + idx + '">Tipologia unità *</label>' +
+              '<input type="text" id="u-type-' + idx + '" class="field-input" value="' + escapeAttr(u.unitType) + '" oninput="updateUnitFieldWizard(' + idx + ', \'unitType\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-sqm-' + idx + '">Metratura (mq)</label>' +
+              '<input type="number" id="u-sqm-' + idx + '" class="field-input" value="' + escapeAttr(u.sizeSqm) + '" oninput="updateUnitFieldWizard(' + idx + ', \'sizeSqm\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-floor-' + idx + '">Piano e ascensore</label>' +
+              '<input type="text" id="u-floor-' + idx + '" class="field-input" value="' + escapeAttr(u.floor) + '" oninput="updateUnitFieldWizard(' + idx + ', \'floor\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-guests-' + idx + '">Ospiti max *</label>' +
+              '<input type="number" id="u-guests-' + idx + '" class="field-input" value="' + escapeAttr(u.maxGuests) + '" min="1" max="20" oninput="updateUnitFieldWizard(' + idx + ', \'maxGuests\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-bath-' + idx + '">Bagni</label>' +
+              '<input type="number" id="u-bath-' + idx + '" class="field-input" value="' + escapeAttr(u.bathrooms) + '" min="1" max="10" oninput="updateUnitFieldWizard(' + idx + ', \'bathrooms\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-bed-d-' + idx + '">Letti matrimoniali</label>' +
+              '<input type="number" id="u-bed-d-' + idx + '" class="field-input" value="' + escapeAttr(u.bedsDouble) + '" min="0" max="10" oninput="updateUnitFieldWizard(' + idx + ', \'bedsDouble\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-bed-s-' + idx + '">Letti singoli</label>' +
+              '<input type="number" id="u-bed-s-' + idx + '" class="field-input" value="' + escapeAttr(u.bedsSingle) + '" min="0" max="10" oninput="updateUnitFieldWizard(' + idx + ', \'bedsSingle\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-bed-sf-' + idx + '">Divani letto</label>' +
+              '<input type="number" id="u-bed-sf-' + idx + '" class="field-input" value="' + escapeAttr(u.bedsSofa) + '" min="0" max="10" oninput="updateUnitFieldWizard(' + idx + ', \'bedsSofa\', this.value)"/>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="wizard-grid-2">' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-amen-' + idx + '">Servizi e dotazioni camera/appartamento</label>' +
+              '<input type="text" id="u-amen-' + idx + '" class="field-input" value="' + escapeAttr(u.amenities) + '" oninput="updateUnitFieldWizard(' + idx + ', \'amenities\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-photo-' + idx + '">Foto principale unità (URL)</label>' +
+              '<input type="text" id="u-photo-' + idx + '" class="field-input" value="' + escapeAttr(u.photoUrl) + '" oninput="updateUnitFieldWizard(' + idx + ', \'photoUrl\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-desc-it-' + idx + '">Descrizione in Italiano (IT)</label>' +
+              '<input type="text" id="u-desc-it-' + idx + '" class="field-input" value="' + escapeAttr(u.descIt) + '" oninput="updateUnitFieldWizard(' + idx + ', \'descIt\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-desc-en-' + idx + '">Descrizione in Inglese (EN)</label>' +
+              '<input type="text" id="u-desc-en-' + idx + '" class="field-input" value="' + escapeAttr(u.descEn) + '" oninput="updateUnitFieldWizard(' + idx + ', \'descEn\', this.value)"/>' +
+            '</div>' +
+          '</div>' +
+
+          '<h4 style="margin:8px 0 10px;color:var(--gold-text-light);">Dati operativi e collegamento 3. Blue Arroyo Cleaning (Turni ed Etichette)</h4>' +
+          '<div class="wizard-grid-3">' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-key-' + idx + '">Codice chiave *</label>' +
+              '<input type="text" id="u-key-' + idx + '" class="field-input" value="' + escapeAttr(u.keyCode) + '" oninput="updateUnitFieldWizard(' + idx + ', \'keyCode\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-hook-' + idx + '">Gancio armadio chiavi *</label>' +
+              '<input type="text" id="u-hook-' + idx + '" class="field-input" value="' + escapeAttr(u.keyHook) + '" oninput="updateUnitFieldWizard(' + idx + ', \'keyHook\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-door-' + idx + '">Codice portone *</label>' +
+              '<input type="text" id="u-door-' + idx + '" class="field-input" value="' + escapeAttr(u.doorCode) + '" oninput="updateUnitFieldWizard(' + idx + ', \'doorCode\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-kbox-' + idx + '">Codice Key Box *</label>' +
+              '<input type="text" id="u-kbox-' + idx + '" class="field-input" value="' + escapeAttr(u.keyBoxCode) + '" oninput="updateUnitFieldWizard(' + idx + ', \'keyBoxCode\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-clean-min-' + idx + '">Tempo standard pulizia (minuti)</label>' +
+              '<input type="number" id="u-clean-min-' + idx + '" class="field-input" value="' + escapeAttr(u.standardCleaningMinutes) + '" oninput="updateUnitFieldWizard(' + idx + ', \'standardCleaningMinutes\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-ba-tag-' + idx + '">Etichetta Turno Blue Arroyo</label>' +
+              '<input type="text" id="u-ba-tag-' + idx + '" class="field-input" value="' + escapeAttr(u.blueArroyoShiftTag) + '" oninput="updateUnitFieldWizard(' + idx + ', \'blueArroyoShiftTag\', this.value)"/>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="wizard-grid-2">' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-access-' + idx + '">Istruzioni di accesso per ospite e operatore</label>' +
+              '<input type="text" id="u-access-' + idx + '" class="field-input" value="' + escapeAttr(u.accessInstructions) + '" oninput="updateUnitFieldWizard(' + idx + ', \'accessInstructions\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-linen-' + idx + '">Dotazione biancheria standard 60°C e kit</label>' +
+              '<input type="text" id="u-linen-' + idx + '" class="field-input" value="' + escapeAttr(u.standardLinenKit) + '" oninput="updateUnitFieldWizard(' + idx + ', \'standardLinenKit\', this.value)"/>' +
+            '</div>' +
+          '</div>' +
+
+          '<h4 style="margin:8px 0 10px;color:var(--gold-text-light);">Regole di soggiorno e deposito cauzionale</h4>' +
+          '<div class="wizard-grid-3">' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-minstay-' + idx + '">Soggiorno minimo (notti)</label>' +
+              '<input type="number" id="u-minstay-' + idx + '" class="field-input" value="' + escapeAttr(u.minStayNights) + '" min="1" max="30" oninput="updateUnitFieldWizard(' + idx + ', \'minStayNights\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-maxstay-' + idx + '">Soggiorno massimo (notti)</label>' +
+              '<input type="number" id="u-maxstay-' + idx + '" class="field-input" value="' + escapeAttr(u.maxStayNights) + '" min="1" max="365" oninput="updateUnitFieldWizard(' + idx + ', \'maxStayNights\', this.value)"/>' +
+            '</div>' +
+            '<div class="field-group">' +
+              '<label class="field-label" for="u-dep-' + idx + '">Deposito cauzionale (€)</label>' +
+              '<input type="number" id="u-dep-' + idx + '" class="field-input" value="' + escapeAttr(u.securityDepositEur) + '" min="0" step="10" oninput="updateUnitFieldWizard(' + idx + ', \'securityDepositEur\', this.value)"/>' +
+            '</div>' +
+          '</div>' +
+          '<div class="field-group" style="margin-bottom:0;">' +
+            '<label class="field-label" for="u-rules-' + idx + '">Regole della casa (fumo, animali, feste, silenzio)</label>' +
+            '<input type="text" id="u-rules-' + idx + '" class="field-input" value="' + escapeAttr(u.houseRules) + '" oninput="updateUnitFieldWizard(' + idx + ', \'houseRules\', this.value)"/>' +
+          '</div>' +
+        '</div>';
+      });
+      box.innerHTML = html;
+    }
+
+    function updateOnboardingFinalSummary(st) {
+      if (!st) return;
+      var sEl = document.getElementById('ob-final-summary-structure');
+      var rEl = document.getElementById('ob-final-summary-revenue');
+      if (sEl) {
+        sEl.textContent = (st.structure.commercialName || 'Struttura') + ' (' + (st.structure.propertyType || 'Micro albergo') + ') · ' + (st.units ? st.units.length : 1) + ' unità';
+      }
+      if (rEl && st.revenueAuto) {
+        rEl.textContent = 'Grado L' + (st.revenueAuto.autonomyLevel || 2) + ' · Base ' + (st.revenueAuto.baseRateEur || 165) + ' € (Floor ' + (st.revenueAuto.floorRateEur || 118) + ' € – Cap ' + (st.revenueAuto.ceilingRateEur || 320) + ' €)';
+      }
+    }
+
+    function collectOnboardingStateFromDOM() {
+      var st = (window.ITACloudSync && ITACloudSync.getOnboardingState) ? ITACloudSync.getOnboardingState() : {};
+      if (!st.structure) st.structure = {};
+      if (!st.bookingEngine) st.bookingEngine = {};
+      if (!st.revenueAuto) st.revenueAuto = {};
+
+      var val = function (id, fallback) {
+        var el = document.getElementById(id);
+        return el ? el.value : fallback;
+      };
+
+      // Passo 1
+      st.structure.propertyType = val('ob-s-type', st.structure.propertyType || 'Micro albergo');
+      st.structure.commercialName = val('ob-s-comm-name', st.structure.commercialName || '');
+      st.structure.legalName = val('ob-s-legal-name', st.structure.legalName || '');
+      st.structure.vatOrTaxCode = val('ob-s-vat', st.structure.vatOrTaxCode || '');
+      st.structure.address = val('ob-s-address', st.structure.address || '');
+      st.structure.phone = val('ob-s-phone', st.structure.phone || '');
+      st.structure.email = val('ob-s-email', st.structure.email || '');
+      st.structure.logoUrl = val('ob-s-logo', st.structure.logoUrl || '/brand/logo.png');
+      st.structure.cin = val('ob-s-cin', st.structure.cin || '');
+      st.structure.cir = val('ob-s-cir', st.structure.cir || '');
+      st.structure.alloggiatiUsername = val('ob-s-aw-user', st.structure.alloggiatiUsername || '');
+      st.structure.alloggiatiWsKey = val('ob-s-aw-key', st.structure.alloggiatiWsKey || '');
+      st.structure.istatCode = val('ob-s-istat', st.structure.istatCode || '');
+      st.structure.cityTaxRateEur = parseFloat(val('ob-s-tax-rate', st.structure.cityTaxRateEur || 5.5)) || 5.5;
+      st.structure.cityTaxMaxNights = parseInt(val('ob-s-tax-max', st.structure.cityTaxMaxNights || 7), 10) || 7;
+      st.structure.cityTaxExemptions = val('ob-s-tax-ex', st.structure.cityTaxExemptions || '');
+      st.structure.checkInTime = val('ob-s-checkin', st.structure.checkInTime || '15:00');
+      st.structure.checkOutTime = val('ob-s-checkout', st.structure.checkOutTime || '10:00');
+      st.structure.languages = val('ob-s-langs', st.structure.languages || 'IT, EN');
+      st.structure.timezone = 'Europe/Rome';
+      st.structure.currency = 'EUR';
+
+      // Passo 3
+      st.bookingEngine.smartsBookingsActive = val('ob-be-direct', 'true') === 'true';
+      st.bookingEngine.otaMarkupCompensationPct = parseInt(val('ob-be-markup', 18), 10) || 18;
+      st.bookingEngine.cancellationPolicy = val('ob-be-cancel', st.bookingEngine.cancellationPolicy || '');
+      st.bookingEngine.payoutIban = val('ob-be-iban', st.bookingEngine.payoutIban || '');
+      st.bookingEngine.airbnbIcalUrl = val('ob-be-airbnb', st.bookingEngine.airbnbIcalUrl || '');
+      st.bookingEngine.bookingIcalUrl = val('ob-be-booking', st.bookingEngine.bookingIcalUrl || '');
+      st.bookingEngine.vrboIcalUrl = val('ob-be-vrbo', st.bookingEngine.vrboIcalUrl || '');
+      st.bookingEngine.instantBookEnabled = val('ob-be-instant', 'true') === 'true';
+
+      // Passo 4
+      st.revenueAuto.baseRateEur = parseInt(val('ob-rev-base', 165), 10) || 165;
+      st.revenueAuto.floorRateEur = parseInt(val('ob-rev-floor', 118), 10) || 118;
+      st.revenueAuto.ceilingRateEur = parseInt(val('ob-rev-cap', 320), 10) || 320;
+      st.revenueAuto.autonomyLevel = parseInt(val('ob-rev-level', 2), 10) || 2;
+      st.revenueAuto.strategyProfile = val('ob-rev-strategy', 'Bilanciata (+18,5% target)');
+      st.revenueAuto.autoUnlockOrphanNights = val('ob-rev-orphans', 'true') === 'true';
+      st.revenueAuto.weekendMultiplierPct = parseInt(val('ob-rev-weekend', 22), 10) || 22;
+
+      return st;
+    }
+
+    async function autoSaveOnboardingFromDOM(stepNum) {
+      if (!window.ITACloudSync || typeof ITACloudSync.saveOnboardingWizardStep !== 'function') return;
+      var st = collectOnboardingStateFromDOM();
+      await ITACloudSync.saveOnboardingWizardStep(stepNum || st.currentStep || 1, st, st.completed);
+      appState = loadState();
+      updateOnboardingFinalSummary(st);
+      renderOnboardingPersistentBar();
+      var liveBadge = document.getElementById('wiz-live-save-status');
+      if (liveBadge) {
+        liveBadge.textContent = 'Salvato in automatico sul server alle ' + new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      }
+    }
+
+    async function updateUnitFieldWizard(unitIdx, fieldName, rawValue) {
+      if (!window.ITACloudSync || typeof ITACloudSync.getOnboardingState !== 'function') return;
+      var st = collectOnboardingStateFromDOM();
+      if (!Array.isArray(st.units) || !st.units[unitIdx]) return;
+      var numericFields = ['sizeSqm', 'maxGuests', 'bathrooms', 'bedsDouble', 'bedsSingle', 'bedsSofa', 'standardCleaningMinutes', 'minStayNights', 'maxStayNights', 'securityDepositEur'];
+      st.units[unitIdx][fieldName] = numericFields.indexOf(fieldName) !== -1 ? (Number(rawValue) || 0) : rawValue;
+      await ITACloudSync.saveOnboardingWizardStep(2, st, st.completed);
+      appState = loadState();
+      renderOnboardingPersistentBar();
+      var liveBadge = document.getElementById('wiz-live-save-status');
+      if (liveBadge) {
+        liveBadge.textContent = 'Scheda unità ' + (unitIdx + 1) + ' salvata sul server';
+      }
+    }
+
+    function handleAddUnitWizard() {
+      if (!window.ITACloudSync || typeof ITACloudSync.addOnboardingUnit !== 'function') return;
+      collectOnboardingStateFromDOM();
+      var st = ITACloudSync.addOnboardingUnit();
+      renderOnboardingUnitsDOM(st);
+      updateOnboardingFinalSummary(st);
+      renderOnboardingPersistentBar();
+    }
+
+    function handleDuplicateUnitWizard(unitIdx) {
+      if (!window.ITACloudSync || typeof ITACloudSync.duplicateOnboardingUnit !== 'function') return;
+      collectOnboardingStateFromDOM();
+      var st = ITACloudSync.duplicateOnboardingUnit(unitIdx);
+      renderOnboardingUnitsDOM(st);
+      updateOnboardingFinalSummary(st);
+      renderOnboardingPersistentBar();
+    }
+
+    function handleRemoveUnitWizard(unitIdx) {
+      if (!window.ITACloudSync || typeof ITACloudSync.removeOnboardingUnit !== 'function') return;
+      var st = ITACloudSync.removeOnboardingUnit(unitIdx);
+      renderOnboardingUnitsDOM(st);
+      updateOnboardingFinalSummary(st);
+      renderOnboardingPersistentBar();
+    }
+
+    function goToOnboardingStep(stepNum, skipSave) {
+      var targetStep = Math.max(1, Math.min(4, parseInt(stepNum, 10) || 1));
+      if (!skipSave) {
+        autoSaveOnboardingFromDOM(targetStep);
+      } else {
+        populateOnboardingDOMFromState();
+      }
+
+      for (var i = 1; i <= 4; i++) {
+        var panel = document.getElementById('wiz-panel-' + i);
+        var tab = document.getElementById('wiz-tab-' + i);
+        if (panel) panel.style.display = (i === targetStep) ? 'block' : 'none';
+        if (tab) {
+          tab.classList.remove('active', 'done');
+          if (i === targetStep) tab.classList.add('active');
+          else if (i < targetStep) tab.classList.add('done');
+        }
+      }
+      renderOnboardingPersistentBar();
+    }
+
+    async function saveAndAdvanceOnboarding(nextStep) {
+      var curStep = Math.max(1, (nextStep || 2) - 1);
+      var st = collectOnboardingStateFromDOM();
+      if (curStep === 1) {
+        if (!st.structure.commercialName || !st.structure.cin) {
+          showOnionError('Inserisci almeno il Nome commerciale della struttura e il codice CIN per procedere al Passo 2.');
+          return;
+        }
+      }
+      if (curStep === 2) {
+        if (!Array.isArray(st.units) || st.units.length === 0 || !st.units[0].name) {
+          showOnionError('Configura almeno una scheda appartamento o camera prima di procedere al Passo 3.');
+          return;
+        }
+      }
+      showOnionError('');
+      await ITACloudSync.saveOnboardingWizardStep(nextStep, st, st.completed);
+      appState = loadState();
+      renderAll();
+      goToOnboardingStep(nextStep, true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openOnboardingWizardAtSavedStep() {
+      var st = (window.ITACloudSync && ITACloudSync.getOnboardingState) ? ITACloudSync.getOnboardingState() : null;
+      var step = (st && !st.completed && st.currentStep) ? st.currentStep : 1;
+      populateOnboardingDOMFromState();
+      navigateToOnion('onboarding', { step: step }, true);
+    }
+
+    async function pauseOnboardingAndReturnHome() {
+      var st = collectOnboardingStateFromDOM();
+      await ITACloudSync.saveOnboardingWizardStep(st.currentStep || 1, st, st.completed);
+      appState = loadState();
+      renderAll();
+      navigateToOnion('home', {}, true);
+    }
+
+    async function completeFullOnboardingWizard() {
+      var st = collectOnboardingStateFromDOM();
+      if (st.revenueAuto.floorRateEur >= st.revenueAuto.ceilingRateEur) {
+        showOnionError('Il Guardrail Minimo (Floor) deve essere inferiore al Guardrail Massimo (Cap).');
+        return;
+      }
+      showOnionError('');
+      await ITACloudSync.saveOnboardingWizardStep(4, st, true);
+      appState = loadState();
+      renderAll();
+      showConfirmationScreen(
+        'Struttura configurata e Revenue Automatico attivato',
+        st.structure.commercialName + ' (' + st.structure.propertyType + ' · ' + st.units.length + (st.units.length === 1 ? ' unità' : ' unità') + ') è ora attiva nel Channel Manager itassistance in Grado L' + st.revenueAuto.autonomyLevel + ' con turni 3. Blue Arroyo Cleaning e motore 4. Smartbookings sincronizzati.',
+        'home',
+        'Vai alla tua Home operativa'
+      );
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
       if (window.ITACloudSync && ITACloudSync.getPmPortfolio) {
         ITACloudSync.getPmPortfolio();
@@ -2525,6 +3896,15 @@
         saveState();
       }
 
+      if (params.get('first_access') === '1' && window.ITACloudSync && typeof ITACloudSync.resetOnboardingForFirstAccess === 'function') {
+        ITACloudSync.resetOnboardingForFirstAccess(
+          params.get('type') || 'Micro albergo',
+          params.get('name') || ''
+        );
+        appState = loadState();
+      }
+
+      populateOnboardingDOMFromState();
       renderAll();
       prefillAlloggiatiFromBooking();
 
@@ -2536,8 +3916,13 @@
         fornitori: 'dettaglio-spese',
         extra: 'prezzi'
       };
-      var initView = params.get('view') || legacyTabMap[params.get('tab')] || 'home';
-      var initStep = parseInt(params.get('step'), 10) || 1;
+      var obState = (window.ITACloudSync && typeof ITACloudSync.getOnboardingState === 'function')
+        ? ITACloudSync.getOnboardingState()
+        : { completed: false, currentStep: 1 };
+
+      var explicitView = params.get('view') || legacyTabMap[params.get('tab')];
+      var initView = explicitView || (obState.completed !== true ? 'onboarding' : 'home');
+      var initStep = parseInt(params.get('step'), 10) || (initView === 'onboarding' ? (obState.currentStep || 1) : 1);
       navigateToOnion(initView, { step: initStep }, false);
 
       if (window.ITACloudSync) {

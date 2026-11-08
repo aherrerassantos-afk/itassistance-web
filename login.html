@@ -276,6 +276,10 @@
         Apri area riservata
       </button>
 
+      <button type="button" class="btn btn-secondary" onclick="doFirstAccessOnboardingLogin()">
+        Primo accesso nuova struttura
+      </button>
+
       <p style="margin-top: 16px; margin-bottom: 6px; font-size: 0.9375rem; color: var(--ink-muted); text-align: center;">
         Non hai ancora un codice proprietario?
       </p>
@@ -425,6 +429,26 @@
       }
 
       window.location.href = '/app.html?code=' + encodeURIComponent(code);
+    }
+
+    function doFirstAccessOnboardingLogin() {
+      var rawInput = (document.getElementById('lg-code').value || 'ITA-FIRENZE-01').trim();
+      var isEmailInput = rawInput.indexOf('@') !== -1;
+      var code = isEmailInput ? 'ITA-FIRENZE-01' : (rawInput.toUpperCase() || 'ITA-FIRENZE-01');
+      var email = isEmailInput ? rawInput : ((document.getElementById('lg-email').value || 'proprietario@itadreamteam.com').trim());
+      var apt = (document.getElementById('lg-apt').value || '').trim();
+
+      if (window.ITACloudSync && typeof ITACloudSync.loginOwnerSession === 'function') {
+        ITACloudSync.loginOwnerSession({
+          ownerCode: code,
+          email: email,
+          apartmentName: apt
+        });
+      }
+      if (window.ITACloudSync && typeof ITACloudSync.resetOnboardingForFirstAccess === 'function') {
+        ITACloudSync.resetOnboardingForFirstAccess('Micro albergo', apt || 'Residenza Palazzo Santo Spirito Firenze');
+      }
+      window.location.href = '/app.html?code=' + encodeURIComponent(code) + '&view=onboarding&first_access=1';
     }
   </script>
 </body>

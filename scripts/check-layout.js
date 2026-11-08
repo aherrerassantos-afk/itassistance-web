@@ -30,6 +30,7 @@ const PAGES_TO_CHECK = [
   { path: '/index.html', name: 'home-it', checkAllWidths: true },
   { path: '/en/index.html', name: 'home-en', checkAllWidths: true },
   { path: '/login.html', name: 'login', checkAllWidths: false, widths: [390, 1440] },
+  { path: '/app.html', name: 'app-onboarding', checkAllWidths: false, widths: [390, 1440] },
   { path: '/prezzi.html', name: 'prezzi', checkAllWidths: false, widths: [390, 1440] },
   { path: '/checkout.html', name: 'checkout', checkAllWidths: false, widths: [390, 1440] }
 ];
@@ -38,6 +39,9 @@ const PAGES_TO_CHECK = [
 const BRAND_CAMEL_EXCEPTIONS = new Set([
   'WhatsApp',
   'SmartBookings',
+  'SmartsBookings',
+  'KeyBox',
+  'AirCover',
   'AirBnB',
   'PayPal',
   'YouTube',

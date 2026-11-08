@@ -397,8 +397,8 @@
       </div>
 
       <!-- AZIONE PRINCIPALE UNICA (56PX) -->
-      <a href="/app.html" class="btn btn-gold" id="btn-open-app-main">
-        Apri il tuo Riepilogo delle 08:00 nell'Area Proprietario
+      <a href="/app.html?view=onboarding&first_access=1" class="btn btn-gold" id="btn-open-app-main">
+        Avvia Configurazione Guidata Struttura (Onboarding 4 Passi)
       </a>
     </section>
 
@@ -534,7 +534,7 @@
 
       var mainBtn = document.getElementById('btn-open-app-main');
       if (mainBtn && codeVal) {
-        mainBtn.href = '/app.html?code=' + encodeURIComponent(codeVal);
+        mainBtn.href = '/app.html?code=' + encodeURIComponent(codeVal) + '&view=onboarding&first_access=1';
       }
 
       var bankDetails = (window.SITE_CONFIG && typeof SITE_CONFIG.getBankTransferDetails === 'function')
