@@ -180,18 +180,49 @@
             </div>
             <div>
               <span class="price-num" id="prz-dyn-main">99,00 €</span>
-              <span style="font-size:1rem;color:var(--ink-muted);">/ mese · IVA inclusa (Range 99,00 € – 289,50 €)</span>
+              <span style="font-size:1rem;color:var(--ink-muted);">/ mese per unità · IVA inclusa (Range 99,00 € – 299,00 €)</span>
+              <div id="prz-transparent-msg" style="font-size:0.9375rem;font-weight:700;color:var(--gold-text-light);margin-top:4px;">
+                Prezzo attuale in base ai posti disponibili nel team · Bloccato per tutta la durata contrattuale (Price Lock)
+              </div>
             </div>
           </div>
 
-          <div style="margin:20px 0;padding:16px;background:var(--bg-stone);border:1.5px solid var(--ink-navy);border-radius:8px;font-size:1rem;">
-            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+          <div style="margin:20px 0;padding:18px;background:var(--bg-stone);border:1.5px solid var(--ink-navy);border-radius:12px;font-size:1rem;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
               <div>
-                <strong style="color:var(--ink-navy);">Indice Giornaliero Acquisizione Nuovi Immobili Firenze (99,00 € – 289,50 € / mese):</strong><br>
-                <span id="prz-dyn-slots" style="color:var(--ink-muted);">Il canone mensile di ingresso varia ogni giorno in base agli slot di acquisizione disponibili nel sistema per controllare la domanda. Quando attivi il tuo immobile blocchi la tariffa di oggi per sempre.</span>
+                <strong style="color:var(--ink-navy);">Prezzo dinamico dell'abbonamento (99 € – 299 €/mese) · Regola Domanda e Offerta:</strong><br>
+                <span id="prz-dyn-slots" style="color:var(--ink-muted);">Prezzo attuale in base ai posti disponibili nel team. Formula trasparente: 99 € + (299 € − 99 €) × saturazione, arrotondato a 9 €.</span>
               </div>
-              <button type="button" class="btn btn-outline" style="min-height:48px;padding:10px 16px;font-size:0.9375rem;" onclick="rerollPrezziPage()">Simula variazione giornaliera</button>
+              <span id="prz-saturation-badge" style="background:var(--ink-navy);color:var(--gold-accent);padding:6px 12px;border-radius:999px;font-weight:700;font-size:0.875rem;">
+                Saturazione: 0% (0/40 unità)
+              </span>
             </div>
+
+            <!-- Barra di saturazione capacità team -->
+            <div style="width:100%;height:12px;background:#E5E7EB;border-radius:999px;overflow:hidden;border:1px solid var(--border-control);margin-bottom:12px;">
+              <div id="prz-saturation-bar" style="width:0%;height:100%;background:linear-gradient(90deg,#6D28D9 0%,#5B21B6 100%);transition:width 0.25s ease;"></div>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;">
+              <span style="font-size:0.875rem;font-weight:700;color:var(--ink-navy);">Simula saturazione capacità team:</span>
+              <button type="button" class="btn btn-outline" style="min-height:42px;padding:6px 12px;font-size:0.85rem;" onclick="setPrezziSaturationScenario(0, 40)">Saturazione 0% (99 €)</button>
+              <button type="button" class="btn btn-outline" style="min-height:42px;padding:6px 12px;font-size:0.85rem;" id="btn-sim-sat-50" onclick="setPrezziSaturationScenario(20, 40)">Saturazione 50% (199 €)</button>
+              <button type="button" class="btn btn-outline" style="min-height:42px;padding:6px 12px;font-size:0.85rem;" id="btn-sim-sat-100" onclick="setPrezziSaturationScenario(40, 40)">Saturazione 100% (Lista d'attesa)</button>
+            </div>
+          </div>
+
+          <!-- Box Lista d'attesa quando la saturazione è al 100% -->
+          <div id="prz-waitlist-box" style="display:none;margin:20px 0;padding:20px;background:#FEF2F2;border:2px solid #DC2626;border-radius:12px;color:#7F1D1D;">
+            <h3 style="font-size:1.25rem;color:#991B1B;margin-bottom:6px;">Capacità operativa del team al 100% — Iscrizione diretta sospesa (Lista d'attesa)</h3>
+            <p style="margin-bottom:12px;font-size:0.95rem;">
+              Per garantire il livello di servizio promesso ai proprietari attivi, il team non accetta iscrizioni dirette finché non si libera capacità operativa. Inserisci i tuoi dati per ricevere una notifica prioritaria appena si apre uno slot.
+            </p>
+            <div style="display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:10px;">
+              <input type="text" id="prz-wl-name" placeholder="Nome e Cognome" style="padding:12px;border-radius:10px;border:1.5px solid #DC2626;font-size:1rem;width:100%;"/>
+              <input type="email" id="prz-wl-email" placeholder="La tua email per la notifica" style="padding:12px;border-radius:10px;border:1.5px solid #DC2626;font-size:1rem;width:100%;"/>
+            </div>
+            <button type="button" class="btn btn-gold" style="width:100%;" onclick="submitPrezziWaitlist()">Iscriviti alla Lista d'attesa con notifica automatica</button>
+            <div id="prz-wl-feedback" style="display:none;margin-top:10px;padding:10px;background:#ECFDF5;color:#065F46;border-radius:8px;font-weight:700;"></div>
           </div>
 
           <div style="margin:20px 0;padding:16px;background:var(--status-ok-bg);color:var(--status-ok-text);border:1.5px solid var(--status-ok-text);border-radius:8px;font-size:1rem;">
@@ -231,8 +262,27 @@
           </div>
 
           <div style="display:grid;grid-template-columns:1fr;gap:12px;">
-            <a href="/checkout.html" class="btn btn-gold">Attiva prova 14 giorni</a>
+            <a href="/checkout.html" id="prz-primary-cta-btn" class="btn btn-gold">Attiva prova 14 giorni e blocca il prezzo</a>
             <a href="/calcola-risparmio.html" class="btn btn-outline">Calcola il tuo risparmio</a>
+          </div>
+
+          <!-- CARD CONTRATTO & FORM TARIFFARIO / DATI CLIENTE (SCARICABILE IN PDF · JUL-012) -->
+          <div id="prezzi-contract-tariff-pdf-card" style="margin-top:24px;padding:22px 18px;background:var(--bg-stone);border:2px solid var(--ink-navy);border-radius:14px;">
+            <span class="eyebrow">Modulistica Ufficiale · Piano 4 Itassistance / Blue Arroyo S.r.l.</span>
+            <h3 style="font-family:var(--font-display);font-size:clamp(1.25rem, 3vw, 1.55rem);color:var(--ink-navy);margin:0 0 8px;">
+              📄 Contratto &amp; Form Tariffario / Dati Cliente (Scaricabile in PDF · JUL-012)
+            </h3>
+            <p style="font-size:0.95rem;color:var(--ink-muted);margin:0 0 16px;max-width:65ch;">
+              Compila online il Form strutturato in 4 Blocchi (Dati Cliente Proprietario o Gestore Airbnb, Dati Professionista/Creator, Tariffario con calcolo automatico e Condizioni Contrattuali Artt. 1–14 + Doppia Firma ex artt. 1341–1342 c.c.) oppure scarica subito il contratto in formato <code>.pdf</code>. Dati societari: <strong>Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]</strong>.
+            </p>
+            <div style="display:grid;grid-template-columns:1fr;gap:10px;">
+              <a href="/contratto.html?type=creator" class="btn btn-gold" style="white-space:normal;overflow-wrap:anywhere;">
+                📝 Compila Form Dati Cliente &amp; Tariffario + Scarica PDF
+              </a>
+              <a href="/contratti/contratto-produzione-contenuti-itassistance.pdf" download="Contratto_Produzione_Contenuti_Itassistance.pdf" class="btn btn-outline" style="white-space:normal;overflow-wrap:anywhere;">
+                📥 Scarica Direttamente Contratto PDF (.pdf)
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -242,7 +292,7 @@
   <footer>
     <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">
       <div>itassistance · Assistenza tutti i giorni 09:00–23:00 · Telefono e WhatsApp: <a href="tel:+393510380392" style="color:var(--bg-light);text-decoration:underline;">+39 351 038 0392</a> · <a href="mailto:info@itadreamteam.com" style="color:var(--bg-light);text-decoration:underline;">info@itadreamteam.com</a></div>
-      <div>Blue Arroyo SRL · P.IVA 07480210488 · Via Matteo Palmieri 20r, 50122 Firenze (FI)</div>
+      <div>Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]</div>
     </div>
   </footer>
   <script>
@@ -250,9 +300,67 @@
       if (!window.SITE_CONFIG || typeof SITE_CONFIG.getDynamicPricing !== 'function') return;
       var dp = SITE_CONFIG.getDynamicPricing();
       var m = document.getElementById('prz-dyn-main');
-      if (m) m.textContent = dp.todayFormatted;
       var s = document.getElementById('prz-dyn-slots');
-      if (s) s.textContent = 'Quotazione valida oggi: ' + dp.todayFormatted + '/mese (' + dp.yearlyFormatted + '/anno) · Disponibilità oggi a Firenze: ' + dp.slotsAvailable + ' slot su ' + dp.maxSlots + ' (' + dp.demandLevel + ').';
+      var b = document.getElementById('prz-saturation-badge');
+      var bar = document.getElementById('prz-saturation-bar');
+      var wlBox = document.getElementById('prz-waitlist-box');
+      var ctaBtn = document.getElementById('prz-primary-cta-btn');
+
+      if (m) m.textContent = dp.isWaitlistOnly ? 'Lista d\'attesa' : dp.todayFormatted;
+      if (s) {
+        s.textContent = (dp.transparentMessage || 'Prezzo attuale in base ai posti disponibili nel team.') +
+          ' Formula: 99 € + (299 € − 99 €) × saturazione (' + dp.saturationPct + '%). Disponibilità: ' +
+          dp.slotsAvailable + ' unità libere su ' + dp.maxSlots + ' gestibili.';
+      }
+      if (b) {
+        b.textContent = 'Saturazione: ' + dp.saturationPct + '% (' + dp.managedUnits + '/' + dp.capacityUnits + ' unità)';
+      }
+      if (bar) {
+        bar.style.width = Math.min(100, dp.saturationPct) + '%';
+      }
+      if (wlBox && ctaBtn) {
+        if (dp.isWaitlistOnly) {
+          wlBox.style.display = 'block';
+          ctaBtn.style.display = 'none';
+        } else {
+          wlBox.style.display = 'none';
+          ctaBtn.style.display = 'inline-flex';
+          ctaBtn.textContent = 'Prova 14 giorni · Blocca ' + dp.todayFormatted;
+          ctaBtn.href = '/checkout.html?locked_price=' + encodeURIComponent(dp.todayMonthlyEur);
+        }
+      }
+    }
+    function setPrezziSaturationScenario(managed, capacity) {
+      if (window.SITE_CONFIG && typeof SITE_CONFIG.setCapacityParameters === 'function') {
+        SITE_CONFIG.setCapacityParameters({
+          managedUnits: managed,
+          capacityUnits: capacity,
+          forcedPrice: null,
+          updatedBy: 'Simulatore Pagina Prezzi'
+        });
+      }
+      renderPrezziDynamic();
+    }
+    function submitPrezziWaitlist() {
+      var nameEl = document.getElementById('prz-wl-name');
+      var emailEl = document.getElementById('prz-wl-email');
+      var fb = document.getElementById('prz-wl-feedback');
+      var name = nameEl ? nameEl.value.trim() : '';
+      var email = emailEl ? emailEl.value.trim() : '';
+      if (!email) {
+        if (fb) {
+          fb.style.display = 'block';
+          fb.textContent = 'Inserisci un indirizzo email valido per ricevere la notifica quando si libera capacità.';
+        }
+        return;
+      }
+      if (window.SITE_CONFIG && typeof SITE_CONFIG.submitWaitlistEntry === 'function') {
+        SITE_CONFIG.submitWaitlistEntry({ name: name || 'Proprietario', email: email, unitsCount: 1 });
+      }
+      if (fb) {
+        fb.style.display = 'block';
+        fb.textContent = 'Sei iscritto in Lista d\'attesa! Ti invieremo una notifica appena si libera un posto nel team.';
+      }
     }
     function rerollPrezziPage() {
       if (window.SITE_CONFIG && typeof SITE_CONFIG.rerollDynamicPrice === 'function') {

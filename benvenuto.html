@@ -385,9 +385,9 @@
       </div>
 
       <div id="w-bonifico-box" class="bonifico-alert">
-        <strong>Coordinate per il Bonifico Bancario (Blue Arroyo SRL · P.IVA 07480210488):</strong><br/>
-        Intestatario: <strong>Blue Arroyo SRL</strong> (Via Matteo Palmieri 20r, 50122 Firenze)<br/>
-        IBAN: <strong id="w-bonifico-iban">IT60X0306902887100000007480</strong> · Causale: <code id="w-bonifico-causale" style="font-weight:700;">Attivazione itassistance</code>.<br/>
+        <strong>Coordinate per il Bonifico Bancario (Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1):</strong><br/>
+        Intestatario: <strong>Blue Arroyo S.r.l.</strong> (Sede legale: Via Matteo Palmieri 20R, Firenze)<br/>
+        IBAN: <strong id="w-bonifico-iban">[DA CONFERMARE]</strong> · Causale: <code id="w-bonifico-causale" style="font-weight:700;">Attivazione itassistance</code>.<br/>
         <span>La tua Area Proprietario e i 14 giorni di garanzia sono già attivi fin da subito.</span>
         <div style="margin-top:10px;">
           <button type="button" class="btn btn-outline" id="btn-copy-iban" onclick="copyWelcomeBankDetails()" style="min-height:48px;padding:10px 16px;font-size:0.9375rem;">
@@ -473,7 +473,7 @@
     <!-- AZIONI SECONDARIE DOCUMENTALI -->
     <section aria-label="Documenti e promemoria">
       <button type="button" class="btn btn-outline" onclick="downloadWelcomeInvoicePDF()">
-        Scarica Fattura / Ricevuta PDF (Blue Arroyo SRL)
+        Scarica Fattura / Ricevuta PDF (Blue Arroyo S.r.l.)
       </button>
       <button type="button" class="btn btn-outline" onclick="sendActivationSummaryWhatsApp()">
         Invia riepilogo e link di accesso su WhatsApp
@@ -481,7 +481,7 @@
     </section>
 
     <footer style="text-align:center;font-size:0.875rem;color:var(--ink-muted);margin-top:32px;">
-      Blue Arroyo SRL · P.IVA 07480210488 · Via Matteo Palmieri 20r, 50122 Firenze (FI)<br/>
+      Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]<br/>
       Assistenza proprietari Firenze (Tutti i giorni 09:00–23:00): +39 351 038 0392 · info@itadreamteam.com
     </footer>
   </main>
@@ -544,7 +544,7 @@
             ownerCode: codeVal,
             invoiceId: actData.invoiceId || 'FATT-2026'
           })
-        : { iban: 'IT60X0306902887100000007480', causale: 'Attivazione itassistance ' + codeVal + ' - ' + (actData.invoiceId || 'FATT-2026') };
+        : { iban: '[DA CONFERMARE]', causale: 'Attivazione itassistance ' + codeVal + ' - ' + (actData.invoiceId || 'FATT-2026') };
 
       var bIban = document.getElementById('w-bonifico-iban');
       if (bIban) bIban.textContent = bankDetails.iban;
@@ -559,9 +559,9 @@
     });
 
     function copyWelcomeBankDetails() {
-      var iban = (document.getElementById('w-bonifico-iban') && document.getElementById('w-bonifico-iban').textContent) || 'IT60X0306902887100000007480';
+      var iban = (document.getElementById('w-bonifico-iban') && document.getElementById('w-bonifico-iban').textContent) || '[DA CONFERMARE]';
       var caus = (document.getElementById('w-bonifico-causale') && document.getElementById('w-bonifico-causale').textContent) || 'Attivazione itassistance';
-      var copyStr = 'Intestatario: Blue Arroyo SRL\nIBAN: ' + iban + '\nCausale: ' + caus;
+      var copyStr = 'Intestatario: Blue Arroyo S.r.l.\nIBAN: ' + iban + '\nCausale: ' + caus;
       try {
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(copyStr);
@@ -638,9 +638,9 @@
               {
                 stack: [
                   { text: 'itassistance', fontSize: 20, bold: true, color: '#1E1035' },
-                  { text: 'Blue Arroyo SRL', fontSize: 11, bold: true, margin: [0, 4, 0, 0] },
-                  { text: 'Via Matteo Palmieri 20r, 50122 Firenze (FI)', fontSize: 9.5, color: '#4C3D63' },
-                  { text: 'P.IVA / C.F.: IT07480210488', fontSize: 9.5, color: '#4C3D63' }
+                  { text: 'Blue Arroyo S.r.l.', fontSize: 11, bold: true, margin: [0, 4, 0, 0] },
+                  { text: 'Sede legale: Via Matteo Palmieri 20R, Firenze', fontSize: 9.5, color: '#4C3D63' },
+                  { text: 'P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]', fontSize: 9.5, color: '#4C3D63' }
                 ]
               },
               {

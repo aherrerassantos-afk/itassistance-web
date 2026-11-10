@@ -106,8 +106,10 @@
       background: #fff;
       width: 100%;
       max-width: 520px;
+      max-height: 90dvh;
+      overflow-y: auto;
       border-radius: 16px;
-      padding: 32px 28px;
+      padding: 24px 18px;
       border: 2px solid var(--gold);
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
     }
@@ -615,8 +617,9 @@
           </button>
         </div>
       </details>
-      <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-muted);">
-        <a href="/app.html" style="text-decoration:underline;">Vai all'Area Proprietario (App)</a>· <a href="/" style="text-decoration:underline;">Torna al sito pubblico</a>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:12px;margin-top:12px;font-size:12px;color:var(--text-muted);">
+        <a href="/app.html" style="text-decoration:underline;display:inline-flex;align-items:center;min-height:44px;padding:4px 8px;">Vai all'Area Proprietario (App)</a>
+        <a href="/" style="text-decoration:underline;display:inline-flex;align-items:center;min-height:44px;padding:4px 8px;">Torna al sito pubblico</a>
       </div>
     </div>
   </div>
@@ -643,7 +646,7 @@
         <select id="quick-role-switch" class="role-switcher-select" onchange="switchActiveRole(this.value)">
           <option value="superadmin">Holding / Super Admin Gruppo</option>
           <option value="hr"> 1. General Director Operatività</option>
-          <option value="billing">2. General Director Amministrazione</option>
+          <option value="billing">2. Gabriela · Direzione Amministrazione &amp; Contabilità (4 Piani)</option>
           <option value="partners">3. General Director Vendite (PM &amp; Partner)</option>
         </select>
         <a href="/app.html" class="btn btn-outline btn-sm" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.3);">Vista App Proprietario</a>
@@ -696,10 +699,11 @@
       </button>
 
       <div style="margin-top:16px;padding:12px;border-radius:10px;background:var(--gold-light);border:1px solid rgba(196,181,253,0.45);font-size:11.5px;color:var(--navy);">
-        <strong>Dati Fiscali Emittente</strong><br/>
-        Blue Arroyo SRL<br/>
-        P.IVA 07480210488<br/>
-        Via Matteo Palmieri 20r, 50122 Firenze
+        <strong>Dati Societari Ufficiali (Piano 4 · Itassistance)</strong><br/>
+        Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze<br/>
+        P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1<br/>
+        PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]<br/>
+        <strong>Magazzino PBA:</strong> Via dell'Agnolo 72R, Firenze <em>(Uso Interno Operativo)</em>
       </div>
     </aside>
 
@@ -719,7 +723,11 @@
                 Modello attivo: <strong>99 € / mese IVA inclusa</strong> (o <strong>1.188 € / anno</strong>) · Garanzia 14 gg Soddisfatto o Rimborsato · Extra opzionale <strong>+10% Revenue &amp; Adempimenti</strong>.
               </p>
             </div>
-            <button type="button" class="btn btn-outline btn-sm" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.35);" onclick="resetAdminDemoData()">↺ Ripristina dati demo</button>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-gold btn-sm" onclick="sendAdminReportToCentralAmministrazione()">📤 Trasmetti Report Piano 4 a /amministrazione Centrale 2FA</button>
+              <button type="button" class="btn btn-gold btn-sm" onclick="activateRealDataCleanMode()">🟢 Modalità Dati Reali (Azzera Demo)</button>
+              <button type="button" class="btn btn-outline btn-sm" style="background:transparent;color:#fff;border-color:rgba(255,255,255,0.35);" onclick="resetAdminDemoData()">↺ Ripristina dati demo</button>
+            </div>
           </div>
         </div>
 
@@ -746,24 +754,420 @@
           </div>
         </div>
 
-        <!-- CABINA DIREZIONE VENDITE: QUOTAZIONE VARIABILE GIORNALIERA (99,00 € - 289,50 € / MESE) -->
-        <div class="panel-card" style="border:2px solid var(--navy);background:#FFFFFF;margin-bottom:18px;">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;">
+        <!-- D. CABINA DIREZIONE: PREZZO DINAMICO DELL'ABBONAMENTO (99 € - 299 € / MESE) & CAPACITÀ TEAM -->
+        <div class="panel-card" id="adm-capacity-pricing-panel" style="border:2px solid var(--navy);background:#FFFFFF;margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:12px;">
             <div>
-              <span class="badge badge-gold">DIREZIONE VENDITE · CONTROLLO DOMANDA FIRENZE (FASE 1 RANDOM)</span>
+              <span class="badge badge-gold">SEZIONE D · PREZZO DINAMICO CAPACITÀ TEAM (99 € – 299 € / MESE)</span>
               <h2 style="font-family:var(--serif);font-size:20px;margin-top:6px;color:var(--navy);">
-                Quotazione Giornaliera Acquisizione Nuovi Immobili: <span id="adm-dyn-price-lbl">99,00 € / mese</span>
+                Prezzo Nuovi Clienti: <span id="adm-dyn-price-lbl">99,00 € / mese</span>
               </h2>
               <p style="font-size:13px;color:var(--text-muted);margin-top:4px;" id="adm-dyn-slots-lbl">
-                Range sistema: min 99,00 € — max 289,50 € / mese · Disponibilità oggi a Firenze: 4 slot su 6.
+                Formula: 99 € + (299 € − 99 €) × saturazione (arrotondato a 9 €) · Saturazione = unità gestite / capacità team.
+              </p>
+            </div>
+            <span class="badge badge-ok" id="adm-saturation-pill" style="font-size:13px;padding:6px 12px;">Saturazione: 0% (0/40 unità)</span>
+          </div>
+
+          <div class="form-grid-3" style="margin-bottom:12px;">
+            <div class="field">
+              <label for="adm-cap-managed-inp">Unità attualmente gestite dal team</label>
+              <input type="number" id="adm-cap-managed-inp" min="0" max="500" value="0"/>
+            </div>
+            <div class="field">
+              <label for="adm-cap-total-inp">Capacità massima unità gestibili dal team</label>
+              <input type="number" id="adm-cap-total-inp" min="1" max="500" value="40"/>
+            </div>
+            <div class="field">
+              <label for="adm-force-price-inp">Forza prezzo manuale (€/mese, opzionale)</label>
+              <input type="number" id="adm-force-price-inp" min="99" max="299" step="1" placeholder="Automatico da formula"/>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
+            <button type="button" class="btn btn-primary btn-sm" onclick="adminApplyCapacityParameters()">Salva Capacità e Ricalcola Prezzo</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="adminSetQuickSaturation(0, 40)">Preset 0% (99 €)</button>
+            <button type="button" class="btn btn-outline btn-sm" id="adm-btn-sat-50" onclick="adminSetQuickSaturation(20, 40)">Preset 50% (199 €)</button>
+            <button type="button" class="btn btn-outline btn-sm" id="adm-btn-sat-100" onclick="adminSetQuickSaturation(40, 40)">Preset 100% (Lista d'attesa)</button>
+          </div>
+
+          <div id="adm-tier-report-strip" style="font-size:12.5px;color:var(--navy);background:var(--gold-light);padding:10px 12px;border-radius:8px;border:1px solid var(--border);margin-bottom:16px;"></div>
+
+          <!-- DIREZIONE VENDITE · CONTROLLO DOMANDA FIRENZE (FASE 1 RANDOM) + ARM AUTO-RIEMPIMENTO DAL CHAT DI PALAZZO -->
+          <div id="adm-direzione-vendite-domanda-firenze-box" style="background:linear-gradient(135deg,#0B1A33 0%,#152C52 100%);color:#FFFFFF;border:2px solid #D97706;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 8px 22px rgba(11,26,51,0.18);">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:14px;">
+              <div>
+                <div style="font-size:11px;font-weight:800;letter-spacing:0.8px;color:#FCD34D;text-transform:uppercase;margin-bottom:6px;">
+                  DIREZIONE VENDITE · CONTROLLO DOMANDA FIRENZE (FASE 1 RANDOM)
+                </div>
+                <div style="font-size:20px;font-weight:800;color:#FFFFFF;line-height:1.25;">
+                  Quotazione Giornaliera Acquisizione Nuovi Immobili:
+                  <span id="adm-daily-rate-display" style="color:#FCD34D;">199,00 € / mese</span>
+                  (<span id="adm-daily-annual-display">2.388,00 € / anno</span>)
+                </div>
+                <div style="font-size:12.5px;color:#CBD5E1;margin-top:4px;">
+                  Range sistema: min <strong>99,00 €</strong> — max <strong>299,50 € / mese</strong> · Disponibilità oggi a Firenze: <strong id="adm-daily-slots-display" style="color:#34D399;">12 slot su 24</strong>
+                </div>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:rgba(255,255,255,0.08);padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.18);">
+                <label for="adm-daily-rate-input" style="font-size:11.5px;font-weight:700;color:#F8FAFC;">Tariffa €/mese:</label>
+                <input type="number" id="adm-daily-rate-input" min="99" max="299.5" step="0.5" value="199" oninput="adminLiveUpdateMomentTariff(this.value)" style="width:96px;padding:7px 10px;border-radius:7px;border:1.5px solid #FCD34D;background:#0F172A;color:#FFFFFF;font-weight:800;font-size:14px;"/>
+                <button type="button" class="btn btn-gold btn-sm" onclick="adminApplyDailyRateBtn()">Imposta tariffa</button>
+                <button type="button" class="btn btn-outline btn-sm" style="background:#FFFFFF;color:#0B1A33;border-color:#FFFFFF;font-weight:800;" onclick="adminRollRandomDailyRateBtn()">🎲 Estrai random (99–299,50 €)</button>
+              </div>
+            </div>
+
+            <!-- MODULO ARM DIRETTAMENTE SOTTO LA QUOTAZIONE GIORNALIERA IN TAB 1 -->
+            <div id="adm-tab1-arm-palazzo-module" style="background:#FFFFFF;color:var(--navy);border:2px solid #7C3AED;border-radius:12px;padding:16px;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+                <div>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:4px;">
+                    <span class="badge" style="background:#5B21B6;color:#FFFFFF;font-weight:800;">🤖 ARM — Auto-Riempimento dal Preventivo Generale PBA (Preventivo Itassitance + Tariffa al Momento)</span>
+                    <span class="badge badge-ok" id="adm-tab1-arm-sync-badge">LIVE SYNC · ARM-2026-MP86</span>
+                    <span class="badge badge-green" id="adm-tab1-arm-consent-badge">✅ Consenso Esplicito Preventivo Generale PBA: VERIFICATO (itassistanceRequested: true · itassistanceConsent: true)</span>
+                  </div>
+                  <div style="font-size:13px;color:var(--text-muted);">
+                    Dati caricati automaticamente dal Preventivo Generale PBA di <strong>Marco Palumbo</strong> + <strong>Tariffa al Momento Itassitance</strong> sincronizzata in tempo reale con il cursore sopra.<br/>
+                    <strong style="color:var(--navy);">🔒 Canale unico di ingresso: Preventivo Generale PBA con consenso esplicito Itassistance</strong> (se un cliente non seleziona Itassistance in <code>preventivo.html</code> di PBA, NON entra nell'ARM commerciale di Itassistance; nessun inserimento manuale nell'ARM).
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  <button type="button" class="btn btn-gold" style="font-weight:800;padding:10px 16px;font-size:13.5px;box-shadow:0 4px 14px rgba(217,119,6,0.35);" onclick="downloadMarcoArmQuotePdfInAdmin()">
+                    📄 Scarica Preventivo PDF con Servizio Itassitance &amp; Tariffa al Momento
+                  </button>
+                  <a href="/app.html?role=owner&amp;client=PROSPECT-MARCO-PALUMBO-2026&amp;email=mr.mpalumbo@gmail.com#arm" class="btn btn-primary btn-sm">👤 Apri ARM in App &rarr;</a>
+                </div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:10px;margin-bottom:12px;">
+                <div style="background:#F8FAFC;border:1.5px solid rgba(109,40,217,0.28);border-radius:9px;padding:11px;">
+                  <div style="font-size:10.5px;font-weight:800;color:#5B21B6;text-transform:uppercase;margin-bottom:3px;">1. Cliente &amp; Regime (da Chat Palazzo)</div>
+                  <div style="font-size:14.5px;font-weight:800;color:var(--navy);">Marco Palumbo</div>
+                  <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">
+                    📞 <strong>38064444415</strong> · ✉️ <strong>mr.mpalumbo@gmail.com</strong><br/>
+                    🧾 Regime: <strong>Privato (Marca da bollo €2)</strong>
+                  </div>
+                </div>
+
+                <div style="background:#F8FAFC;border:1.5px solid rgba(109,40,217,0.28);border-radius:9px;padding:11px;">
+                  <div style="font-size:10.5px;font-weight:800;color:#5B21B6;text-transform:uppercase;margin-bottom:3px;">2. Immobile (da Chat Palazzo)</div>
+                  <div style="font-size:14.5px;font-weight:800;color:var(--navy);">Trilocale (2 camere)</div>
+                  <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">
+                    🛏️ <strong>2 Letti Matrimoniali + 0 Singoli</strong><br/>
+                    🚿 <strong>2 Bagni · 1 Cucina</strong> · 🛋️ <strong>Divano Letto Matrimoniale Extra</strong>
+                  </div>
+                </div>
+
+                <div style="background:#F8FAFC;border:1.5px solid rgba(109,40,217,0.28);border-radius:9px;padding:11px;">
+                  <div style="font-size:10.5px;font-weight:800;color:#5B21B6;text-transform:uppercase;margin-bottom:3px;">3. Turnover PBA (Pass-Through 0% in ARM)</div>
+                  <div style="font-size:14.5px;font-weight:800;color:#059669;">Pack Base · € 86,00 / turnover</div>
+                  <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">
+                    Stima 6 cambi/mese: <strong>€ 516,00 / mese</strong><br/>
+                    Pulizia €42 + Biancheria €32 + Kit €7 + 2° Bagno €5 (<strong>0% ricarico</strong>)
+                  </div>
+                </div>
+
+                <div style="background:#ECFDF5;border:2px solid #059669;border-radius:9px;padding:11px;">
+                  <div style="font-size:10.5px;font-weight:800;color:#065F46;text-transform:uppercase;margin-bottom:3px;">4. Servizio ITASSITANCE + Tariffa al Momento</div>
+                  <div style="font-size:15px;font-weight:800;color:#065F46;" id="adm-tab1-arm-moment-rate">199,00 € / mese (2.388,00 € / anno)</div>
+                  <div style="font-size:11.5px;color:#065F46;margin-top:3px;">
+                    🎁 Promo Chat Palazzo <strong>-50% 1° Mese: <span id="adm-tab1-arm-first-month">99,50 €</span></strong> (Price Lock 24m)<br/>
+                    💰 <strong>Netto Proprietario Stimato ARM: <span id="adm-tab1-arm-net-owner">2.735,00 € / mese</span></strong>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:#F5F3FF;border:1px solid rgba(109,40,217,0.25);border-radius:8px;padding:9px 12px;font-size:12px;color:#4C1D95;">
+                <div>
+                  <strong>Formula ARM in Tempo Reale:</strong> Ricavo Lordo Stimato <strong>€ 3.450,00</strong> − Pulizie PBA Pass-Through <strong>€ 516,00</strong> − Tariffa al Momento Itassitance <strong id="adm-tab1-arm-formula-rate">199,00 €</strong> = <strong id="adm-tab1-arm-formula-net">2.735,00 € / mese</strong> (1° mese Promo -50%: <strong id="adm-tab1-arm-formula-net-m1">2.834,50 €</strong>).
+                </div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <button type="button" class="btn btn-green btn-sm" onclick="adminTriggerArmFollowBack('whatsapp')">💬 WhatsApp Marco (38064444415)</button>
+                  <button type="button" class="btn btn-gold btn-sm" onclick="downloadMarcoArmQuotePdfInAdmin()">📄 Scarica Preventivo PDF</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- C. SEPARAZIONE RIGOROSA DELL'80% INTERNO, ESCALATION AL PROPRIETARIO & VISTA COLLABORATORI P.IVA -->
+        <div class="panel-card" id="adm-internal-80-panel" style="border:2px solid var(--navy);background:#FFFFFF;margin-bottom:18px;">
+          <div class="panel-head" style="margin-bottom:12px;">
+            <div>
+              <span class="badge badge-gold">SEZIONE C · PRINCIPIO DI PARETO (80% INTERNO RISERVATO vs 20% INBOX PROPRIETARIO)</span>
+              <div class="panel-title" style="margin-top:4px;">Registro Problemi Risolti dal Dream Team (80% Interno) &amp; Escalation al Proprietario</div>
+              <p style="font-size:13px;color:var(--text-muted);">
+                Ciò che ha visibilità <code>interno</code> resta invisibile al proprietario lato API/DB. I collaboratori a P.IVA vedono solo le attività assegnate a loro senza alcun dato economico del proprietario.
               </p>
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-              <input type="number" id="adm-force-price-inp" min="99" max="289.5" step="0.5" placeholder="Es. 179.50" style="width:120px;padding:8px 10px;border:1px solid var(--border);border-radius:7px;font-size:13.5px;"/>
-              <button type="button" class="btn btn-primary btn-sm" onclick="adminForceDailyPrice()">Imposta tariffa</button>
-              <button type="button" class="btn btn-gold btn-sm" onclick="adminRerollRandomDailyPrice()">Estrai random (99–289,50 €)</button>
+              <label for="adm-80-role-view" style="font-size:12px;font-weight:700;color:var(--navy);">Simula Vista API / Ruolo:</label>
+              <select id="adm-80-role-view" onchange="renderAdminInternal80Panel()" style="width:auto;padding:7px 10px;border:1.5px solid var(--navy);border-radius:8px;font-size:12.5px;font-weight:700;">
+                <option value="internal_admin" selected>Console Interna Team (Vede 100%: 10 interni + 1 proprietario)</option>
+                <option value="owner">API Account Proprietario (Vede SOLO 20%: 0 record interni)</option>
+                <option value="COLLAB-01">Collaboratore P.IVA: Sara M. (Solo task assegnati · No dati economici)</option>
+                <option value="COLLAB-02">Collaboratore P.IVA: Marco V. (Solo task assegnati · No dati economici)</option>
+                <option value="COLLAB-03">Collaboratore P.IVA: Elena R. (Solo task assegnati · No dati economici)</option>
+              </select>
             </div>
           </div>
+
+          <div id="adm-80-security-banner" style="padding:10px 12px;border-radius:8px;background:#ECFDF5;color:#065F46;font-size:12.5px;font-weight:700;margin-bottom:12px;"></div>
+
+          <!-- Form rapido per Escalation ("Invia al proprietario") -->
+          <div style="background:var(--gold-light);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;">
+            <div style="font-size:12px;font-weight:800;color:var(--navy);text-transform:uppercase;margin-bottom:8px;">
+              Escalation Ticket al Proprietario ("Invia al proprietario" nell'Inbox 20% mantenendo segrete le note interne):
+            </div>
+            <div class="form-grid-3">
+              <div class="field">
+                <label for="adm-esc-title">Titolo decisione per il proprietario</label>
+                <input type="text" id="adm-esc-title" placeholder="Es. Autorizzazione sostituzione caldaia (380 €)" value="Autorizzazione intervento antenna TV post-maltempo (95 €)"/>
+              </div>
+              <div class="field">
+                <label for="adm-esc-owner-txt">Testo chiaro per il proprietario (visibile in Inbox)</label>
+                <input type="text" id="adm-esc-owner-txt" value="Il vento ha spostato la parabola sul tetto. L'antennista certificato può intervenire domani alle 10:00 per 95 € IVA incl. Approvi?"/>
+              </div>
+              <div class="field">
+                <label for="adm-esc-internal-note">Nota interna riservata (NON inviata al proprietario)</label>
+                <input type="text" id="adm-esc-internal-note" value="NOTA INTERNA: Costo netto fornitore 70 €, già pre-allertato Marco V."/>
+              </div>
+            </div>
+            <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary btn-sm" onclick="adminEscalateNewTicketToOwner()">Invia al proprietario (Crea in Inbox 20%)</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="adminLogNewInternalTicket()">+ Registra ticket risolto internamente (Resta nell'80%)</button>
+            </div>
+          </div>
+
+          <div id="adm-internal-80-list" style="display:grid;grid-template-columns:1fr;gap:8px;"></div>
+        </div>
+
+        <!-- JUL-010 · SKILL TICKET MANUTENZIONI & NETWORK MANUTENTORI (REGIA FRONT DESK / SUPPORTO PM) -->
+        <div class="panel-card" id="adm-maint-skill-network-panel" style="border:2px solid #5B21B6;background:#FFFFFF;margin-bottom:18px;">
+          <div class="panel-head" style="margin-bottom:12px;">
+            <div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px;">
+                <span class="badge" style="background:#5B21B6;color:#FFFFFF;font-weight:800;">🛠️ SKILL TICKET MANUTENZIONI &amp; NETWORK MANUTENTORI (JUL-010)</span>
+                <span class="badge badge-ok" id="adm-maint-privacy-badge">🔒 Privacy Incrociata Attiva: il Manutentore non vede mai il profilo/prezzo del Proprietario · il Proprietario non vede mai il profilo/compenso del Manutentore</span>
+              </div>
+              <div class="panel-title">Regia Front Desk &amp; Supporto PM: Ticket Minimal Editabili, Planner (60 min + 15 min buffer) e Liquidazione Mensile</div>
+              <p style="font-size:13px;color:var(--text-muted);margin-top:4px;">
+                Il Front Desk / Supporto PM può creare o modificare in qualsiasi momento ogni ticket (Task, Foto, Data/Ora richiesta, Prezzo Cliente standard <strong>30,00 €</strong> o adeguato per difficoltà e Supplemento disponibilità immediata). Ogni nuova richiesta invia notifica istantanea a tutto il Network Manutentori.
+              </p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <button type="button" class="btn btn-primary btn-sm" onclick="admResetMaintSkillForm()">+ Nuovo Ticket Manutenzione</button>
+              <button type="button" class="btn btn-gold btn-sm" onclick="admLiquidateMaintainerMonth()">🔄 Esegui Liquidazione Mensile Fattura (Azzera Contatore Mese)</button>
+            </div>
+          </div>
+
+          <!-- KPI CONTABILITÀ AUTOMATICA MANUTENTORI & ADDEBITO PROPRIETARI -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:14px;">
+            <div style="background:#F5F3FF;border:2px solid #6D28D9;border-radius:12px;padding:12px 14px;">
+              <div style="font-size:11px;font-weight:800;color:#5B21B6;text-transform:uppercase;">Importo Maturato Mese Corrente Manutentori (su fattura)</div>
+              <div style="font-size:22px;font-weight:800;color:#1E1035;margin-top:4px;" id="adm-maint-kpi-maintainer-month">42,50 €</div>
+              <div style="font-size:12px;color:#4C3D63;margin-top:2px;" id="adm-maint-kpi-maintainer-sub">Base 15,00 € a intervento + Extra intervento + Rimborso materiali</div>
+            </div>
+            <div style="background:#ECFDF5;border:2px solid #059669;border-radius:12px;padding:12px 14px;">
+              <div style="font-size:11px;font-weight:800;color:#065F46;text-transform:uppercase;">Addebito Automatico su Conto Proprietario</div>
+              <div style="font-size:22px;font-weight:800;color:#065F46;margin-top:4px;" id="adm-maint-kpi-owner-charge">70,00 €</div>
+              <div style="font-size:12px;color:#065F46;margin-top:2px;" id="adm-maint-kpi-owner-sub">Base 30,00 € (o difficoltà) + Supplemento urgenza + Rimborso materiali</div>
+            </div>
+            <div style="background:#FFFBEB;border:1.5px solid #D97706;border-radius:12px;padding:12px 14px;">
+              <div style="font-size:11px;font-weight:800;color:#B45309;text-transform:uppercase;">Stato Code &amp; Planner (60 min + 15 min buffer)</div>
+              <div style="font-size:16px;font-weight:800;color:#1E1035;margin-top:4px;" id="adm-maint-kpi-queues">1 Richiesto · 1 In Planner · 1 Realizzato</div>
+              <div style="font-size:12px;color:#92400E;margin-top:2px;" id="adm-maint-last-liquidation-lbl"> Zero sovrapposizioni · Buffer 15 min pre/post attivo</div>
+            </div>
+          </div>
+
+          <!-- FORM CREAZIONE / EDITING TICKET DA PARTE DEL TEAM ITASSISTANCE (FRONT DESK / SUPPORTO PM) -->
+          <div style="background:var(--gold-light);border:1.5px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+              <div style="font-size:13px;font-weight:800;color:var(--navy);text-transform:uppercase;" id="adm-maint-form-heading">
+                ✏️ Crea o Modifica Ticket Manutenzione (Front Desk / Supporto PM)
+              </div>
+              <span class="badge badge-gold" id="adm-maint-editing-pill">Nuovo Ticket · Notifica automatica a tutti i manutentori</span>
+            </div>
+            <input type="hidden" id="adm-maint-edit-id" value=""/>
+            <div class="form-grid-3" style="margin-bottom:10px;">
+              <div class="field">
+                <label for="adm-maint-task">1. Task da fare (Descrizione intervento) *</label>
+                <input type="text" id="adm-maint-task" placeholder="Es. Sostituzione flessibile doccia e verifica scarico lavabo" value="Regolazione cerniere porta finestra camera e sostituzione maniglia interna"/>
+              </div>
+              <div class="field">
+                <label for="adm-maint-datetime-text">2. Ora e Data richiesta (Testo + Slot Planner) *</label>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                  <input type="text" id="adm-maint-datetime-text" placeholder="Es. Giovedì ore 09:30" value="Giovedì ore 09:30" style="flex:1;min-width:130px;"/>
+                  <input type="datetime-local" id="adm-maint-slot-iso" value="2026-11-12T09:30" style="flex:1;min-width:155px;"/>
+                </div>
+              </div>
+              <div class="field">
+                <label for="adm-maint-photos">3. Foto dell'intervento richiesto (URL / Nomi file)</label>
+                <input type="text" id="adm-maint-photos" placeholder="Es. foto_maniglia_camera.jpg, dettaglio_infisso.jpg" value="foto_maniglia_camera.jpg, dettaglio_infisso.jpg"/>
+              </div>
+            </div>
+            <div class="form-grid-4" style="margin-bottom:10px;">
+              <div class="field">
+                <label for="adm-maint-zone">Zona / Indirizzo operativo (visibile per logistica)</label>
+                <input type="text" id="adm-maint-zone" placeholder="Es. Santo Spirito · Via Maggio 18, Firenze" value="Santa Croce · Via dei Pandolfini 21, Firenze"/>
+              </div>
+              <div class="field">
+                <label for="adm-maint-owner-hidden">Profilo Proprietario (🔒 Nascosto al Manutentore)</label>
+                <input type="text" id="adm-maint-owner-hidden" placeholder="Es. Marco Rinaldi (App. Santa Croce)" value="Marco Rinaldi (App. Santa Croce)"/>
+              </div>
+              <div class="field">
+                <label for="adm-maint-owner-base">Prezzo Cliente Base / Difficoltà (€, std 30,00 €)</label>
+                <input type="number" id="adm-maint-owner-base" min="30" step="2" value="30" oninput="admUpdateMaintPricePreview()"/>
+              </div>
+              <div class="field">
+                <label for="adm-maint-owner-extra">Supplemento Disponibilità Immediata (+ €)</label>
+                <input type="number" id="adm-maint-owner-extra" min="0" step="2" value="10" oninput="admUpdateMaintPricePreview()"/>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding-top:8px;border-top:1px solid var(--border);">
+              <div style="font-size:12.5px;color:var(--navy);" id="adm-maint-price-preview-strip">
+                <strong>Riepilogo Regola Economica:</strong> Addebito Cliente Proprietario: <strong>40,00 €</strong> (30,00 € base + 10,00 € supplemento immediato) · Compenso Manutentore in App: <strong>15,00 € base + + € 5,00 Extra per l'intervento</strong> (+ eventuale rimborso materiali).
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button type="button" class="btn btn-primary btn-sm" onclick="admSaveMaintSkillTicket()">💾 Salva Ticket e Notifica Network Manutentori</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="admResetMaintSkillForm()">Annulla Modifica</button>
+              </div>
+            </div>
+            <div id="adm-maint-planner-alert" style="display:none;margin-top:10px;padding:10px 12px;border-radius:8px;font-size:12.5px;font-weight:700;"></div>
+          </div>
+
+          <!-- LE 3 CODE IN TEMPO REALE: 1. INTERVENTI RICHIESTI · 2. PLANNER MANUTENTORI (60m+15m) · 3. JOBS REALIZZATI -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;">
+            <div style="background:#F8FAFC;border:1.5px solid var(--border);border-radius:12px;padding:12px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;">
+                <strong style="font-size:13px;color:var(--navy);">🔔 1. Interventi Richiesti (Notifica Network)</strong>
+                <span class="badge badge-gold" id="adm-maint-count-req">0</span>
+              </div>
+              <p style="font-size:11.5px;color:var(--text-muted);margin-bottom:10px;">
+                Visibili a tutti i manutentori fino all'accettazione. Il primo che accetta blocca la task e la sposta nel proprio Planner.
+              </p>
+              <div id="adm-maint-list-requested" style="display:flex;flex-direction:column;gap:10px;"></div>
+            </div>
+
+            <div style="background:#F5F3FF;border:1.5px solid #7C3AED;border-radius:12px;padding:12px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;">
+                <strong style="font-size:13px;color:#4C1D95;">📅 2. Planner Manutentori (60m + 15m Buffer)</strong>
+                <span class="badge" style="background:#5B21B6;color:#fff;" id="adm-maint-count-plan">0</span>
+              </div>
+              <p style="font-size:11.5px;color:#4C3D63;margin-bottom:10px;">
+                Durata standard <strong>60 min</strong> + buffer obbligatorio <strong>15 min prima e dopo</strong>. Il sistema impedisce sovrapposizioni.
+              </p>
+              <div id="adm-maint-list-planner" style="display:flex;flex-direction:column;gap:10px;"></div>
+            </div>
+
+            <div style="background:#ECFDF5;border:1.5px solid #059669;border-radius:12px;padding:12px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;">
+                <strong style="font-size:13px;color:#065F46;">✅ 3. Jobs Realizzati &amp; Contabilità</strong>
+                <span class="badge badge-ok" id="adm-maint-count-done">0</span>
+              </div>
+              <p style="font-size:11.5px;color:#065F46;margin-bottom:10px;">
+                Al completamento aggiorna il maturato mensile del manutentore (su fattura) e addebita il conto del Proprietario.
+              </p>
+              <div id="adm-maint-list-completed" style="display:flex;flex-direction:column;gap:10px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- JUL-011 & JUL-012 · CONTRATTO PRODUZIONE CONTENUTI & LIBERATORIA IMMOBILE (CREATOR / MARKETING) IN TAB 1 (#adm-overview) -->
+        <div class="panel-card" id="adm-overview-creator-contract-box" style="border:2px solid #D97706;background:linear-gradient(135deg,#FFFBEB 0%,#FFFFFF 100%);margin-bottom:18px;">
+          <div class="panel-head" style="margin-bottom:10px;">
+            <div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px;">
+                <span class="badge badge-gold">🎬 JUL-011 / JUL-012 · MODULISTICA LEGALE CREATOR / SHOOTING MARKETING</span>
+                <span class="badge badge-ok">Art. 2222 / 1655 c.c. · Location Release · L. 633/1941 · GDPR · Artt. 1341-1342 c.c.</span>
+              </div>
+              <div class="panel-title">🎬 Contratto Produzione Contenuti &amp; Liberatoria Immobile (Creator / Marketing · JUL-011)</div>
+              <p style="font-size:13px;color:var(--text-muted);margin-top:4px;">
+                Compila al volo <strong>Dati Cliente + Immobile + Tariffario</strong> (i campi lasciati vuoti restano con segnaposto <code>[DA COMPILARE]</code>) e scarica direttamente il file <code>.pdf</code> compilato o il modello in bianco per <strong>Blue Arroyo S.r.l.</strong> (Via Matteo Palmieri 20R, Firenze · P.IVA 07480210488 · REA FI-706161 · SDI M5UXCR1).
+              </p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <button type="button" class="btn btn-gold btn-sm" onclick="admDownloadCreatorContractPdfFromBox('t1')">📥 Scarica Contratto Compilato in PDF (.pdf)</button>
+              <a href="/contratti/contratto-produzione-contenuti-itassistance.pdf" download="Contratto_Produzione_Contenuti_Itassistance_In_Bianco.pdf" class="btn btn-outline btn-sm">📄 Scarica Modello PDF in Bianco (/contratti/contratto-produzione-contenuti-itassistance.pdf)</a>
+              <a href="/contratto.html?type=creator" class="btn btn-primary btn-sm">✏️ Apri Form Completo in /contratto.html?type=creator</a>
+              <button type="button" class="btn btn-outline btn-sm" onclick="admOpenCreatorPrintPreviewFromBox('t1')">🖨️ Vista Stampa A4</button>
+            </div>
+          </div>
+
+          <div style="background:#FFFFFF;border:1.5px solid var(--border);border-radius:10px;padding:12px;">
+            <div style="font-size:11.5px;font-weight:800;color:var(--navy);text-transform:uppercase;margin-bottom:8px;">
+              ⚡ Compilazione Rapida Dati Cliente + Immobile + Professionista + Tariffario (per Download Immediato .PDF):
+            </div>
+            <div class="form-grid-4" style="margin-bottom:8px;">
+              <div class="field">
+                <label for="adm-cc-t1-client">Cliente (Proprietario / Gestore Airbnb)</label>
+                <input type="text" id="adm-cc-t1-client" placeholder="[DA COMPILARE: Nome / Ragione Sociale]"/>
+              </div>
+              <div class="field">
+                <label for="adm-cc-t1-client-vat">C.F. / P.IVA &amp; Qualifica Firmatario</label>
+                <input type="text" id="adm-cc-t1-client-vat" placeholder="[DA COMPILARE: C.F./P.IVA · Proprietario/Gestore]"/>
+              </div>
+              <div class="field">
+                <label for="adm-cc-t1-property">Indirizzo Immobile, Nome Alloggio &amp; CIN/CIR</label>
+                <input type="text" id="adm-cc-t1-property" placeholder="[DA COMPILARE: Via ..., Firenze · CIN ...]"/>
+              </div>
+              <div class="field">
+                <label for="adm-cc-t1-sessions">Giorni / Orari Sessioni &amp; Durata Accesso</label>
+                <input type="text" id="adm-cc-t1-sessions" placeholder="[DA COMPILARE: Data e fascia oraria]"/>
+              </div>
+            </div>
+            <div class="form-grid-4">
+              <div class="field">
+                <label for="adm-cc-t1-creator">Professionista (Creator / Fotografo / Marketing)</label>
+                <input type="text" id="adm-cc-t1-creator" placeholder="[DA COMPILARE: Nome / P.IVA · art. 2222/1655 c.c.]"/>
+              </div>
+              <div class="field">
+                <label for="adm-cc-t1-mode">Modalità &amp; Tariffe Itassistance</label>
+                <select id="adm-cc-t1-mode">
+                  <option value="Collaborazione Retribuita · Canone App 99,00 €/mese · Opzione +10% · Check-in 20,00 € · Manutenzione 30,00 €">Collaborazione Retribuita + Tariffe Ufficiali (99€/m · +10% · 20€ · 30€)</option>
+                  <option value="Collaborazione Gratuita (Cross-Promotion) · Canone App 99,00 €/mese · Opzione +10% · Check-in 20,00 € · Manutenzione 30,00 €">Collaborazione Gratuita / Cross-Promotion + Tariffe Ufficiali</option>
+                  <option value="Permuta Servizi (Barter) · Canone App 99,00 €/mese · Opzione +10% · Check-in 20,00 € · Manutenzione 30,00 €">Permuta Servizi (Barter) + Tariffe Ufficiali</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="adm-cc-t1-photo">Shooting Foto + Video/Reel/Ads (€)</label>
+                <div style="display:flex;gap:6px;">
+                  <input type="number" id="adm-cc-t1-photo" min="0" step="10" placeholder="Foto €" oninput="admRecalcCreatorQuickTotal('t1')"/>
+                  <input type="number" id="adm-cc-t1-video" min="0" step="10" placeholder="Video €" oninput="admRecalcCreatorQuickTotal('t1')"/>
+                </div>
+              </div>
+              <div class="field">
+                <label for="adm-cc-t1-total">Fee Accesso (€) &amp; Totale Tariffario (€)</label>
+                <div style="display:flex;gap:6px;">
+                  <input type="number" id="adm-cc-t1-access" min="0" step="10" placeholder="Fee €" oninput="admRecalcCreatorQuickTotal('t1')"/>
+                  <input type="number" id="adm-cc-t1-total" min="0" step="10" placeholder="Totale €"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- E. DASHBOARD MISURAZIONE DELL'AUTOMAZIONE (OBIETTIVO >= 70%) -->
+        <div class="panel-card" id="adm-automation-70-panel" style="border:2px solid var(--navy);background:#FFFFFF;margin-bottom:18px;">
+          <div class="panel-head" style="margin-bottom:12px;">
+            <div>
+              <span class="badge badge-gold">SEZIONE E · MISURAZIONE DELL'AUTOMAZIONE (OBIETTIVO &ge; 70%)</span>
+              <div class="panel-title" style="margin-top:4px;">
+                Indice di Automazione Operativa: <span id="adm-auto-total-pct" style="color:var(--green);">78%</span> (Obiettivo &ge; 70%)
+              </div>
+              <p style="font-size:13px;color:var(--text-muted);" id="adm-auto-owner-msg">
+                Messaggio aggregato mostrato al proprietario: "Il 78% delle attività della tua gestione è automatizzato".
+              </p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary btn-sm" onclick="adminLogAutomationSample('guest_messages', 'automatica')">+ Registra esecuzione automatica</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="adminLogAutomationSample('cleaning', 'manuale')">+ Registra esecuzione manuale</button>
+            </div>
+          </div>
+
+          <div id="adm-auto-trend-strip" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;"></div>
+          <div id="adm-auto-below-target-alert" style="margin-bottom:12px;"></div>
+          <div id="adm-auto-functions-list" style="display:grid;grid-template-columns:1fr;gap:8px;"></div>
         </div>
 
         <!-- ═══ CENTRALE OPERATIVA, FIELD FIRENZE (20€/30€) & ASSISTENZA 09:00–23:00 ═══ -->
@@ -928,15 +1332,15 @@
           </div>
         </div>
 
-        <!-- MAPPA ECOSISTEMA & FLUSSI INTER-AZIENDALI DEL GRUPPO BLUE ARROYO (ORDINE UFFICIALE 1 ->2 ->3 ->4 + 3 GENERAL DIRECTORS PER AZIENDA) -->
+        <!-- MAPPA ECOSISTEMA & FLUSSI INTER-AZIENDALI DEL GRUPPO BLUE ARROYO (ORDINE UFFICIALE PIANO 1 -> PIANO 2 -> PIANO 3 -> PIANO 4) -->
         <div class="panel-card" id="adm-group-synergy-card" style="border:2px solid var(--navy);">
           <div class="panel-head">
             <div>
               <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
-                <span class="badge badge-gold"> IL CICLO VIRTUOSO DEL GRUPPO BLUE ARROYO (1 → 2 → 3 → 4)</span>
-                <span class="badge badge-ok">4 Aziende Autonome · 12 General Directors · Tutto il Valore Resta nel Gruppo</span>
+                <span class="badge badge-gold"> IL CICLO VIRTUOSO DEL GRUPPO BLUE ARROYO (PIANO 1 → PIANO 2 → PIANO 3 → PIANO 4)</span>
+                <span class="badge badge-ok">4 Piani Autonomi · 12 General Directors · Tutto il Valore Resta nel Gruppo</span>
               </div>
-              <div class="panel-title">1. Crea il Bene → 2. Lo Protegge → 3. Lo Allestisce → 4. Lo Riempie di Turisti</div>
+              <div class="panel-title">Piano 1 · Toscan Costruzioni → Piano 2 · PBA → Piano 3 · SmartsBookings → Piano 4 · Itassistance</div>
               <p style="font-size:13px;color:var(--text-muted);">
                 Ogni General Director ha il suo cruscotto, i suoi numeri e i suoi obiettivi autonomi, ma tutto il valore rimane all'interno del <strong>Gruppo Blue Arroyo</strong>:
               </p>
@@ -944,14 +1348,14 @@
           </div>
 
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;">
-            <!-- 1. TOSCAN COSTRUZIONI -->
+            <!-- PIANO 1 · TOSCAN COSTRUZIONI -->
             <div style="background:#F8FAFC;border:1.5px solid var(--border);border-top:4px solid #B45309;border-radius:10px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
               <div>
                 <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
-                  <span style="font-size:11px;font-weight:800;color:#B45309;text-transform:uppercase;">1. CREA IL BENE</span>
+                  <span style="font-size:11px;font-weight:800;color:#B45309;text-transform:uppercase;">PIANO 1 · CREA IL BENE</span>
                   <span class="badge badge-gold" style="font-size:10.5px;">Cliente: INVESTITORI</span>
                 </div>
-                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;"> 1. Toscan Costruzioni</div>
+                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">Piano 1 · Toscan Costruzioni</div>
                 <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
                   <strong>└─► Consegna un appartamento nuovo, cablato e collaudato che non ha bisogno di riparazioni per anni</strong> (Contratto a prezzo fisso in 5 SAL garantiti + DM 37/08 + APE + Agibilità).
                 </p>
@@ -966,64 +1370,41 @@
                 </div>
               </div>
               <div style="font-size:11.5px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:6px;padding:6px 8px;color:#92400E;font-weight:700;">
-                │ Passa l'immobile nuovo e cablato a <code>2. itassistance</code>▼
+                │ Passa l'immobile nuovo e cablato a <code>Piano 2 · PBA</code> e <code>Piano 4 · Itassistance</code>▼
               </div>
             </div>
 
-            <!-- 2. itassistance -->
-            <div style="background:var(--gold-light);border:2px solid var(--navy);border-top:4px solid var(--navy);border-radius:10px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
-              <div>
-                <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
-                  <span style="font-size:11px;font-weight:800;color:var(--navy);text-transform:uppercase;">2. LO PROTEGGE (Qui)</span>
-                  <span class="badge badge-ok" style="font-size:10.5px;">Cliente: PROPRIETARI-GESTORI (75%) &amp; PM</span>
-                </div>
-                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">2. itassistance</div>
-                <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
-                  <strong>└─► Lo rende immediatamente conforme alla legge (Questura e Comune), ne ottimizza le tariffe e libera il tempo del proprietario (75% gestisce da solo 1–2 case)</strong> per spingerlo alla sfida successiva: investire nel prossimo immobile con <em>Toscan Costruzioni</em>.
-                </p>
-                <div style="font-size:11px;background:#fff;border:1px solid var(--gold);border-radius:6px;padding:6px 8px;margin-bottom:8px;color:var(--navy);">
-                  <strong>I 3 General Directors (Questa Console):</strong><br/>
-                  • <strong>DG Operatività:</strong> Alloggiati, ISTAT, Channel Manager, schedine<br/>
-                  • <strong>DG Amministrazione:</strong> Piani 99€/+10%, fatturazione elettronica<br/>
-                  • <strong>DG Vendite:</strong> Onboarding Proprietari-Gestori (75%) &amp; PM
-                </div>
-              </div>
-              <div style="font-size:11.5px;background:#fff;border:1px solid var(--navy);border-radius:6px;padding:6px 8px;color:var(--navy);font-weight:700;">
-                │ Attiva in automatico i turnover su <code>3. Blue Arroyo Cleaning</code>▼
-              </div>
-            </div>
-
-            <!-- 3. BLUE ARROYO CLEANING CO. -->
+            <!-- PIANO 2 · PBA – PALAZZO BY BLUE ARROYO -->
             <div style="background:#F8FAFC;border:1.5px solid var(--border);border-top:4px solid #059669;border-radius:10px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
               <div>
                 <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
-                  <span style="font-size:11px;font-weight:800;color:#059669;text-transform:uppercase;">3. LO ALLESTISCE</span>
+                  <span style="font-size:11px;font-weight:800;color:#059669;text-transform:uppercase;">PIANO 2 · LO ALLESTISCE</span>
                   <span class="badge badge-info" style="font-size:10.5px;">Cliente: PROPRIETARI-GESTORI (75%) &amp; PM</span>
                 </div>
-                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">3. Blue Arroyo Cleaning</div>
+                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">Piano 2 · PBA – Palazzo by Blue Arroyo</div>
                 <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
-                  <strong>└─► Lo trasforma in una suite d'albergo con biancheria a 60°C, kit biologici e spugne sigillate a costo zero per il PM</strong> (3 Hub ZTL Firenze, turnover chiusi entro le 15:00 e 4 foto SHA-256).
+                  <strong>└─► Lo trasforma in una suite d'albergo con biancheria a 60°C, kit biologici e spugne sigillate a costo zero per il PM</strong> (Magazzino PBA: Via dell'Agnolo 72R, Firenze <em>[Uso Interno Operativo]</em> · Sede legale: Via Matteo Palmieri 20R, Firenze · turnover chiusi entro le 15:00 e 4 foto SHA-256).
                 </p>
                 <div style="font-size:11px;background:#fff;border:1px solid var(--border);border-radius:6px;padding:6px 8px;margin-bottom:8px;color:var(--navy);">
                   <strong>I 3 General Directors:</strong><br/>
-                  • <strong>DG Operatività:</strong> Cleaners, turni, foto danni, 3 hub logistici ZTL<br/>
-                  • <strong>DG Amministrazione:</strong> Consuntivi mensili, pagamenti HR, regimi IVA<br/>
-                  • <strong>DG Vendite:</strong> Contratti turnover per pacchetti alloggi PM
+                  • <strong>DG Operatività:</strong> Cleaners, turni, foto danni, Magazzino Via dell'Agnolo 72R <em>(Uso Interno Operativo)</em><br/>
+                  • <strong>DG Amministrazione:</strong> Consuntivi mensili, pagamenti HR, regimi IVA (Sede legale: Via Matteo Palmieri 20R)<br/>
+                  • <strong>DG Vendite:</strong> Preventivo Generale PBA &amp; Contratti turnover
                 </div>
               </div>
               <div style="font-size:11.5px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:6px;padding:6px 8px;color:#065F46;font-weight:700;">
-                │ Consegna una suite pronta per <code>4. Smartbookings</code>▼
+                │ Consegna una suite pronta per <code>Piano 3 · SmartsBookings</code>▼
               </div>
             </div>
 
-            <!-- 4. SMARTS BOOKINGS -->
+            <!-- PIANO 3 · SMARTSBOOKINGS.COM -->
             <div style="background:#F8FAFC;border:1.5px solid var(--border);border-top:4px solid #0284C7;border-radius:10px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
               <div>
                 <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
-                  <span style="font-size:11px;font-weight:800;color:#0284C7;text-transform:uppercase;">4. LO RIEMPIE DI TURISTI</span>
+                  <span style="font-size:11px;font-weight:800;color:#0284C7;text-transform:uppercase;">PIANO 3 · LO RIEMPIE DI TURISTI</span>
                   <span class="badge badge-gold" style="font-size:10.5px;">Cliente: TURISTI / OSPITI</span>
                 </div>
-                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">4. Smartbookings</div>
+                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">Piano 3 · SmartsBookings.com</div>
                 <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
                   <strong>└─► Vende le notti senza regalare il 20% alle multinazionali OTA, restituisce 15€ (15%) di cashback all'ospite e bonifica l'85% al proprietario</strong> entro le ore 12:00 del check-out.
                 </p>
@@ -1035,7 +1416,30 @@
                 </div>
               </div>
               <div style="font-size:11.5px;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:6px;padding:6px 8px;color:#0369A1;font-weight:700;">
-                 Ri-alimenta tutto il Ciclo Virtuoso del Gruppo Blue Arroyo
+                │ Sincronizza incassi e disponibilità con <code>Piano 4 · Itassistance</code>▼
+              </div>
+            </div>
+
+            <!-- PIANO 4 · ITASSISTANCE -->
+            <div style="background:var(--gold-light);border:2px solid var(--navy);border-top:4px solid var(--navy);border-radius:10px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;">
+              <div>
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                  <span style="font-size:11px;font-weight:800;color:var(--navy);text-transform:uppercase;">PIANO 4 · LO PROTEGGE (Qui)</span>
+                  <span class="badge badge-ok" style="font-size:10.5px;">Cliente: PROPRIETARI-GESTORI (75%) &amp; PM</span>
+                </div>
+                <div style="font-size:16px;font-weight:800;color:var(--navy);margin:4px 0;">Piano 4 · Itassistance</div>
+                <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">
+                  <strong>└─► Lo rende immediatamente conforme alla legge (Questura e Comune), ne ottimizza le tariffe e libera il tempo del proprietario (75% gestisce da solo 1–2 case)</strong> per spingerlo alla sfida successiva: investire nel prossimo immobile con <em>Piano 1 · Toscan Costruzioni</em>.
+                </p>
+                <div style="font-size:11px;background:#fff;border:1px solid var(--gold);border-radius:6px;padding:6px 8px;margin-bottom:8px;color:var(--navy);">
+                  <strong>I 3 General Directors (Questa Console):</strong><br/>
+                  • <strong>DG Operatività:</strong> Alloggiati, ISTAT, Channel Manager, schedine<br/>
+                  • <strong>DG Amministrazione:</strong> Piani 99€/+10%, fatturazione elettronica<br/>
+                  • <strong>DG Vendite:</strong> ARM dal Preventivo Generale PBA (con consenso esplicito)
+                </div>
+              </div>
+              <div style="font-size:11.5px;background:#fff;border:1px solid var(--navy);border-radius:6px;padding:6px 8px;color:var(--navy);font-weight:700;">
+                 Ri-alimenta tutto il Ciclo Virtuoso del Gruppo Blue Arroyo (Piano 1 → 2 → 3 → 4)
               </div>
             </div>
           </div>
@@ -1212,22 +1616,23 @@
 
           <!-- KIT COPIA-INCOLLA GOOGLE BUSINESS PROFILE / BING PLACES / SEARCH CONSOLE -->
           <details style="margin-top:16px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;">
-            <summary style="cursor:pointer;font-weight:800;color:var(--navy);font-size:14px;">Kit Operativo Copia-Incolla: Google Business Profile (Maps), Bing Places &amp; Search Console (Via Matteo Palmieri 20r, Firenze)</summary>
+            <summary style="cursor:pointer;font-weight:800;color:var(--navy);font-size:14px;">Kit Operativo Copia-Incolla: Google Business Profile (Maps), Bing Places &amp; Search Console (Via Matteo Palmieri 20R, 50122 Firenze)</summary>
             <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;font-size:13px;">
               <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px;">
                 <strong style="color:var(--navy);display:block;margin-bottom:6px;">1. Dati NAP Ufficiali (Identici Ovunque)</strong>
-                <div id="gbp-nap-text" style="color:var(--text-muted);line-height:1.5;margin-bottom:8px;">Nome: itassistance — Blue Arroyo SRL
+                <div id="gbp-nap-text" style="color:var(--text-muted);line-height:1.5;margin-bottom:8px;">Nome: itassistance — Blue Arroyo S.r.l.
 Categoria: Software aziendale / Servizi per affitti brevi
-Indirizzo: Via Matteo Palmieri 20r, 50122 Firenze (FI)
+Sede legale: Via Matteo Palmieri 20R, Firenze (FI)
+P.IVA / C.F.: 07480210488 · REA: FI-706161 · SDI: M5UXCR1
+PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]
 Telefono/WhatsApp: +39 351 038 0392
 Sito Web: https://www.itadreamteam.com
-Orari: Lunedì–Domenica 09:00–23:00
-P.IVA: 07480210488</div>
+Orari: Lunedì–Domenica 09:00–23:00</div>
                 <button type="button" class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('gbp-nap-text').innerText);showToast(' NAP copiato negli appunti!')">Copia NAP Ufficiale</button>
               </div>
               <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px;">
                 <strong style="color:var(--navy);display:block;margin-bottom:6px;">2. Descrizione Google Business / Bing Places (750 car.)</strong>
-                <div id="gbp-desc-text" style="color:var(--text-muted);line-height:1.5;margin-bottom:8px;">itassistance (Blue Arroyo SRL, Via Matteo Palmieri 20r, Firenze) è l'app per i proprietari di appartamenti in affitto breve a Firenze e in Italia che vogliono gestire il proprio immobile in 10 minuti al giorno senza cedere il 20% a un Property Manager. Canone fisso di 99 € al mese IVA inclusa, zero commissioni (0%) e garanzia 14 giorni Soddisfatto o Rimborsato. Include report mattutino alle 08:00, compilazione guidata Alloggiati Web, calcolo Tassa di Soggiorno Firenze, ISTAT Ross1000, turni pulizie, prospetto Commercialista e PDF Check-in IT/EN. Su Firenze sono attivi a richiesta: check-in di persona (20 € IVA incl.), piccola manutenzione (30 € IVA incl.) e opzione Extra Revenue Management &amp; Adempimenti (+10%).</div>
+                <div id="gbp-desc-text" style="color:var(--text-muted);line-height:1.5;margin-bottom:8px;">itassistance (Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1) è l'app per i proprietari di appartamenti in affitto breve a Firenze e in Italia che vogliono gestire il proprio immobile in 10 minuti al giorno senza cedere il 20% a un Property Manager. Canone fisso di 99 € al mese IVA inclusa, zero commissioni (0%) e garanzia 14 giorni Soddisfatto o Rimborsato. Include report mattutino alle 08:00, compilazione guidata Alloggiati Web, calcolo Tassa di Soggiorno Firenze, ISTAT Ross1000, turni pulizie, prospetto Commercialista e PDF Check-in IT/EN. Su Firenze sono attivi a richiesta: check-in di persona (20 € IVA incl.), piccola manutenzione (30 € IVA incl.) e opzione Extra Revenue Management &amp; Adempimenti (+10%).</div>
                 <button type="button" class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText(document.getElementById('gbp-desc-text').innerText);showToast(' Descrizione Google Maps copiata!')">Copia Descrizione 750 car.</button>
               </div>
               <div style="background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px;">
@@ -1285,6 +1690,168 @@ P.IVA: 07480210488</div>
            2. GESTIONE VENDITE, LEAD CRM & PARTNERS
       ══════════════════════════════════════════════════ -->
       <section class="adm-view" id="adm-partners">
+        <!-- ═══ NUOVO PANNELLO CROSS-CRM PBA -> ITASSITANCE + SCHEDA ARM (AUTO-RIEMPIMENTO) & FOLLOW-BACK COMMERCIALE ═══ -->
+        <div class="panel-card" id="adm-cross-crm-arm-panel" style="border:2px solid #6D28D9;background:linear-gradient(135deg,#F5F3FF 0%,#FFFFFF 100%);margin-bottom:18px;">
+          <div class="panel-head" style="margin-bottom:12px;">
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+                <span class="badge" style="background:#5B21B6;color:#fff;">🔗 LEAD DA PREVENTIVO GENERALE PBA · RICHIESTA INFO PIANO 4 ITASSITANCE</span>
+                <span class="badge badge-green" id="adm-arm-consent-badge">✅ Consenso Esplicito Preventivo Generale PBA: VERIFICATO (itassistanceRequested: true · itassistanceConsent: true)</span>
+                <span class="badge badge-gold">CODICE ARM: ARM-2026-MP86 · SCHEDA TECNICA: ST-APT-ARM-2026-MP86</span>
+                <span class="badge badge-amber" id="adm-arm-status-badge">⏳ STATO: PROSPECT_IN_ATTESA</span>
+              </div>
+              <div class="panel-title">🤖 Scheda ARM (Auto-Riempimento Tecnico &amp; Economico) &amp; Strumenti Follow-Back Commerciale (Prospect &rarr; Cliente)</div>
+              <p style="font-size:13px;color:var(--text-muted);margin:4px 0 0;">
+                Sincronizzata automaticamente da <code>GET http://localhost:3000/api/crm/prospects</code> esclusivamente quando il cliente seleziona <strong>«SÌ, voglio ricevere info anche da Itassitance»</strong> (<code>itassistanceRequested: true</code> · <code>itassistanceConsent: true</code>) sul Preventivo Generale PBA (<code>preventivo.html</code>).<br/>
+                <strong style="color:var(--navy);">🔒 Canale unico di ingresso: Preventivo Generale PBA con consenso esplicito Itassistance</strong> (se un cliente non seleziona Itassistance nel preventivo generale PBA, NON entra nell'ARM commerciale di Itassistance; nessun inserimento manuale nell'ARM).
+              </p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-gold btn-sm" style="font-weight:800;" onclick="downloadMarcoArmQuotePdfInAdmin()">📄 Scarica Preventivo PDF con Servizio Itassitance &amp; Tariffa al Momento</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="adminSyncCrossCrmNow()">🔄 Sincronizza Cross-CRM PBA</button>
+              <a href="/app.html?role=owner&amp;client=PROSPECT-MARCO-PALUMBO-2026&amp;email=mr.mpalumbo@gmail.com" class="btn btn-primary btn-sm" id="adm-open-marco-client-area-btn">👤 Apri Area Cliente Itassitance (Marco) &rarr;</a>
+              <a href="http://localhost:3003/area-clienti.html?client=PROSPECT-MARCO-PALUMBO-2026&amp;email=mr.mpalumbo@gmail.com" target="_blank" class="btn btn-outline btn-sm">🏢 Area Cliente PBA &rarr;</a>
+            </div>
+          </div>
+
+          <!-- 4 Blocchi ARM Auto-Compilati (Anagrafica, Tecnico Alloggio, Operativo PBA Pass-Through, Prospetto Economico ARM) -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:12px;margin-bottom:14px;">
+            <div style="background:#fff;border:1.5px solid rgba(109,40,217,0.3);border-radius:10px;padding:12px;">
+              <div style="font-size:11px;font-weight:800;color:#5B21B6;text-transform:uppercase;margin-bottom:4px;">1. Anagrafica &amp; Profilo Fiscale (Auto-Filled)</div>
+              <div style="font-size:15px;font-weight:800;color:var(--navy);">Marco Palumbo</div>
+              <div style="font-size:12.5px;color:var(--text-muted);margin-top:4px;">
+                📞 Tel/WA: <strong>38064444415</strong><br/>
+                ✉️ Email: <strong>mr.mpalumbo@gmail.com</strong><br/>
+                🧾 Regime: <strong>Privato (Marca da bollo €2)</strong>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1.5px solid rgba(109,40,217,0.3);border-radius:10px;padding:12px;">
+              <div style="font-size:11px;font-weight:800;color:#5B21B6;text-transform:uppercase;margin-bottom:4px;">2. Dati Tecnici Alloggio (ST-APT-ARM-2026-MP86)</div>
+              <div style="font-size:15px;font-weight:800;color:var(--navy);">Trilocale (2 camere)</div>
+              <div style="font-size:12.5px;color:var(--text-muted);margin-top:4px;">
+                🛏️ Letti: <strong>2 Matrimoniali + 0 Singoli</strong><br/>
+                🛋️ Extra: <strong>Divano Letto Matrimoniale</strong><br/>
+                🚿 Ambienti: <strong>2 Bagni · 1 Cucina · 3 Set/Letto 90°C</strong>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1.5px solid rgba(109,40,217,0.3);border-radius:10px;padding:12px;">
+              <div style="font-size:11px;font-weight:800;color:#5B21B6;text-transform:uppercase;margin-bottom:4px;">3. Dati Operativi Piano 2 · PBA Pass-Through (0% Ricarico)</div>
+              <div style="font-size:15px;font-weight:800;color:#059669;">Pack Base · € 86,00 / turnover</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">
+                Pulizia €42,00 + Biancheria 2 Matr €32,00 + Kit base €7,00 + Bagno extra €5,00.<br/>
+                <strong>Magazzino PBA: Via dell'Agnolo 72R, Firenze <em>(Uso Interno Operativo)</em> · 100% Pass-Through (0% ricarico in ARM)</strong>
+              </div>
+            </div>
+
+            <div style="background:#ECFDF5;border:1.5px solid #059669;border-radius:10px;padding:12px;">
+              <div style="font-size:11px;font-weight:800;color:#065F46;text-transform:uppercase;margin-bottom:4px;">4. Prospetto Economico ARM + Tariffa al Momento</div>
+              <div style="font-size:16px;font-weight:800;color:#065F46;" id="adm-arm-t2-net-lbl">Netto ARM: € 2.735,00 / mese</div>
+              <div style="font-size:12px;color:#065F46;margin-top:4px;">
+                • Ricavo Lordo Stimato: <strong>€ 3.450,00/mese</strong><br/>
+                • Turni PBA (6/mese): <strong>€ 516,00/mese</strong><br/>
+                • Tariffa al Momento (Price Lock 24m): <strong id="adm-arm-t2-rate-lbl">199,00 €/mese (1° mese 99,50 € -50%)</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5 Strumenti di Follow-Back Commerciale (Prospect -> Sopralluogo -> Cliente) -->
+          <div style="background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;">
+            <div style="font-size:12px;font-weight:800;color:var(--navy);text-transform:uppercase;margin-bottom:8px;">
+              Strumenti di Follow-Back Commerciale (Prospect &rarr; Sopralluogo &rarr; Approvazione Cliente &amp; Scheda Tecnica Apt):
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+              <button type="button" class="btn btn-green btn-sm" onclick="adminTriggerArmFollowBack('whatsapp')">💬 1. Follow-Back WhatsApp 1-Clic (38064444415)</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="adminTriggerArmFollowBack('call')">📞 2. Registra Chiamata Commerciale</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="adminTriggerArmFollowBack('inspection')">📅 3. Fissa Sopralluogo &amp; Audit Tecnico</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="adminTriggerArmFollowBack('proposal')">📧 4. Invia Proposta ARM &amp; Contratto Price Lock</button>
+              <button type="button" class="btn btn-gold btn-sm" id="adm-btn-approve-marco" onclick="adminApproveMarcoProspectToClient()">✅ 5. APPROVA PREVENTIVO &amp; CONVERTI IN CLIENTE (Attiva Area Cliente + Scheda Tecnica Apt)</button>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <input type="text" id="adm-arm-followup-note" placeholder="Aggiungi nota follow-back commerciale per Marco Palumbo (opzionale)..." style="flex:1;min-width:220px;padding:7px 10px;border:1px solid var(--border);border-radius:7px;font-size:12.5px;"/>
+              <button type="button" class="btn btn-primary btn-sm" onclick="adminTriggerArmFollowBack('custom_note')">+ Salva Nota nel Log Follow-Back</button>
+            </div>
+          </div>
+
+          <!-- Log Follow-Back & Stato Area Cliente Dedicata -->
+          <div id="adm-arm-followup-log-box" style="font-size:12px;background:#F8FAFC;border:1px solid var(--border);border-radius:8px;padding:10px 12px;"></div>
+        </div>
+
+        <!-- JUL-011 & JUL-012 · CONTRATTO PRODUZIONE CONTENUTI & LIBERATORIA IMMOBILE (CREATOR / MARKETING) IN TAB 2 (#adm-partners / CONTRATTI & COMMERCIALE) -->
+        <div class="panel-card" id="adm-partners-creator-contract-box" style="border:2px solid #D97706;background:linear-gradient(135deg,#FFFBEB 0%,#FFFFFF 100%);margin-bottom:18px;">
+          <div class="panel-head" style="margin-bottom:10px;">
+            <div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px;">
+                <span class="badge badge-gold">🎬 JUL-011 / JUL-012 · CONTRATTI &amp; COMMERCIALE · SHOOTING / CREATOR</span>
+                <span class="badge badge-ok">Blue Arroyo S.r.l. · Via Matteo Palmieri 20R, Firenze · P.IVA 07480210488 · REA FI-706161 · SDI M5UXCR1</span>
+              </div>
+              <div class="panel-title">🎬 Contratto Produzione Contenuti &amp; Liberatoria Immobile (Creator / Marketing · JUL-011)</div>
+              <p style="font-size:13px;color:var(--text-muted);margin-top:4px;">
+                Compila al volo <strong>Dati Cliente + Immobile + Tariffario</strong> (i campi lasciati vuoti restano con segnaposto <code>[DA COMPILARE]</code>) e scarica il file <code>.pdf</code> compilato o il modello PDF in bianco (Nota legale preliminare ex artt. 2222 / 1655 / 1322 c.c., L. 633/1941, GDPR, Artt. 1–14, doppia sottoscrizione artt. 1341–1342 c.c., Allegato A e Allegato B).
+              </p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <button type="button" class="btn btn-gold btn-sm" onclick="admDownloadCreatorContractPdfFromBox('t2')">📥 Scarica Contratto Compilato in PDF (.pdf)</button>
+              <a href="/contratti/contratto-produzione-contenuti-itassistance.pdf" download="Contratto_Produzione_Contenuti_Itassistance_In_Bianco.pdf" class="btn btn-outline btn-sm">📄 Scarica Modello PDF in Bianco (/contratti/contratto-produzione-contenuti-itassistance.pdf)</a>
+              <a href="/contratto.html?type=creator" class="btn btn-primary btn-sm">✏️ Apri Form Completo in /contratto.html?type=creator</a>
+              <button type="button" class="btn btn-outline btn-sm" onclick="admOpenCreatorPrintPreviewFromBox('t2')">🖨️ Vista Stampa A4</button>
+            </div>
+          </div>
+
+          <div style="background:#FFFFFF;border:1.5px solid var(--border);border-radius:10px;padding:12px;">
+            <div style="font-size:11.5px;font-weight:800;color:var(--navy);text-transform:uppercase;margin-bottom:8px;">
+              ⚡ Compilazione Rapida Dati Cliente + Immobile + Professionista + Tariffario (per Download Immediato .PDF):
+            </div>
+            <div class="form-grid-4" style="margin-bottom:8px;">
+              <div class="field">
+                <label for="adm-cc-t2-client">Cliente (Proprietario / Gestore Airbnb)</label>
+                <input type="text" id="adm-cc-t2-client" placeholder="[DA COMPILARE: Nome / Ragione Sociale]"/>
+              </div>
+              <div class="field">
+                <label for="adm-cc-t2-client-vat">C.F. / P.IVA &amp; Qualifica Firmatario</label>
+                <input type="text" id="adm-cc-t2-client-vat" placeholder="[DA COMPILARE: C.F./P.IVA · Proprietario/Gestore]"/>
+              </div>
+              <div class="field">
+                <label for="adm-cc-t2-property">Indirizzo Immobile, Nome Alloggio &amp; CIN/CIR</label>
+                <input type="text" id="adm-cc-t2-property" placeholder="[DA COMPILARE: Via ..., Firenze · CIN ...]"/>
+              </div>
+              <div class="field">
+                <label for="adm-cc-t2-sessions">Giorni / Orari Sessioni &amp; Durata Accesso</label>
+                <input type="text" id="adm-cc-t2-sessions" placeholder="[DA COMPILARE: Data e fascia oraria]"/>
+              </div>
+            </div>
+            <div class="form-grid-4">
+              <div class="field">
+                <label for="adm-cc-t2-creator">Professionista (Creator / Fotografo / Marketing)</label>
+                <input type="text" id="adm-cc-t2-creator" placeholder="[DA COMPILARE: Nome / P.IVA · art. 2222/1655 c.c.]"/>
+              </div>
+              <div class="field">
+                <label for="adm-cc-t2-mode">Modalità &amp; Tariffe Itassistance</label>
+                <select id="adm-cc-t2-mode">
+                  <option value="Collaborazione Retribuita · Canone App 99,00 €/mese · Opzione +10% · Check-in 20,00 € · Manutenzione 30,00 €">Collaborazione Retribuita + Tariffe Ufficiali (99€/m · +10% · 20€ · 30€)</option>
+                  <option value="Collaborazione Gratuita (Cross-Promotion) · Canone App 99,00 €/mese · Opzione +10% · Check-in 20,00 € · Manutenzione 30,00 €">Collaborazione Gratuita / Cross-Promotion + Tariffe Ufficiali</option>
+                  <option value="Permuta Servizi (Barter) · Canone App 99,00 €/mese · Opzione +10% · Check-in 20,00 € · Manutenzione 30,00 €">Permuta Servizi (Barter) + Tariffe Ufficiali</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="adm-cc-t2-photo">Shooting Foto + Video/Reel/Ads (€)</label>
+                <div style="display:flex;gap:6px;">
+                  <input type="number" id="adm-cc-t2-photo" min="0" step="10" placeholder="Foto €" oninput="admRecalcCreatorQuickTotal('t2')"/>
+                  <input type="number" id="adm-cc-t2-video" min="0" step="10" placeholder="Video €" oninput="admRecalcCreatorQuickTotal('t2')"/>
+                </div>
+              </div>
+              <div class="field">
+                <label for="adm-cc-t2-total">Fee Accesso (€) &amp; Totale Tariffario (€)</label>
+                <div style="display:flex;gap:6px;">
+                  <input type="number" id="adm-cc-t2-access" min="0" step="10" placeholder="Fee €" oninput="admRecalcCreatorQuickTotal('t2')"/>
+                  <input type="number" id="adm-cc-t2-total" min="0" step="10" placeholder="Totale €"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- IN CIMA PER IL RUOLO VENDITE: LEAD DA CONTATTARE E ATTIVARE IN 1 CLIC -->
         <div class="panel-card" style="border:1.5px solid var(--gold);background:linear-gradient(180deg, #FFFFFF 0%, #F5F3FF 100%);">
           <div class="panel-head">
@@ -1480,6 +2047,24 @@ P.IVA: 07480210488</div>
            4. GESTIONE FORNITORI & ORDINI DI LAVORO (FIRENZE)
       ══════════════════════════════════════════════════ -->
       <section class="adm-view" id="adm-fornitori">
+        <!-- ACCESSO DIRETTO ANCHE DA TAB FORNITORI ALLA SKILL TICKET MANUTENZIONI & NETWORK MANUTENTORI (JUL-010) -->
+        <div class="panel-card" id="adm-fornitori-maint-skill-mirror" style="border:2px solid #5B21B6;background:#F5F3FF;margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:10px;">
+            <div>
+              <span class="badge" style="background:#5B21B6;color:#FFFFFF;font-weight:800;">🛠️ NETWORK MANUTENTORI &amp; SKILL TICKET (JUL-010 · SINCRONIZZATO CON REGIA)</span>
+              <h3 style="font-size:17px;color:var(--navy);margin-top:6px;">Riepilogo Live Network Manutentori, Planner (60m + 15m buffer) e Liquidazione Mensile</h3>
+              <p style="font-size:12.5px;color:var(--text-muted);margin-top:2px;">
+                🔒 <strong>Privacy Incrociata Attiva:</strong> il Manutentore vede solo task, foto, data/ora e il proprio compenso (<strong>15,00 € base</strong> + eventuale <strong>+ € Extra per l'intervento</strong> + <strong>Rimborso materiali</strong>); il Proprietario vede solo il proprio addebito (<strong>30,00 € base</strong> + eventuale supplemento + materiali).
+              </p>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-primary btn-sm" onclick="switchAdminTab('overview'); setTimeout(function(){ var el=document.getElementById('adm-maint-skill-network-panel'); if(el) el.scrollIntoView({behavior:'smooth'}); }, 80);">🛠️ Apri Console Completa Ticket &amp; Planner in Regia</button>
+              <button type="button" class="btn btn-gold btn-sm" onclick="admLiquidateMaintainerMonth()">🔄 Liquidazione Mensile Fattura Manutentori</button>
+            </div>
+          </div>
+          <div id="adm-fornitori-maint-summary-cards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;"></div>
+        </div>
+
         <div class="panel-card">
           <div class="panel-head">
             <div>
@@ -1566,8 +2151,116 @@ P.IVA: 07480210488</div>
               </p>
             </div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button type="button" class="btn btn-outline btn-sm" onclick="exportGabrielaLedgerCsv()">⬇ Esporta Prima Nota 4 Piani (Gabriela CSV)</button>
               <button type="button" class="btn btn-outline btn-sm" onclick="exportBillingCSV()">⬇ Esporta Registro Fatture CSV</button>
               <button type="button" class="btn btn-gold btn-sm" onclick="toggleForm('form-new-invoice')">+ Emetti Nuova Fattura</button>
+            </div>
+          </div>
+
+          <!-- HUB CONTABILE GABRIELA — 5 CANALI DI CARICAMENTO DATI REALI MULTI-PIANO (1-4) -->
+          <div style="background:linear-gradient(135deg,#F5F3FF 0%,#EDE9FE 100%);border:1.5px solid #8B5CF6;border-radius:12px;padding:16px;margin-bottom:18px;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+              <div>
+                <span class="badge" style="background:#5B21B6;color:#fff;margin-bottom:4px;">CONSOLE CONTABILE GABRIELA · HOLDING &amp; 4 PIANI OPERATIVI</span>
+                <h3 style="margin:4px 0 2px;font-size:16px;color:var(--navy);">Caricamento Dati Contabili Reali — 5 Canali Attivi (P1 Toscan · P2 PBA · P3 SmartsBookings · P4 ITASSITANCE)</h3>
+                <p style="font-size:12.5px;color:var(--text-muted);margin:0;">
+                  Carica subito documenti reali: <strong>1. PDF/Foto Fattura &amp; Scontrino (OCR)</strong> · <strong>2. CSV Estratto Conto Banca (Intesa/CREDEM/Qonto)</strong> · <strong>3. XML FatturaPA SDI</strong> · <strong>4. Form Rapido 1-Tap</strong> · <strong>5. Import Storico Excel/CSV</strong>.
+                </p>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button type="button" class="btn btn-gold btn-sm" onclick="sendAdminReportToCentralAmministrazione()">📤 Invia a /amministrazione Centrale 2FA (Gabriela · Biviana · Julian)</button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="activateRealDataCleanMode()">🟢 Svuota Demo e Carica Solo Reali</button>
+              </div>
+            </div>
+
+            <!-- 5 Pulsanti Upload / Ingestione Rapida -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:10px;margin-bottom:14px;">
+              <label style="display:flex;flex-direction:column;gap:4px;padding:10px 12px;background:#fff;border:1.5px dashed #7C3AED;border-radius:10px;cursor:pointer;font-size:12px;">
+                <strong style="color:#4C1D95;">1. PDF / Foto Fattura (OCR)</strong>
+                <span style="color:var(--text-muted);font-size:11px;">Trascina o scegli PDF/JPG/PNG</span>
+                <input type="file" accept=".pdf,.jpg,.jpeg,.png,.webp" style="display:none;" onchange="handleGabrielaFileIngest(this, 'M1_PDF_OCR', 'Fattura / Scontrino PDF-Foto')"/>
+              </label>
+              <label style="display:flex;flex-direction:column;gap:4px;padding:10px 12px;background:#fff;border:1.5px dashed #7C3AED;border-radius:10px;cursor:pointer;font-size:12px;">
+                <strong style="color:#4C1D95;">2. CSV Banca (Intesa/CREDEM)</strong>
+                <span style="color:var(--text-muted);font-size:11px;">Riconciliazione IUV / Bonifici</span>
+                <input type="file" accept=".csv,.txt,.cbi" style="display:none;" onchange="handleGabrielaFileIngest(this, 'M2_BANK_CSV', 'Estratto Conto Bancario CSV')"/>
+              </label>
+              <label style="display:flex;flex-direction:column;gap:4px;padding:10px 12px;background:#fff;border:1.5px dashed #7C3AED;border-radius:10px;cursor:pointer;font-size:12px;">
+                <strong style="color:#4C1D95;">3. XML FatturaPA (SDI)</strong>
+                <span style="color:var(--text-muted);font-size:11px;">Import Cassetto Fiscale 07480210488</span>
+                <input type="file" accept=".xml,.p7m" style="display:none;" onchange="handleGabrielaFileIngest(this, 'M3_SDI_XML', 'FatturaPA XML SDI')"/>
+              </label>
+              <label style="display:flex;flex-direction:column;gap:4px;padding:10px 12px;background:#fff;border:1.5px dashed #7C3AED;border-radius:10px;cursor:pointer;font-size:12px;">
+                <strong style="color:#4C1D95;">5. Storico Excel / CSV</strong>
+                <span style="color:var(--text-muted);font-size:11px;">Import massivo pregresso</span>
+                <input type="file" accept=".csv,.xlsx,.xls" style="display:none;" onchange="handleGabrielaFileIngest(this, 'M5_EXCEL_BULK', 'Import Storico Contabile')"/>
+              </label>
+            </div>
+
+            <!-- Canale 4: Form Rapido 1-Tap Multi-Piano -->
+            <div style="background:#fff;border:1px solid rgba(124,58,237,0.3);border-radius:10px;padding:12px;margin-bottom:12px;">
+              <div style="font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:8px;">
+                Canale 4 · Inserimento Rapido 1-Tap Movimento Contabile Reale (con imputazione Centro di Costo Piano 1–4)
+              </div>
+              <div class="form-grid-4">
+                <div class="field">
+                  <label>Piano / Centro di Costo *</label>
+                  <select id="gab-floor">
+                    <option value="P4 · ITASSITANCE (Canoni 99€ / Extra 10% / ARM)">P4 · ITASSITANCE (Canoni 99€ / Extra 10% / ARM)</option>
+                    <option value="P1 · Toscan Costruzioni (SAL Cantiere / Manutenzioni 30€)">P1 · Toscan Costruzioni (SAL Cantiere / Manutenzioni 30€)</option>
+                    <option value="P2 · PBA Blue Arroyo (Pulizie ZTL / Lavanderia 60°C / Kit)">P2 · PBA Blue Arroyo (Pulizie ZTL / Lavanderia 60°C / Kit)</option>
+                    <option value="P3 · SmartsBookings (Incasso 85% / Cashback 15% / Fee)">P3 · SmartsBookings (Incasso 85% / Cashback 15% / Fee)</option>
+                    <option value="P0 · Holding Blue Arroyo SRL (F24 / IVA / Consulenze)">P0 · Holding Blue Arroyo SRL (F24 / IVA / Consulenze)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Tipo Movimento *</label>
+                  <select id="gab-type">
+                    <option value="Incasso Attivo">Incasso Attivo (+ Entrata)</option>
+                    <option value="Fattura Passiva Fornitore">Fattura Passiva Fornitore (- Uscita)</option>
+                    <option value="Partita di Giro ARM (Pass-Through)">Partita di Giro ARM Proprietario (Neutro)</option>
+                    <option value="Imposta Soggiorno / F24">Imposta Soggiorno / F24</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Soggetto / Fornitore / Proprietario *</label>
+                  <input type="text" id="gab-subject" placeholder="es. Lavanderia Giglio Bianco o Mario Rossi"/>
+                </div>
+                <div class="field">
+                  <label>Importo Lordo (€) &amp; IVA *</label>
+                  <div style="display:flex;gap:6px;">
+                    <input type="number" id="gab-amount" step="0.01" placeholder="es. 99.00" style="flex:1;"/>
+                    <select id="gab-vat" style="width:92px;">
+                      <option value="22%">IVA 22%</option>
+                      <option value="10%">IVA 10%</option>
+                      <option value="Esente">Esente</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px;">
+                <input type="text" id="gab-notes" placeholder="Estremi documento / IBAN / IUV / Note per commercialista..." style="flex:1;min-width:220px;padding:7px 10px;border:1px solid var(--border);border-radius:7px;font-size:12.5px;"/>
+                <button type="button" class="btn btn-primary btn-sm" onclick="submitGabrielaRealEntry()">+ Registra Movimento Reale in Prima Nota</button>
+              </div>
+            </div>
+
+            <!-- Tabella Prima Nota Reale Multi-Piano -->
+            <div class="table-wrap" style="background:#fff;border-radius:8px;border:1px solid var(--border);">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID / Data</th>
+                    <th>Canale</th>
+                    <th>Piano / Centro Costo</th>
+                    <th>Tipo</th>
+                    <th>Soggetto &amp; Note</th>
+                    <th>Importo (IVA)</th>
+                    <th>Stato Validazione Gabriela</th>
+                    <th>Azione</th>
+                  </tr>
+                </thead>
+                <tbody id="tb-gabriela-ledger"></tbody>
+              </table>
             </div>
           </div>
 
@@ -1706,7 +2399,7 @@ P.IVA: 07480210488</div>
 
       <!-- Footer -->
       <footer style="margin-top:28px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-        <div>itassistance Backoffice · Blue Arroyo SRL · P.IVA 07480210488 · Via Matteo Palmieri 20r, 50122 Firenze (FI)</div>
+        <div>Piano 4 · Itassistance Backoffice · Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE] · Magazzino PBA: Via dell'Agnolo 72R, Firenze <em>(Uso Interno Operativo)</em></div>
         <div>Supporto operativo Firenze (09:00–23:00): +39 351 038 0392 · info@itadreamteam.com</div>
       </footer>
     </main>
@@ -1755,8 +2448,8 @@ P.IVA: 07480210488</div>
         defaultTab: 'overview'
       },
       billing: {
-        badge: ' DG AMMINISTRAZIONE',
-        name: 'General Director Amministrazione (Fatture, SDI & Fornitori)',
+        badge: ' GABRIELA · AMMINISTRAZIONE & CONTABILITÀ',
+        name: 'Gabriela · Direzione Amministrazione & Contabilità (4 Piani)',
         email: 'fatturazione@itadreamteam.com',
         defaultTab: 'fatturazione'
       },
@@ -1901,12 +2594,12 @@ P.IVA: 07480210488</div>
         suppliers: [
           {
             id: 's0',
-            name: '3. Blue Arroyo Cleaning Co. (PBA · 3 Hub Logistici ZTL Firenze)',
+            name: 'Piano 2 · PBA – Palazzo by Blue Arroyo (Magazzino PBA: Via dell\'Agnolo 72R, Firenze [Uso Interno Operativo] · Sede legale: Via Matteo Palmieri 20R, Firenze)',
             category: 'Turnover 15:00 per PM, Biancheria 60°C, Kit Bio Gratuiti & Dossier SHA-256',
-            vat: '3° Azienda Gruppo Blue Arroyo (Cliente: PM) · Fattura Unica SDI 1-Clic',
+            vat: 'Piano 2 · Gruppo Blue Arroyo (Cliente: PM) · Fattura Unica SDI 1-Clic',
             rate: 'Turnover garantito h 15:00 + Forniture Bagno/Cucina gratuite (232€/m risparmio)',
             amount: 2450,
-            contact: 'DG Operatività / Vendite B2B PM · Certificato 4 Foto SHA-256 WhatsApp',
+            contact: 'Magazzino PBA: Via dell\'Agnolo 72R, Firenze (Uso Interno Operativo) · Sede legale: Via Matteo Palmieri 20R, Firenze · Certificato 4 Foto SHA-256 WhatsApp',
             paid: true
           },
           {
@@ -1943,7 +2636,7 @@ P.IVA: 07480210488</div>
             id: 's4',
             name: 'Welcome Florence & Runner Bagagli Smartbookings',
             category: 'Accoglienza Check-in Presenziale (20€) & Logistica Valigie',
-            vat: 'P.IVA 07192830482 · Presidio Stazione SMN & Centro Storico',
+            vat: 'P.IVA 07192830482 · Coordinamento Sede legale Via Matteo Palmieri 20R & Magazzino Via dell\'Agnolo 72R (Uso Interno Operativo), Firenze',
             rate: '20 € ad accoglienza di persona + Runner bagagli casa-a-casa',
             amount: 340,
             contact: 'Giulia · +39 349 8871203',
@@ -2056,7 +2749,16 @@ P.IVA: 07480210488</div>
         var raw = localStorage.getItem(ADM_STORAGE_KEY);
         if (raw) {
           var p = JSON.parse(raw);
-          if (p && p.partners && p.hr && p.suppliers && p.invoices && p.accounts) return p;
+          if (p && p.partners && p.hr && p.suppliers && p.invoices && p.accounts) {
+            p.suppliers.forEach(function (sup) {
+              if (sup && sup.id === 's0') {
+                sup.name = 'Piano 2 · PBA – Palazzo by Blue Arroyo (Magazzino PBA: Via dell\'Agnolo 72R, Firenze [Uso Interno Operativo] · Sede legale: Via Matteo Palmieri 20R, Firenze)';
+                sup.vat = 'Piano 2 · Gruppo Blue Arroyo (Cliente: PM) · Fattura Unica SDI 1-Clic';
+                sup.contact = 'Magazzino PBA: Via dell\'Agnolo 72R, Firenze (Uso Interno Operativo) · Sede legale: Via Matteo Palmieri 20R, Firenze · Certificato 4 Foto SHA-256 WhatsApp';
+              }
+            });
+            return p;
+          }
         }
       } catch (e) {}
       return getDefaultAdminData();
@@ -2705,11 +3407,11 @@ P.IVA: 07480210488</div>
             columns: [
               {
                 stack: [
-                  { text: 'itassistance', fontSize: 20, bold: true, color: '#111111' },
-                  { text: 'Blue Arroyo SRL', fontSize: 11, bold: true, margin: [0, 4, 0, 0] },
-                  { text: 'Via Matteo Palmieri 20r, 50122 Firenze (FI)', fontSize: 9.5, color: '#52525B' },
-                  { text: 'P.IVA / C.F.: IT07480210488', fontSize: 9.5, color: '#52525B' },
-                  { text: 'Email: info@itadreamteam.com · Tel: +39 351 038 0392', fontSize: 9, color: '#52525B' }
+                  { text: 'itassistance (Piano 4)', fontSize: 20, bold: true, color: '#111111' },
+                  { text: 'Blue Arroyo S.r.l.', fontSize: 11, bold: true, margin: [0, 4, 0, 0] },
+                  { text: 'Sede legale: Via Matteo Palmieri 20R, Firenze (FI)', fontSize: 9.5, color: '#52525B' },
+                  { text: 'P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1', fontSize: 9.5, color: '#52525B' },
+                  { text: 'PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE] · Tel: +39 351 038 0392', fontSize: 9, color: '#52525B' }
                 ]
               },
               {
@@ -3108,42 +3810,267 @@ P.IVA: 07480210488</div>
       if (!window.SITE_CONFIG || typeof SITE_CONFIG.getDynamicPricing !== 'function') return;
       var dp = SITE_CONFIG.getDynamicPricing();
       var pLbl = document.getElementById('adm-dyn-price-lbl');
-      if (pLbl) pLbl.textContent = dp.todayFormatted + ' / mese (' + dp.yearlyFormatted + ' / anno)';
-      var sLbl = document.getElementById('adm-dyn-slots-lbl');
-      if (sLbl) sLbl.textContent = 'Range sistema: min 99,00 € — max 289,50 € / mese · Disponibilità oggi a Firenze: ' + dp.slotsAvailable + ' slot su ' + dp.maxSlots + ' (' + dp.demandLevel + ').';
-      var inp = document.getElementById('adm-force-price-inp');
-      if (inp) inp.value = dp.todayMonthlyEur;
-    }
-
-    function adminForceDailyPrice() {
-      if (!window.SITE_CONFIG || typeof SITE_CONFIG.setAdminForcedDailyPrice !== 'function') return;
-      var inp = document.getElementById('adm-force-price-inp');
-      var val = parseFloat(inp ? inp.value : 99);
-      if (isNaN(val) || val < 99 || val > 289.5) {
-        alert('Inserisci un valore compreso tra 99,00 € e 289,50 €.');
-        return;
+      if (pLbl) {
+        pLbl.textContent = dp.isWaitlistOnly
+          ? 'LISTA D\'ATTESA (Saturazione 100%)'
+          : (dp.todayFormatted + ' / mese (' + dp.yearlyFormatted + ' / anno)');
       }
-      var next = SITE_CONFIG.setAdminForcedDailyPrice(val);
-      renderAdminDynamicPricing();
-      showToast('Quotazione giornaliera impostata a ' + next.todayFormatted + ' / mese (' + next.slotsAvailable + ' slot su 6).');
+      var sLbl = document.getElementById('adm-dyn-slots-lbl');
+      if (sLbl) {
+        sLbl.textContent = 'Formula: 99 € + (299 € − 99 €) × saturazione (' + dp.saturationPct + '%) · Disponibilità: ' + dp.slotsAvailable + ' unità libere su ' + dp.maxSlots + ' (' + dp.demandLevel + ').';
+      }
+      var pill = document.getElementById('adm-saturation-pill');
+      if (pill) {
+        pill.textContent = 'Saturazione: ' + dp.saturationPct + '% (' + dp.managedUnits + '/' + dp.capacityUnits + ' unità)';
+      }
+      var mInp = document.getElementById('adm-cap-managed-inp');
+      if (mInp) mInp.value = dp.managedUnits;
+      var cInp = document.getElementById('adm-cap-total-inp');
+      if (cInp) cInp.value = dp.capacityUnits;
+      var fInp = document.getElementById('adm-force-price-inp');
+      if (fInp) fInp.value = dp.forcedByAdmin ? dp.todayMonthlyEur : '';
+
+      if (typeof SITE_CONFIG.getPriceHistoryReport === 'function') {
+        var rep = SITE_CONFIG.getPriceHistoryReport();
+        var strip = document.getElementById('adm-tier-report-strip');
+        if (strip && rep && rep.signupsByTier) {
+          var t = rep.signupsByTier;
+          strip.innerHTML = '<strong>Report Direzione Iscrizioni per Fascia di Prezzo (Price Lock):</strong> ' +
+            'Fascia 99–149 €: <strong>' + (t['99-149'] || 0) + ' iscritti</strong> · ' +
+            'Fascia 150–219 €: <strong>' + (t['150-219'] || 0) + ' iscritti</strong> · ' +
+            'Fascia 220–299 €: <strong>' + (t['220-299'] || 0) + ' iscritti</strong> · ' +
+            'In Lista d\'attesa (100%): <strong>' + ((rep.waitlist || []).length) + ' contatti</strong>.';
+        }
+      }
     }
 
-    function adminRerollRandomDailyPrice() {
-      if (!window.SITE_CONFIG || typeof SITE_CONFIG.setAdminForcedDailyPrice !== 'function') return;
-      var next = SITE_CONFIG.setAdminForcedDailyPrice(null);
+    function adminApplyCapacityParameters() {
+      if (!window.SITE_CONFIG || typeof SITE_CONFIG.setCapacityParameters !== 'function') return;
+      var managed = parseInt((document.getElementById('adm-cap-managed-inp') || {}).value, 10) || 0;
+      var capacity = Math.max(1, parseInt((document.getElementById('adm-cap-total-inp') || {}).value, 10) || 40);
+      var rawForce = (document.getElementById('adm-force-price-inp') || {}).value;
+      var forcedPrice = rawForce ? parseFloat(rawForce) : null;
+      var next = SITE_CONFIG.setCapacityParameters({
+        managedUnits: managed,
+        capacityUnits: capacity,
+        forcedPrice: forcedPrice,
+        updatedBy: 'Direzione Console Admin'
+      });
       renderAdminDynamicPricing();
-      showToast('Estratta nuova quotazione random: ' + next.todayFormatted + ' / mese (' + next.slotsAvailable + ' slot su 6).');
+      showToast('Capacità aggiornata (' + managed + '/' + capacity + ' unità · Saturazione ' + next.saturationPct + '%): ' + (next.isWaitlistOnly ? 'Lista d\'attesa attiva' : next.todayFormatted + '/mese'));
+    }
+
+    function adminSetQuickSaturation(managed, capacity) {
+      if (!window.SITE_CONFIG || typeof SITE_CONFIG.setCapacityParameters !== 'function') return;
+      var next = SITE_CONFIG.setCapacityParameters({
+        managedUnits: managed,
+        capacityUnits: capacity,
+        forcedPrice: null,
+        updatedBy: 'Preset Direzione Admin'
+      });
+      renderAdminDynamicPricing();
+      showToast('Saturazione impostata al ' + next.saturationPct + '%: ' + (next.isWaitlistOnly ? 'Lista d\'attesa attiva' : ('Prezzo nuovo cliente ' + next.todayFormatted + '/mese')));
+    }
+
+    /* ================================================================
+       SEZIONE C: SEPARAZIONE 80% INTERNO, ESCALATION & VISTA COLLABORATORI P.IVA
+       ================================================================ */
+    function renderAdminInternal80Panel() {
+      if (!window.ITACloudSync || typeof ITACloudSync.fetchTicketsApiForRole !== 'function') return;
+      var selEl = document.getElementById('adm-80-role-view');
+      var selVal = selEl ? selEl.value : 'internal_admin';
+      var secBanner = document.getElementById('adm-80-security-banner');
+      var listBox = document.getElementById('adm-internal-80-list');
+      if (!listBox) return;
+
+      var apiRes = null;
+      if (selVal === 'owner') {
+        apiRes = ITACloudSync.fetchTicketsApiForRole('owner');
+        if (secBanner) {
+          secBanner.style.background = '#DBEAFE';
+          secBanner.style.color = '#1E40AF';
+          secBanner.textContent = 'TEST SICUREZZA API PROPRIETARIO: Ricevuto ' + apiRes.records.length + ' solo record (visibilita: "proprietario") · ' + apiRes.internalRecordsLeakedCount + ' record interni ricevuti (10 ticket interni bloccati lato API).';
+        }
+      } else if (selVal.indexOf('COLLAB-') === 0) {
+        apiRes = ITACloudSync.fetchTicketsApiForRole('collaborator_piva', { collaboratorId: selVal });
+        if (secBanner) {
+          secBanner.style.background = '#FEF3C7';
+          secBanner.style.color = '#92400E';
+          secBanner.textContent = 'VISTA COLLABORATORE P.IVA (' + selVal + '): Visibili solo le ' + apiRes.records.length + ' attività assegnate · Dati economici del proprietario oscurati (ownerFinancialsExposed: false).';
+        }
+      } else {
+        apiRes = ITACloudSync.fetchTicketsApiForRole('internal_admin');
+        if (secBanner) {
+          secBanner.style.background = '#ECFDF5';
+          secBanner.style.color = '#065F46';
+          secBanner.textContent = 'CONSOLE INTERNA TEAM: ' + apiRes.internalOnlyCount + ' ticket interni risolti dal team (invisibili al proprietario) + ' + apiRes.escalatedToOwnerCount + ' inviato al proprietario (Inbox 20%) · Costi interni tracciati: ' + apiRes.totalInternalCostEur + ' €.';
+        }
+      }
+
+      var records = (apiRes && apiRes.records) ? apiRes.records : [];
+      var html = '';
+      records.forEach(function (r) {
+        var isOwnerVis = r.visibilita === 'proprietario';
+        var visBadge = isOwnerVis
+          ? '<span class="badge badge-gold">visibilita: proprietario (20% Inbox)</span>'
+          : '<span class="badge badge-ok">visibilita: interno (80% Team)</span>';
+
+        var internalDetail = '';
+        if (selVal === 'internal_admin') {
+          internalDetail = '<div style="font-size:12px;color:var(--text-muted);margin-top:4px;">' +
+            '<strong>Nota Interna Team:</strong> ' + (r.internalNotes || '—') +
+            ' · <strong>Risolto da:</strong> ' + (r.assignedTo || 'Team') +
+            ' · <strong>Tempo:</strong> ' + (r.resolutionTimeMin || 5) + ' min' +
+            ' · <strong>Costo interno:</strong> ' + (r.internalCostEur || 0) + ' €' +
+            (r.visibilita === 'interno'
+              ? ' <button type="button" class="btn btn-outline btn-sm" style="margin-left:8px;padding:3px 8px;font-size:11px;" onclick="adminQuickEscalateExisting(\'' + r.id + '\')">Invia al proprietario &rarr;</button>'
+              : '') +
+          '</div>';
+        } else if (selVal === 'owner') {
+          internalDetail = '<div style="font-size:12px;color:#1E40AF;margin-top:4px;">' +
+            '<strong>Testo per il proprietario:</strong> ' + (r.description || r.title) +
+            ' <em>(Note interne e costi interni filtrati lato API)</em>' +
+          '</div>';
+        } else {
+          internalDetail = '<div style="font-size:12px;color:#92400E;margin-top:4px;">' +
+            '<strong>Istruzioni operative assegnate:</strong> ' + (r.operationalInstructions || '—') +
+            ' <em>(Dati economici proprietario nascosti)</em>' +
+          '</div>';
+        }
+
+        html += '<div style="padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">' +
+            '<strong>[' + r.id + '] ' + r.title + ' (' + (r.unitName || r.unitId) + ')</strong>' +
+            visBadge +
+          '</div>' +
+          internalDetail +
+        '</div>';
+      });
+      listBox.innerHTML = html;
+    }
+
+    function adminEscalateNewTicketToOwner() {
+      if (!window.ITACloudSync || typeof ITACloudSync.escalateTicketToOwnerInbox !== 'function') return;
+      var title = ((document.getElementById('adm-esc-title') || {}).value || '').trim();
+      var ownerTxt = ((document.getElementById('adm-esc-owner-txt') || {}).value || '').trim();
+      var intNote = ((document.getElementById('adm-esc-internal-note') || {}).value || '').trim();
+      if (!title) return;
+      ITACloudSync.escalateTicketToOwnerInbox({
+        title: title,
+        ownerFacingText: ownerTxt || title,
+        internalNotes: intNote || 'Nota interna riservata al team.',
+        ownerQuoteEur: 95,
+        internalCostEur: 70,
+        isUrgent: true,
+        dueDateLabel: 'Entro 24 ore · Urgente'
+      });
+      renderAdminInternal80Panel();
+      showToast('Ticket inviato nell\'Inbox 20% del proprietario (le note interne sono rimaste riservate)!');
+    }
+
+    function adminQuickEscalateExisting(ticketId) {
+      if (!window.ITACloudSync || typeof ITACloudSync.escalateTicketToOwnerInbox !== 'function') return;
+      ITACloudSync.escalateTicketToOwnerInbox({
+        ticketId: ticketId,
+        ownerFacingText: 'Richiesta conferma operativa dal team su questo intervento.',
+        dueDateLabel: 'Entro 48 ore'
+      });
+      renderAdminInternal80Panel();
+      showToast('Ticket ' + ticketId + ' escalato al proprietario nell\'Inbox 20%!');
+    }
+
+    function adminLogNewInternalTicket() {
+      if (!window.ITACloudSync || typeof ITACloudSync.addInternalResolvedTicket !== 'function') return;
+      ITACloudSync.addInternalResolvedTicket({
+        title: 'Sostituzione batterie telecomando climatizzatore e verifica filtri',
+        internalNotes: 'Eseguito durante controllo ordinario senza disturbare il proprietario.',
+        assignedTo: 'Marco V. (Ops & Tech P.IVA)',
+        collaboratorId: 'COLLAB-02',
+        resolutionTimeMin: 10,
+        internalCostEur: 3.50
+      });
+      renderAdminInternal80Panel();
+      showToast('Ticket registrato come "interno" (80%): risolto dal team e invisibile al proprietario.');
+    }
+
+    /* ================================================================
+       SEZIONE E: DASHBOARD MISURAZIONE DELL'AUTOMAZIONE (OBIETTIVO >= 70%)
+       ================================================================ */
+    function renderAdminAutomation70Dashboard() {
+      if (!window.ITACloudSync || typeof ITACloudSync.getAutomationMetrics !== 'function') return;
+      var m = ITACloudSync.getAutomationMetrics();
+      var pctEl = document.getElementById('adm-auto-total-pct');
+      var msgEl = document.getElementById('adm-auto-owner-msg');
+      var trendEl = document.getElementById('adm-auto-trend-strip');
+      var alertEl = document.getElementById('adm-auto-below-target-alert');
+      var listEl = document.getElementById('adm-auto-functions-list');
+
+      if (pctEl) {
+        pctEl.textContent = m.totalAutomationPct + '% (' + m.totalAutoCount + ' automatiche su ' + m.grandTotalExecutions + ' esecuzioni)';
+        pctEl.style.color = m.meetsTarget ? 'var(--green)' : '#DC2626';
+      }
+      if (msgEl) {
+        msgEl.textContent = 'Messaggio aggregato per il proprietario: "' + m.ownerBadgeText + '".';
+      }
+      if (trendEl) {
+        var tHtml = '';
+        (m.monthlyTrend || []).forEach(function (tr) {
+          tHtml += '<span class="badge badge-ok" style="padding:6px 10px;font-size:12px;">' + tr.monthLabel + ': <strong>' + tr.pct + '%</strong></span>';
+        });
+        trendEl.innerHTML = tHtml;
+      }
+      if (alertEl) {
+        if (m.belowTargetFunctions && m.belowTargetFunctions.length > 0) {
+          var names = m.belowTargetFunctions.map(function (f) { return f.label + ' (' + f.automationPct + '%)'; }).join(' · ');
+          alertEl.innerHTML = '<div style="padding:10px 12px;border-radius:8px;background:#FEF3C7;color:#92400E;border:1px solid #F59E0B;font-size:12.5px;">' +
+            '<strong>Funzioni sotto l\'obiettivo del ' + m.targetPct + '% (candidate a potenziamento automazione):</strong> ' + names +
+          '</div>';
+        } else {
+          alertEl.innerHTML = '<div style="padding:10px 12px;border-radius:8px;background:#ECFDF5;color:#065F46;font-size:12.5px;font-weight:700;">Tutte le funzioni tracciate superano l\'obiettivo del 70%.</div>';
+        }
+      }
+      if (listEl) {
+        var fHtml = '';
+        (m.functions || []).forEach(function (fn) {
+          var barColor = fn.isBelowTarget ? '#F59E0B' : '#059669';
+          var pillHtml = fn.isBelowTarget
+            ? '<span class="badge" style="background:#FEF3C7;color:#92400E;">' + fn.automationPct + '% (Sotto 70%)</span>'
+            : '<span class="badge badge-ok">' + fn.automationPct + '% Auto</span>';
+          fHtml += '<div style="padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px;">' +
+              '<strong>' + fn.label + '</strong>' +
+              pillHtml +
+            '</div>' +
+            '<div style="width:100%;height:8px;background:#E5E7EB;border-radius:999px;overflow:hidden;margin-bottom:4px;">' +
+              '<div style="width:' + fn.automationPct + '%;height:100%;background:' + barColor + ';"></div>' +
+            '</div>' +
+            '<div style="font-size:11.5px;color:var(--text-muted);">Automatiche: <strong>' + fn.autoCount + '</strong> · Manuali: <strong>' + fn.manualCount + '</strong> · Totale: ' + fn.totalCount + '</div>' +
+          '</div>';
+        });
+        listEl.innerHTML = fHtml;
+      }
+    }
+
+    function adminLogAutomationSample(fnKey, mode) {
+      if (!window.ITACloudSync || typeof ITACloudSync.recordAutomationExecution !== 'function') return;
+      ITACloudSync.recordAutomationExecution(fnKey, mode, 'Registrato da Console Admin');
+      renderAdminAutomation70Dashboard();
+      showToast('Esecuzione ' + mode + ' registrata su ' + fnKey + '!');
     }
 
     document.addEventListener('DOMContentLoaded', function () {
       renderAdminAll();
       renderAdminDynamicPricing();
+      renderAdminInternal80Panel();
+      renderAdminAutomation70Dashboard();
       renderReportLogsInAdmin();
       loadLiveConfigForm();
       if (window.ITACloudSync) {
         ITACloudSync.onLiveSync(function () {
           renderReportLogsInAdmin();
           renderAdminChannelManager();
+          renderAdminInternal80Panel();
+          renderAdminAutomation70Dashboard();
         });
       }
       var params = new URLSearchParams(window.location.search);
@@ -3163,6 +4090,1071 @@ P.IVA: 07480210488</div>
         document.getElementById('login-screen').classList.add('hidden');
         switchAdminTab(viewParam, true);
       }
+      renderGabrielaAccountingHubUI();
+    });
+
+    /* ════════════════════════════════════════════════════════════════
+       HUB CONTABILE GABRIELA & MODALITÀ DATI REALI 1-CLIC (YV-mw9cvy66)
+    ════════════════════════════════════════════════════════════════ */
+    var GABRIELA_LEDGER_KEY = 'itassistance_gabriela_real_ledger_v1';
+
+    function getGabrielaLedgerEntries() {
+      try {
+        var raw = localStorage.getItem(GABRIELA_LEDGER_KEY);
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) return parsed;
+        }
+      } catch (e) {}
+      var seed = [
+        {
+          id: 'GAB-2026-001',
+          date: new Date().toISOString().slice(0, 10),
+          channel: 'M3_SDI_XML',
+          floor: 'P4 · ITASSITANCE (Canoni 99€ / Extra 10% / ARM)',
+          type: 'Incasso Attivo',
+          subject: 'Marco Rossi · App. Santo Spirito (Canone 99€)',
+          notes: 'FatturaPA XML SDI · P.IVA 07480210488',
+          amountEur: 99.00,
+          vat: '22%',
+          status: 'Validato da Gabriela'
+        }
+      ];
+      try { localStorage.setItem(GABRIELA_LEDGER_KEY, JSON.stringify(seed)); } catch (e) {}
+      return seed;
+    }
+
+    function saveGabrielaLedgerEntries(list) {
+      try {
+        localStorage.setItem(GABRIELA_LEDGER_KEY, JSON.stringify(list || []));
+      } catch (e) {}
+    }
+
+    function renderGabrielaAccountingHubUI() {
+      var tb = document.getElementById('tb-gabriela-ledger');
+      if (!tb) return;
+      var list = getGabrielaLedgerEntries();
+      if (list.length === 0) {
+        tb.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:16px;">Modalità Dati Reali attiva: nessun dato demo presente. Usa uno dei 5 canali qui sopra per registrare il primo documento reale.</td></tr>';
+        return;
+      }
+      var html = '';
+      list.forEach(function (r) {
+        var badgeClass = r.status === 'Chiuso nel mese' || r.status === 'Riconciliato'
+          ? 'badge-green'
+          : (r.status === 'Validato da Gabriela' ? 'badge-gold' : 'badge-amber');
+        html += '<tr>' +
+          '<td><strong>' + r.id + '</strong><br/><span style="font-size:11px;color:var(--text-muted);">' + r.date + '</span></td>' +
+          '<td><span class="badge" style="background:#EDE9FE;color:#5B21B6;">' + r.channel + '</span></td>' +
+          '<td style="font-size:12px;font-weight:600;">' + r.floor + '</td>' +
+          '<td>' + r.type + '</td>' +
+          '<td><strong>' + r.subject + '</strong>' + (r.notes ? '<br/><span style="font-size:11px;color:var(--text-muted);">' + r.notes + '</span>' : '') + '</td>' +
+          '<td style="font-weight:700;">' + Number(r.amountEur || 0).toFixed(2) + ' € <span style="font-size:11px;color:var(--text-muted);">(' + (r.vat || '22%') + ')</span></td>' +
+          '<td><span class="badge ' + badgeClass + '">' + r.status + '</span></td>' +
+          '<td><button type="button" class="btn btn-outline btn-sm" onclick="advanceGabrielaEntryStatus(\'' + r.id + '\')">Avanza Stato ✓</button></td>' +
+        '</tr>';
+      });
+      tb.innerHTML = html;
+    }
+
+    function submitGabrielaRealEntry() {
+      var floorEl = document.getElementById('gab-floor');
+      var typeEl = document.getElementById('gab-type');
+      var subjEl = document.getElementById('gab-subject');
+      var amtEl = document.getElementById('gab-amount');
+      var vatEl = document.getElementById('gab-vat');
+      var notesEl = document.getElementById('gab-notes');
+      var subj = subjEl ? subjEl.value.trim() : '';
+      var amt = amtEl ? parseFloat(amtEl.value) : 0;
+      if (!subj || isNaN(amt) || amt <= 0) {
+        showToast('Inserisci Soggetto e Importo valido (> 0 €) per registrare il movimento.');
+        return;
+      }
+      var list = getGabrielaLedgerEntries();
+      var newEntry = {
+        id: 'GAB-' + new Date().getFullYear() + '-' + String(list.length + 1).padStart(3, '0'),
+        date: new Date().toISOString().slice(0, 10),
+        channel: 'M4_QUICK_1TAP',
+        floor: floorEl ? floorEl.value : 'P4 · ITASSITANCE',
+        type: typeEl ? typeEl.value : 'Incasso Attivo',
+        subject: subj,
+        notes: notesEl ? notesEl.value.trim() : '',
+        amountEur: amt,
+        vat: vatEl ? vatEl.value : '22%',
+        status: 'Validato da Gabriela'
+      };
+      list.unshift(newEntry);
+      saveGabrielaLedgerEntries(list);
+      if (subjEl) subjEl.value = '';
+      if (amtEl) amtEl.value = '';
+      if (notesEl) notesEl.value = '';
+      renderGabrielaAccountingHubUI();
+      showToast('Movimento reale ' + newEntry.id + ' registrato in Prima Nota (' + newEntry.floor + ').');
+    }
+
+    function handleGabrielaFileIngest(inputEl, channelCode, channelLabel) {
+      if (!inputEl || !inputEl.files || inputEl.files.length === 0) return;
+      var file = inputEl.files[0];
+      var floorEl = document.getElementById('gab-floor');
+      var list = getGabrielaLedgerEntries();
+      var newEntry = {
+        id: 'GAB-' + new Date().getFullYear() + '-' + String(list.length + 1).padStart(3, '0'),
+        date: new Date().toISOString().slice(0, 10),
+        channel: channelCode,
+        floor: floorEl ? floorEl.value : 'P4 · ITASSITANCE (Canoni 99€ / Extra 10% / ARM)',
+        type: channelLabel,
+        subject: 'File reale: ' + file.name,
+        notes: 'Dimensione: ' + Math.max(1, Math.round(file.size / 1024)) + ' KB · Caricato da Gabriela',
+        amountEur: 99.00,
+        vat: '22%',
+        status: 'Da verificare'
+      };
+      list.unshift(newEntry);
+      saveGabrielaLedgerEntries(list);
+      inputEl.value = '';
+      renderGabrielaAccountingHubUI();
+      showToast('Documento "' + file.name + '" acquisito via ' + channelLabel + ' (' + newEntry.id + ').');
+    }
+
+    function advanceGabrielaEntryStatus(entryId) {
+      var states = ['Da verificare', 'Validato da Gabriela', 'Riconciliato', 'Chiuso nel mese'];
+      var list = getGabrielaLedgerEntries();
+      list.forEach(function (r) {
+        if (r.id === entryId) {
+          var idx = states.indexOf(r.status);
+          r.status = states[Math.min(states.length - 1, idx + 1)];
+        }
+      });
+      saveGabrielaLedgerEntries(list);
+      renderGabrielaAccountingHubUI();
+      showToast('Stato movimento ' + entryId + ' aggiornato.');
+    }
+
+    function exportGabrielaLedgerCsv() {
+      var list = getGabrielaLedgerEntries();
+      var rows = ['ID;Data;Canale;Piano_Centro_Costo;Tipo;Soggetto;Note;Importo_EUR;IVA;Stato'];
+      list.forEach(function (r) {
+        rows.push([
+          r.id, r.date, r.channel, '"' + (r.floor || '') + '"', '"' + (r.type || '') + '"',
+          '"' + (r.subject || '').replace(/"/g, '""') + '"',
+          '"' + (r.notes || '').replace(/"/g, '""') + '"',
+          Number(r.amountEur || 0).toFixed(2), r.vat || '22%', r.status
+        ].join(';'));
+      });
+      var blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'prima-nota-gabriela-4-piani-' + new Date().toISOString().slice(0, 10) + '.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('Prima Nota 4 Piani esportata in CSV per Gabriela e Commercialista.');
+    }
+
+    function activateRealDataCleanMode() {
+      admState.partners = [];
+      admState.invoices = [];
+      saveAdminState();
+      saveGabrielaLedgerEntries([]);
+      renderAllAdmin();
+      renderGabrielaAccountingHubUI();
+      showToast('Modalità Dati Reali attiva: dati demo rimossi. Puoi inserire subito partner, fatture e movimenti reali.');
+    }
+
+    async function sendAdminReportToCentralAmministrazione() {
+      var res = null;
+      if (window.ITACloudSync && typeof ITACloudSync.pushItassitanceCompanyInputToCentralAdmin === 'function') {
+        res = await ITACloudSync.pushItassitanceCompanyInputToCentralAdmin({
+          source_ui: 'admin.html',
+          active_partners_count: Array.isArray(admState.partners) ? admState.partners.length : 5,
+          active_invoices_count: Array.isArray(admState.invoices) ? admState.invoices.length : 6
+        });
+      }
+      showToast('Report Piano 4 trasmesso a http://localhost:3000/api/amministrazione/company-input (azienda_id: itassitance) per Gabriela, Biviana e Julian.');
+      return res;
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       CROSS-CRM PBA -> ITASSITANCE + SCHEDA ARM & FOLLOW-BACK (Marco Palumbo)
+    ════════════════════════════════════════════════════════════════ */
+    function renderAdminCrossCrmArmPanel() {
+      if (!window.ITACloudSync || typeof ITACloudSync.getMarcoPalumboArmRecord !== 'function') return;
+      var rec = ITACloudSync.getMarcoPalumboArmRecord();
+      // BLOCCO 4 JUL-009: Ingresso esclusivo dal Preventivo Generale PBA con consenso esplicito Itassistance
+      var hasExplicitConsent = (rec.itassistanceRequested !== false) && (rec.itassistanceConsent !== false);
+      var t1Mod = document.getElementById('adm-tab1-arm-palazzo-module');
+      var t2Mod = document.getElementById('adm-cross-crm-arm-panel');
+      if (!hasExplicitConsent) {
+        if (t1Mod) t1Mod.style.display = 'none';
+        if (t2Mod) t2Mod.style.display = 'none';
+        return;
+      }
+      var badgeEl = document.getElementById('adm-arm-status-badge');
+      var btnApp = document.getElementById('adm-btn-approve-marco');
+      var logBox = document.getElementById('adm-arm-followup-log-box');
+
+      if (badgeEl) {
+        if (rec.status === 'APPROVATO_CLIENTE') {
+          badgeEl.className = 'badge badge-green';
+          badgeEl.textContent = '✅ STATO: APPROVATO_CLIENTE · Area Cliente & Scheda Tecnica ST-APT-ARM-2026-MP86 Attive';
+        } else {
+          badgeEl.className = 'badge badge-amber';
+          badgeEl.textContent = '⏳ STATO: ' + rec.status + ' (' + (rec.pipelineStageLabel || 'Prospect in Attesa') + ')';
+        }
+      }
+      if (btnApp) {
+        if (rec.status === 'APPROVATO_CLIENTE') {
+          btnApp.textContent = '✅ CLIENTE APPROVATO · Area Cliente Itassitance & Scheda Tecnica ST-APT-ARM-2026-MP86 Attive';
+        }
+      }
+      if (logBox) {
+        var hist = Array.isArray(rec.followupHistory) ? rec.followupHistory : [];
+        var html = '<strong style="color:var(--navy);display:block;margin-bottom:6px;">Registro Follow-Back Commerciale &amp; Pipeline Cross-CRM (' + hist.length + ' eventi):</strong>';
+        hist.slice(0, 5).forEach(function (h) {
+          html += '<div style="padding:4px 0;border-bottom:1px dashed var(--border);">' +
+            '<span style="font-weight:700;color:#5B21B6;">[' + h.timestamp + ' · ' + h.channel + ']</span> ' +
+            '<span>' + h.action + '</span>' +
+          '</div>';
+        });
+        logBox.innerHTML = html;
+      }
+    }
+
+    async function adminSyncCrossCrmNow() {
+      if (!window.ITACloudSync || typeof ITACloudSync.syncCrossCrmProspectsFromPba !== 'function') return;
+      await ITACloudSync.syncCrossCrmProspectsFromPba();
+      renderAdminCrossCrmArmPanel();
+      showToast('Cross-CRM sincronizzato con Preventivo PBA: scheda ARM-2026-MP86 (Marco Palumbo) aggiornata.');
+    }
+
+    async function adminTriggerArmFollowBack(actionKey) {
+      if (!window.ITACloudSync || typeof ITACloudSync.logCrossCrmFollowup !== 'function') return;
+      var noteEl = document.getElementById('adm-arm-followup-note');
+      var customNote = noteEl ? noteEl.value.trim() : '';
+      var channel = 'Follow-Back Commerciale';
+      var note = customNote;
+      var nextStatus = 'FOLLOWBACK_IN_CORSO';
+
+      if (actionKey === 'whatsapp') {
+        channel = 'WhatsApp 1-Clic (38064444415)';
+        note = customNote || 'Inviata su WhatsApp a Marco (38064444415) proposta congiunta Itassitance Price Lock 199€/mese (-50% 1° mese) + Turnover PBA €86,00 Pass-Through (Netto stimato ARM €2.735/mese).';
+        var waMsg = encodeURIComponent('Ciao Marco! Abbiamo ricevuto la tua richiesta info dal preventivo PBA per il tuo Trilocale (2 camere, 2 matrimoniali, 2 bagni, divano letto · Turnover PBA €86,00). Con Itassitance hai il Piano Price Lock 199 €/mese (-50% 1° mese), 0% ricarico sui turni PBA e un Netto Proprietario stimato ARM di € 2.735,00/mese. Quando preferisci sentirci o fissare il sopralluogo?');
+        window.open('https://wa.me/3938064444415?text=' + waMsg, '_blank');
+      } else if (actionKey === 'call') {
+        channel = 'Chiamata Commerciale (38064444415)';
+        note = customNote || 'Chiamata commerciale effettuata al 38064444415: illustrato prospetto ARM (€3.450 lordo -> €2.735 netto proprietario) e confermati dati tecnici Trilocale.';
+      } else if (actionKey === 'inspection') {
+        channel = 'Sopralluogo & Audit Tecnico';
+        note = customNote || 'Fissato Sopralluogo Congiunto PBA + Itassitance per verifica dotazione 3 Set/Letto 90°C, 2 bagni, cucina e check-in remoto.';
+        nextStatus = 'SOPRALLUOGO_FISSATO';
+      } else if (actionKey === 'proposal') {
+        channel = 'Email Proposta ARM & Contratto Price Lock';
+        note = customNote || 'Inviata a mr.mpalumbo@gmail.com Proposta ARM-2026-MP86 con Contratto Price Lock 24 mesi (199 €/mese) e Scheda Tecnica ST-APT-ARM-2026-MP86.';
+        nextStatus = 'PROPOSTA_ARM_INVIATA';
+      } else {
+        channel = 'Nota Commerciale CRM';
+        note = customNote || 'Aggiornamento pipeline commerciale registrato su scheda ARM-2026-MP86.';
+      }
+
+      await ITACloudSync.logCrossCrmFollowup('PROSPECT-MARCO-PALUMBO-2026', channel, note, nextStatus);
+      if (noteEl) noteEl.value = '';
+      renderAdminCrossCrmArmPanel();
+      showToast('Follow-Back registrato (' + channel + ') per Marco Palumbo.');
+    }
+
+    async function adminApproveMarcoProspectToClient() {
+      if (!window.ITACloudSync || typeof ITACloudSync.approveCrossCrmProspectToClient !== 'function') return;
+      await ITACloudSync.approveCrossCrmProspectToClient('PROSPECT-MARCO-PALUMBO-2026');
+      // Aggiungi anche ai partner attivi di admin.html se non presente
+      var hasMarcoPartner = admState.partners.some(function (p) {
+        return p.contact && p.contact.toLowerCase().indexOf('mr.mpalumbo@gmail.com') !== -1;
+      });
+      if (!hasMarcoPartner) {
+        admState.partners.unshift({
+          id: 'p_marco_mp86',
+          name: 'Marco Palumbo · Trilocale 2 Camere (ST-APT-ARM-2026-MP86)',
+          type: 'Cliente Proprietario (Cross-CRM PBA + Itassitance)',
+          contact: 'mr.mpalumbo@gmail.com · 38064444415 · Privato (Marca da bollo €2)',
+          apts: 1,
+          plan: '199 €/mese Price Lock 24M (-50% 1° mese PBA) · Turni PBA €86 Pass-Through',
+          active: true
+        });
+        saveAdminState();
+        renderAllAdmin();
+      }
+      renderAdminCrossCrmArmPanel();
+      renderAdminMomentTariffAndArmUI();
+      showToast('Marco Palumbo APPROVATO COME CLIENTE! Attivata Area Cliente Itassitance + Scheda Tecnica ST-APT-ARM-2026-MP86.');
+    }
+
+    function fmtItaEuro(n) {
+      return Number(n || 0).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    }
+
+    function renderAdminMomentTariffAndArmUI(customTariffObj) {
+      var tariff = customTariffObj || (window.ITACloudSync && typeof ITACloudSync.getCurrentItassitanceMomentTariff === 'function'
+        ? ITACloudSync.getCurrentItassitanceMomentTariff()
+        : { rateMonthly: 199.00, rateAnnual: 2388.00, firstMonthPromo50: 99.50, slotsAvailable: 12, slotsTotal: 24 });
+
+      var netSteady = Math.round((3450 - 516 - tariff.rateMonthly) * 100) / 100;
+      var netFirstMonth = Math.round((3450 - 516 - tariff.firstMonthPromo50) * 100) / 100;
+
+      var inp = document.getElementById('adm-daily-rate-input');
+      if (inp && document.activeElement !== inp) inp.value = tariff.rateMonthly;
+
+      var dispRate = document.getElementById('adm-daily-rate-display');
+      if (dispRate) dispRate.textContent = fmtItaEuro(tariff.rateMonthly) + ' / mese';
+
+      var dispAnnual = document.getElementById('adm-daily-annual-display');
+      if (dispAnnual) dispAnnual.textContent = fmtItaEuro(tariff.rateAnnual) + ' / anno';
+
+      var dispSlots = document.getElementById('adm-daily-slots-display');
+      if (dispSlots) dispSlots.textContent = (tariff.slotsAvailable || 12) + ' slot su ' + (tariff.slotsTotal || 24);
+
+      var t1Rate = document.getElementById('adm-tab1-arm-moment-rate');
+      if (t1Rate) t1Rate.textContent = fmtItaEuro(tariff.rateMonthly) + ' / mese (' + fmtItaEuro(tariff.rateAnnual) + ' / anno)';
+
+      var t1First = document.getElementById('adm-tab1-arm-first-month');
+      if (t1First) t1First.textContent = fmtItaEuro(tariff.firstMonthPromo50);
+
+      var t1Net = document.getElementById('adm-tab1-arm-net-owner');
+      if (t1Net) t1Net.textContent = fmtItaEuro(netSteady) + ' / mese';
+
+      var fRate = document.getElementById('adm-tab1-arm-formula-rate');
+      if (fRate) fRate.textContent = fmtItaEuro(tariff.rateMonthly);
+
+      var fNet = document.getElementById('adm-tab1-arm-formula-net');
+      if (fNet) fNet.textContent = fmtItaEuro(netSteady) + ' / mese';
+
+      var fNetM1 = document.getElementById('adm-tab1-arm-formula-net-m1');
+      if (fNetM1) fNetM1.textContent = fmtItaEuro(netFirstMonth);
+
+      var t2Net = document.getElementById('adm-arm-t2-net-lbl');
+      if (t2Net) t2Net.textContent = 'Netto ARM: ' + fmtItaEuro(netSteady) + ' / mese';
+
+      var t2Rate = document.getElementById('adm-arm-t2-rate-lbl');
+      if (t2Rate) t2Rate.textContent = fmtItaEuro(tariff.rateMonthly) + '/mese (1° mese ' + fmtItaEuro(tariff.firstMonthPromo50) + ' -50%)';
+    }
+
+    function adminLiveUpdateMomentTariff(val) {
+      var parsed = parseFloat(String(val).replace(',', '.'));
+      if (isNaN(parsed) || parsed < 99 || parsed > 299.5) return;
+      if (window.ITACloudSync && typeof ITACloudSync.setCurrentItassitanceMomentTariff === 'function') {
+        var updated = ITACloudSync.setCurrentItassitanceMomentTariff(parsed, 'Live Input Direzione Vendite');
+        renderAdminMomentTariffAndArmUI(updated);
+      }
+    }
+
+    function adminApplyDailyRateBtn() {
+      var inp = document.getElementById('adm-daily-rate-input');
+      var val = inp ? inp.value : 199;
+      if (window.ITACloudSync && typeof ITACloudSync.setCurrentItassitanceMomentTariff === 'function') {
+        var updated = ITACloudSync.setCurrentItassitanceMomentTariff(val, 'Bottone Imposta Tariffa');
+        renderAdminMomentTariffAndArmUI(updated);
+        showToast('Tariffa al Momento aggiornata a ' + fmtItaEuro(updated.rateMonthly) + '/mese e sincronizzata con ARM Marco Palumbo!');
+      }
+    }
+
+    function adminRollRandomDailyRateBtn() {
+      if (window.ITACloudSync && typeof ITACloudSync.rollRandomItassitanceMomentTariff === 'function') {
+        var updated = ITACloudSync.rollRandomItassitanceMomentTariff();
+        var inp = document.getElementById('adm-daily-rate-input');
+        if (inp) inp.value = updated.rateMonthly;
+        renderAdminMomentTariffAndArmUI(updated);
+        showToast('Estratta Tariffa Random Fase 1: ' + fmtItaEuro(updated.rateMonthly) + '/mese (1° mese Promo Chat Palazzo: ' + fmtItaEuro(updated.firstMonthPromo50) + ')');
+      }
+    }
+
+    function downloadMarcoArmQuotePdfInAdmin() {
+      if (window.ITACloudSync && typeof ITACloudSync.downloadMarcoPalumboArmQuotePdf === 'function') {
+        var res = ITACloudSync.downloadMarcoPalumboArmQuotePdf();
+        showToast('Scaricato ' + (res && res.fileName ? res.fileName : 'Preventivo_Itassitance_ARM_Marco_Palumbo.pdf') + ' con Tariffa al Momento!');
+      }
+    }
+
+    /* ══════════════════════════════════════════════════════════════════════════
+       JUL-010 — SKILL TICKET MANUTENZIONI & NETWORK MANUTENTORI (REGIA ADMIN)
+       - Scheda task minimal ed editabile (Task, Foto, Data/Ora richiesta)
+       - Privacy incrociata assoluta Proprietario <-> Manutentore
+       - Planner 60 min + 15 min buffer obbligatorio prima e dopo
+       - Regola economica: Proprietario 30,00 € base + extra; Manutentore 15,00 € base + extra + rimborso materiali (ZERO riferimenti a frazioni/quote in UI)
+       ══════════════════════════════════════════════════════════════════════════ */
+    var ADM_MAINT_SKILL_STORAGE_KEY = 'ita_maintenance_skill_network_v1';
+
+    function admGetDefaultMaintSkillState() {
+      return {
+        lastLiquidationAt: '01/11/2026 ore 09:00',
+        liquidatedHistoryTotalEur: 185.00,
+        maintainers: [
+          { id: 'MAINT-01', name: 'Alessandro Gori · Tecnico Manutentore Firenze', specialty: 'Idraulica, Serrature & Infissi' },
+          { id: 'MAINT-02', name: 'Stefano Conti · Squadra Pronto Intervento FI', specialty: 'Elettrico, Climatizzazione & Caldaie' }
+        ],
+        tickets: [
+          {
+            id: 'MNT-2026-901',
+            taskTitle: 'Sostituzione sifone lavabo bagno padronale e sigillatura box doccia',
+            photos: ['foto_sifone_bagno.jpg', 'foto_guarnizione_doccia.jpg'],
+            requestedDateTimeText: 'Giovedì ore 09:30',
+            slotStartIso: '2026-11-12T09:30',
+            durationMinutes: 60,
+            bufferMinutes: 15,
+            zoneLabel: 'Santo Spirito · Via Maggio 18, Firenze',
+            ownerProfileHidden: 'Famiglia Corsini (App. Santo Spirito)',
+            ownerBaseEur: 30.00,
+            ownerExtraEur: 10.00,
+            materialsReimbursementEur: 0.00,
+            status: 'richiesto',
+            assignedMaintainerId: '',
+            assignedMaintainerName: '',
+            createdAt: '10/11/2026 08:45',
+            updatedBy: 'Front Desk Itassistance',
+            liquidatedInMonth: false
+          },
+          {
+            id: 'MNT-2026-902',
+            taskTitle: 'Ripristino serratura smart portoncino e fissaggio maniglia interna',
+            photos: ['foto_serratura_ingresso.jpg'],
+            requestedDateTimeText: 'Giovedì ore 11:30',
+            slotStartIso: '2026-11-12T11:30',
+            durationMinutes: 60,
+            bufferMinutes: 15,
+            zoneLabel: 'Santa Croce · Via dei Pandolfini 21, Firenze',
+            ownerProfileHidden: 'Marco Rinaldi (App. Santa Croce)',
+            ownerBaseEur: 30.00,
+            ownerExtraEur: 20.00,
+            materialsReimbursementEur: 0.00,
+            status: 'in_planner',
+            assignedMaintainerId: 'MAINT-01',
+            assignedMaintainerName: 'Alessandro Gori · Tecnico Manutentore Firenze',
+            createdAt: '10/11/2026 09:10',
+            updatedBy: 'Supporto PM Itassistance',
+            liquidatedInMonth: false
+          },
+          {
+            id: 'MNT-2026-903',
+            taskTitle: 'Sostituzione lampada specchio bagno e riarmo differenziale quadro',
+            photos: ['foto_specchio_bagno.jpg', 'foto_quadro_elettrico.jpg'],
+            requestedDateTimeText: 'Mercoledì ore 15:00',
+            slotStartIso: '2026-11-11T15:00',
+            durationMinutes: 60,
+            bufferMinutes: 15,
+            zoneLabel: 'Trilocale 2 Camere · ST-APT-ARM-2026-MP86, Firenze',
+            ownerProfileHidden: 'Marco Palumbo (ST-APT-ARM-2026-MP86)',
+            ownerBaseEur: 40.00,
+            ownerExtraEur: 10.00,
+            materialsReimbursementEur: 17.50,
+            status: 'completato',
+            assignedMaintainerId: 'MAINT-01',
+            assignedMaintainerName: 'Alessandro Gori · Tecnico Manutentore Firenze',
+            completedAt: '11/11/2026 16:00',
+            createdAt: '10/11/2026 08:15',
+            updatedBy: 'Front Desk Itassistance',
+            liquidatedInMonth: false
+          }
+        ]
+      };
+    }
+
+    function admComputeTicketEconomics(t) {
+      var ownerBase = Math.max(30, Number(t && t.ownerBaseEur) || 30);
+      var ownerExtra = Math.max(0, Number(t && t.ownerExtraEur) || 0);
+      var materials = Math.max(0, Number(t && t.materialsReimbursementEur) || 0);
+      var baseDifficultyDelta = Math.max(0, ownerBase - 30);
+      var maintBase = 15.00;
+      var maintExtra = Math.round(((baseDifficultyDelta + ownerExtra) * 0.5) * 100) / 100;
+      var maintTotal = Math.round((maintBase + maintExtra + materials) * 100) / 100;
+      var ownerTotal = Math.round((ownerBase + ownerExtra + materials) * 100) / 100;
+      return {
+        ownerBaseEur: ownerBase,
+        ownerExtraEur: ownerExtra,
+        materialsReimbursementEur: materials,
+        ownerTotalChargeEur: ownerTotal,
+        maintainerBaseEur: maintBase,
+        maintainerExtraEur: maintExtra,
+        maintainerTotalInvoiceEur: maintTotal
+      };
+    }
+
+    function admLoadMaintSkillState() {
+      if (window.ITACloudSync && typeof ITACloudSync.getMaintenanceNetworkTicketsForRole === 'function') {
+        try {
+          var cloudView = ITACloudSync.getMaintenanceNetworkTicketsForRole('frontdesk_pm');
+          if (cloudView && Array.isArray(cloudView.tickets)) {
+            return {
+              lastLiquidationAt: cloudView.lastLiquidationAt || '01/11/2026 ore 09:00',
+              liquidatedHistoryTotalEur: Number(cloudView.liquidatedHistoryTotalEur) || 0,
+              maintainers: cloudView.maintainers || admGetDefaultMaintSkillState().maintainers,
+              tickets: cloudView.tickets
+            };
+          }
+        } catch (e) {}
+      }
+      try {
+        var raw = localStorage.getItem(ADM_MAINT_SKILL_STORAGE_KEY);
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          if (parsed && Array.isArray(parsed.tickets)) return parsed;
+        }
+      } catch (e) {}
+      var def = admGetDefaultMaintSkillState();
+      try {
+        localStorage.setItem(ADM_MAINT_SKILL_STORAGE_KEY, JSON.stringify(def));
+      } catch (e) {}
+      return def;
+    }
+
+    function admSaveMaintSkillState(st) {
+      try {
+        localStorage.setItem(ADM_MAINT_SKILL_STORAGE_KEY, JSON.stringify(st));
+      } catch (e) {}
+    }
+
+    function admFormatSlotWindowWithBuffer(slotIso) {
+      if (!slotIso) return 'Slot 60 min + 15 min buffer pre/post';
+      var d = new Date(slotIso);
+      if (isNaN(d.getTime())) return slotIso + ' (60m + 15m buffer)';
+      var bufStart = new Date(d.getTime() - 15 * 60000);
+      var jobEnd = new Date(d.getTime() + 60 * 60000);
+      var bufEnd = new Date(d.getTime() + 75 * 60000);
+      var pad = function (n) { return String(n).padStart(2, '0'); };
+      var dayStr = pad(d.getDate()) + '/' + pad(d.getMonth() + 1);
+      var tJob = pad(d.getHours()) + ':' + pad(d.getMinutes()) + '–' + pad(jobEnd.getHours()) + ':' + pad(jobEnd.getMinutes());
+      var tBuf = pad(bufStart.getHours()) + ':' + pad(bufStart.getMinutes()) + '–' + pad(bufEnd.getHours()) + ':' + pad(bufEnd.getMinutes());
+      return dayStr + ' · Intervento ' + tJob + ' (Blocco Planner c/buffer 15m: ' + tBuf + ')';
+    }
+
+    function admCheckPlannerBufferConflict(tickets, candidateSlotIso, maintainerId, excludeTicketId) {
+      if (!candidateSlotIso) return null;
+      var candStart = new Date(candidateSlotIso).getTime();
+      if (isNaN(candStart)) return null;
+      var candWindowStart = candStart - 15 * 60000;
+      var candWindowEnd = candStart + (60 + 15) * 60000;
+      for (var i = 0; i < tickets.length; i++) {
+        var tk = tickets[i];
+        if (!tk || tk.id === excludeTicketId) continue;
+        if (tk.status !== 'in_planner') continue;
+        if (maintainerId && tk.assignedMaintainerId && tk.assignedMaintainerId !== maintainerId) continue;
+        var exStart = new Date(tk.slotStartIso).getTime();
+        if (isNaN(exStart)) continue;
+        var exWindowStart = exStart - 15 * 60000;
+        var exWindowEnd = exStart + (60 + 15) * 60000;
+        if (candWindowStart < exWindowEnd && candWindowEnd > exWindowStart) {
+          return tk;
+        }
+      }
+      return null;
+    }
+
+    function admUpdateMaintPricePreview() {
+      var baseEl = document.getElementById('adm-maint-owner-base');
+      var extraEl = document.getElementById('adm-maint-owner-extra');
+      var strip = document.getElementById('adm-maint-price-preview-strip');
+      if (!strip) return;
+      var econ = admComputeTicketEconomics({
+        ownerBaseEur: baseEl ? baseEl.value : 30,
+        ownerExtraEur: extraEl ? extraEl.value : 0,
+        materialsReimbursementEur: 0
+      });
+      var extraMaintLabel = econ.maintainerExtraEur > 0
+        ? ' + <strong>+ € ' + fmtItaEuro(econ.maintainerExtraEur).replace(' €', '') + ' Extra per l\'intervento</strong>'
+        : ' (nessun extra aggiuntivo)';
+      strip.innerHTML = '<strong>Riepilogo Regola Economica (Privacy Incrociata):</strong> ' +
+        'Addebito Cliente Proprietario: <strong>' + fmtItaEuro(econ.ownerTotalChargeEur) + '</strong> (' + fmtItaEuro(econ.ownerBaseEur) + ' base' +
+        (econ.ownerExtraEur > 0 ? ' + ' + fmtItaEuro(econ.ownerExtraEur) + ' supplemento disponibilità/difficoltà' : '') + ') · ' +
+        'Vista Network Manutentore: <strong>' + fmtItaEuro(econ.maintainerBaseEur) + ' base</strong>' + extraMaintLabel + ' + rimborso materiali a piè di lista.';
+    }
+
+    function admResetMaintSkillForm() {
+      var idEl = document.getElementById('adm-maint-edit-id');
+      if (idEl) idEl.value = '';
+      var tEl = document.getElementById('adm-maint-task');
+      if (tEl) tEl.value = '';
+      var dtEl = document.getElementById('adm-maint-datetime-text');
+      if (dtEl) dtEl.value = 'Venerdì ore 10:30';
+      var isoEl = document.getElementById('adm-maint-slot-iso');
+      if (isoEl) isoEl.value = '2026-11-13T10:30';
+      var phEl = document.getElementById('adm-maint-photos');
+      if (phEl) phEl.value = 'foto_intervento_richiesto.jpg';
+      var zEl = document.getElementById('adm-maint-zone');
+      if (zEl) zEl.value = 'Centro Storico · Firenze';
+      var owEl = document.getElementById('adm-maint-owner-hidden');
+      if (owEl) owEl.value = 'Proprietario Appartamento Firenze';
+      var bEl = document.getElementById('adm-maint-owner-base');
+      if (bEl) bEl.value = '30';
+      var exEl = document.getElementById('adm-maint-owner-extra');
+      if (exEl) exEl.value = '0';
+      var hEl = document.getElementById('adm-maint-form-heading');
+      if (hEl) hEl.textContent = '✏️ Crea Nuovo Ticket Manutenzione (Front Desk / Supporto PM)';
+      var pEl = document.getElementById('adm-maint-editing-pill');
+      if (pEl) pEl.textContent = 'Nuovo Ticket · Notifica automatica a tutti i manutentori';
+      var alEl = document.getElementById('adm-maint-planner-alert');
+      if (alEl) alEl.style.display = 'none';
+      admUpdateMaintPricePreview();
+    }
+
+    function admLoadTicketIntoSkillForm(ticketId) {
+      var st = admLoadMaintSkillState();
+      var tk = null;
+      for (var i = 0; i < st.tickets.length; i++) {
+        if (st.tickets[i].id === ticketId) {
+          tk = st.tickets[i];
+          break;
+        }
+      }
+      if (!tk) return;
+      document.getElementById('adm-maint-edit-id').value = tk.id;
+      document.getElementById('adm-maint-task').value = tk.taskTitle || '';
+      document.getElementById('adm-maint-datetime-text').value = tk.requestedDateTimeText || '';
+      document.getElementById('adm-maint-slot-iso').value = tk.slotStartIso || '2026-11-12T09:30';
+      document.getElementById('adm-maint-photos').value = Array.isArray(tk.photos) ? tk.photos.join(', ') : (tk.photos || '');
+      document.getElementById('adm-maint-zone').value = tk.zoneLabel || '';
+      document.getElementById('adm-maint-owner-hidden').value = tk.ownerProfileHidden || '';
+      document.getElementById('adm-maint-owner-base').value = Number(tk.ownerBaseEur) || 30;
+      document.getElementById('adm-maint-owner-extra').value = Number(tk.ownerExtraEur) || 0;
+      var hEl = document.getElementById('adm-maint-form-heading');
+      if (hEl) hEl.textContent = '✏️ Modifica Ticket ' + tk.id + ' (Front Desk / Supporto PM)';
+      var pEl = document.getElementById('adm-maint-editing-pill');
+      if (pEl) pEl.textContent = 'Editing attivo su ' + tk.id + ' · Salva per aggiornare in tempo reale';
+      admUpdateMaintPricePreview();
+      var panel = document.getElementById('adm-maint-skill-network-panel');
+      if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function admShowMaintPlannerAlert(msg, isError) {
+      var alEl = document.getElementById('adm-maint-planner-alert');
+      if (!alEl) return;
+      alEl.style.display = 'block';
+      alEl.style.background = isError ? '#FEF2F2' : '#ECFDF5';
+      alEl.style.color = isError ? '#991B1B' : '#065F46';
+      alEl.style.border = isError ? '1.5px solid #DC2626' : '1.5px solid #059669';
+      alEl.textContent = msg;
+    }
+
+    function admSaveMaintSkillTicket() {
+      var editId = (document.getElementById('adm-maint-edit-id').value || '').trim();
+      var taskTitle = (document.getElementById('adm-maint-task').value || '').trim();
+      var dtText = (document.getElementById('adm-maint-datetime-text').value || '').trim() || 'Giovedì ore 09:30';
+      var slotIso = (document.getElementById('adm-maint-slot-iso').value || '').trim() || '2026-11-12T09:30';
+      var photosRaw = (document.getElementById('adm-maint-photos').value || '').trim();
+      var zoneLabel = (document.getElementById('adm-maint-zone').value || '').trim() || 'Firenze';
+      var ownerHidden = (document.getElementById('adm-maint-owner-hidden').value || '').trim() || 'Proprietario Itassistance';
+      var ownerBase = Math.max(30, parseFloat(document.getElementById('adm-maint-owner-base').value) || 30);
+      var ownerExtra = Math.max(0, parseFloat(document.getElementById('adm-maint-owner-extra').value) || 0);
+
+      if (!taskTitle) {
+        admShowMaintPlannerAlert('Inserisci la descrizione della task da fare prima di salvare il ticket.', true);
+        return;
+      }
+
+      var photosArr = photosRaw
+        ? photosRaw.split(',').map(function (s) { return s.trim(); }).filter(Boolean)
+        : ['foto_intervento.jpg'];
+
+      var payload = {
+        id: editId || ('MNT-2026-' + Math.floor(100 + Math.random() * 899)),
+        taskTitle: taskTitle,
+        photos: photosArr,
+        requestedDateTimeText: dtText,
+        slotStartIso: slotIso,
+        durationMinutes: 60,
+        bufferMinutes: 15,
+        zoneLabel: zoneLabel,
+        ownerProfileHidden: ownerHidden,
+        ownerBaseEur: ownerBase,
+        ownerExtraEur: ownerExtra,
+        updatedBy: 'Front Desk / Supporto PM Itassistance'
+      };
+
+      if (window.ITACloudSync && typeof ITACloudSync.createOrUpdateMaintenanceSkillTicket === 'function') {
+        try {
+          ITACloudSync.createOrUpdateMaintenanceSkillTicket(payload, 'frontdesk_pm');
+        } catch (e) {}
+      }
+
+      var st = admLoadMaintSkillState();
+      var found = false;
+      for (var i = 0; i < st.tickets.length; i++) {
+        if (st.tickets[i].id === payload.id) {
+          st.tickets[i] = Object.assign({}, st.tickets[i], payload);
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        payload.status = 'richiesto';
+        payload.materialsReimbursementEur = 0;
+        payload.assignedMaintainerId = '';
+        payload.assignedMaintainerName = '';
+        payload.createdAt = new Date().toLocaleString('it-IT').slice(0, 16);
+        payload.liquidatedInMonth = false;
+        st.tickets.unshift(payload);
+      }
+      admSaveMaintSkillState(st);
+      renderAdminMaintSkillNetworkPanel();
+      admShowMaintPlannerAlert(
+        editId
+          ? 'Ticket ' + payload.id + ' aggiornato da Front Desk / Supporto PM.'
+          : 'Nuovo Ticket ' + payload.id + ' creato! Notifica inviata a tutti i manutentori del network.',
+        false
+      );
+      showToast(editId ? ('Ticket ' + payload.id + ' aggiornato!') : ('Ticket ' + payload.id + ' pubblicato in Interventi Richiesti!'));
+    }
+
+    function admAcceptMaintSkillTicket(ticketId) {
+      var st = admLoadMaintSkillState();
+      var tk = null;
+      for (var i = 0; i < st.tickets.length; i++) {
+        if (st.tickets[i].id === ticketId) {
+          tk = st.tickets[i];
+          break;
+        }
+      }
+      if (!tk) return;
+      var selEl = document.getElementById('adm-maint-assign-' + ticketId);
+      var maintId = selEl ? selEl.value : 'MAINT-01';
+      var maintName = 'Alessandro Gori · Tecnico Manutentore Firenze';
+      if (maintId === 'MAINT-02') maintName = 'Stefano Conti · Squadra Pronto Intervento FI';
+
+      var conflict = admCheckPlannerBufferConflict(st.tickets, tk.slotStartIso, maintId, tk.id);
+      if (conflict) {
+        var msg = '⛔ Conflitto Planner (60 min + 15 min buffer): lo slot richiesto (' + tk.requestedDateTimeText + ') si sovrappone con il ticket ' + conflict.id + ' (' + conflict.requestedDateTimeText + ') per ' + maintName + '. Modifica l\'orario prima di accettare.';
+        admShowMaintPlannerAlert(msg, true);
+        showToast('Slot non disponibile: buffer 15 min + 60 min occupato da ' + conflict.id);
+        return;
+      }
+
+      if (window.ITACloudSync && typeof ITACloudSync.acceptMaintenanceJobByMaintainer === 'function') {
+        try {
+          ITACloudSync.acceptMaintenanceJobByMaintainer(ticketId, { id: maintId, name: maintName });
+        } catch (e) {}
+      }
+
+      tk.status = 'in_planner';
+      tk.assignedMaintainerId = maintId;
+      tk.assignedMaintainerName = maintName;
+      admSaveMaintSkillState(st);
+      renderAdminMaintSkillNetworkPanel();
+      admShowMaintPlannerAlert('✅ Intervento ' + tk.id + ' accettato da ' + maintName + '! Rimosso dalla coda pubblica e bloccato nel Planner (60m + 15m buffer pre/post).', false);
+      showToast('Ticket ' + tk.id + ' inserito nel Planner di ' + maintName + '!');
+    }
+
+    function admCompleteMaintSkillTicket(ticketId) {
+      var st = admLoadMaintSkillState();
+      var tk = null;
+      for (var i = 0; i < st.tickets.length; i++) {
+        if (st.tickets[i].id === ticketId) {
+          tk = st.tickets[i];
+          break;
+        }
+      }
+      if (!tk) return;
+      var matInp = document.getElementById('adm-maint-mat-' + ticketId);
+      var matEur = Math.max(0, parseFloat(matInp ? matInp.value : 0) || 0);
+
+      if (window.ITACloudSync && typeof ITACloudSync.completeMaintenanceJobByMaintainer === 'function') {
+        try {
+          ITACloudSync.completeMaintenanceJobByMaintainer(ticketId, { materialsReimbursementEur: matEur });
+        } catch (e) {}
+      }
+
+      tk.status = 'completato';
+      tk.materialsReimbursementEur = matEur;
+      tk.completedAt = new Date().toLocaleString('it-IT').slice(0, 16);
+      tk.liquidatedInMonth = false;
+      var econ = admComputeTicketEconomics(tk);
+
+      // Addebito automatico sul conto del Proprietario (Fattura / Spesa registrata in Admin)
+      if (admState && Array.isArray(admState.invoices)) {
+        admState.invoices.unshift({
+          id: 'FATT-MNT-' + tk.id.replace('MNT-2026-', ''),
+          date: new Date().toLocaleDateString('it-IT'),
+          client: tk.ownerProfileHidden || 'Proprietario Immobile Firenze',
+          cf: 'Addebito Automatico Conto Proprietario',
+          desc: 'Intervento Manutenzione ' + tk.id + ': ' + tk.taskTitle + (matEur > 0 ? ' (incl. Rimborso materiali ' + fmtItaEuro(matEur) + ')' : ''),
+          total: econ.ownerTotalChargeEur,
+          method: 'Addebito Automatico Conto Proprietario',
+          status: 'Pagata'
+        });
+        saveAdminState();
+        renderAllAdmin();
+      }
+
+      admSaveMaintSkillState(st);
+      renderAdminMaintSkillNetworkPanel();
+      admShowMaintPlannerAlert(
+        '✅ Job ' + tk.id + ' completato! Maturato Manutentore aggiornato (+' + fmtItaEuro(econ.maintainerTotalInvoiceEur) + ' su fattura) e addebitato automaticamente il Conto Proprietario (' + fmtItaEuro(econ.ownerTotalChargeEur) + ').',
+        false
+      );
+      showToast('Job ' + tk.id + ' realizzato: maturato manutentore e addebito proprietario aggiornati!');
+    }
+
+    function admLiquidateMaintainerMonth() {
+      if (window.ITACloudSync && typeof ITACloudSync.liquidateAndResetMaintainerMonthlyCounter === 'function') {
+        try {
+          ITACloudSync.liquidateAndResetMaintainerMonthlyCounter();
+        } catch (e) {}
+      }
+      var st = admLoadMaintSkillState();
+      var liquidatedNow = 0;
+      for (var i = 0; i < st.tickets.length; i++) {
+        var tk = st.tickets[i];
+        if (tk && tk.status === 'completato' && !tk.liquidatedInMonth) {
+          var ec = admComputeTicketEconomics(tk);
+          liquidatedNow += ec.maintainerTotalInvoiceEur;
+          tk.liquidatedInMonth = true;
+        }
+      }
+      st.lastLiquidationAt = new Date().toLocaleString('it-IT').slice(0, 16);
+      st.liquidatedHistoryTotalEur = Math.round(((Number(st.liquidatedHistoryTotalEur) || 0) + liquidatedNow) * 100) / 100;
+      admSaveMaintSkillState(st);
+      renderAdminMaintSkillNetworkPanel();
+      admShowMaintPlannerAlert(
+        '🔄 Liquidazione mensile eseguita (' + fmtItaEuro(liquidatedNow) + ' liquidati su fattura). Il contatore "Importo Maturato Mese Corrente" è stato azzerato (0,00 €).',
+        false
+      );
+      showToast('Liquidazione mensile eseguita: contatore mese azzerato a 0,00 €!');
+    }
+
+    function renderAdminMaintSkillNetworkPanel() {
+      var st = admLoadMaintSkillState();
+      var reqList = [];
+      var planList = [];
+      var doneList = [];
+      var maintainerMonthTotal = 0;
+      var ownerChargeTotal = 0;
+
+      for (var i = 0; i < st.tickets.length; i++) {
+        var tk = st.tickets[i];
+        if (!tk) continue;
+        var ec = admComputeTicketEconomics(tk);
+        if (tk.status === 'richiesto') {
+          reqList.push({ tk: tk, ec: ec });
+        } else if (tk.status === 'in_planner') {
+          planList.push({ tk: tk, ec: ec });
+        } else if (tk.status === 'completato') {
+          doneList.push({ tk: tk, ec: ec });
+          if (!tk.liquidatedInMonth) {
+            maintainerMonthTotal += ec.maintainerTotalInvoiceEur;
+          }
+          ownerChargeTotal += ec.ownerTotalChargeEur;
+        }
+      }
+
+      var kpiMaint = document.getElementById('adm-maint-kpi-maintainer-month');
+      if (kpiMaint) kpiMaint.textContent = fmtItaEuro(maintainerMonthTotal);
+
+      var kpiOwner = document.getElementById('adm-maint-kpi-owner-charge');
+      if (kpiOwner) kpiOwner.textContent = fmtItaEuro(ownerChargeTotal);
+
+      var kpiQueues = document.getElementById('adm-maint-kpi-queues');
+      if (kpiQueues) {
+        kpiQueues.textContent = reqList.length + ' Richiesti · ' + planList.length + ' In Planner · ' + doneList.length + ' Realizzati';
+      }
+
+      var liqLbl = document.getElementById('adm-maint-last-liquidation-lbl');
+      if (liqLbl) {
+        liqLbl.textContent = 'Ultima liquidazione fattura: ' + (st.lastLiquidationAt || '—') + ' · Buffer 15m attivo';
+      }
+
+      var cReq = document.getElementById('adm-maint-count-req');
+      if (cReq) cReq.textContent = String(reqList.length);
+      var cPlan = document.getElementById('adm-maint-count-plan');
+      if (cPlan) cPlan.textContent = String(planList.length);
+      var cDone = document.getElementById('adm-maint-count-done');
+      if (cDone) cDone.textContent = String(doneList.length);
+
+      var reqBox = document.getElementById('adm-maint-list-requested');
+      if (reqBox) {
+        if (!reqList.length) {
+          reqBox.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:8px;">Nessun intervento in attesa di accettazione.</div>';
+        } else {
+          reqBox.innerHTML = reqList.map(function (item) {
+            var t = item.tk;
+            var e = item.ec;
+            var photosStr = Array.isArray(t.photos) ? t.photos.join(', ') : (t.photos || 'Nessuna foto');
+            var extraBadge = e.maintainerExtraEur > 0
+              ? '<span class="badge" style="background:#FEF3C7;color:#92400E;font-weight:800;">+ € ' + fmtItaEuro(e.maintainerExtraEur).replace(' €', '') + ' Extra per l\'intervento</span>'
+              : '';
+            return '<div style="background:#FFFFFF;border:1.5px solid var(--border);border-radius:10px;padding:10px;">' +
+              '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px;flex-wrap:wrap;margin-bottom:4px;">' +
+                '<strong style="font-size:12.5px;color:var(--navy);">' + t.id + ' · ' + t.taskTitle + '</strong>' +
+                '<span class="badge badge-gold">🔔 Notifica Attiva</span>' +
+              '</div>' +
+              '<div style="font-size:11.5px;color:var(--text-muted);margin-bottom:4px;">' +
+                '📍 <strong>' + (t.zoneLabel || 'Firenze') + '</strong><br/>' +
+                '🕒 Data/Ora richiesta: <strong>' + (t.requestedDateTimeText || '') + '</strong><br/>' +
+                '📷 Foto: <code>' + photosStr + '</code>' +
+              '</div>' +
+              '<div style="background:#F5F3FF;border-radius:8px;padding:7px 9px;font-size:11.5px;margin-bottom:8px;">' +
+                '<div>👤 <strong>Addebito Proprietario (🔒 Nascosto al Manutentore):</strong> ' + fmtItaEuro(e.ownerTotalChargeEur) + ' (' + (t.ownerProfileHidden || 'Proprietario') + ')</div>' +
+                '<div style="margin-top:2px;">👷 <strong>Vista Manutentore (🔒 Nascosta al Proprietario):</strong> <strong>' + fmtItaEuro(e.maintainerBaseEur) + ' base</strong> ' + extraBadge + '</div>' +
+              '</div>' +
+              '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">' +
+                '<select id="adm-maint-assign-' + t.id + '" style="flex:1;min-width:140px;padding:6px 8px;border-radius:7px;border:1px solid var(--border);font-size:11.5px;font-weight:700;">' +
+                  '<option value="MAINT-01">Alessandro Gori (Manutentore FI)</option>' +
+                  '<option value="MAINT-02">Stefano Conti (Squadra Tecnica FI)</option>' +
+                '</select>' +
+                '<button type="button" class="btn btn-primary btn-sm" onclick="admAcceptMaintSkillTicket(\'' + t.id + '\')">👷 Accetta in Planner</button>' +
+                '<button type="button" class="btn btn-outline btn-sm" onclick="admLoadTicketIntoSkillForm(\'' + t.id + '\')">✏️ Modifica</button>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+        }
+      }
+
+      var planBox = document.getElementById('adm-maint-list-planner');
+      if (planBox) {
+        if (!planList.length) {
+          planBox.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:8px;">Nessun intervento pianificato nel Planner.</div>';
+        } else {
+          planBox.innerHTML = planList.map(function (item) {
+            var t = item.tk;
+            var e = item.ec;
+            var extraBadge = e.maintainerExtraEur > 0
+              ? ' + <strong>+ € ' + fmtItaEuro(e.maintainerExtraEur).replace(' €', '') + ' Extra per l\'intervento</strong>'
+              : '';
+            return '<div style="background:#FFFFFF;border:1.5px solid #7C3AED;border-radius:10px;padding:10px;">' +
+              '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px;flex-wrap:wrap;margin-bottom:4px;">' +
+                '<strong style="font-size:12.5px;color:#4C1D95;">' + t.id + ' · ' + t.taskTitle + '</strong>' +
+                '<span class="badge badge-ok">60m + 15m Buffer</span>' +
+              '</div>' +
+              '<div style="font-size:11.5px;color:var(--text-muted);margin-bottom:6px;">' +
+                '👷 Assegnato a: <strong>' + (t.assignedMaintainerName || 'Manutentore Network') + '</strong><br/>' +
+                '🕒 Richiesta: <strong>' + (t.requestedDateTimeText || '') + '</strong><br/>' +
+                '🛡️ Slot Bloccato: <strong>' + admFormatSlotWindowWithBuffer(t.slotStartIso) + '</strong><br/>' +
+                '💶 Compenso Manutentore: <strong>' + fmtItaEuro(e.maintainerBaseEur) + ' base</strong>' + extraBadge +
+              '</div>' +
+              '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">' +
+                '<label style="font-size:11px;font-weight:700;color:var(--navy);">Rimborso materiali (€):</label>' +
+                '<input type="number" id="adm-maint-mat-' + t.id + '" min="0" step="0.5" value="' + (Number(t.materialsReimbursementEur) || 0) + '" style="width:78px;padding:5px 7px;border-radius:6px;border:1px solid var(--border);font-size:12px;font-weight:700;"/>' +
+                '<button type="button" class="btn btn-gold btn-sm" onclick="admCompleteMaintSkillTicket(\'' + t.id + '\')">✅ Segna Realizzato</button>' +
+                '<button type="button" class="btn btn-outline btn-sm" onclick="admLoadTicketIntoSkillForm(\'' + t.id + '\')">✏️ Modifica</button>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+        }
+      }
+
+      var doneBox = document.getElementById('adm-maint-list-completed');
+      if (doneBox) {
+        if (!doneList.length) {
+          doneBox.innerHTML = '<div style="font-size:12px;color:var(--text-muted);padding:8px;">Nessun job completato.</div>';
+        } else {
+          doneBox.innerHTML = doneList.map(function (item) {
+            var t = item.tk;
+            var e = item.ec;
+            var statusPayout = t.liquidatedInMonth
+              ? '<span class="badge" style="background:#E5E7EB;color:#374151;">Liquidato su fattura</span>'
+              : '<span class="badge badge-ok">Maturato Mese Attivo</span>';
+            return '<div style="background:#FFFFFF;border:1.5px solid #059669;border-radius:10px;padding:10px;">' +
+              '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px;flex-wrap:wrap;margin-bottom:4px;">' +
+                '<strong style="font-size:12.5px;color:#065F46;">' + t.id + ' · ' + t.taskTitle + '</strong>' +
+                statusPayout +
+              '</div>' +
+              '<div style="font-size:11.5px;color:var(--text-muted);margin-bottom:4px;">' +
+                '👷 Eseguito da: <strong>' + (t.assignedMaintainerName || 'Manutentore Network') + '</strong> · ' + (t.requestedDateTimeText || '') +
+              '</div>' +
+              '<div style="background:#ECFDF5;border-radius:8px;padding:7px 9px;font-size:11.5px;color:#065F46;">' +
+                '<div>🧾 <strong>Maturato Manutentore (su fattura): ' + fmtItaEuro(e.maintainerTotalInvoiceEur) + '</strong> (' +
+                  fmtItaEuro(e.maintainerBaseEur) + ' base' +
+                  (e.maintainerExtraEur > 0 ? ' + + € ' + fmtItaEuro(e.maintainerExtraEur).replace(' €', '') + ' Extra intervento' : '') +
+                  (e.materialsReimbursementEur > 0 ? ' + ' + fmtItaEuro(e.materialsReimbursementEur) + ' materiali' : '') +
+                ')</div>' +
+                '<div style="margin-top:2px;">💳 <strong>Addebito Automatico Conto Proprietario: ' + fmtItaEuro(e.ownerTotalChargeEur) + '</strong> (🔒 Invisibile al Manutentore)</div>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+        }
+      }
+
+      // Aggiorna anche il mirror nella sezione Fornitori (#adm-fornitori-maint-summary-cards)
+      var mirrorBox = document.getElementById('adm-fornitori-maint-summary-cards');
+      if (mirrorBox) {
+        mirrorBox.innerHTML =
+          '<div style="background:#FFFFFF;border:1.5px solid #6D28D9;border-radius:10px;padding:12px;">' +
+            '<div style="font-size:11px;font-weight:800;color:#5B21B6;text-transform:uppercase;">Importo Maturato Mese Corrente (Su Fattura Manutentori)</div>' +
+            '<div style="font-size:20px;font-weight:800;color:var(--navy);margin-top:4px;">' + fmtItaEuro(maintainerMonthTotal) + '</div>' +
+            '<div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">15,00 € base + Extra intervento + Rimborso materiali · Ultima liquidazione: ' + (st.lastLiquidationAt || '—') + '</div>' +
+          '</div>' +
+          '<div style="background:#FFFFFF;border:1.5px solid #059669;border-radius:10px;padding:12px;">' +
+            '<div style="font-size:11px;font-weight:800;color:#065F46;text-transform:uppercase;">Addebito Automatico Conto Proprietari</div>' +
+            '<div style="font-size:20px;font-weight:800;color:#065F46;margin-top:4px;">' + fmtItaEuro(ownerChargeTotal) + '</div>' +
+            '<div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">30,00 € base (o difficoltà) + Supplemento + Materiali</div>' +
+          '</div>' +
+          '<div style="background:#FFFFFF;border:1.5px solid #D97706;border-radius:10px;padding:12px;">' +
+            '<div style="font-size:11px;font-weight:800;color:#B45309;text-transform:uppercase;">Stato Live Code &amp; Planner (60m + 15m Buffer)</div>' +
+            '<div style="font-size:16px;font-weight:800;color:var(--navy);margin-top:4px;">' + reqList.length + ' Richiesti · ' + planList.length + ' In Planner · ' + doneList.length + ' Realizzati</div>' +
+            '<div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">Privacy incrociata attiva tra Proprietario e Manutentore</div>' +
+          '</div>';
+      }
+
+      admUpdateMaintPricePreview();
+    }
+
+    function admRecalcCreatorQuickTotal(prefix) {
+      var p = prefix || 't1';
+      var photoEl = document.getElementById('adm-cc-' + p + '-photo');
+      var videoEl = document.getElementById('adm-cc-' + p + '-video');
+      var accessEl = document.getElementById('adm-cc-' + p + '-access');
+      var totalEl = document.getElementById('adm-cc-' + p + '-total');
+      var photoVal = photoEl && photoEl.value !== '' ? parseFloat(photoEl.value) || 0 : 0;
+      var videoVal = videoEl && videoEl.value !== '' ? parseFloat(videoEl.value) || 0 : 0;
+      var accessVal = accessEl && accessEl.value !== '' ? parseFloat(accessEl.value) || 0 : 0;
+      if (totalEl) {
+        totalEl.value = (Math.round((photoVal + videoVal + accessVal) * 100) / 100).toFixed(2);
+      }
+    }
+
+    function admCollectCreatorQuickPayload(prefix) {
+      var p = prefix || 't1';
+      var getVal = function (suffix) {
+        var el = document.getElementById('adm-cc-' + p + '-' + suffix);
+        return el && el.value !== undefined ? String(el.value).trim() : '';
+      };
+      var modeRaw = getVal('mode');
+      return {
+        clientName: getVal('client'),
+        clientVatOrCf: getVal('client-vat'),
+        propertyAddress: getVal('property'),
+        shootingSessions: getVal('sessions'),
+        shootingDates: getVal('sessions'),
+        creatorName: getVal('creator'),
+        collaborationMode: modeRaw,
+        feePhotoShooting: getVal('photo'),
+        feeVideoReelAds: getVal('video'),
+        feeAccessManagement: getVal('access'),
+        totalTariffEur: getVal('total'),
+        economicConsideration: (modeRaw ? modeRaw + ' · ' : '') + (getVal('total') ? ('Totale Tariffario: € ' + getVal('total')) : '[DA COMPILARE]')
+      };
+    }
+
+    function admDownloadCreatorContractPdfFromBox(prefix) {
+      var payload = admCollectCreatorQuickPayload(prefix);
+      if (window.ITACloudSync && typeof ITACloudSync.downloadCreatorContractCompiledPdf === 'function') {
+        ITACloudSync.downloadCreatorContractCompiledPdf(payload);
+        if (typeof showToast === 'function') {
+          showToast('📥 Contratto Produzione Contenuti (.pdf) generato e scaricato!');
+        }
+      }
+    }
+
+    function admOpenCreatorPrintPreviewFromBox(prefix) {
+      var payload = admCollectCreatorQuickPayload(prefix);
+      if (window.ITACloudSync && typeof ITACloudSync.openCreatorPropertyReleaseContractPrint === 'function') {
+        ITACloudSync.openCreatorPropertyReleaseContractPrint(payload);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      renderAdminMomentTariffAndArmUI();
+      renderAdminMaintSkillNetworkPanel();
+      if (window.ITACloudSync && typeof ITACloudSync.syncCrossCrmProspectsFromPba === 'function') {
+        ITACloudSync.syncCrossCrmProspectsFromPba().then(function () {
+          renderAdminCrossCrmArmPanel();
+          renderAdminMomentTariffAndArmUI();
+        });
+      }
+      renderAdminCrossCrmArmPanel();
     });
   </script>
 </body>

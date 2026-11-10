@@ -30,6 +30,8 @@
   }
   </script>
   <script src="/site-config.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.min.js" defer></script>
 </head>
 <body>
 <div id="root">
@@ -75,15 +77,15 @@
     display:flex; justify-content:center; padding:0; margin:0;
   }
   .sheet{
-    position:relative; width:100%; max-width:720px; height:min(100vh,860px);
-    background:var(--sheet); display:flex; flex-direction:column; overflow:hidden;
+    position:relative; width:100%; max-width:720px; min-height:100dvh; height:auto;
+    background:var(--sheet); display:flex; flex-direction:column;
     border-radius:var(--radius); box-shadow:0 24px 60px rgba(0,0,0,.16),0 2px 6px rgba(0,0,0,.06);
   }
-  @media (max-width:720px){ .sheet{border-radius:0; height:100vh; box-shadow:none} }
+  @media (max-width:720px){ .sheet{border-radius:0; min-height:100dvh; height:auto; box-shadow:none} }
 
   /* ── header ───────────────────────────── */
   .hdr{
-    flex:0 0 auto; padding:22px 28px 16px; text-align:center;
+    flex:0 0 auto; padding:22px max(16px, env(safe-area-inset-right, 0px)) 16px max(16px, env(safe-area-inset-left, 0px)); text-align:center;
     border-bottom:1px solid transparent; transition:border-color .25s ease, padding .25s ease;
     background:var(--sheet); z-index:3;
   }
@@ -102,8 +104,8 @@
 
   /* ── scroll body ──────────────────────── */
   .scroller{
-    flex:1 1 auto; overflow-y:auto; overscroll-behavior:contain;
-    padding:8px 28px 32px; scroll-behavior:smooth;
+    flex:1 1 auto;
+    padding:8px max(16px, env(safe-area-inset-right, 0px)) 32px max(16px, env(safe-area-inset-left, 0px)); scroll-behavior:smooth;
   }
   @media (prefers-reduced-motion:reduce){ .scroller{scroll-behavior:auto} }
   .doc{font-size:15px; line-height:1.55; letter-spacing:-.006em; color:var(--ink)}
@@ -135,12 +137,7 @@
 
   /* ── jump-to-bottom chevron ───────────── */
   .jump{
-    position:absolute; right:20px; bottom:calc(var(--footh,168px) + 16px);
-    width:40px; height:40px; border-radius:50%; border:0; cursor:pointer;
-    background:var(--sheet); color:var(--blue);
-    box-shadow:0 2px 10px rgba(0,0,0,.16),0 0 0 .5px var(--hair);
-    display:grid; place-items:center; z-index:4;
-    transition:opacity .25s ease, transform .25s ease;
+    display:none !important;
   }
   .jump[hidden]{display:grid; opacity:0; transform:scale(.85); pointer-events:none}
   .jump svg{width:17px;height:17px}
@@ -227,6 +224,148 @@
   .receipt div{display:flex; justify-content:space-between; gap:16px}
   .receipt div span:last-child{color:var(--ink); font-weight:500; text-align:right}
   .done .btn{max-width:420px}
+
+  /* ── JUL-011: Model Selector Tabs & Creator Contract Generator ── */
+  .sheet{max-width:860px}
+  .model-tabs{
+    display:grid; grid-template-columns:1fr 1fr; gap:8px;
+    padding:12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px));
+    background:var(--fill); border-bottom:1px solid var(--hair);
+  }
+  @media (max-width:640px){ .model-tabs{grid-template-columns:1fr} }
+  .model-tab-btn{
+    min-height:48px; min-width:0; width:100%;
+    padding:10px 14px; border-radius:12px;
+    border:1.5px solid var(--hair); background:var(--sheet);
+    color:var(--ink-2); font-family:var(--font); font-size:13.5px; font-weight:700;
+    line-height:1.35; text-align:left; cursor:pointer;
+    display:flex; align-items:center; gap:8px;
+    overflow-wrap:anywhere; transition:all .15s ease;
+  }
+  .model-tab-btn.active{
+    background:var(--blue); color:#fff; border-color:var(--blue);
+    box-shadow:0 4px 14px rgba(0,0,0,.12);
+  }
+  .model-tab-btn:focus-visible{outline:3px solid var(--gold-accent); outline-offset:2px}
+  #contract-owner-service-section{
+    display:flex; flex-direction:column; flex:1 1 auto; min-width:0; width:100%;
+  }
+  #contract-owner-service-section[hidden],
+  #contract-creator-release-section[hidden]{
+    display:none !important;
+  }
+  #contract-creator-release-section{
+    display:flex; flex-direction:column; flex:1 1 auto; min-width:0; width:100%;
+    padding:16px max(16px, env(safe-area-inset-right, 0px)) 36px max(16px, env(safe-area-inset-left, 0px));
+  }
+  .cr-panel{
+    background:var(--fill); border:1px solid var(--hair); border-radius:14px;
+    padding:16px; margin-bottom:20px; width:100%; max-width:100%;
+  }
+  .cr-panel h2{
+    margin:0 0 6px; font-size:16px; font-weight:700; color:var(--ink);
+  }
+  .cr-panel p.sub{
+    margin:0 0 14px; font-size:13px; color:var(--ink-2); line-height:1.45;
+  }
+  .cr-form-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%;
+  }
+  @media (max-width:600px){ .cr-form-grid{grid-template-columns:1fr} }
+  .cr-field{
+    display:flex; flex-direction:column; gap:5px; min-width:0;
+  }
+  .cr-field.full{grid-column:1 / -1}
+  .cr-field label{
+    font-size:12px; font-weight:700; color:var(--ink-2); letter-spacing:.01em;
+  }
+  .cr-field input,
+  .cr-field select,
+  .cr-field textarea{
+    width:100%; max-width:100%; min-width:0;
+    font-family:var(--font); font-size:14px; color:var(--ink);
+    background:var(--sheet); border:1px solid var(--hair); border-radius:10px;
+    padding:10px 12px; outline:none;
+  }
+  .cr-field textarea{resize:vertical; min-height:68px; line-height:1.45}
+  .cr-field input:focus,
+  .cr-field select:focus,
+  .cr-field textarea:focus{border-color:var(--border-control)}
+  .cr-dyn{
+    font-weight:700; color:var(--ink); background:var(--fill);
+    padding:1px 6px; border-radius:5px; border-bottom:1px dashed var(--border-control);
+    overflow-wrap:anywhere;
+  }
+  .cr-legal-doc{
+    background:var(--sheet); border:1px solid var(--hair); border-radius:14px;
+    padding:22px max(16px, 2.5vw); width:100%; max-width:100%;
+    font-size:14.5px; line-height:1.6; color:var(--ink); overflow-wrap:anywhere;
+  }
+  .cr-legal-doc h2{
+    font-size:12.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--ink-3); margin:28px 0 10px; padding-top:16px; border-top:1px solid var(--hair);
+  }
+  .cr-legal-doc h2:first-of-type{margin-top:14px; padding-top:0; border-top:0}
+  .cr-legal-doc h3{
+    font-size:15.5px; font-weight:700; margin:16px 0 6px; color:var(--ink);
+  }
+  .cr-legal-doc p{margin:0 0 10px}
+  .cr-legal-doc ul{margin:0 0 12px; padding-left:20px}
+  .cr-legal-doc li{margin-bottom:6px}
+  .cr-badge-zero{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:6px 10px; border-radius:8px; background:var(--status-ok-bg); color:var(--status-ok-text);
+    font-size:12px; font-weight:700; margin-bottom:10px;
+  }
+  .cr-sign-grid{
+    display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px; margin:14px 0;
+  }
+  @media (max-width:680px){ .cr-sign-grid{grid-template-columns:1fr} }
+  .cr-sign-box{
+    background:var(--fill); border:1px solid var(--hair); border-radius:12px;
+    padding:14px; display:flex; flex-direction:column; gap:8px; min-width:0;
+  }
+  .cr-sign-box strong{font-size:13px; color:var(--ink)}
+  .cr-sign-line{
+    margin-top:18px; padding-top:8px; border-top:1px dashed var(--ink-3);
+    font-size:12px; color:var(--ink-2);
+  }
+  .cr-annex-table{
+    width:100%; border-collapse:collapse; margin:10px 0 16px; font-size:13.5px;
+  }
+  .cr-annex-table th,
+  .cr-annex-table td{
+    border:1px solid var(--hair); padding:9px 11px; text-align:left; vertical-align:top;
+    overflow-wrap:anywhere;
+  }
+  .cr-annex-table th{background:var(--fill); font-weight:700; width:34%}
+  @media (max-width:520px){
+    .cr-annex-table, .cr-annex-table tbody, .cr-annex-table tr, .cr-annex-table th, .cr-annex-table td{
+      display:block; width:100%;
+    }
+    .cr-annex-table tr{margin-bottom:8px; border:1px solid var(--hair); border-radius:8px; overflow:hidden}
+    .cr-annex-table th, .cr-annex-table td{border:0; border-bottom:1px solid var(--hair-soft)}
+  }
+  .cr-actions-bar{
+    display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:20px;
+  }
+  @media (max-width:640px){ .cr-actions-bar{grid-template-columns:1fr} }
+  .cr-btn-secondary{
+    width:100%; min-height:54px; font-family:var(--font); font-size:15px; font-weight:700;
+    padding:12px 16px; border-radius:12px; border:2px solid var(--blue);
+    background:var(--sheet); color:var(--ink); cursor:pointer;
+  }
+  .cr-status-box{
+    margin-top:16px; padding:14px 16px; border-radius:12px;
+    background:var(--status-ok-bg); color:var(--status-ok-text);
+    border:1px solid var(--hair); font-size:13.5px; line-height:1.5;
+  }
+  @media print{
+    .model-tabs, .no-print, .ftr, .jump{display:none !important}
+    .sheet{max-width:100%; box-shadow:none; border-radius:0}
+    .cr-legal-doc{border:0; padding:0}
+    .cr-dyn{background:transparent; border-bottom:1px solid currentColor; padding:0}
+  }
 </style>
 
 <div class="sheet">
@@ -235,17 +374,44 @@
       <img src="/brand/logo.png" alt="itassistance" style="width:26px;height:auto;vertical-align:middle;border-radius:4px;">
       <span>itassistance</span>
     </div>
-    <h1>Termini di servizio</h1>
-    <p>Condizioni generali di abbonamento all'app itassistance e servizi opzionali · Blue Arroyo SRL (P.IVA 07480210488)</p>
+    <h1 id="hdr-main-title">Termini di servizio &amp; Contratti Ufficiali</h1>
+    <p id="hdr-main-sub">Condizioni generali di abbonamento all'app itassistance (Piano 4 · Itassistance) e Contratti Produzione Contenuti · Blue Arroyo S.r.l. (P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1)</p>
   </header>
 
+  <!-- ═══ SELETTORE MODELLO CONTRATTUALE (JUL-011 / JUL-012) ═══ -->
+  <nav class="model-tabs" id="contract-model-tabs" aria-label="Selettore Modello Contrattuale">
+    <button type="button" class="model-tab-btn active" id="tab-btn-owner" data-contract-tab="owner" aria-selected="true">
+      <span>🏠 1. Contratto di Servizio Proprietario (Gestione &amp; Price Lock)</span>
+    </button>
+    <button type="button" class="model-tab-btn" id="tab-btn-creator" data-contract-tab="creator" aria-selected="false">
+      <span>🎬 2. Contratto Produzione Contenuti, Form Cliente &amp; Tariffario + PDF (JUL-011 / JUL-012)</span>
+    </button>
+  </nav>
+
+  <!-- ═══ TAB 1: CONTRATTO DI SERVIZIO PROPRIETARIO (PRESERVATO AL 100%) ═══ -->
+  <div id="contract-owner-service-section">
   <main class="scroller" id="scroller" tabindex="0">
     <div class="doc">
+
+      <div class="callout no-print" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--hair);">
+        <div style="min-width:0;flex:1 1 240px;">
+          <b>📄 Cerchi il Form Dati Cliente &amp; Tariffario con Download PDF diretto (JUL-012)?</b><br/>
+          <span>Compila i 4 Blocchi (Dati Cliente, Professionista, Tariffario e Condizioni) oppure scarica subito il PDF.</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <button type="button" class="btn" id="btn-jump-to-creator-form" style="width:auto;min-height:42px;padding:8px 14px;font-size:13.5px;">
+            📝 Apri Form 4 Blocchi &amp; Tariffario
+          </button>
+          <a href="/contratti/contratto-produzione-contenuti-itassistance.pdf" download="Contratto_Produzione_Contenuti_Itassistance.pdf" class="cr-btn-secondary" style="width:auto;min-height:42px;padding:8px 14px;font-size:13.5px;text-decoration:none;display:inline-flex;align-items:center;">
+            📥 Scarica PDF (.pdf)
+          </a>
+        </div>
+      </div>
 
       <p class="lead">Leggi con attenzione. Scorrendo fino in fondo potrai accettare i Termini di Servizio e procedere all'attivazione di itassistance (99 € al mese IVA inclusa, con garanzia 14 giorni Soddisfatto o Rimborsato).</p>
 
       <h2>Le parti</h2>
-      <p><strong>Blue Arroyo SRL</strong>, titolare del prodotto “itassistance”, sede in Via Matteo Palmieri 20r, 50122 Firenze (FI), P.IVA 07480210488, PEC <strong>bluearroyosrl@pec.it</strong>— di seguito <strong>il Fornitore</strong>.</p>
+      <p><strong>Blue Arroyo S.r.l.</strong>, titolare del prodotto “itassistance” (Piano 4 · Itassistance) – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: <strong>[DA CONFERMARE]</strong> · Capitale sociale: <strong>[DA CONFERMARE]</strong> — di seguito <strong>il Fornitore</strong>.</p>
       <p>Il sottoscrittore identificato nel modulo in calce, titolare del diritto di disporre dell’immobile indicato — di seguito <strong>il Proprietario</strong> o <strong>Committente</strong>.</p>
 
       <h2>Premesse</h2>
@@ -363,7 +529,7 @@
       <h2>17 · Cessione, forza maggiore, comunicazioni</h2>
       <p>Il contratto <strong>non è cedibile</strong> dal Committente senza consenso scritto. In caso di vendita dell’immobile, comunicazione con 30 giorni di preavviso: il contratto si risolve salvo subentro scritto dell’acquirente. Il Fornitore può cedere a società del gruppo e avvalersi di subappaltatori.</p>
       <p><strong>Forza maggiore</strong>: nessuna responsabilità per eventi imprevedibili e non controllabili; oltre 60 giorni ciascuna Parte può recedere senza indennizzo, con canone ridotto del 50% durante la sospensione.</p>
-      <p><strong>Comunicazioni.</strong> Recesso, disdetta, risoluzione, diffide e contestazioni solo a mezzo <strong>PEC o raccomandata a/r</strong>: la PEC del Fornitore è <strong>bluearroyosrl@pec.it</strong>, quella del Committente è l’indirizzo indicato in fase di sottoscrizione. Le comunicazioni operative viaggiano via e-mail o WhatsApp ai recapiti indicati, con valore probatorio riconosciuto ex art. 2712 c.c.</p>
+      <p><strong>Comunicazioni.</strong> Recesso, disdetta, risoluzione, diffide e contestazioni solo a mezzo <strong>PEC o raccomandata a/r</strong>: la PEC del Fornitore è <strong>[DA CONFERMARE]</strong>, quella del Committente è l’indirizzo indicato in fase di sottoscrizione. Le comunicazioni operative viaggiano via e-mail o WhatsApp ai recapiti indicati, con valore probatorio riconosciuto ex art. 2712 c.c.</p>
 
       <h2>18 · Legge e foro</h2>
       <p>Contratto regolato dalla <strong>legge italiana</strong>. Foro esclusivo di <strong>Firenze</strong>, salvo che il Committente rivesta la qualifica di consumatore ai sensi dell’art. 3 D.Lgs. 206/2005, nel qual caso resta competente il foro del suo luogo di residenza o domicilio elettivo.</p>
@@ -422,6 +588,575 @@
     <button class="btn" id="copy" style="margin-top:8px;">Copia riepilogo</button>
     <button class="btn ghost" id="print">Stampa o salva in PDF</button>
   </div>
+  </div><!-- /#contract-owner-service-section -->
+
+  <!-- ═══ TAB 2: CONTRATTO PRODUZIONE CONTENUTI & LIBERATORIA IMMOBILE + FORM 4 BLOCCHI & TARIFFARIO (JUL-011 / JUL-012) ═══ -->
+  <section id="contract-creator-release-section" hidden aria-label="Contratto Produzione Contenuti, Form 4 Blocchi Dati Cliente, Tariffario e Liberatoria Immobile">
+
+    <!-- PANNELLO DI COMPILAZIONE RAPIDA STRUTTURATO IN 4 BLOCCHI (JUL-012 · INTERATTIVO · NON STAMPATO SU CARTA) -->
+    <div class="cr-panel no-print" id="creator-quick-form-panel">
+      <div class="cr-badge-zero">🛡️ REGOLA ZERO ATTIVA · Form 4 Blocchi con Tariffario, Dati Cliente &amp; Download PDF Diretto (JUL-011 / JUL-012)</div>
+      <h2>🎬 Form Compilabile 4 Blocchi: Dati Cliente, Professionista, Tariffario &amp; Scarica PDF (.pdf)</h2>
+      <p class="sub">Compila i 4 Blocchi sottostanti per aggiornare in tempo reale sia l'anteprima integrale del contratto sia il file <code>Contratto_Produzione_Contenuti_Itassistance_Compilato.pdf</code> scaricabile con 1 clic.</p>
+
+      <!-- ═══ BLOCCO A — DATI CLIENTE (PROPRIETARIO O GESTORE AUTORIZZATO AIRBNB) & IMMOBILE ═══ -->
+      <div class="callout" style="margin:12px 0;border:1px solid var(--hair);background:var(--sheet);">
+        <h3 style="margin:0 0 10px;font-size:15px;color:var(--ink);">🏠 BLOCCO A — Dati Cliente (Proprietario o Gestore Autorizzato Airbnb) &amp; Immobile</h3>
+        <div class="cr-form-grid">
+          <div class="cr-field">
+            <label for="cr-client-name">Nome e Cognome / Ragione Sociale Cliente</label>
+            <input type="text" id="cr-client-name" placeholder="[DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-client-tax">Codice Fiscale e Partita IVA Cliente</label>
+            <input type="text" id="cr-client-tax" placeholder="[DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-client-address">Domicilio / Sede Legale Cliente</label>
+            <input type="text" id="cr-client-address" placeholder="[DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-client-contact">Email / PEC e Telefono Cliente</label>
+            <input type="text" id="cr-client-contact" placeholder="[DA COMPILARE]" />
+          </div>
+          <div class="cr-field full">
+            <label for="cr-client-role">Qualifica del Firmatario Cliente</label>
+            <select id="cr-client-role">
+              <option value="Proprietario dell'immobile">Proprietario dell'immobile</option>
+              <option value="Gestore / Property Manager / Intermediario Airbnb autorizzato dal proprietario">Gestore / Property Manager / Intermediario Airbnb autorizzato dal proprietario</option>
+            </select>
+          </div>
+          <div class="cr-field">
+            <label for="cr-prop-address">Indirizzo Completo dell'Immobile</label>
+            <input type="text" id="cr-prop-address" placeholder="[DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-prop-name">Nome Commerciale Alloggio / Codice Unità</label>
+            <input type="text" id="cr-prop-name" placeholder="[es. ST-APT-... / DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-prop-cin">CIN / CIR dell'Immobile</label>
+            <input type="text" id="cr-prop-cin" placeholder="[DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-access-duration">Durata Autorizzazione Accesso all'Immobile</label>
+            <input type="text" id="cr-access-duration" placeholder="[DURATA · DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-slot">Giorni / Orari Sessioni di Shooting</label>
+            <input type="text" id="cr-slot" placeholder="[DATA / ORARIO INGRESSO – USCITA · DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-license-duration">Durata Licenza Utilizzo Contenuti</label>
+            <select id="cr-license-duration">
+              <option value="Illimitata / Indefinita (per tutta la durata massima legale)">Illimitata / Indefinita</option>
+              <option value="[DURATA · DA CONFERMARE]">[DURATA] (specificata nelle note/accordi)</option>
+            </select>
+          </div>
+          <div class="cr-field full">
+            <label for="cr-referente">Referente Presidio / Accoglienza sul Posto</label>
+            <input type="text" id="cr-referente" placeholder="[DA COMPILARE]" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ BLOCCO B — DATI PROFESSIONISTA (CONTENT CREATOR / FOTOGRAFO / VIDEOMAKER / MARKETING) ═══ -->
+      <div class="callout" style="margin:12px 0;border:1px solid var(--hair);background:var(--sheet);">
+        <h3 style="margin:0 0 10px;font-size:15px;color:var(--ink);">🎥 BLOCCO B — Dati Professionista (Content Creator / Fotografo / Videomaker / Marketing)</h3>
+        <div class="cr-form-grid">
+          <div class="cr-field full">
+            <label for="cr-legal-type">Qualifica Giuridica Professionista</label>
+            <select id="cr-legal-type">
+              <option value="opera_2222">Contratto d'opera ex art. 2222 c.c. (Professionista / Creator autonomo)</option>
+              <option value="appalto_1655">Appalto di servizi ex art. 1655 c.c. (Agenzia / Impresa di produzione)</option>
+            </select>
+          </div>
+          <div class="cr-field">
+            <label for="cr-name">Nome e Cognome / Ragione Sociale Professionista</label>
+            <input type="text" id="cr-name" placeholder="[DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-cf">Codice Fiscale Professionista</label>
+            <input type="text" id="cr-cf" placeholder="[DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-piva">Partita IVA Professionista / Agenzia</label>
+            <input type="text" id="cr-piva" placeholder="[DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-addr">Domicilio / Sede Legale Professionista</label>
+            <input type="text" id="cr-addr" placeholder="[DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-email">Email / PEC Professionista</label>
+            <input type="text" id="cr-email" placeholder="[DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-phone">Telefono Professionista</label>
+            <input type="text" id="cr-phone" placeholder="[DA COMPILARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-deliv-foto">Deliverable: N° Fotografie HD post-prodotte</label>
+            <input type="text" id="cr-deliv-foto" placeholder="[DA CONFERMARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-deliv-reel">Deliverable: N° Video / Reel Verticali 9:16</label>
+            <input type="text" id="cr-deliv-reel" placeholder="[DA CONFERMARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-deliv-video169">Deliverable: N° Video Orizzontali 16:9</label>
+            <input type="text" id="cr-deliv-video169" placeholder="[DA CONFERMARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-deliv-giorni">Termine Consegna Deliverable (giorni dallo shooting)</label>
+            <input type="text" id="cr-deliv-giorni" placeholder="[DA CONFERMARE]" />
+          </div>
+          <div class="cr-field full">
+            <label for="cr-attrezzature">Attrezzature Autorizzate (Allegato A)</label>
+            <input type="text" id="cr-attrezzature" placeholder="[Fotocamera/Videocamera, cavalletto gommato, LED a batteria · DA CONFERMARE]" />
+          </div>
+          <div class="cr-field full">
+            <label for="cr-troupe-list">Eventuali Collaboratori / Modelli / Troupe Autorizzati all'Accesso (Allegato B)</label>
+            <textarea id="cr-troupe-list" placeholder="[1. Nome e Cognome — Estremi Documento — Qualifica (Creator / Fotografo / Videomaker / Modello) · DA COMPILARE]"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ BLOCCO C — TARIFFARIO & CONDIZIONI ECONOMICHE (SELEZIONABILE E COMPILABILE) ═══ -->
+      <div class="callout" style="margin:12px 0;border:1px solid var(--hair);background:var(--sheet);">
+        <h3 style="margin:0 0 10px;font-size:15px;color:var(--ink);">💶 BLOCCO C — Tariffario &amp; Condizioni Economiche (Selezionabile e Compilabile)</h3>
+        <div class="cr-form-grid">
+          <div class="cr-field full">
+            <label for="cr-collab-mode">Selettore Modalità Collaborazione (Art. 9)</label>
+            <select id="cr-collab-mode">
+              <option value="1. Collaborazione Gratuita (autorizzazione accesso + uso commerciale immagini senza corrispettivo in denaro)">1. Collaborazione Gratuita (autorizzazione accesso + uso commerciale immagini senza corrispettivo in denaro)</option>
+              <option value="2. Collaborazione Retribuita (Tariffario)" selected>2. Collaborazione Retribuita (Tariffario)</option>
+              <option value="3. Scambio di Servizi / Permuta (descrizione servizi scambiati e valore convenzionale € [...])">3. Scambio di Servizi / Permuta (descrizione servizi scambiati e valore convenzionale € [...])</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Preset 1-Clic Tariffe Ufficiali Itassistance -->
+        <div style="margin:12px 0;padding:12px;border-radius:10px;background:var(--fill);border:1px solid var(--hair);">
+          <div style="font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:8px;">⚡ Preset 1-Clic Tariffe Ufficiali Itassistance (selezionabili / aggiungibili nel contratto):</div>
+          <div class="cr-form-grid" style="gap:8px;">
+            <label style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink);cursor:pointer;">
+              <input type="checkbox" id="cr-preset-1" data-preset-euro="99" style="margin-top:3px;" />
+              <span><strong>Preset 1:</strong> Abbonamento App Itassistance: <strong>99,00 € / mese</strong> (o 1.188,00 € / anno Price Lock)</span>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink);cursor:pointer;">
+              <input type="checkbox" id="cr-preset-2" data-preset-euro="0" style="margin-top:3px;" />
+              <span><strong>Preset 2:</strong> Extra Revenue Management &amp; Adempimenti: <strong>+10%</strong> (opzionale)</span>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink);cursor:pointer;">
+              <input type="checkbox" id="cr-preset-3" data-preset-euro="20" style="margin-top:3px;" />
+              <span><strong>Preset 3:</strong> Check-in in presenza a Firenze: <strong>20,00 € / intervento</strong></span>
+            </label>
+            <label style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink);cursor:pointer;">
+              <input type="checkbox" id="cr-preset-4" data-preset-euro="30" style="margin-top:3px;" />
+              <span><strong>Preset 4:</strong> Piccola manutenzione ordinaria: <strong>30,00 € / intervento</strong></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Tabella Voci Tariffario Produzione Contenuti / Shooting & Marketing -->
+        <div style="margin:12px 0;">
+          <div style="font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:6px;">📋 Tabella Voci Tariffario Produzione Contenuti / Shooting &amp; Marketing:</div>
+          <table class="cr-annex-table" style="margin:0;">
+            <thead>
+              <tr>
+                <th style="width:65%;">Voce Tariffaria / Prestazione</th>
+                <th style="width:35%;">Importo (€)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Voce 1:</strong> Servizio Fotografico / Shooting Interni</td>
+                <td><input type="text" id="cr-tar-1-amt" placeholder="[DA COMPILARE]" style="width:100%;padding:8px 10px;border:1px solid var(--hair);border-radius:8px;font-family:var(--font);font-size:13.5px;background:var(--sheet);color:var(--ink);" /></td>
+              </tr>
+              <tr>
+                <td><strong>Voce 2:</strong> Produzione Video / Reel / Campagne Social &amp; Paid Ads</td>
+                <td><input type="text" id="cr-tar-2-amt" placeholder="[DA COMPILARE]" style="width:100%;padding:8px 10px;border:1px solid var(--hair);border-radius:8px;font-family:var(--font);font-size:13.5px;background:var(--sheet);color:var(--ink);" /></td>
+              </tr>
+              <tr>
+                <td><strong>Voce 3:</strong> Fee / Canone Accesso o Gestione Operativa</td>
+                <td><input type="text" id="cr-tar-3-amt" placeholder="[DA COMPILARE]" style="width:100%;padding:8px 10px;border:1px solid var(--hair);border-radius:8px;font-family:var(--font);font-size:13.5px;background:var(--sheet);color:var(--ink);" /></td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Voce 4 (Personalizzata):</strong>
+                  <input type="text" id="cr-tar-4-desc" placeholder="Riga Tariffaria Personalizzata [DA COMPILARE]" style="width:100%;margin-top:4px;padding:7px 10px;border:1px solid var(--hair);border-radius:8px;font-family:var(--font);font-size:13px;background:var(--sheet);color:var(--ink);" />
+                </td>
+                <td><input type="text" id="cr-tar-4-amt" placeholder="[DA COMPILARE]" style="width:100%;padding:8px 10px;border:1px solid var(--hair);border-radius:8px;font-family:var(--font);font-size:13.5px;background:var(--sheet);color:var(--ink);" /></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:10px;padding:10px 14px;border-radius:10px;background:var(--status-ok-bg);color:var(--status-ok-text);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;font-weight:700;">
+            <span>Totale Calcolato Tariffario (Voci + Preset):</span>
+            <span id="cr-tariff-total-lbl" style="font-size:16px;">[DA CONFERMARE]</span>
+          </div>
+        </div>
+
+        <div class="cr-form-grid" style="margin-top:10px;">
+          <div class="cr-field">
+            <label for="cr-tax-regime">Regime Fiscale Applicabile</label>
+            <select id="cr-tax-regime">
+              <option value="IVA 22%">IVA 22%</option>
+              <option value="Regime Forfettario ex L. 190/2014">Regime Forfettario ex L. 190/2014</option>
+              <option value="IVA inclusa">IVA inclusa</option>
+            </select>
+          </div>
+          <div class="cr-field">
+            <label for="cr-iban">Coordinate IBAN Beneficiario</label>
+            <input type="text" id="cr-iban" placeholder="[DA CONFERMARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-pay-terms">Termini e Modalità di Pagamento</label>
+            <input type="text" id="cr-pay-terms" placeholder="[Bonifico a vista fattura / SDI M5UXCR1 · DA CONFERMARE]" />
+          </div>
+          <div class="cr-field">
+            <label for="cr-licenza-regime">Regime Licenza d'Uso Commerciale (Art. 5)</label>
+            <select id="cr-licenza-regime">
+              <option value="Non esclusiva">Non esclusiva (con divieto uso per competitor diretti)</option>
+              <option value="Esclusiva">Esclusiva assoluta a favore di Blue Arroyo S.r.l.</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Campi hidden/compatibilità con selettori JUL-011 -->
+        <input type="hidden" id="cr-qualifica" value="opera_2222" />
+        <input type="hidden" id="cr-nome" value="" />
+        <input type="hidden" id="cr-sede" value="" />
+        <input type="hidden" id="cr-pec" value="" />
+        <input type="hidden" id="cr-proprietario" value="" />
+        <input type="hidden" id="cr-unit-code" value="" />
+        <input type="hidden" id="cr-unit-addr" value="" />
+        <input type="hidden" id="cr-accordo-tipo" value="opzione_a" />
+        <input type="hidden" id="cr-compenso" value="" />
+      </div>
+
+      <!-- ═══ BLOCCO D — SCARICA CONTRATTO IN FORMATO PDF (.PDF DIRETTO + MODELLO IN BIANCO + STAMPA) ═══ -->
+      <div class="callout" style="margin:12px 0 0;border:2px solid var(--border-control);background:var(--sheet);">
+        <h3 style="margin:0 0 6px;font-size:15.5px;color:var(--ink);">📥 BLOCCO D — Scarica Contratto in Formato PDF (.pdf Diretto + Modello in Bianco + Stampa)</h3>
+        <p style="margin:0 0 12px;font-size:13px;color:var(--ink-2);">Scarica subito con 1 clic il file <code>.pdf</code> compilato con tutti i dati inseriti nei Blocchi A, B e C (Tariffario incluso), oppure scarica il modello PDF in bianco o avvia la stampa nativa.</p>
+        <div class="cr-actions-bar" style="margin-top:8px;">
+          <button type="button" class="btn" id="btn-download-compiled-pdf" style="grid-column:1 / -1;">
+            📥 Scarica Contratto Compilato in PDF (.pdf)
+          </button>
+          <a href="/contratti/contratto-produzione-contenuti-itassistance.pdf" download="Contratto_Produzione_Contenuti_Itassistance.pdf" class="cr-btn-secondary" id="btn-download-blank-pdf" style="text-decoration:none;display:flex;align-items:center;justify-content:center;text-align:center;">
+            📄 Scarica Modello Contratto PDF in Bianco (.pdf)
+          </a>
+          <button type="button" class="cr-btn-secondary" id="btn-print-creator-contract-top">
+            🖨️ Stampa / Salva PDF Nativo
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TESTO LEGALE INTEGRALE VISIBILE E STAMPABILE -->
+    <article class="cr-legal-doc" id="creator-legal-printable-doc">
+      <div style="border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:18px;">
+        <div style="font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);">
+          MODELLO CONTRATTUALE UFFICIALE · PIANO 4 ITASSISTANCE / BLUE ARROYO S.R.L. (JUL-011 / JUL-012)
+        </div>
+        <h2 style="margin:6px 0 8px;padding:0;border:0;font-size:19px;line-height:1.25;color:var(--ink);text-transform:uppercase;">
+          CONTRATTO DI COLLABORAZIONE, ACCESSO ALL’IMMOBILE E LICENZA D’USO COMMERCIALE DI CONTENUTI AUDIOVISIVI E FOTOGRAFICI
+        </h2>
+        <p style="margin:0;font-size:13px;color:var(--ink-2);">
+          <strong>Dati societari verificati:</strong> Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: <strong>[DA CONFERMARE]</strong> · Capitale sociale: <strong>[DA CONFERMARE]</strong>
+        </p>
+      </div>
+
+      <!-- BLOCCO 1: NOTA LEGALE PRELIMINARE DI INQUADRAMENTO -->
+      <div class="callout" style="margin-top:0;">
+        <b>Nota Legale Preliminare di Inquadramento Giuridico.</b><br/>
+        Il presente accordo disciplina in modo unitario l'accesso temporaneo a un immobile gestito o promosso da <strong>Blue Arroyo S.r.l.</strong> e la produzione/licenza di contenuti fotografici e audiovisivi a fini commerciali e promozionali. Sotto il profilo civilistico, il rapporto è qualificato:
+        <ul style="margin:6px 0 6px;padding-left:18px;">
+          <li>qualora la controparte operi come <strong>Professionista / Creator autonomo</strong>, quale <em>Contratto d'opera lavorativa/intellettuale</em> ai sensi degli <strong>artt. 2222 e ss. c.c.</strong>, eseguito con lavoro prevalentemente proprio e senza vincolo di subordinazione;</li>
+          <li>qualora la controparte operi come <strong>Agenzia di comunicazione o Impresa di produzione</strong>, quale <em>Contratto di appalto di servizi</em> ai sensi degli <strong>artt. 1655 e ss. c.c.</strong>, con organizzazione dei mezzi necessari e gestione a proprio rischio.</li>
+        </ul>
+        In entrambi i casi (inquadramento selezionato: <span class="cr-dyn" data-cr-bind="qualifica">Contratto d'opera ex art. 2222 c.c. (Professionista / Creator autonomo)</span>), l'accordo integra un <strong>contratto atipico misto ex art. 1322, comma 2, c.c.</strong> comprensivo di: <strong>(i)</strong> concessione precaria e regolamentata di accesso all'immobile (<em>Location Release / Property Release</em>); <strong>(ii)</strong> cessione/licenza dei diritti di utilizzazione economica sulle opere fotografiche, fotografie semplici e opere audiovisive ai sensi della <strong>Legge 22 aprile 1941, n. 633</strong> (L.d.A., artt. 2, 12-bis, 87–92, 96–97) e dell'<strong>art. 10 c.c.</strong>; <strong>(iii)</strong> patto di riservatezza (NDA) e tutela dei dati personali ai sensi del <strong>Regolamento (UE) 2016/679 (GDPR)</strong> e del <strong>D.Lgs. 196/2003</strong> (come novellato dal D.Lgs. 101/2018).
+      </div>
+
+      <!-- EPIGRAFE DELLE PARTI -->
+      <h2>Epigrafe delle Parti Contraenti</h2>
+      <p>Tra:</p>
+      <p><strong>1. Società / Gestore / Piattaforma:</strong> <strong>Blue Arroyo S.r.l.</strong>, con sede legale in Via Matteo Palmieri 20R, Firenze, P.IVA e C.F. <strong>07480210488</strong>, iscritta al REA di Firenze n. <strong>FI-706161</strong>, Codice Destinatario SDI <strong>M5UXCR1</strong>, PEC <strong>[DA CONFERMARE]</strong>, Capitale sociale <strong>[DA CONFERMARE]</strong> (di seguito denominata anche <strong>“Blue Arroyo S.r.l.”</strong> o la <strong>“Società”</strong>);</p>
+      <p><strong>2. Cliente / Proprietario o Gestore Autorizzato dell'Immobile (Blocco A):</strong> <span class="cr-dyn" data-cr-bind="proprietario">[DA COMPILARE]</span>, C.F./P.IVA <span class="cr-dyn" data-cr-bind="client_tax">[DA COMPILARE]</span>, con domicilio/sede legale in <span class="cr-dyn" data-cr-bind="client_address">[DA COMPILARE]</span>, recapiti Email/PEC/Tel. <span class="cr-dyn" data-cr-bind="client_contact">[DA COMPILARE]</span>, che interviene in qualità di <span class="cr-dyn" data-cr-bind="client_role">Proprietario dell'immobile</span> per l'alloggio denominato <span class="cr-dyn" data-cr-bind="unit_code">[es. ST-APT-... / DA COMPILARE]</span> (CIN/CIR: <span class="cr-dyn" data-cr-bind="prop_cin">[DA COMPILARE]</span>) sito in <span class="cr-dyn" data-cr-bind="unit_addr">[DA COMPILARE]</span> (di seguito il <strong>“Cliente / Proprietario”</strong>);</p>
+      <p><strong>3. Professionista / Creator / Produttore incaricato (Blocco B):</strong> <span class="cr-dyn" data-cr-bind="nome">[DA COMPILARE]</span>, C.F. <span class="cr-dyn" data-cr-bind="cf">[DA COMPILARE]</span>, P.IVA <span class="cr-dyn" data-cr-bind="piva">[DA COMPILARE]</span>, con domicilio/sede legale in <span class="cr-dyn" data-cr-bind="sede">[DA COMPILARE]</span>, Email/PEC <span class="cr-dyn" data-cr-bind="pec">[DA COMPILARE]</span>, Tel. <span class="cr-dyn" data-cr-bind="phone">[DA COMPILARE]</span>, che agisce nella qualifica di <span class="cr-dyn" data-cr-bind="qualifica">Contratto d'opera ex art. 2222 c.c. (Professionista / Creator autonomo)</span> (di seguito il <strong>“Creator”</strong> o <strong>“Professionista”</strong>);</p>
+      <p>congiuntamente definite le <strong>“Parti”</strong>.</p>
+
+      <!-- ART. 1 -->
+      <h2>Art. 1 · Premesse, Allegati e Definizioni</h2>
+      <p><strong>1.1.</strong> Le premesse, la Nota Legale Preliminare e gli Allegati (<strong>Allegato A</strong> – <em>Scheda Tecnica dell'Immobile, Finestra di Accesso, Attrezzature Autorizzate, Deliverable e Tariffario</em>; <strong>Allegato B</strong> – <em>Elenco Nominativo Troupe, Collaboratori e Modelli Autorizzati all'Accesso + Liberatoria Ritratto/Immagine</em>) costituiscono parte integrante e sostanziale del presente Contratto.</p>
+      <p><strong>1.2.</strong> Ai fini del presente Contratto si intendono per: <strong>a) “Immobile”</strong>: l'unità immobiliare identificata con Nome/Codice <span class="cr-dyn" data-cr-bind="unit_code">[es. ST-APT-... / DA COMPILARE]</span> (CIN/CIR <span class="cr-dyn" data-cr-bind="prop_cin">[DA COMPILARE]</span>) sita in <span class="cr-dyn" data-cr-bind="unit_addr">[DA COMPILARE]</span>; <strong>b) “Shooting”</strong>: la sessione autorizzata di scatti fotografici e/o riprese audiovisive eseguita nell'Immobile nella finestra temporale <span class="cr-dyn" data-cr-bind="slot">[DATA / ORARIO INGRESSO – USCITA · DA COMPILARE]</span> (durata autorizzazione accesso: <span class="cr-dyn" data-cr-bind="access_duration">[DURATA · DA COMPILARE]</span>); <strong>c) “Contenuti”</strong> o <strong>“Opere”</strong>: tutte le fotografie (opere fotografiche e fotografie semplici ex artt. 2 e 87 L. 633/1941), i video, i reel, le tracce audio, i file RAW/post-prodotti e i girati realizzati durante lo Shooting; <strong>d) “Troupe”</strong>: i collaboratori, assistenti, operatori e modelli preventivamente identificati nell'Allegato B.</p>
+
+      <!-- ART. 2 -->
+      <h2>Art. 2 · Oggetto del Contratto</h2>
+      <p><strong>2.1.</strong> Il presente Contratto ha per oggetto: <strong>(a)</strong> la realizzazione da parte del Creator dei Contenuti fotografici e audiovisivi aventi ad oggetto gli spazi interni ed esterni dell'Immobile <span class="cr-dyn" data-cr-bind="unit_code">[es. ST-APT-... / DA COMPILARE]</span>; <strong>(b)</strong> la concessione temporanea e condizionata del permesso di accesso e ripresa nell'Immobile per la durata <span class="cr-dyn" data-cr-bind="access_duration">[DURATA · DA COMPILARE]</span> (<em>Location Release / Property Release</em>); <strong>(c)</strong> la concessione e regolamentazione dei diritti di utilizzazione economica, riproduzione, diffusione e sfruttamento commerciale e pubblicitario dei Contenuti con durata licenza <span class="cr-dyn" data-cr-bind="license_duration">Illimitata / Indefinita</span> secondo i termini dell'Art. 5.</p>
+
+      <!-- ART. 3 -->
+      <h2>Art. 3 · Modalità, Orari e Regole di Accesso all'Immobile (Location Release, Custodia e Divieti di Sicurezza)</h2>
+      <p><strong>3.1. Finestra Oraria Tassativa.</strong> L'accesso all'Immobile è consentito esclusivamente nella data e fascia oraria <span class="cr-dyn" data-cr-bind="slot">[DATA / ORARIO INGRESSO – USCITA · DA COMPILARE]</span> (durata autorizzazione: <span class="cr-dyn" data-cr-bind="access_duration">[DURATA · DA COMPILARE]</span>), alla presenza o sotto il coordinamento del referente incaricato <span class="cr-dyn" data-cr-bind="referente">[DA COMPILARE]</span>. L'autorizzazione ha natura meramente precaria e transitoria, escludendo qualsivoglia detenzione autonoma o rapporto locativo.</p>
+      <p><strong>3.2. Obbligo di Custodia e Diligenza.</strong> Durante la permanenza nell'Immobile il Creator opera con la diligenza professionale qualificata ex art. 1176, comma 2, c.c., assumendo gli obblighi di custodia delle chiavi/codici eventualmente affidati e delle dotazioni presenti.</p>
+      <p><strong>3.3. Limitazione Soggettiva degli Ingressi.</strong> È vietato l'accesso a qualsiasi soggetto non preventivamente elencato nell'<strong>Allegato B</strong> e non munito di valido documento di identità.</p>
+      <p><strong>3.4. Divieti Operativi e di Sicurezza Assoluti.</strong> È fatto divieto assoluto al Creator e alla Troupe di:
+        <ul>
+          <li>spostare mobili pesanti, arredi d'epoca, opere d'arte o apparecchiature senza il consenso preventivo del referente sul posto;</li>
+          <li>applicare chiodi, viti, ganci, nastri adesivi abrasivi o vernici su pareti, soffitti, infissi e pavimenti (tutti i cavalletti e stativi devono essere dotati di gommini protettivi);</li>
+          <li>fumare (anche sigarette elettroniche/riscaldatori di tabacco), accendere candele, fiamme libere, incensi, macchine del fumo o utilizzare droni all'interno dei locali senza specifica autorizzazione scritta;</li>
+          <li>sovraccaricare l'impianto elettrico domestico oltre la potenza contrattuale ordinaria;</li>
+          <li>riprendere o fotografare serrature di sicurezza, codici di accesso (keybox / smart-lock), impianti d'allarme, telecamere di sicurezza, casseforti, targhe di veicoli, corrispondenza privata, volti di condòmini/vicini o elementi che compromettano la sicurezza dell'Immobile.</li>
+        </ul>
+      </p>
+      <p><strong>3.5. Riconsegna.</strong> Al termine dello Shooting l'Immobile deve essere riconsegnato esattamente nello stato di ordine, pulizia e integrità in cui è stato ricevuto, previa verifica congiunta con il referente.</p>
+
+      <!-- ART. 4 -->
+      <h2>Art. 4 · Responsabilità per Danni ex artt. 2043, 2049, 2051 c.c., Manleva e Polizza RCT</h2>
+      <p><strong>4.1. Responsabilità Diretta e per Fatto degli Ausiliari.</strong> Ai sensi degli <strong>artt. 1218, 1228, 2043, 2049 e 2051 c.c.</strong>, il Creator/Produttore è integralmente ed esclusivamente responsabile per qualsiasi danno materiale o immateriale (rotture, graffi a parquet/marmi, macchie su tessuti/divani, guasti a impianti, furti o smarrimenti) arrecato all'Immobile, agli arredi, alle parti comuni condominiali o a terzi durante lo Shooting dal Creator medesimo o dai membri della propria Troupe, collaboratori o modelli.</p>
+      <p><strong>4.2. Manleva Integrale.</strong> Il Creator/Produttore si obbliga a tenere integralmente indenni e manlevati <strong>Blue Arroyo S.r.l.</strong> e il <strong>Proprietario</strong> da qualsivoglia pretesa risarcitoria, azione legale, sanzione o richiesta avanzata da condòmini, vicini, terzi o membri della Troupe/modelli (inclusi eventuali infortuni occorsi alle attrezzature o al personale del Creator durante l'esecuzione delle riprese).</p>
+      <p><strong>4.3. Copertura Assicurativa RCT.</strong> Il Creator/Produttore dichiara di operare nel pieno rispetto delle norme di sicurezza sul lavoro e di disporre di idonea copertura assicurativa di Responsabilità Civile verso Terzi (RCT) professionale ovvero di assumere in proprio, senza beneficio di escussione, l'obbligo di immediato ristoro integrale a semplice richiesta scritta.</p>
+
+      <!-- ART. 5 -->
+      <h2>Art. 5 · Autorizzazione all'Utilizzo Commerciale delle Immagini (Property Release) e Titolarità dei Diritti d'Autore (L. 633/1941)</h2>
+      <p><strong>5.1. Autorizzazione Espressa all'Utilizzo Commerciale e Pubblicitario a favore del Professionista e della Società.</strong> Il Proprietario / Concedente concede espressamente e irrevocabilmente al Professionista / Creator e a <strong>Blue Arroyo S.r.l.</strong> l'autorizzazione a utilizzare, riprodurre, modificare, pubblicare, comunicare al pubblico e distribuire le fotografie e i video dell'Immobile per finalità commerciali e promozionali (durata licenza: <span class="cr-dyn" data-cr-bind="license_duration">Illimitata / Indefinita</span>). L'autorizzazione comprende espressamente:
+        <ul>
+          <li><strong>Pubblicazioni organiche</strong> su Instagram, Facebook, TikTok, YouTube, LinkedIn, Pinterest e altri social network;</li>
+          <li><strong>Campagne pubblicitarie a pagamento (Paid Ads)</strong>, incluse <strong>Meta Ads, Instagram Ads, TikTok Ads, Google Ads, YouTube Ads</strong> e altre piattaforme pubblicitarie;</li>
+          <li><strong>Video promozionali, reel, stories, shorts e post</strong>;</li>
+          <li><strong>Contenuti destinati a siti web, portali OTA (Airbnb, Booking.com, Vrbo, Expedia), landing page, cataloghi</strong> e altri canali commerciali;</li>
+          <li><strong>Montaggio, editing, color grading, adattamento e riutilizzo</strong> dei contenuti in diversi formati.</li>
+        </ul>
+        Le Parti convengono espressamente che l'autorizzazione comprende <strong>sia la diffusione organica sia la pubblicità sponsorizzata a pagamento</strong> e che <strong>non sarà necessario richiedere un'autorizzazione individuale per ogni singola pubblicazione o campagna pubblicitaria</strong>. L'autorizzazione all'accesso fisico all'Immobile è distinta dalla licenza di sfruttamento commerciale delle immagini, la quale ha validità internazionale (worldwide), su tutti i mezzi digitali attuali e futuri e sopravvive alla scadenza del permesso di accesso fisico.
+      </p>
+      <p><strong>5.2. Diritti d'Autore sui Contenuti Prodotti e Portfolio del Professionista.</strong> Ai sensi della <strong>Legge 22 aprile 1941, n. 633 (L.d.A.)</strong> e in espressa deroga all'art. 98 L.d.A., è stabilito che <strong>il Professionista / Creator conserva tutti i diritti d'autore e i diritti connessi</strong> sulle fotografie, sui video, sulle registrazioni, sui file RAW e sui contenuti creativi originali realizzati, fatto salvo quanto previsto dalla licenza d'uso commerciale concessa a Blue Arroyo S.r.l. e al Cliente/Concedente (in regime <strong><span class="cr-dyn" data-cr-bind="licenza_regime">Non esclusiva</span></strong>). Il Professionista ha altresì il pieno e perpetuo diritto di utilizzare il materiale prodotto nel proprio <strong>portfolio professionale</strong> e a fini di <strong>autopromozione</strong>.</p>
+
+      <!-- ART. 6 -->
+      <h2>Art. 6 · Rispetto della Sicurezza, Divieto Geolocalizzazione Civico, Divieto Ripresa Ospiti (GDPR) e Garanzie del Gestore</h2>
+      <p><strong>6.1. Divieto di Interferenza con gli Ospiti e Tutela GDPR.</strong> È fatto divieto di interferire con le prenotazioni e con il soggiorno degli ospiti ed è vietato riprendere o pubblicare immagini di ospiti, dati personali, documenti o effetti personali identificabili senza le necessarie autorizzazioni ai sensi del Regolamento (UE) 2016/679 (GDPR).</p>
+      <p><strong>6.2. Divieto Tassativo di Geolocalizzazione del Civico e Riservatezza Codici di Accesso.</strong> Il Professionista ha l'obbligo di mantenere riservati e non mostrare nei video/foto codici di accesso (keybox / smart-lock), chiavi, l'indirizzo esatto o il numero civico dell'Immobile.</p>
+      <p><strong>6.3. Dichiarazioni e Garanzie del Proprietario / Gestore Autorizzato.</strong> Il Cliente (<span class="cr-dyn" data-cr-bind="proprietario">[DA COMPILARE]</span>, che agisce in qualità di <span class="cr-dyn" data-cr-bind="client_role">Proprietario dell'immobile</span>) dichiara e garantisce di avere la piena capacità giuridica e tutte le autorizzazioni necessarie per consentire l'accesso all'Immobile, le riprese audiovisive e lo sfruttamento commerciale e pubblicitario delle relative immagini. Qualora il firmatario sia un amministratore, Property Manager, gestore o intermediario Airbnb e non il proprietario catastale dell'Immobile, egli dichiara e documenta di essere debitamente autorizzato dal proprietario a concedere tali diritti, impegnandosi a manlevare e tenere indenni Blue Arroyo S.r.l. e il Professionista da qualsiasi contestazione di terzi.</p>
+
+      <!-- ART. 7 -->
+      <h2>Art. 7 · Liberatoria Immagine Modelli e Troupe ex artt. 10 c.c. e 96–97 L. 633/1941</h2>
+      <p><strong>7.1.</strong> Qualora nei Contenuti appaiano il ritratto, la figura o la voce del Creator stesso ovvero di modelli, figuranti, talent o membri della Troupe, il Creator rilascia sin d'ora per sé — e garantisce di aver acquisito da ciascun soggetto ritratto mediante sottoscrizione dell'<strong>Allegato B</strong> — ampia e irrevocabile <strong>liberatoria per l'utilizzo dell'immagine e della voce ai sensi dell'art. 10 c.c. e degli artt. 96 e 97 della L. 633/1941</strong> per tutte le finalità promozionali, pubblicitarie e commerciali di cui all'Art. 5, manlevando integralmente Blue Arroyo S.r.l. e il Proprietario da qualsiasi richiesta economica o inibitoria futura.</p>
+
+      <!-- ART. 8 -->
+      <h2>Art. 8 · Termini di Consegna e Standard Tecnici</h2>
+      <p><strong>8.1. Deliverable Concordati.</strong> Il Creator si impegna a realizzare e consegnare i seguenti materiali finiti e post-prodotti ad alta risoluzione, privi di watermark o firme sovraimpresse:
+        <ul>
+          <li><strong>Fotografie HD post-prodotte (formato orizzontale e verticale, web + stampa):</strong> n. <span class="cr-dyn" data-cr-bind="deliv_foto">[DA CONFERMARE]</span>;</li>
+          <li><strong>Video / Reel verticali (formato 9:16, 4K/1080p, montati e pronti per social/ADV):</strong> n. <span class="cr-dyn" data-cr-bind="deliv_reel">[DA CONFERMARE]</span>;</li>
+          <li><strong>Video orizzontali (formato 16:9, 4K/1080p per portali/sito web):</strong> n. <span class="cr-dyn" data-cr-bind="deliv_video169">[DA CONFERMARE]</span>.</li>
+        </ul>
+      </p>
+      <p><strong>8.2. Termine Essenziale di Consegna e Revisioni.</strong> La consegna dei file dovrà avvenire tramite cartella cloud dedicata entro e non oltre <strong><span class="cr-dyn" data-cr-bind="deliv_giorni">[DA CONFERMARE]</span> giorni</strong> dalla data dello Shooting. È prevista la facoltà di richiedere entro 7 giorni dalla ricezione fino a n. 2 cicli di modifiche/correzioni tecniche, cromatiche o di montaggio senza costi aggiuntivi.</p>
+
+      <!-- ART. 9 -->
+      <h2>Art. 9 · Tariffario, Corrispettivo o Accordo di Collaborazione (Blocco C)</h2>
+      <p><strong>9.1. Modalità di Collaborazione Selezionata:</strong> <strong><span class="cr-dyn" data-cr-bind="accordo_label">2. Collaborazione Retribuita (Tariffario)</span></strong>.</p>
+      <p><strong>9.2. Prospetto Tariffario e Condizioni Economiche Applicate:</strong></p>
+      <table class="cr-annex-table">
+        <tbody>
+          <tr>
+            <th>Servizio Fotografico / Shooting Interni</th>
+            <td>€ <span class="cr-dyn" data-cr-bind="tar_1">[DA COMPILARE]</span></td>
+          </tr>
+          <tr>
+            <th>Produzione Video / Reel / Campagne Social &amp; Paid Ads</th>
+            <td>€ <span class="cr-dyn" data-cr-bind="tar_2">[DA COMPILARE]</span></td>
+          </tr>
+          <tr>
+            <th>Fee / Canone Accesso o Gestione Operativa</th>
+            <td>€ <span class="cr-dyn" data-cr-bind="tar_3">[DA COMPILARE]</span></td>
+          </tr>
+          <tr>
+            <th><span class="cr-dyn" data-cr-bind="tar_4_desc">Riga Tariffaria Personalizzata</span></th>
+            <td>€ <span class="cr-dyn" data-cr-bind="tar_4">[DA COMPILARE]</span></td>
+          </tr>
+          <tr>
+            <th>Servizi Ufficiali Itassistance Selezionati (Preset)</th>
+            <td><span class="cr-dyn" data-cr-bind="presets_summary">[Nessun preset selezionato]</span></td>
+          </tr>
+          <tr>
+            <th>TOTALE COMPLESSIVO TARIFFARIO</th>
+            <td><strong><span class="cr-dyn" data-cr-bind="compenso">[DA CONFERMARE]</span></strong> (Regime fiscale: <span class="cr-dyn" data-cr-bind="tax_regime">IVA 22%</span>)</td>
+          </tr>
+          <tr>
+            <th>IBAN &amp; Termini di Pagamento</th>
+            <td>IBAN: <span class="cr-dyn" data-cr-bind="iban">[DA CONFERMARE]</span> · Termini: <span class="cr-dyn" data-cr-bind="pay_terms">[DA CONFERMARE]</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>9.3. Onnicomprensività.</strong> Le Parti dichiarano che quanto pattuito al presente Articolo remunera integralmente ogni prestazione, spesa di trasferta, attrezzatura, post-produzione e concessione di diritti d'autore e d'immagine, rinunciando a qualsiasi ulteriore pretesa o compenso aggiuntivo presente o futuro.</p>
+
+      <!-- ART. 10 -->
+      <h2>Art. 10 · Obbligo di Riservatezza / NDA e Scudo Privacy Proprietario</h2>
+      <p><strong>10.1. Riservatezza Assoluta (NDA).</strong> Il Creator si impegna, per sé e per la propria Troupe, a mantenere la più stretta riservatezza su tutte le informazioni apprese in occasione dello Shooting, inclusi l'identità e i dati personali del Proprietario, il valore dell'Immobile, i sistemi di accesso, le tariffe e l'organizzazione aziendale di Blue Arroyo S.r.l., per tutta la durata del Contratto e per i <strong>36 (trentasei) mesi successivi</strong>.</p>
+      <p><strong>10.2. Scudo Privacy e Divieto di Scavalco.</strong> È fatto divieto al Creator di contattare direttamente il Proprietario o proporre al medesimo servizi autonomi scavalcando Blue Arroyo S.r.l. per i 24 mesi successivi allo Shooting.</p>
+
+      <!-- ART. 11 -->
+      <h2>Art. 11 · Trattamento Dati Personali (GDPR Reg. UE 2016/679 e D.Lgs. 196/2003)</h2>
+      <p><strong>11.1.</strong> Ai sensi degli artt. 6, 13 e 14 del <strong>Regolamento (UE) 2016/679 (GDPR)</strong> e del <strong>D.Lgs. 196/2003</strong> (come modificato dal D.Lgs. 101/2018), le Parti si danno reciprocamente atto che i dati personali (inclusi dati anagrafici, documenti di riconoscimento della Troupe nell'Allegato B e immagini/voci contenute nelle riprese) sono trattati da <strong>Blue Arroyo S.r.l.</strong> (Titolare del trattamento, sede in Via Matteo Palmieri 20R, Firenze) esclusivamente per l'esecuzione del presente Contratto, per la sicurezza degli accessi all'Immobile, per gli adempimenti fiscali e per l'esercizio dei diritti di licenza commerciale di cui agli Artt. 5 e 7.</p>
+
+      <!-- ART. 12 -->
+      <h2>Art. 12 · Clausola Risolutiva Espressa ex art. 1456 c.c. e Rimozione Immediata Contenuti</h2>
+      <p><strong>12.1.</strong> Ai sensi e per gli effetti dell'<strong>art. 1456 c.c.</strong>, ciascuna Parte adempiente potrà risolvere di diritto il presente Contratto mediante semplice comunicazione scritta (anche via PEC o e-mail) qualora la controparte violi gli obblighi previsti da: <strong>Art. 3</strong> (rispetto degli orari, divieto di accesso a soggetti non autorizzati, divieti di sicurezza e divieto di ripresa di serrature/codici), <strong>Art. 4</strong> (responsabilità per danni), <strong>Art. 6</strong> (violazione GDPR o divieto di geolocalizzazione del civico), <strong>Art. 8</strong> (mancata consegna dei Deliverable entro il termine pattuito), <strong>Art. 10</strong> (violazione dell'NDA o dello Scudo Privacy Proprietario).</p>
+      <p><strong>12.2. Obbligo di Rimozione entro 12 Ore.</strong> In caso di pubblicazione difforme dalle regole di sicurezza dell'Art. 6, la Parte inadempiente è obbligata a rimuovere i contenuti lesivi entro e non oltre <strong>12 (dodici) ore</strong> dalla richiesta scritta, fatto salvo il risarcimento del danno.</p>
+
+      <!-- ART. 13 -->
+      <h2>Art. 13 · Legge Applicabile e Foro Esclusivo di Firenze</h2>
+      <p><strong>13.1.</strong> Il presente Contratto è regolato in via esclusiva dalla <strong>legge italiana</strong>. Per qualsiasi controversia inerente alla validità, interpretazione, esecuzione o risoluzione del presente Contratto sarà competente in via esclusiva il <strong>Foro di Firenze</strong>, con espressa esclusione di ogni altro foro alternativo o concorrente.</p>
+
+      <!-- ART. 14 -->
+      <h2>Art. 14 · Disposizioni Finali</h2>
+      <p><strong>14.1.</strong> Qualsiasi modifica al presente Contratto dovrà rivestire forma scritta a pena di nullità. L'eventuale nullità o inefficacia di singole clausole non comporta la nullità dell'intero Contratto ex art. 1419 c.c. Per tutto quanto non espressamente previsto si applicano le norme del Codice Civile e della Legge 22 aprile 1941, n. 633.</p>
+
+      <!-- SEZIONE 1: SOTTOSCRIZIONE GENERALE DELLE PARTI -->
+      <h2>Sezione 1 — Sottoscrizione Generale delle Parti</h2>
+      <p>Letto, confermato e sottoscritto a Firenze / in modalità digitale.</p>
+      <div class="cr-sign-grid">
+        <div class="cr-sign-box">
+          <strong>1. Per Blue Arroyo S.r.l.</strong>
+          <span style="font-size:12px;color:var(--ink-2);">Via Matteo Palmieri 20R, Firenze · P.IVA 07480210488</span>
+          <div class="cr-sign-line">Firma Legale Rappresentante / Delegato</div>
+        </div>
+        <div class="cr-sign-box">
+          <strong>2. Per il Cliente / Proprietario o Gestore</strong>
+          <span style="font-size:12px;color:var(--ink-2);"><span class="cr-dyn" data-cr-bind="proprietario">[DA COMPILARE]</span> (<span class="cr-dyn" data-cr-bind="client_role">Proprietario dell'immobile</span>)</span>
+          <div class="cr-sign-line">Firma Cliente / Proprietario o Gestore Autorizzato</div>
+        </div>
+        <div class="cr-sign-box">
+          <strong>3. Per il Professionista / Creator</strong>
+          <span style="font-size:12px;color:var(--ink-2);"><span class="cr-dyn" data-cr-bind="nome">[DA COMPILARE]</span> (C.F. <span class="cr-dyn" data-cr-bind="cf">[DA COMPILARE]</span>)</span>
+          <div class="cr-sign-line" id="cr-doc-general-sign-line">Firma Generale Creator: [IN ATTESA DI FIRMA]</div>
+        </div>
+      </div>
+
+      <!-- SEZIONE 2: DOPPIA SOTTOSCRIZIONE SPECIFICA EX ARTT. 1341 E 1342 C.C. -->
+      <h2>Sezione 2 — Doppia Sottoscrizione Specifica delle Clausole Vessatorie ex artt. 1341 e 1342 c.c.</h2>
+      <div class="vex" style="font-size:13px;color:var(--ink);border:1px solid var(--hair);padding:14px;">
+        Ai sensi e per gli effetti degli <strong>artt. 1341 e 1342 del Codice Civile</strong>, le Parti (<span class="cr-dyn" data-cr-bind="proprietario">[DA COMPILARE]</span> e <span class="cr-dyn" data-cr-bind="nome">[DA COMPILARE]</span>) dichiarano di aver letto con particolare attenzione e di approvare specificamente per iscritto le seguenti clausole:
+        <ul style="margin:8px 0;padding-left:18px;">
+          <li><strong>Art. 3</strong> (Natura precaria dell'accesso, limiti orari tassativi, obblighi di custodia e divieti assoluti di sicurezza e ripresa di serrature/codici);</li>
+          <li><strong>Art. 4</strong> (Responsabilità oggettiva e diretta per danni ex artt. 2043, 2049 e 2051 c.c., esonero di responsabilità e obbligo di manleva integrale);</li>
+          <li><strong>Art. 5</strong> (Autorizzazione irrevocabile all'utilizzo commerciale e pubblicitario su social organici e Paid Ads / Meta Ads / TikTok Ads / Google Ads senza necessità di consenso per singola pubblicazione, e riserva dei diritti d'autore e portfolio al Professionista ex L. 633/1941);</li>
+          <li><strong>Art. 6</strong> (Tutela GDPR ospiti, divieto tassativo di geolocalizzazione del civico e garanzia/manleva di legittimazione del Gestore/Intermediario Airbnb);</li>
+          <li><strong>Art. 7</strong> (Garanzia e manleva integrale sulle liberatorie ritratto/immagine ex art. 10 c.c. e artt. 96–97 L. 633/1941 di modelli e troupe);</li>
+          <li><strong>Art. 10</strong> (Obbligo di riservatezza NDA per 36 mesi, Scudo Privacy Proprietario e divieto di contatto diretto/scavalco per 24 mesi);</li>
+          <li><strong>Art. 12</strong> (Clausola risolutiva espressa ex art. 1456 c.c. e obbligo di rimozione immediata dei contenuti entro 12 ore);</li>
+          <li><strong>Art. 13</strong> (Legge applicabile e competenza esclusiva del <strong>Foro di Firenze</strong> con deroga ad ogni altro foro).</li>
+        </ul>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--ink-3);font-weight:700;" id="cr-doc-vex-sign-line">
+          Seconda Firma Specifica ex artt. 1341–1342 c.c.: [IN ATTESA DI FIRMA SPECIFICA]
+        </div>
+      </div>
+
+      <!-- ALLEGATO A -->
+      <h2>Allegato A — Scheda Tecnica dell'Immobile, Finestra di Accesso, Attrezzature Autorizzate, Deliverable e Tariffario</h2>
+      <table class="cr-annex-table">
+        <tbody>
+          <tr>
+            <th>Cliente / Concedente &amp; Qualifica (Blocco A)</th>
+            <td><span class="cr-dyn" data-cr-bind="proprietario">[DA COMPILARE]</span> · C.F./P.IVA: <span class="cr-dyn" data-cr-bind="client_tax">[DA COMPILARE]</span> · Qualifica: <span class="cr-dyn" data-cr-bind="client_role">Proprietario dell'immobile</span></td>
+          </tr>
+          <tr>
+            <th>Nome Alloggio / Codice Unità &amp; CIN/CIR</th>
+            <td><span class="cr-dyn" data-cr-bind="unit_code">[es. ST-APT-... / DA COMPILARE]</span> · CIN/CIR: <span class="cr-dyn" data-cr-bind="prop_cin">[DA COMPILARE]</span></td>
+          </tr>
+          <tr>
+            <th>Indirizzo Immobile (Riservato · Vietata Geolocalizzazione)</th>
+            <td><span class="cr-dyn" data-cr-bind="unit_addr">[DA COMPILARE]</span></td>
+          </tr>
+          <tr>
+            <th>Durata Accesso &amp; Fascia Oraria Sessioni</th>
+            <td>Durata accesso: <span class="cr-dyn" data-cr-bind="access_duration">[DURATA · DA COMPILARE]</span> · Giorni/Orari: <span class="cr-dyn" data-cr-bind="slot">[DATA / ORARIO INGRESSO – USCITA · DA COMPILARE]</span></td>
+          </tr>
+          <tr>
+            <th>Durata Licenza Utilizzo Contenuti &amp; Regime</th>
+            <td>Durata licenza: <span class="cr-dyn" data-cr-bind="license_duration">Illimitata / Indefinita</span> · Regime: <span class="cr-dyn" data-cr-bind="licenza_regime">Non esclusiva</span></td>
+          </tr>
+          <tr>
+            <th>Referente Presidio / Check-in Shooting</th>
+            <td><span class="cr-dyn" data-cr-bind="referente">[DA COMPILARE]</span></td>
+          </tr>
+          <tr>
+            <th>Attrezzature Autorizzate all'Introduzione nell'Immobile</th>
+            <td><span class="cr-dyn" data-cr-bind="attrezzature">[Fotocamera/Videocamera, cavalletto gommato, LED a batteria · DA CONFERMARE]</span></td>
+          </tr>
+          <tr>
+            <th>Deliverable Richiesti (Art. 8)</th>
+            <td>
+              • Fotografie HD post-prodotte: <strong><span class="cr-dyn" data-cr-bind="deliv_foto">[DA CONFERMARE]</span></strong><br/>
+              • Video / Reel Verticali 9:16: <strong><span class="cr-dyn" data-cr-bind="deliv_reel">[DA CONFERMARE]</span></strong><br/>
+              • Video Orizzontali 16:9: <strong><span class="cr-dyn" data-cr-bind="deliv_video169">[DA CONFERMARE]</span></strong><br/>
+              • Consegna entro: <strong><span class="cr-dyn" data-cr-bind="deliv_giorni">[DA CONFERMARE]</span> giorni</strong> dallo shooting
+            </td>
+          </tr>
+          <tr>
+            <th>Modalità Collaborazione &amp; Totale Tariffario (Art. 9)</th>
+            <td>
+              <span class="cr-dyn" data-cr-bind="accordo_label">2. Collaborazione Retribuita (Tariffario)</span> · Totale: <strong><span class="cr-dyn" data-cr-bind="compenso">[DA CONFERMARE]</span></strong> (<span class="cr-dyn" data-cr-bind="tax_regime">IVA 22%</span>)
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ALLEGATO B -->
+      <h2>Allegato B — Elenco Nominativo Troupe, Collaboratori e Modelli Autorizzati all'Accesso + Liberatoria Ritratto/Immagine</h2>
+      <p><strong>B.1. Soggetti Autorizzati all'Ingresso nell'Immobile (Art. 3.3):</strong></p>
+      <div class="callout" style="white-space:pre-wrap;font-family:var(--font);color:var(--ink);" id="cr-doc-troupe-list">[1. Nome e Cognome — Estremi Documento — Qualifica (Creator / Fotografo / Videomaker / Modello) · DA COMPILARE]</div>
+      <p><strong>B.2. Dichiarazione Congiunta di Liberatoria Ritratto, Immagine e Voce (Art. 10 c.c. e Artt. 96–97 L. 633/1941):</strong><br/>
+      I soggetti sopra elencati, unitamente al Creator/Produttore <span class="cr-dyn" data-cr-bind="nome">[DA COMPILARE]</span>, autorizzano a titolo gratuito o nell'ambito degli accordi di cui all'Art. 9, senza limiti di tempo e per tutto il mondo, <strong>Blue Arroyo S.r.l.</strong>, il Professionista e i rispettivi aventi causa a fissare, riprodurre, pubblicare, sincronizzare e diffondere la propria immagine, il proprio ritratto e la propria voce ripresi durante lo Shooting presso l'Immobile <span class="cr-dyn" data-cr-bind="unit_code">[es. ST-APT-... / DA COMPILARE]</span> per tutte le finalità promozionali, editoriali, web, social, OTA e pubblicitarie (Paid Ads / ADV) indicate nell'Art. 5 del Contratto, dichiarando di non aver nulla a pretendere ad alcun titolo presente o futuro.</p>
+    </article>
+
+    <!-- BLOCCO INTERATTIVO DI FIRMA DIGITALE & SCARICA PDF IN FONDO PAGINA -->
+    <div class="cr-panel no-print" style="margin-top:20px;">
+      <h2>✍️ Sottoscrizione Digitale &amp; Download Diretto PDF (JUL-011 / JUL-012)</h2>
+      <p class="sub">Spunta le due caselle obbligatorie (Sottoscrizione Generale + Doppia Firma Specifica Clausole Vessatorie ex artt. 1341–1342 c.c.) e inserisci il nome per esteso del firmatario per registrare il contratto con timestamp ufficiale <code>Europe/Rome</code>, oppure scarica subito il file <code>.pdf</code>.</p>
+
+      <div class="cr-form-grid" style="margin-bottom:12px;">
+        <div class="cr-field full">
+          <label for="cr-firma-input">Firma Digitale per Esteso (Creator / Professionista e/o Cliente · vale per Sezione 1, Sezione 2 ex artt. 1341–1342 c.c. e Allegati A/B)</label>
+          <input type="text" id="cr-firma-input" placeholder="Digita Nome e Cognome per esteso per firmare..." />
+        </div>
+      </div>
+
+      <label class="check">
+        <input type="checkbox" id="cr-check-general">
+        <span class="box"><svg viewBox="0 0 24 24"><polyline points="4,12 9,18 20,6"/></svg></span>
+        <span><strong>Sezione 1 — Accettazione Integrale del Contratto, del Tariffario e degli Allegati A e B</strong>
+          <small>Dichiaro di aver letto e di accettare integralmente gli Artt. 1–14, la Nota Legale Preliminare, il Tariffario (Blocco C) e gli Allegati A e B del Contratto Produzione Contenuti &amp; Liberatoria Immobile.</small>
+        </span>
+      </label>
+
+      <label class="check">
+        <input type="checkbox" id="cr-check-vexatory">
+        <span class="box"><svg viewBox="0 0 24 24"><polyline points="4,12 9,18 20,6"/></svg></span>
+        <span><strong>Sezione 2 — Approvazione Specifica Clausole Vessatorie ex artt. 1341 e 1342 c.c.</strong>
+          <small>Approvo specificamente per iscritto gli Artt. 3 (limiti accesso e divieti sicurezza), 4 (responsabilità danni ex artt. 2043, 2049, 2051 c.c. e manleva), 5 (licenza commerciale mondiale su web, OTA, social organici e Paid Ads + riserva diritti d'autore e portfolio al Professionista), 6 (tutela GDPR ospiti, divieto geolocalizzazione civico e garanzie del Gestore/Intermediario Airbnb), 7 (liberatoria immagine modelli/troupe), 10 (NDA e Scudo Privacy Proprietario), 12 (clausola risolutiva espressa ex art. 1456 c.c. e rimozione entro 12 ore), 13 (Foro esclusivo di Firenze).</small>
+        </span>
+      </label>
+
+      <div class="cr-actions-bar">
+        <button type="button" class="btn" id="btn-download-compiled-pdf-bottom">
+          📥 Scarica Contratto Compilato in PDF (.pdf)
+        </button>
+        <button type="button" class="btn" id="btn-sign-creator-contract">
+          ✍️ Registra Firma Digitale Contratto Creator
+        </button>
+        <a href="/contratti/contratto-produzione-contenuti-itassistance.pdf" download="Contratto_Produzione_Contenuti_Itassistance.pdf" class="cr-btn-secondary" style="text-decoration:none;display:flex;align-items:center;justify-content:center;text-align:center;">
+          📄 Scarica Modello Contratto PDF in Bianco (.pdf)
+        </a>
+        <button type="button" class="cr-btn-secondary" id="btn-print-creator-contract">
+          🖨️ Stampa / Salva PDF Nativo
+        </button>
+      </div>
+
+      <div class="cr-status-box" id="cr-sign-feedback" hidden role="status" aria-live="polite"></div>
+    </div>
+
+  </section>
 </div>
 
 <script>
@@ -539,6 +1274,589 @@
   document.getElementById('print').addEventListener('click',function(){ window.print(); });
 
   refresh();
+
+  /* ═══════════════════════════════════════════════════════════════════════════
+   * JUL-011 / JUL-012 — SELETTORE MODELLO, FORM 4 BLOCCHI, TARIFFARIO & PDF
+   * ═══════════════════════════════════════════════════════════════════════════ */
+  var tabBtnOwner = document.getElementById('tab-btn-owner');
+  var tabBtnCreator = document.getElementById('tab-btn-creator');
+  var btnJumpToCreator = document.getElementById('btn-jump-to-creator-form');
+  var secOwner = document.getElementById('contract-owner-service-section');
+  var secCreator = document.getElementById('contract-creator-release-section');
+
+  function switchContractTab(mode){
+    var isCreator = (mode === 'creator');
+    if (tabBtnOwner && tabBtnCreator && secOwner && secCreator) {
+      tabBtnOwner.classList.toggle('active', !isCreator);
+      tabBtnOwner.setAttribute('aria-selected', !isCreator ? 'true' : 'false');
+      tabBtnCreator.classList.toggle('active', isCreator);
+      tabBtnCreator.setAttribute('aria-selected', isCreator ? 'true' : 'false');
+      secOwner.hidden = isCreator;
+      secCreator.hidden = !isCreator;
+      if (!isCreator) {
+        refresh();
+      }
+    }
+  }
+
+  if (tabBtnOwner) {
+    tabBtnOwner.addEventListener('click', function(){ switchContractTab('owner'); });
+  }
+  if (tabBtnCreator) {
+    tabBtnCreator.addEventListener('click', function(){ switchContractTab('creator'); });
+  }
+  if (btnJumpToCreator) {
+    btnJumpToCreator.addEventListener('click', function(){
+      switchContractTab('creator');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  function valOrPlaceholder(id, fallback){
+    var el = document.getElementById(id);
+    if (!el) return fallback;
+    var v = (el.value || '').trim();
+    return v.length > 0 ? v : fallback;
+  }
+
+  function parseEuroNum(raw){
+    if (!raw) return NaN;
+    var cleaned = String(raw).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
+    var n = parseFloat(cleaned);
+    return isFinite(n) ? n : NaN;
+  }
+
+  function formatEuroIt(num){
+    return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+  }
+
+  function computeTariffSummary(){
+    var sum = 0;
+    var hasAnyNumeric = false;
+    var rowIds = ['cr-tar-1-amt', 'cr-tar-2-amt', 'cr-tar-3-amt', 'cr-tar-4-amt'];
+    for (var i = 0; i < rowIds.length; i++) {
+      var v = valOrPlaceholder(rowIds[i], '');
+      var n = parseEuroNum(v);
+      if (!isNaN(n)) {
+        sum += n;
+        hasAnyNumeric = true;
+      }
+    }
+
+    var presets = [];
+    var p1 = document.getElementById('cr-preset-1');
+    var p2 = document.getElementById('cr-preset-2');
+    var p3 = document.getElementById('cr-preset-3');
+    var p4 = document.getElementById('cr-preset-4');
+    if (p1 && p1.checked) {
+      presets.push('Abbonamento App Itassistance (99,00 €/mese o 1.188,00 €/anno Price Lock)');
+      sum += 99;
+      hasAnyNumeric = true;
+    }
+    if (p2 && p2.checked) {
+      presets.push('Extra Revenue Management & Adempimenti (+10%)');
+    }
+    if (p3 && p3.checked) {
+      presets.push('Check-in in presenza a Firenze (20,00 €/intervento)');
+      sum += 20;
+      hasAnyNumeric = true;
+    }
+    if (p4 && p4.checked) {
+      presets.push('Piccola manutenzione ordinaria (30,00 €/intervento)');
+      sum += 30;
+      hasAnyNumeric = true;
+    }
+
+    var collabMode = valOrPlaceholder('cr-collab-mode', '2. Collaborazione Retribuita (Tariffario)');
+    var totalStr = '[DA CONFERMARE]';
+    if (collabMode.indexOf('1. Collaborazione Gratuita') === 0 && !hasAnyNumeric) {
+      totalStr = '0,00 € (Collaborazione Gratuita)';
+    } else if (hasAnyNumeric) {
+      totalStr = formatEuroIt(sum) + ((p2 && p2.checked) ? ' + 10% Extra Revenue' : '');
+    } else if (p2 && p2.checked) {
+      totalStr = '+10% Extra Revenue Management & Adempimenti';
+    }
+
+    var totLbl = document.getElementById('cr-tariff-total-lbl');
+    if (totLbl) totLbl.textContent = totalStr;
+
+    var compHidden = document.getElementById('cr-compenso');
+    if (compHidden) compHidden.value = totalStr;
+
+    return {
+      totalStr: totalStr,
+      presetsText: presets.length > 0 ? presets.join(' · ') : '[Nessun preset selezionato]'
+    };
+  }
+
+  function syncCreatorContractLive(){
+    var legalEl = document.getElementById('cr-legal-type');
+    var qualText = legalEl && legalEl.options[legalEl.selectedIndex]
+      ? legalEl.options[legalEl.selectedIndex].text
+      : "Contratto d'opera ex art. 2222 c.c. (Professionista / Creator autonomo)";
+
+    var collabEl = document.getElementById('cr-collab-mode');
+    var collabText = collabEl && collabEl.options[collabEl.selectedIndex]
+      ? collabEl.options[collabEl.selectedIndex].text
+      : "2. Collaborazione Retribuita (Tariffario)";
+
+    var tariffInfo = computeTariffSummary();
+
+    var profName = valOrPlaceholder('cr-name', valOrPlaceholder('cr-nome', '[DA COMPILARE]'));
+    var profAddr = valOrPlaceholder('cr-addr', valOrPlaceholder('cr-sede', '[DA COMPILARE]'));
+    var profEmail = valOrPlaceholder('cr-email', valOrPlaceholder('cr-pec', '[DA COMPILARE]'));
+    var clientName = valOrPlaceholder('cr-client-name', valOrPlaceholder('cr-proprietario', '[DA COMPILARE]'));
+    var propName = valOrPlaceholder('cr-prop-name', valOrPlaceholder('cr-unit-code', '[es. ST-APT-... / DA COMPILARE]'));
+    var propAddr = valOrPlaceholder('cr-prop-address', valOrPlaceholder('cr-unit-addr', '[DA COMPILARE]'));
+
+    /* Sync hidden aliases */
+    var hNome = document.getElementById('cr-nome'); if (hNome) hNome.value = profName === '[DA COMPILARE]' ? '' : profName;
+    var hSede = document.getElementById('cr-sede'); if (hSede) hSede.value = profAddr === '[DA COMPILARE]' ? '' : profAddr;
+    var hPec = document.getElementById('cr-pec'); if (hPec) hPec.value = profEmail === '[DA COMPILARE]' ? '' : profEmail;
+    var hProp = document.getElementById('cr-proprietario'); if (hProp) hProp.value = clientName === '[DA COMPILARE]' ? '' : clientName;
+    var hUnit = document.getElementById('cr-unit-code'); if (hUnit) hUnit.value = propName === '[es. ST-APT-... / DA COMPILARE]' ? '' : propName;
+    var hAddr = document.getElementById('cr-unit-addr'); if (hAddr) hAddr.value = propAddr === '[DA COMPILARE]' ? '' : propAddr;
+
+    var map = {
+      qualifica: qualText,
+      nome: profName,
+      cf: valOrPlaceholder('cr-cf', '[DA COMPILARE]'),
+      piva: valOrPlaceholder('cr-piva', '[DA COMPILARE]'),
+      sede: profAddr,
+      pec: profEmail,
+      phone: valOrPlaceholder('cr-phone', '[DA COMPILARE]'),
+      proprietario: clientName,
+      client_tax: valOrPlaceholder('cr-client-tax', '[DA COMPILARE]'),
+      client_address: valOrPlaceholder('cr-client-address', '[DA COMPILARE]'),
+      client_contact: valOrPlaceholder('cr-client-contact', '[DA COMPILARE]'),
+      client_role: valOrPlaceholder('cr-client-role', "Proprietario dell'immobile"),
+      unit_code: propName,
+      unit_addr: propAddr,
+      prop_cin: valOrPlaceholder('cr-prop-cin', '[DA COMPILARE]'),
+      access_duration: valOrPlaceholder('cr-access-duration', '[DURATA · DA COMPILARE]'),
+      slot: valOrPlaceholder('cr-slot', '[DATA / ORARIO INGRESSO – USCITA · DA COMPILARE]'),
+      license_duration: valOrPlaceholder('cr-license-duration', 'Illimitata / Indefinita'),
+      referente: valOrPlaceholder('cr-referente', '[DA COMPILARE]'),
+      accordo_label: collabText,
+      compenso: tariffInfo.totalStr,
+      tar_1: valOrPlaceholder('cr-tar-1-amt', '[DA COMPILARE]'),
+      tar_2: valOrPlaceholder('cr-tar-2-amt', '[DA COMPILARE]'),
+      tar_3: valOrPlaceholder('cr-tar-3-amt', '[DA COMPILARE]'),
+      tar_4_desc: valOrPlaceholder('cr-tar-4-desc', 'Riga Tariffaria Personalizzata'),
+      tar_4: valOrPlaceholder('cr-tar-4-amt', '[DA COMPILARE]'),
+      presets_summary: tariffInfo.presetsText,
+      tax_regime: valOrPlaceholder('cr-tax-regime', 'IVA 22%'),
+      iban: valOrPlaceholder('cr-iban', '[DA CONFERMARE]'),
+      pay_terms: valOrPlaceholder('cr-pay-terms', '[DA CONFERMARE]'),
+      licenza_regime: valOrPlaceholder('cr-licenza-regime', 'Non esclusiva'),
+      deliv_giorni: valOrPlaceholder('cr-deliv-giorni', '[DA CONFERMARE]'),
+      deliv_foto: valOrPlaceholder('cr-deliv-foto', '[DA CONFERMARE]'),
+      deliv_reel: valOrPlaceholder('cr-deliv-reel', '[DA CONFERMARE]'),
+      deliv_video169: valOrPlaceholder('cr-deliv-video169', '[DA CONFERMARE]'),
+      attrezzature: valOrPlaceholder('cr-attrezzature', '[Fotocamera/Videocamera, cavalletto gommato, LED a batteria · DA CONFERMARE]')
+    };
+
+    var binds = document.querySelectorAll('[data-cr-bind]');
+    for (var i = 0; i < binds.length; i++) {
+      var key = binds[i].getAttribute('data-cr-bind');
+      if (map[key] !== undefined) {
+        binds[i].textContent = map[key];
+      }
+    }
+
+    var troupeDoc = document.getElementById('cr-doc-troupe-list');
+    if (troupeDoc) {
+      troupeDoc.textContent = valOrPlaceholder('cr-troupe-list', '[1. Nome e Cognome — Estremi Documento — Qualifica (Creator / Fotografo / Videomaker / Modello) · DA COMPILARE]');
+    }
+
+    var firmaVal = valOrPlaceholder('cr-firma-input', '');
+    var genSignLine = document.getElementById('cr-doc-general-sign-line');
+    var vexSignLine = document.getElementById('cr-doc-vex-sign-line');
+    var cGen = document.getElementById('cr-check-general');
+    var cVex = document.getElementById('cr-check-vexatory');
+
+    if (genSignLine) {
+      genSignLine.textContent = (firmaVal && cGen && cGen.checked)
+        ? 'Firmato digitalmente (Sez. 1): ' + firmaVal
+        : 'Firma Generale Creator: ' + (firmaVal || '[IN ATTESA DI FIRMA]');
+    }
+    if (vexSignLine) {
+      vexSignLine.textContent = (firmaVal && cVex && cVex.checked)
+        ? 'Seconda Firma Specifica ex artt. 1341–1342 c.c. (Sez. 2): APPROVATO E SOTTOSCRITTO DA ' + firmaVal
+        : 'Seconda Firma Specifica ex artt. 1341–1342 c.c.: [IN ATTESA DI FIRMA SPECIFICA]';
+    }
+    return map;
+  }
+
+  var crInputIds = [
+    'cr-client-name','cr-client-tax','cr-client-address','cr-client-contact','cr-client-role',
+    'cr-prop-address','cr-prop-name','cr-prop-cin','cr-access-duration','cr-slot','cr-license-duration','cr-referente',
+    'cr-legal-type','cr-name','cr-cf','cr-piva','cr-addr','cr-email','cr-phone',
+    'cr-deliv-foto','cr-deliv-reel','cr-deliv-video169','cr-deliv-giorni','cr-attrezzature','cr-troupe-list',
+    'cr-collab-mode','cr-preset-1','cr-preset-2','cr-preset-3','cr-preset-4',
+    'cr-tar-1-amt','cr-tar-2-amt','cr-tar-3-amt','cr-tar-4-desc','cr-tar-4-amt',
+    'cr-tax-regime','cr-iban','cr-pay-terms','cr-licenza-regime',
+    'cr-firma-input','cr-check-general','cr-check-vexatory'
+  ];
+  crInputIds.forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', syncCreatorContractLive);
+      el.addEventListener('change', syncCreatorContractLive);
+    }
+  });
+
+  /* ── Generatore Nativo Binario %PDF-1.4 (Fallback Garantito 100% Offline/Online) ── */
+  function buildRawPdf14Bytes(linesArray){
+    function escPdf(s){
+      return String(s || '')
+        .replace(/[^\x20-\x7E]/g, function(ch){
+          var mapChar = { '€':'EUR ', 'à':'a', 'è':'e', 'é':'e', 'ì':'i', 'ò':'o', 'ù':'u', '’':"'", '“':'"', '”':'"', '–':'-', '—':'-', '·':'-', '•':'*' };
+          return mapChar[ch] || ' ';
+        })
+        .replace(/\\/g, '\\\\')
+        .replace(/\(/g, '\\(')
+        .replace(/\)/g, '\\)');
+    }
+    var wrapped = [];
+    for (var i = 0; i < linesArray.length; i++) {
+      var rawLine = String(linesArray[i] || '');
+      if (rawLine.length <= 92) {
+        wrapped.push(rawLine);
+      } else {
+        var words = rawLine.split(' ');
+        var cur = '';
+        for (var w = 0; w < words.length; w++) {
+          if ((cur + ' ' + words[w]).trim().length > 92) {
+            wrapped.push(cur.trim());
+            cur = words[w];
+          } else {
+            cur = (cur + ' ' + words[w]).trim();
+          }
+        }
+        if (cur.trim()) wrapped.push(cur.trim());
+      }
+    }
+    var linesPerPage = 48;
+    var pages = [];
+    for (var p = 0; p < wrapped.length; p += linesPerPage) {
+      pages.push(wrapped.slice(p, p + linesPerPage));
+    }
+    if (pages.length === 0) pages.push(['Contratto Itassistance']);
+
+    var objs = [];
+    objs.push('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+    var kids = [];
+    for (var k = 0; k < pages.length; k++) {
+      kids.push((4 + k * 2) + ' 0 R');
+    }
+    objs.push('2 0 obj\n<< /Type /Pages /Kids [' + kids.join(' ') + '] /Count ' + pages.length + ' >>\nendobj\n');
+    objs.push('3 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n');
+
+    for (var idx = 0; idx < pages.length; idx++) {
+      var pageObjNum = 4 + idx * 2;
+      var contentObjNum = pageObjNum + 1;
+      var streamLines = ['BT', '/F1 9.5 Tf', '42 800 Td', '14 TL'];
+      var pLines = pages[idx];
+      for (var l = 0; l < pLines.length; l++) {
+        streamLines.push('(' + escPdf(pLines[l]) + ') Tj T*');
+      }
+      streamLines.push('ET');
+      var streamStr = streamLines.join('\n');
+      objs.push(pageObjNum + ' 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents ' + contentObjNum + ' 0 R >>\nendobj\n');
+      objs.push(contentObjNum + ' 0 obj\n<< /Length ' + streamStr.length + ' >>\nstream\n' + streamStr + '\nendstream\nendobj\n');
+    }
+
+    var pdf = '%PDF-1.4\n';
+    var offsets = [0];
+    for (var o = 0; o < objs.length; o++) {
+      offsets.push(pdf.length);
+      pdf += objs[o];
+    }
+    var xrefPos = pdf.length;
+    pdf += 'xref\n0 ' + (objs.length + 1) + '\n0000000000 65535 f \n';
+    for (var x = 1; x < offsets.length; x++) {
+      var pad = ('0000000000' + offsets[x]).slice(-10);
+      pdf += pad + ' 00000 n \n';
+    }
+    pdf += 'trailer\n<< /Size ' + (objs.length + 1) + ' /Root 1 0 R >>\nstartxref\n' + xrefPos + '\n%%EOF';
+    var bytes = new Uint8Array(pdf.length);
+    for (var b = 0; b < pdf.length; b++) {
+      bytes[b] = pdf.charCodeAt(b) & 0xff;
+    }
+    return new Blob([bytes], { type: 'application/pdf' });
+  }
+
+  window.downloadCompiledCreatorContractPdf = function(){
+    var m = syncCreatorContractLive();
+    var troupeTxt = valOrPlaceholder('cr-troupe-list', '[1. Nome e Cognome - Estremi Documento - Qualifica · DA COMPILARE]');
+    var firmaVal = valOrPlaceholder('cr-firma-input', '[IN ATTESA DI FIRMA]');
+    var fileName = 'Contratto_Produzione_Contenuti_Itassistance_Compilato.pdf';
+
+    var textLines = [
+      'CONTRATTO DI COLLABORAZIONE, ACCESSO ALL IMMOBILE E LICENZA D USO COMMERCIALE',
+      'Blue Arroyo S.r.l. - Sede legale: Via Matteo Palmieri 20R, Firenze - P.IVA / C.F. 07480210488 - REA FI-706161 - SDI M5UXCR1',
+      'PEC: [DA CONFERMARE] - Capitale sociale: [DA CONFERMARE]',
+      '----------------------------------------------------------------------------------------',
+      'BLOCCO A - DATI CLIENTE (PROPRIETARIO O GESTORE AUTORIZZATO AIRBNB) E IMMOBILE:',
+      'Cliente / Firmatario: ' + m.proprietario + ' | C.F./P.IVA: ' + m.client_tax,
+      'Domicilio / Sede Cliente: ' + m.client_address + ' | Contatti: ' + m.client_contact,
+      'Qualifica del Firmatario: ' + m.client_role,
+      'Alloggio / Codice Unita: ' + m.unit_code + ' | CIN/CIR: ' + m.prop_cin,
+      'Indirizzo Immobile: ' + m.unit_addr,
+      'Durata Accesso Immobile: ' + m.access_duration + ' | Sessioni Shooting: ' + m.slot,
+      'Durata Licenza Utilizzo Contenuti: ' + m.license_duration + ' | Referente: ' + m.referente,
+      '----------------------------------------------------------------------------------------',
+      'BLOCCO B - DATI PROFESSIONISTA (CONTENT CREATOR / FOTOGRAFO / VIDEOMAKER / MARKETING):',
+      'Professionista / Ragione Sociale: ' + m.nome + ' | Qualifica: ' + m.qualifica,
+      'C.F.: ' + m.cf + ' | P.IVA: ' + m.piva + ' | Tel.: ' + m.phone,
+      'Domicilio / Sede: ' + m.sede + ' | Email / PEC: ' + m.pec,
+      'Deliverable: Foto HD=' + m.deliv_foto + ' | Video 9:16=' + m.deliv_reel + ' | Video 16:9=' + m.deliv_video169 + ' | Consegna=' + m.deliv_giorni + ' gg',
+      'Attrezzature Autorizzate: ' + m.attrezzature,
+      '----------------------------------------------------------------------------------------',
+      'BLOCCO C - TARIFFARIO E CONDIZIONI ECONOMICHE:',
+      'Modalita Collaborazione: ' + m.accordo_label,
+      '1. Servizio Fotografico / Shooting Interni: EUR ' + m.tar_1,
+      '2. Produzione Video / Reel / Campagne Social & Paid Ads: EUR ' + m.tar_2,
+      '3. Fee / Canone Accesso o Gestione Operativa: EUR ' + m.tar_3,
+      '4. ' + m.tar_4_desc + ': EUR ' + m.tar_4,
+      'Preset Servizi Ufficiali Itassistance: ' + m.presets_summary,
+      'TOTALE TARIFFARIO: ' + m.compenso + ' | Regime Fiscale: ' + m.tax_regime,
+      'IBAN: ' + m.iban + ' | Termini di pagamento: ' + m.pay_terms + ' | Licenza: ' + m.licenza_regime,
+      '----------------------------------------------------------------------------------------',
+      'CLAUSOLE CONTRATTUALI INTEGRALI (ARTT. 1 - 14):',
+      'Art. 1-2 (Oggetto): Realizzazione contenuti foto/video nell Immobile, Location Release e licenza d uso commerciale.',
+      'Art. 3 (Accesso e Sicurezza): Rispetto orari, custodia ex art. 1176 c.2 c.c., divieto spostare arredi o riprendere codici/serrature.',
+      'Art. 4 (Responsabilita Danni e Manleva): Responsabilita ex artt. 2043, 2049, 2051 c.c. e manleva integrale verso Proprietario e Societa.',
+      'Art. 5 (Utilizzo Commerciale e Diritti d Autore L. 633/1941): Autorizzazione espressa per pubblicazioni organiche (Instagram, Facebook,',
+      'TikTok, YouTube, web, OTA) e campagne pubblicitarie a pagamento (Paid Ads: Meta Ads, Instagram Ads, TikTok Ads, Google Ads, YouTube Ads),',
+      'video promozionali, reel, stories, landing page, cataloghi, editing e color grading senza necessita di consenso per singola pubblicazione.',
+      'Il Professionista conserva i diritti d autore sulle opere e il diritto perpetuo di utilizzo nel proprio portfolio professionale.',
+      'Art. 6 (GDPR Ospiti, Sicurezza e Garanzie Gestore): Divieto interferire o riprendere ospiti (GDPR), divieto geolocalizzare il civico,',
+      'e garanzia/manleva espressa del Gestore/Property Manager/Intermediario Airbnb di essere autorizzato dal proprietario.',
+      'Art. 7-8 (Liberatoria Modelli/Troupe e Consegna): Liberatoria ex art. 10 c.c. e artt. 96-97 L. 633/1941; consegna entro i giorni pattuiti.',
+      'Art. 9-11 (Tariffario, NDA e GDPR): Applicazione del Tariffario Blocco C; riservatezza NDA 36 mesi; trattamento dati ex GDPR.',
+      'Art. 12-14 (Risoluzione art. 1456 c.c. e Foro): Risoluzione espressa e rimozione entro 12h per violazioni; Foro esclusivo di Firenze.',
+      '----------------------------------------------------------------------------------------',
+      'SEZIONE 1 - SOTTOSCRIZIONE GENERALE DELLE PARTI:',
+      'Per Blue Arroyo S.r.l. | Per il Cliente: ' + m.proprietario + ' | Per il Professionista: ' + m.nome + ' (' + firmaVal + ')',
+      'SEZIONE 2 - DOPPIA SOTTOSCRIZIONE SPECIFICA CLAUSOLE VESSATORIE EX ARTT. 1341 E 1342 C.C.:',
+      'Approvazione specifica scritta degli Artt. 3, 4, 5, 6, 7, 10, 12, 13 (Foro esclusivo di Firenze). Firma: ' + firmaVal,
+      'ALLEGATO A (Scheda Tecnica e Tariffario) & ALLEGATO B (Elenco Troupe/Modelli): ' + troupeTxt
+    ];
+
+    if (window.pdfMake && typeof window.pdfMake.createPdf === 'function') {
+      try {
+        var docDefinition = {
+          pageSize: 'A4',
+          pageMargins: [36, 36, 36, 36],
+          content: [
+            { text: 'CONTRATTO DI COLLABORAZIONE, ACCESSO ALL’IMMOBILE E LICENZA D’USO COMMERCIALE DI CONTENUTI AUDIOVISIVI E FOTOGRAFICI', fontSize: 13, bold: true, margin: [0, 0, 0, 4] },
+            { text: 'Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]', fontSize: 8.5, margin: [0, 0, 0, 10] },
+            { text: 'BLOCCO A — DATI CLIENTE (PROPRIETARIO O GESTORE AUTORIZZATO AIRBNB) & IMMOBILE', fontSize: 10.5, bold: true, margin: [0, 6, 0, 4] },
+            {
+              table: {
+                widths: ['34%', '66%'],
+                body: [
+                  ['Cliente / Ragione Sociale', m.proprietario + ' (C.F./P.IVA: ' + m.client_tax + ')'],
+                  ['Domicilio / Sede & Contatti', m.client_address + ' · ' + m.client_contact],
+                  ['Qualifica del Firmatario', m.client_role],
+                  ['Immobile & CIN/CIR', m.unit_code + ' · CIN/CIR: ' + m.prop_cin + ' · Indirizzo: ' + m.unit_addr],
+                  ['Durata Accesso & Sessioni', 'Durata accesso: ' + m.access_duration + ' · Orari: ' + m.slot],
+                  ['Durata Licenza Contenuti', m.license_duration + ' · Regime: ' + m.licenza_regime]
+                ]
+              },
+              fontSize: 9,
+              margin: [0, 0, 0, 8]
+            },
+            { text: 'BLOCCO B — DATI PROFESSIONISTA (CONTENT CREATOR / FOTOGRAFO / VIDEOMAKER / MARKETING)', fontSize: 10.5, bold: true, margin: [0, 4, 0, 4] },
+            {
+              table: {
+                widths: ['34%', '66%'],
+                body: [
+                  ['Professionista & Qualifica', m.nome + ' · ' + m.qualifica],
+                  ['C.F. / P.IVA & Contatti', 'C.F. ' + m.cf + ' · P.IVA ' + m.piva + ' · Email/PEC: ' + m.pec + ' · Tel: ' + m.phone],
+                  ['Domicilio / Sede Legale', m.sede],
+                  ['Deliverable & Consegna', 'Foto HD: ' + m.deliv_foto + ' · Reel 9:16: ' + m.deliv_reel + ' · Video 16:9: ' + m.deliv_video169 + ' · Entro ' + m.deliv_giorni + ' gg'],
+                  ['Troupe / Modelli (All. B)', troupeTxt]
+                ]
+              },
+              fontSize: 9,
+              margin: [0, 0, 0, 8]
+            },
+            { text: 'BLOCCO C — TARIFFARIO & CONDIZIONI ECONOMICHE', fontSize: 10.5, bold: true, margin: [0, 4, 0, 4] },
+            {
+              table: {
+                widths: ['62%', '38%'],
+                body: [
+                  ['Modalità Collaborazione', m.accordo_label],
+                  ['1. Servizio Fotografico / Shooting Interni', '€ ' + m.tar_1],
+                  ['2. Produzione Video / Reel / Campagne Social & Paid Ads', '€ ' + m.tar_2],
+                  ['3. Fee / Canone Accesso o Gestione Operativa', '€ ' + m.tar_3],
+                  ['4. ' + m.tar_4_desc, '€ ' + m.tar_4],
+                  ['Preset Servizi Ufficiali Itassistance', m.presets_summary],
+                  [{ text: 'TOTALE CALCOLATO TARIFFARIO', bold: true }, { text: m.compenso + ' (' + m.tax_regime + ')', bold: true }],
+                  ['IBAN & Termini di Pagamento', 'IBAN: ' + m.iban + ' · ' + m.pay_terms]
+                ]
+              },
+              fontSize: 9,
+              margin: [0, 0, 0, 8]
+            },
+            { text: 'SINTESI ARTICOLI 1–14, LIBERATORIA USO COMMERCIALE E DOPPIA FIRMA EX ARTT. 1341–1342 C.C.', fontSize: 10.5, bold: true, margin: [0, 4, 0, 4] },
+            { text: textLines.slice(30).join('\n'), fontSize: 8.5, lineHeight: 1.25 }
+          ]
+        };
+        window.pdfMake.createPdf(docDefinition).download(fileName);
+        return;
+      } catch (e) {}
+    }
+
+    var blob = buildRawPdf14Bytes(textLines);
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 400);
+  };
+
+  var btnDlTop = document.getElementById('btn-download-compiled-pdf');
+  if (btnDlTop) btnDlTop.addEventListener('click', window.downloadCompiledCreatorContractPdf);
+  var btnDlBottom = document.getElementById('btn-download-compiled-pdf-bottom');
+  if (btnDlBottom) btnDlBottom.addEventListener('click', window.downloadCompiledCreatorContractPdf);
+
+  var btnPrintCreator = document.getElementById('btn-print-creator-contract');
+  var btnPrintCreatorTop = document.getElementById('btn-print-creator-contract-top');
+  [btnPrintCreator, btnPrintCreatorTop].forEach(function(btn){
+    if (btn) {
+      btn.addEventListener('click', function(){
+        switchContractTab('creator');
+        syncCreatorContractLive();
+        window.print();
+      });
+    }
+  });
+
+  var btnSignCreator = document.getElementById('btn-sign-creator-contract');
+  if (btnSignCreator) {
+    btnSignCreator.addEventListener('click', function(){
+      var m = syncCreatorContractLive();
+      var firma = valOrPlaceholder('cr-firma-input', '');
+      var cGen = document.getElementById('cr-check-general');
+      var cVex = document.getElementById('cr-check-vexatory');
+      var fb = document.getElementById('cr-sign-feedback');
+
+      if (!cGen || !cGen.checked || !cVex || !cVex.checked) {
+        if (fb) {
+          fb.hidden = false;
+          fb.innerHTML = '⚠️ <strong>Attenzione:</strong> per registrare la firma digitale è obbligatorio spuntare sia la <strong>Sezione 1 (Accettazione Generale)</strong> sia la <strong>Sezione 2 (Doppia Firma Specifica Clausole Vessatorie ex artt. 1341–1342 c.c.)</strong>.';
+        }
+        return;
+      }
+
+      var signerName = firma || m.nome || '[FIRMATARIO DA CONFERMARE]';
+      var now = new Date();
+      var tsRome = now.toLocaleString('it-IT', { timeZone: 'Europe/Rome', dateStyle: 'short', timeStyle: 'medium' });
+      var protocolId = 'ITA-CR-' + now.getFullYear() + '-' + Math.random().toString(36).slice(2, 7).toUpperCase();
+
+      var record = {
+        id: protocolId,
+        timestampRome: tsRome,
+        isoDate: now.toISOString(),
+        qualifica: m.qualifica,
+        clientName: m.proprietario,
+        clientTax: m.client_tax,
+        clientRole: m.client_role,
+        creatorName: m.nome,
+        creatorCf: m.cf,
+        creatorPiva: m.piva,
+        creatorSede: m.sede,
+        creatorPec: m.pec,
+        unitCode: m.unit_code,
+        unitAddr: m.unit_addr,
+        propCin: m.prop_cin,
+        shootingSlot: m.slot,
+        accordoTipo: m.accordo_label,
+        compenso: m.compenso,
+        taxRegime: m.tax_regime,
+        iban: m.iban,
+        licenzaRegime: m.licenza_regime,
+        deliverables: {
+          foto: m.deliv_foto,
+          reel916: m.deliv_reel,
+          video169: m.deliv_video169,
+          giorniConsegna: m.deliv_giorni
+        },
+        signerFullName: signerName,
+        generalAccepted: true,
+        vexatory1341Accepted: true
+      };
+
+      var list = [];
+      try {
+        var raw = localStorage.getItem('ita_creator_contracts_v1');
+        if (raw) list = JSON.parse(raw);
+        if (!Array.isArray(list)) list = [];
+      } catch (e) {
+        list = [];
+      }
+      list.unshift(record);
+      try {
+        localStorage.setItem('ita_creator_contracts_v1', JSON.stringify(list));
+      } catch (e) {}
+
+      var genSignLine = document.getElementById('cr-doc-general-sign-line');
+      var vexSignLine = document.getElementById('cr-doc-vex-sign-line');
+      if (genSignLine) {
+        genSignLine.textContent = 'Firmato digitalmente: ' + signerName + ' · Protocollo ' + protocolId + ' · ' + tsRome + ' (Europe/Rome)';
+      }
+      if (vexSignLine) {
+        vexSignLine.textContent = 'Doppia Firma Specifica ex artt. 1341–1342 c.c.: APPROVATO E SOTTOSCRITTO DA ' + signerName + ' · Protocollo ' + protocolId + ' · ' + tsRome + ' (Europe/Rome)';
+      }
+
+      if (fb) {
+        fb.hidden = false;
+        fb.innerHTML = '✅ <strong>Contratto Produzione Contenuti, Tariffario &amp; Liberatoria Immobile registrato con successo!</strong><br/>' +
+          'Protocollo: <code>' + protocolId + '</code> · Data/Ora (Europe/Rome): <strong>' + tsRome + '</strong> · Firmatario: <strong>' + signerName + '</strong> · Totale Tariffario: <strong>' + m.compenso + '</strong>.<br/>' +
+          'Archiviato in <code>localStorage ["ita_creator_contracts_v1"]</code> (' + list.length + ' contratti registrati). Clicca su <strong>📥 Scarica Contratto Compilato in PDF (.pdf)</strong> per scaricare il file PDF.';
+      }
+    });
+  }
+
+  /* Supporto parametri URL (?type=creator o ?model=produzione-contenuti + precompilazione opzionale) */
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var tParam = (params.get('type') || params.get('model') || '').toLowerCase();
+    if (params.get('unit')) {
+      var uEl = document.getElementById('cr-prop-name');
+      if (uEl) uEl.value = params.get('unit');
+    }
+    if (params.get('immobile') || params.get('addr')) {
+      var aEl = document.getElementById('cr-prop-address');
+      if (aEl) aEl.value = params.get('immobile') || params.get('addr');
+    }
+    if (params.get('creator')) {
+      var cEl = document.getElementById('cr-name');
+      if (cEl) cEl.value = params.get('creator');
+    }
+    if (params.get('client')) {
+      var clEl = document.getElementById('cr-client-name');
+      if (clEl) clEl.value = params.get('client');
+    }
+    if (params.get('slot')) {
+      var sEl = document.getElementById('cr-slot');
+      if (sEl) sEl.value = params.get('slot');
+    }
+    if (tParam === 'creator' || tParam === 'produzione-contenuti' || tParam === 'shooting' || tParam === 'liberatoria' || tParam === 'tariffario') {
+      switchContractTab('creator');
+    }
+  } catch (e) {}
+
+  syncCreatorContractLive();
 })();
 </script>
 </div>

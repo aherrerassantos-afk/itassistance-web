@@ -410,19 +410,35 @@
       <span class="status-badge">Passaggio 1 di 3 · Scegli la formula</span>
       <h2 id="step1-heading">Blocca la quotazione di oggi per il tuo immobile.</h2>
       <p class="step-desc">
-        Il canone di ingresso varia ogni giorno tra <strong>99,00 € e 289,50 € al mese</strong> in base agli slot di acquisizione disponibili su Firenze. Attivando oggi blocchi la tariffa odierna per sempre.
+        <strong>Prezzo attuale in base ai posti disponibili nel team</strong> (variabile tra <strong>99,00 € e 299,00 € al mese</strong> per unità secondo la regola domanda e offerta). Chi firma blocca il prezzo per tutta la durata contrattuale (Price Lock).
       </p>
 
       <div class="summary-box" style="margin-bottom: 16px;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
           <div>
-            <div style="font-size: 0.875rem; font-weight: 700; color: var(--gold-text-light);">QUOTAZIONE DI INGRESSO VALIDA OGGI</div>
-            <div style="font-size: 1.125rem; font-weight: 700; color: var(--ink-navy);" id="co-dyn-slots-badge">Disponibilità nuovi immobili: 4 slot su 6 a Firenze</div>
+            <div style="font-size: 0.875rem; font-weight: 700; color: var(--gold-text-light);">PREZZO ATTUALE IN BASE AI POSTI DISPONIBILI NEL TEAM</div>
+            <div style="font-size: 1.125rem; font-weight: 700; color: var(--ink-navy);" id="co-dyn-slots-badge">Disponibilità nuovi immobili: 40 posti su 40 (Saturazione 0% · 99,00 €/mese)</div>
           </div>
           <button type="button" class="btn btn-secondary" style="width: auto; margin-top: 0; min-height: 44px; padding: 8px 14px; font-size: 0.875rem;" onclick="rerollCheckoutDynamicPrice()">
-            Simula variazione giornaliera
+            Simula variazione saturazione
           </button>
         </div>
+      </div>
+
+      <!-- Box Lista d'attesa quando la saturazione è al 100% -->
+      <div id="co-waitlist-banner" style="display: none; background: #FEF2F2; border: 2px solid #DC2626; border-radius: 12px; padding: 18px; margin-bottom: 18px; color: #7F1D1D;">
+        <strong style="display: block; font-size: 1.1rem; color: #991B1B; margin-bottom: 6px;">Saturazione Team al 100% — Lista d'attesa attiva</strong>
+        <p style="font-size: 0.95rem; margin-bottom: 12px;">
+          Tutti i posti operativi del team sono attualmente assegnati. L'iscrizione diretta è temporaneamente chiusa: registrati nella Lista d'attesa per ricevere una notifica prioritaria non appena si libera capacità.
+        </p>
+        <div class="field-group" style="margin-bottom: 10px;">
+          <input type="text" id="co-wl-name" class="field-input" placeholder="Nome e Cognome"/>
+        </div>
+        <div class="field-group" style="margin-bottom: 10px;">
+          <input type="email" id="co-wl-email" class="field-input" placeholder="La tua email per la notifica"/>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="submitCheckoutWaitlist()">Iscriviti alla Lista d'attesa con notifica</button>
+        <div id="co-wl-feedback" style="display: none; margin-top: 10px; font-weight: 700; color: #065F46;"></div>
       </div>
 
       <div class="field-group" style="margin-bottom: 16px;">
@@ -438,12 +454,12 @@
       </div>
 
       <button type="button" class="choice-card selected" id="opt-mensile" onclick="selectBillingCycle('mensile')">
-        <span class="status-badge">Consigliato · Tariffa odierna bloccata</span>
+        <span class="status-badge">Consigliato · Tariffa bloccata per la durata contrattuale</span>
         <div class="choice-head">
           <span class="choice-title">Pagamento mensile</span>
           <span class="choice-price" id="co-price-mensile">99,00 € / mese</span>
         </div>
-        <p style="color: var(--ink-muted);">IVA inclusa (Range sistema: 99,00 € – 289,50 €/mese). Rinnovi mese per mese e disdici quando vuoi senza penali.</p>
+        <p style="color: var(--ink-muted);">IVA inclusa (Range capacità: 99,00 € – 299,00 €/mese). Rinnovi mese per mese e disdici quando vuoi senza penali.</p>
       </button>
 
       <button type="button" class="choice-card" id="opt-annuale" onclick="selectBillingCycle('annuale')">
@@ -464,7 +480,7 @@
         </label>
       </div>
 
-      <button type="button" class="btn btn-primary" onclick="goToCheckoutStep(2)">
+      <button type="button" class="btn btn-primary" id="co-step1-next-btn" onclick="goToCheckoutStep(2)">
         Vai ai tuoi dati (Passaggio 2 di 3)
       </button>
     </section>
@@ -527,7 +543,7 @@
           <span class="choice-title">Attivazione immediata Prova 14 giorni (Bonifico / Fattura)</span>
           <span style="font-weight: 700; color: var(--status-ok-text);">Accesso istantaneo</span>
         </div>
-        <p style="color: var(--ink-muted);">Entri subito nell'Area Riservata e ricevi la fattura pro-forma di Blue Arroyo SRL.</p>
+        <p style="color: var(--ink-muted);">Entri subito nell'Area Riservata e ricevi la fattura pro-forma di Blue Arroyo S.r.l.</p>
       </button>
 
       <button type="button" class="choice-card" id="pay-opt-stripe" onclick="selectPaymentMethod('stripe')">
@@ -586,7 +602,7 @@
   </main>
 
   <footer class="site-footer">
-    Blue Arroyo SRL · Via Matteo Palmieri 20r, 50122 Firenze (FI) · P.IVA 07480210488 · Assistenza 09:00–23:00: <a href="tel:+393510380392" style="text-decoration: underline; font-weight: 700;">+39 351 038 0392</a>
+    Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE] · Assistenza 09:00–23:00: <a href="tel:+393510380392" style="text-decoration: underline; font-weight: 700;">+39 351 038 0392</a>
   </footer>
 
   <script>
@@ -706,6 +722,8 @@
           yearlyFormatted: vol.totalYearlyFormatted,
           slotsAvailable: dp.slotsAvailable,
           maxSlots: dp.maxSlots,
+          saturationPct: dp.saturationPct || 0,
+          isWaitlistOnly: Boolean(dp.isWaitlistOnly),
           demandLevel: dp.demandLevel
         };
       }
@@ -715,14 +733,44 @@
     function renderCheckoutDynamicPricing() {
       var dp = getActiveCheckoutPricing();
       var mEl = document.getElementById('co-price-mensile');
-      if (mEl) mEl.textContent = dp.todayFormatted + ' / mese';
+      if (mEl) mEl.textContent = dp.isWaitlistOnly ? 'Lista d\'attesa' : (dp.todayFormatted + ' / mese');
       var aEl = document.getElementById('co-price-annuale');
-      if (aEl) aEl.textContent = dp.yearlyFormatted + ' / anno';
+      if (aEl) aEl.textContent = dp.isWaitlistOnly ? 'Lista d\'attesa' : (dp.yearlyFormatted + ' / anno');
       var sBadge = document.getElementById('co-dyn-slots-badge');
       if (sBadge) {
-        sBadge.textContent = dp.todayFormatted + '/mese · Disponibilità: ' + dp.slotsAvailable + ' slot su ' + dp.maxSlots + ' oggi a Firenze';
+        sBadge.textContent = (dp.isWaitlistOnly ? 'Lista d\'attesa (100% saturo)' : (dp.todayFormatted + '/mese')) +
+          ' · Disponibilità: ' + dp.slotsAvailable + ' posti liberi su ' + dp.maxSlots + ' nel team (Saturazione ' + (dp.saturationPct || 0) + '%)';
+      }
+      var wlBanner = document.getElementById('co-waitlist-banner');
+      var nextBtn = document.getElementById('co-step1-next-btn');
+      if (wlBanner && nextBtn) {
+        wlBanner.style.display = dp.isWaitlistOnly ? 'block' : 'none';
+        nextBtn.disabled = Boolean(dp.isWaitlistOnly);
+        nextBtn.textContent = dp.isWaitlistOnly
+          ? 'Iscrizione diretta sospesa (Saturazione 100% · Usa la Lista d\'attesa sopra)'
+          : 'Vai ai tuoi dati (Passaggio 2 di 3)';
       }
       selectBillingCycle(currentCycle);
+    }
+
+    function submitCheckoutWaitlist() {
+      var name = ((document.getElementById('co-wl-name') || {}).value || '').trim();
+      var email = ((document.getElementById('co-wl-email') || {}).value || '').trim();
+      var fb = document.getElementById('co-wl-feedback');
+      if (!email) {
+        if (fb) {
+          fb.style.display = 'block';
+          fb.textContent = 'Inserisci la tua email per ricevere la notifica appena si libera un posto.';
+        }
+        return;
+      }
+      if (window.SITE_CONFIG && typeof SITE_CONFIG.submitWaitlistEntry === 'function') {
+        SITE_CONFIG.submitWaitlistEntry({ name: name || 'Proprietario', email: email, unitsCount: getSelectedCheckoutUnits() });
+      }
+      if (fb) {
+        fb.style.display = 'block';
+        fb.textContent = 'Registrazione in Lista d\'attesa confermata! Ti avviseremo appena si libera capacità.';
+      }
     }
 
     function rerollCheckoutDynamicPrice() {
@@ -869,7 +917,7 @@
           : null;
         txtEl.textContent = 'Codice Proprietario: ' + (activationResult.ownerCode || 'ITA-FIRENZE-01') +
           ' · Tariffa bloccata: ' + dp.todayFormatted + '/mese · Riferimento: ' + (activationResult.invoiceId || 'FATT-2026-101') +
-          (currentPaymentMethod === 'bonifico' && bankInfo ? ' · IBAN Blue Arroyo SRL: ' + bankInfo.iban + ' · Causale: ' + bankInfo.causale : '') +
+          (currentPaymentMethod === 'bonifico' && bankInfo ? ' · IBAN Blue Arroyo S.r.l.: ' + bankInfo.iban + ' · Causale: ' + bankInfo.causale : '') +
           '. Ora puoi entrare nella Home di Livello 1.';
       }
 

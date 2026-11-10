@@ -47,7 +47,7 @@
         "@type": ["Organization", "LocalBusiness", "ProfessionalService"],
         "@id": "https://www.itadreamteam.com/#organization",
         "name": "itassistance",
-        "legalName": "Blue Arroyo SRL",
+        "legalName": "Blue Arroyo S.r.l.",
         "url": "https://www.itadreamteam.com/",
         "logo": "https://www.itadreamteam.com/brand/logo.png",
         "image": "https://www.itadreamteam.com/brand/welcome.webp",
@@ -58,7 +58,7 @@
         "priceRange": "99€ / mese",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "Via Matteo Palmieri 20r",
+          "streetAddress": "Via Matteo Palmieri 20R",
           "postalCode": "50122",
           "addressLocality": "Firenze",
           "addressRegion": "FI",
@@ -554,7 +554,7 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      min-height: 44px;
+      min-height: 48px;
       min-width: 48px;
       padding: 8px 12px;
       font-family: var(--font-sans);
@@ -571,17 +571,17 @@
 
     @media (max-width: 380px) {
       .header-inner {
-        padding-left: 10px;
-        padding-right: 10px;
+        padding-left: max(16px, env(safe-area-inset-left, 0px));
+        padding-right: max(16px, env(safe-area-inset-right, 0px));
         gap: 6px;
       }
       .brand-mark {
-        font-size: 1.02rem;
+        font-size: 1rem;
         gap: 6px;
       }
       .brand-mark img {
-        width: 28px;
-        height: 24px;
+        width: 26px;
+        height: 22px;
       }
       .header-actions {
         gap: 6px;
@@ -592,7 +592,8 @@
       }
       .mobile-menu-toggle {
         padding: 6px 10px;
-        min-width: 44px;
+        min-width: 48px;
+        min-height: 48px;
         font-size: 0.8125rem;
       }
     }
@@ -1135,7 +1136,7 @@
       <div class="hero-contrast-veil" aria-hidden="true"></div>
 
       <div class="container hero-content">
-        <span class="kicker">itassistance · Firenze · Blue Arroyo SRL</span>
+        <span class="kicker">Piano 4 · Itassistance · Firenze · Blue Arroyo S.r.l.</span>
         <h1>Gestisci il tuo appartamento a Firenze in 10 minuti al giorno, senza cedere il 20% alle agenzie.</h1>
         <p class="lead-paragraph">
           Il 75% dei proprietari gestisce il proprio immobile in prima persona: noi lo chiamiamo <strong>Proprietario-Gestore</strong>. Con <strong>itassistance</strong> mantieni il 100% degli incassi sul tuo conto bancario, assolvi agli obblighi di Questura e Comune in pochi tocchi e paghi solo 99 € al mese IVA inclusa.
@@ -1158,8 +1159,8 @@
             <span>Soddisfatto o rimborsato</span>
           </div>
           <div class="hero-meta-item">
-            <strong>Sede a Firenze</strong>
-            <span>Via Matteo Palmieri 20r</span>
+            <strong>Sede legale a Firenze</strong>
+            <span>Via Matteo Palmieri 20R, Firenze</span>
           </div>
         </div>
       </div>
@@ -1175,8 +1176,8 @@
             Il 96% degli annunci appartiene a singoli o famiglie con uno o due appartamenti. Chi rifiuta di cedere tra il 15% e il 30% del fatturato a un intermediario tradizionale si scontra però con tre ostacoli quotidiani che tolgono libertà mentale.
           </p>
           <figure class="editorial-figure" style="margin-bottom: 24px;">
-            <img src="/brand/window.webp" width="1024" height="1024" loading="lazy" alt="Vetrina su strada della sede itassistance in Via Matteo Palmieri 20r a Firenze"/>
-            <figcaption class="figure-caption">Sede operativa di itassistance (Blue Arroyo SRL) in Via Matteo Palmieri 20r, Firenze.</figcaption>
+            <img src="/brand/window.webp" width="1024" height="1024" loading="lazy" alt="Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze"/>
+            <figcaption class="figure-caption">Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze.</figcaption>
           </figure>
           <a href="#calcolatore" class="btn btn-secondary">Calcola il tuo risparmio</a>
         </div>
@@ -1386,14 +1387,14 @@
           </p>
           <figure class="editorial-figure" style="margin-bottom: 24px;">
             <img src="/brand/suv.webp" width="1024" height="1024" loading="lazy" alt="Mezzo operativo del gruppo Blue Arroyo a Firenze"/>
-            <figcaption class="figure-caption">Logistica cittadina integrata tra cantieri, assistenza e allestimento alberghiero a Firenze.</figcaption>
+            <figcaption class="figure-caption">Ciclo industriale integrato a Firenze: Piano 1 Toscan Costruzioni, Piano 2 PBA, Piano 3 SmartsBookings, Piano 4 Itassistance.</figcaption>
           </figure>
           <a href="/chi-siamo.html" class="btn btn-secondary">Il ciclo industriale</a>
         </div>
 
         <div class="chapter-list">
           <article class="chapter-item reveal-on-scroll">
-            <span class="chapter-num">1. Crea il bene</span>
+            <span class="chapter-num">Piano 1 · Crea il bene</span>
             <h3>Toscan Costruzioni · Cliente: Investitori e Proprietari</h3>
             <p>
               Consegna un appartamento nuovo, frazionato, cablato e collaudato a Firenze che non ha bisogno di riparazioni per anni, con contratto d'appalto a prezzo fisso.
@@ -1401,26 +1402,26 @@
           </article>
 
           <article class="chapter-item reveal-on-scroll">
-            <span class="chapter-num">2. Lo protegge</span>
-            <h3>itassistance · Cliente: Proprietari-Gestori (75%) e Property Manager</h3>
+            <span class="chapter-num">Piano 2 · Lo allestisce</span>
+            <h3>PBA (Palazzo by Blue Arroyo) · Cliente: Proprietari-Gestori e Property Manager</h3>
             <p>
-              Rende l'immobile immediatamente conforme alla legge per Questura, ISTAT e Comune di Firenze, ne ottimizza le tariffe dinamiche e riduce il lavoro del proprietario a pochi secondi a settimana.
+              Trasforma l'appartamento in una suite alberghiera con biancheria igienizzata a 60 gradi, kit biologici e dotazioni sigillate a costo zero per il gestore e chiusura garantita entro le ore 15:00.
             </p>
           </article>
 
           <article class="chapter-item reveal-on-scroll">
-            <span class="chapter-num">3. Lo allestisce</span>
-            <h3>Blue Arroyo Cleaning · Cliente: Proprietari-Gestori e Property Manager</h3>
-            <p>
-              Trasforma l'appartamento in una suite alberghiera con biancheria igienizzata a 60 gradi, kit biologici e dotazioni sigillate a costo zero per il gestore, con chiusura garantita entro le ore 15:00.
-            </p>
-          </article>
-
-          <article class="chapter-item reveal-on-scroll">
-            <span class="chapter-num">4. Lo riempie di turisti</span>
-            <h3>Smartbookings · Cliente: Turisti e Ospiti</h3>
+            <span class="chapter-num">Piano 3 · Lo riempie di turisti</span>
+            <h3>SmartsBookings · Cliente: Turisti e Ospiti</h3>
             <p>
               Vende le notti senza cedere il 20% alle multinazionali estere, riconosce il 15% di rimborso diretto all'ospite e bonifica l'85% netto al proprietario entro le ore 12:00 del giorno di partenza.
+            </p>
+          </article>
+
+          <article class="chapter-item reveal-on-scroll">
+            <span class="chapter-num">Piano 4 · Lo protegge</span>
+            <h3>Itassistance · Cliente: Proprietari-Gestori (75%) e Property Manager</h3>
+            <p>
+              Rende l'immobile immediatamente conforme alla legge per Questura, ISTAT e Comune di Firenze, ne ottimizza le tariffe dinamiche e riduce il lavoro del proprietario a pochi secondi a settimana.
             </p>
           </article>
         </div>
@@ -1625,6 +1626,27 @@
             </p>
           </details>
         </div>
+
+        <!-- CARD CONTRATTO & FORM TARIFFARIO / DATI CLIENTE (SCARICABILE IN PDF · JUL-012) -->
+        <div class="interactive-panel" id="index-contract-tariff-pdf-card" style="margin-top: 32px; background-color: var(--bg-stone); border: 2px solid var(--ink-navy);">
+          <div style="font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gold-text-light); margin-bottom: 6px;">
+            Modulistica Ufficiale · Piano 4 Itassistance / Blue Arroyo S.r.l.
+          </div>
+          <h3 style="margin: 0 0 10px; font-size: clamp(1.35rem, 3vw, 1.75rem); color: var(--ink-navy);">
+            📄 Contratto &amp; Form Tariffario / Dati Cliente (Scaricabile in PDF · JUL-012)
+          </h3>
+          <p style="margin: 0 0 16px; color: var(--ink-muted); max-width: 72ch;">
+            Compila online il Form strutturato in 4 Blocchi (Dati Cliente Proprietario/Gestore Airbnb, Dati Professionista/Creator, Tariffario con calcolo automatico e Condizioni Legali Artt. 1–14 + Doppia Firma ex artt. 1341–1342 c.c.) oppure scarica direttamente il modello ufficiale in formato <code>.pdf</code>. Dati societari: <strong>Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]</strong>.
+          </p>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+            <a href="/contratto.html?type=creator" class="btn btn-primary">
+              📝 Compila Form Dati Cliente &amp; Tariffario + Scarica PDF
+            </a>
+            <a href="/contratti/contratto-produzione-contenuti-itassistance.pdf" download="Contratto_Produzione_Contenuti_Itassistance.pdf" class="btn btn-secondary">
+              📥 Scarica Direttamente Contratto PDF (.pdf)
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -1636,7 +1658,7 @@
         <div>
           <div style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; margin-bottom: 12px;">itassistance</div>
           <p style="color: var(--ink-on-dark-muted); margin-bottom: 16px;">
-            La piattaforma per il Proprietario-Gestore e i Property Manager a Firenze. Un prodotto di Blue Arroyo SRL, Via Matteo Palmieri 20r, 50122 Firenze (FI), P.IVA 07480210488.
+            La piattaforma per il Proprietario-Gestore e i Property Manager a Firenze (Piano 4 · Itassistance). Un prodotto di Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE].
           </p>
           <p style="color: var(--ink-on-dark-muted);">
             Assistenza Firenze (tutti i giorni 09:00 – 23:00):<br/>
@@ -1677,7 +1699,7 @@
       </div>
 
       <div style="padding-top: 24px; border-top: 1px solid var(--border-control); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 1rem; color: var(--ink-on-dark-muted);">
-        <span>Blue Arroyo SRL · Sede legale: Via Matteo Palmieri 20r, 50122 Firenze (FI) · P.IVA 07480210488</span>
+        <span>Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]</span>
         <span>© 2026 itassistance · Tutti i diritti riservati</span>
       </div>
     </div>
@@ -1699,7 +1721,6 @@
       if (btn) {
         btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       }
-      document.body.style.overflow = isOpen ? 'hidden' : '';
     }
 
     document.addEventListener('keydown', function (e) {

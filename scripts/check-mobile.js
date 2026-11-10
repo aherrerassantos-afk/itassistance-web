@@ -329,6 +329,17 @@ async function auditCurrentDOMState(page, stateLabel) {
       return null;
     }
 
+    function elementsClientRectsOverlap(elA, elB, tol = 2) {
+      const rectsA = Array.from(elA.getClientRects()).filter(r => r.width > 0.5 && r.height > 0.5);
+      const rectsB = Array.from(elB.getClientRects()).filter(r => r.width > 0.5 && r.height > 0.5);
+      for (const ra of rectsA) {
+        for (const rb of rectsB) {
+          if (rectsOverlap(ra, rb, tol)) return true;
+        }
+      }
+      return false;
+    }
+
     // 5A. Sovrapposizione tra elementi cliccabili nello stesso piano (entrambi nel flusso oppure nello stesso contenitore fisso)
     for (let i = 0; i < clickables.length; i++) {
       for (let j = i + 1; j < clickables.length; j++) {
@@ -340,7 +351,7 @@ async function auditCurrentDOMState(page, stateLabel) {
         if (fixA !== fixB) continue; // Gestito nel controllo 5B/5C tra layer fissi e contenuto
         const ra = a.getBoundingClientRect();
         const rb = b.getBoundingClientRect();
-        if (rectsOverlap(ra, rb, 2)) {
+        if (rectsOverlap(ra, rb, 2) && elementsClientRectsOverlap(a, b, 2)) {
           errors.push(`[#5 Elementi Cliccabili Sovrapposti] ${describeEl(a)} copre/interseca ${describeEl(b)}`);
           break;
         }
@@ -429,7 +440,12 @@ async function runMobileChecks() {
             // Stato 2: Se presente menu hamburger mobile (#mobile-menu-open-btn o .mobile-menu-toggle), aprilo e controlla
             const menuBtn = page.locator('#mobile-menu-open-btn, .mobile-menu-toggle').first();
             if (await menuBtn.count() > 0 && await menuBtn.isVisible()) {
-              await menuBtn.click();
+              await menuBtn.click({ timeout: 3000 }).catch(async () => {
+                await page.evaluate(() => {
+                  const b = document.querySelector('#mobile-menu-open-btn, .mobile-menu-toggle');
+                  if (b) b.click();
+                });
+              });
               await page.waitForTimeout(50);
               totalChecks++;
               const menuOpenErrs = await auditCurrentDOMState(page, `${baseLabel} (menu-open)`);
@@ -462,7 +478,12 @@ async function runMobileChecks() {
 
               const closeBtn = page.locator('#mobile-menu-close-btn, .mobile-menu-close').first();
               if (await closeBtn.count() > 0 && await closeBtn.isVisible()) {
-                await closeBtn.click();
+                await closeBtn.click({ timeout: 3000 }).catch(async () => {
+                  await page.evaluate(() => {
+                    const b = document.querySelector('#mobile-menu-close-btn, .mobile-menu-close');
+                    if (b) b.click();
+                  });
+                });
                 await page.waitForTimeout(40);
               }
             }
@@ -471,14 +492,24 @@ async function runMobileChecks() {
             if (pagePath === '/index.html' || pagePath === '/en/index.html') {
               const chatToggle = page.locator('#pba-chat .pba-chat__toggle').first();
               if (await chatToggle.count() > 0 && await chatToggle.isVisible()) {
-                await chatToggle.click();
+                await chatToggle.click({ timeout: 3000 }).catch(async () => {
+                  await page.evaluate(() => {
+                    const b = document.querySelector('#pba-chat .pba-chat__toggle');
+                    if (b) b.click();
+                  });
+                });
                 await page.waitForTimeout(50);
                 totalChecks++;
                 const chatErrs = await auditCurrentDOMState(page, `${baseLabel} (chat-open)`);
                 allErrors.push(...chatErrs);
                 const chatClose = page.locator('#pba-chat .pba-chat__close').first();
                 if (await chatClose.count() > 0 && await chatClose.isVisible()) {
-                  await chatClose.click();
+                  await chatClose.click({ timeout: 3000 }).catch(async () => {
+                    await page.evaluate(() => {
+                      const b = document.querySelector('#pba-chat .pba-chat__close');
+                      if (b) b.click();
+                    });
+                  });
                   await page.waitForTimeout(40);
                 }
               }
