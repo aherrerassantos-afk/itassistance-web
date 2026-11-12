@@ -40,8 +40,8 @@
         },
         body: JSON.stringify({
           nome: (statePayload && statePayload.apartment && statePayload.apartment.name) || sourceLabel,
-          email: (statePayload && statePayload.apartment && statePayload.apartment.ownerEmail) || 'info@itadreamteam.com',
-          telefono: (statePayload && statePayload.apartment && statePayload.apartment.ownerPhone) || '+393510380392',
+          email: (statePayload && statePayload.apartment && statePayload.apartment.ownerEmail) || 'admin@bluearroyo.it',
+          telefono: (statePayload && statePayload.apartment && statePayload.apartment.ownerPhone) || '+393491775561',
           messaggio: JSON.stringify({
             type: 'itassistance_cloud_sync',
             source: sourceLabel,
@@ -128,7 +128,7 @@
     lines.push(' *Apri la tua Area Proprietario per completare in 1 tap:*');
     lines.push('https://www.itadreamteam.com/app.html');
     lines.push('');
-    lines.push(' Supporto Firenze (09:00–23:00): +39 351 038 0392');
+    lines.push(' Assistenza Ospiti Firenze (09:00–23:00): +39 349 177 5561 · itassistance@bluearroyo.it · Admin: admin@bluearroyo.it');
 
     return lines.join('\n');
   }
@@ -146,11 +146,10 @@
       timestamp: new Date().toISOString(),
       scheduledTime: apt.reportTime || '08:00',
       channelPreference: apt.reportChannel || 'whatsapp_email',
-      ownerEmail: apt.ownerEmail || 'proprietario@email.it',
-      ownerPhone: apt.ownerPhone || '+39 351 038 0392',
+      ownerEmail: apt.invoiceEmail || apt.ownerEmail || '[DA CONFERMARE]',
+      ownerPhone: apt.operationalPhone || apt.ownerPhone || '+39 349 177 5561',
       apartmentName: apt.name || 'Appartamento Firenze',
       apartmentAddress: apt.address || 'Firenze',
-      apartmentCin: apt.cin || '',
       addon10Active: Boolean(apt.addon10Active),
       pendingTasksCount: ((ownerState && ownerState.tasks) || []).filter(function (t) { return !t.done; }).length,
       reportMessage: reportText,
@@ -190,8 +189,8 @@
 
     // 4. Se richiesto invio diretto su WhatsApp o Email, apre il canale precompilato
     if (opts.openWhatsApp) {
-      var cleanPhone = String(payload.ownerPhone || '393510380392').replace(/[^0-9]/g, '');
-      if (cleanPhone.length < 8) cleanPhone = '393510380392';
+      var cleanPhone = String(payload.ownerPhone || '393491775561').replace(/[^0-9]/g, '');
+      if (cleanPhone.length < 8) cleanPhone = '393491775561';
       window.open('https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(reportText), '_blank');
     } else if (opts.openEmail) {
       var subj = encodeURIComponent(' Report del Giorno (08:00) — ' + payload.apartmentName + ' | itassistance');
@@ -252,9 +251,7 @@
     var fmtAmount = amountEur.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
     var invoiceId = 'FATT-2026-' + Math.floor(110 + Math.random() * 890);
     var ownerCode = d.ownerCode || ('ITA-' + Math.floor(1000 + Math.random() * 9000));
-    var paymentMethodLabel = d.metodoPagamento === 'bonifico'
-      ? 'Bonifico Bancario Blue Arroyo SRL (Garanzia 14gg attiva fino al ' + guaranteeEnd.toLocaleDateString('it-IT') + ')'
-      : 'Stripe Checkout (Garanzia 14gg attiva fino al ' + guaranteeEnd.toLocaleDateString('it-IT') + ')';
+    var paymentMethodLabel = 'Solo Fattura previa conferma Pro-Forma in My Box · Bonifico Bancario Blue Arroyo S.r.l. (Garanzia 14gg attiva fino al ' + guaranteeEnd.toLocaleDateString('it-IT') + ')';
 
     // 1. Pre-configura l'Area Proprietario (/app.html)
     var ownerState = null;
@@ -342,7 +339,7 @@
         {
           id: 'b3',
           guest: 'Marco Verdi',
-          channel: 'Smartbookings (Diretto)',
+          channel: 'Richiesta Diretta (0%)',
           guests: 2,
           checkin: '2026-10-27',
           checkout: '2026-11-02',
@@ -379,13 +376,13 @@
     ownerState.apartment.guaranteeUntil = guaranteeEnd.toLocaleDateString('it-IT');
     ownerState.apartment.lastInvoiceId = invoiceId;
     ownerState.apartment.ownerCode = ownerCode;
-    ownerState.apartment.paymentMethod = d.metodoPagamento || 'stripe';
+    ownerState.apartment.paymentMethod = 'proforma_mybox_fattura';
 
     try {
       localStorage.setItem(OWNER_KEY, JSON.stringify(ownerState));
       localStorage.setItem(SESSION_KEY, JSON.stringify({
         ownerCode: ownerCode,
-        email: ownerState.apartment.ownerEmail || 'proprietario@itadreamteam.com',
+        email: ownerState.apartment.ownerEmail || '[DA CONFERMARE]',
         apartmentName: ownerState.apartment.name,
         loggedAt: now.toISOString()
       }));
@@ -404,7 +401,7 @@
         lockedMonthlyEur: lockedMonthly,
         amountEur: amountEur,
         addon10Active: ownerState.apartment.addon10Active,
-        paymentMethod: d.metodoPagamento || 'stripe'
+        paymentMethod: 'proforma_mybox_fattura'
       }));
     } catch (e) {}
 
@@ -439,7 +436,7 @@
             (d.extraRevenue ? ' + Attivazione Extra +10% Revenue Management & Adempimenti di Legge' : ''),
           total: amountEur,
           method: paymentMethodLabel,
-          status: d.metodoPagamento === 'bonifico' ? 'In Verifica Bonifico (14gg Attivi)' : 'Pagata'
+          status: 'Pro-Forma in My Box (In attesa conferma cliente)'
         });
 
         localStorage.setItem(ADMIN_KEY, JSON.stringify(adm));
@@ -637,7 +634,7 @@
   function loginOwnerSession(input) {
     var i = input || {};
     var code = (i.ownerCode || 'ITA-FIRENZE-01').toUpperCase().trim();
-    var email = (i.email || 'proprietario@itadreamteam.com').trim();
+    var email = (i.email || '[DA CONFERMARE]').trim();
     try {
       var raw = localStorage.getItem(OWNER_KEY);
       var state = raw ? JSON.parse(raw) : null;
@@ -667,7 +664,7 @@
     } catch (e) {}
     return {
       ownerCode: 'ITA-FIRENZE-01',
-      email: 'proprietario@itadreamteam.com',
+      email: '[DA CONFERMARE]',
       apartmentName: 'Appartamento Santo Spirito'
     };
   }
@@ -695,7 +692,7 @@
       portalMarkupAuto: true,
       lastSyncAt: 'Oggi, 08:00 (Piano Settimanale Attivo)',
       portals: {
-        airbnb: { active: true, name: 'Airbnb', icon: '', markupPct: 0, liveCapability: ' Calcolo + iCal Anti-Overbooking + CSV', apiPushStatus: ' Push API Diretto: In arrivo' },
+        airbnb: { active: true, name: 'Airbnb', icon: '', markupPct: 0, liveCapability: ' Calcolo + coordinamento operativo del calendario condiviso della struttura + CSV', apiPushStatus: ' Push API Diretto: In arrivo' },
         booking: { active: true, name: 'Booking.com', icon: '🅱', markupPct: 4, liveCapability: ' Calcolo (+4% comm.) + iCal + CSV', apiPushStatus: ' Push API XML: In arrivo' },
         vrbo: { active: false, name: 'Vrbo / Expedia', icon: '', markupPct: 3, liveCapability: ' Calcolo (+3% comm.) + iCal + CSV', apiPushStatus: ' Push API Diretto: In arrivo' },
         direct: { active: true, name: 'Sito Diretto (0% Comm.)', icon: '', markupPct: -8, liveCapability: ' Attivo Ora (Tariffa -8% zero comm.)', apiPushStatus: ' Attivo su itassistance' }
@@ -858,9 +855,9 @@
       var recommendedRate = cm.baseRate;
 
       if (occ) {
-        behaviorRule = ' Blocco Anti-Overbooking (' + occ.guest + ')';
-        behaviorDetail = 'Data chiusa su tutti i portali (' + occ.channel + ') — Zero rischio doppia prenotazione.';
-        actionLabel = ' CHIUSA ANTI-OVERBOOKING (' + occ.channel + ')';
+        behaviorRule = ' Coordinamento operativo del calendario condiviso della struttura (' + occ.guest + ')';
+        behaviorDetail = 'Data occupata sul calendario condiviso della struttura (' + occ.channel + ').';
+        actionLabel = ' OCCUPATA SUL CALENDARIO CONDIVISO (' + occ.channel + ')';
         badgeClass = 'badge-ok';
         actionType = 'booked';
         recommendedRate = occ.nightRate || cm.baseRate;
@@ -1049,34 +1046,34 @@
         {
           id: 'apt_1',
           shortLabel: ' 1. Santo Spirito',
-          originBadge: 'Attivo su itassistance + PBA + Smartbookings',
+          originBadge: 'Attivo su itassistance + PBA',
           ownerData: {
             apartment: {
               name: 'Appartamento Santo Spirito',
               address: 'Via Maggio 18, 50125 Firenze (FI)',
-              cin: 'IT048017C2A8B91023',
+              cin: '[DA CONFERMARE]',
               ownerCode: 'ITA-FIRENZE-01',
-              doorCode: '4829# (Portone) / Cassetta 0912',
+              doorCode: '[DA CONFERMARE]',
               floor: 'Piano 2 · Con ascensore',
               elevator: 'Sì (fino al 2° piano)',
               wifi: 'Firenze_SantoSpirito_5G',
-              pass: 'Brunelleschi2026!',
+              pass: '[DA CONFERMARE]',
               ztl: 'ZTL Settore B · Garage convenzionato Fosi a 150m',
               trash: 'Passaggio porta a porta Lun-Sab ore 07:30-08:30',
-              checkout: 'Entro le ore 10:00 · Chiavi sul tavolo in ingresso',
+              checkout: 'Orario check-out 10:00 · Chiavi sul tavolo in ingresso',
               addon10Active: true,
               reportTime: '08:00',
               reportChannel: 'whatsapp_email',
-              ownerPhone: '+39 351 038 0392',
+              ownerPhone: '+39 349 177 5561',
               ownerEmail: 'info@itadreamteam.com'
             },
             bookings: [
               { id: 'b1', guest: 'Jean Luc Martin', channel: 'Airbnb', guests: 2, checkin: '2026-11-02', checkout: '2026-11-06', nights: 4, amount: 760, alloggiatiSent: false, cleaningStatus: 'Programmata 11:00 (Magazzino Via dell\'Agnolo 72R)', cleaner: '3. Blue Arroyo Cleaning (Magazzino Via dell\'Agnolo 72R, Firenze)', cleaningCost: 45 },
               { id: 'b2', guest: 'Hannah e Mark Taylor', channel: 'Booking.com', guests: 2, checkin: '2026-11-07', checkout: '2026-11-12', nights: 5, amount: 1150, alloggiatiSent: false, cleaningStatus: 'Programmata', cleaner: '3. Blue Arroyo Cleaning (Magazzino Via dell\'Agnolo 72R, Firenze)', cleaningCost: 55 },
-              { id: 'b3', guest: 'Marco Verdi', channel: 'Smartbookings (Diretto)', guests: 2, checkin: '2026-10-27', checkout: '2026-11-02', nights: 6, amount: 1510, alloggiatiSent: true, inviato_at: '27/10 16:15', inviato_da: 'Operatore Firenze', cleaningStatus: 'Completata', cleaner: '3. Blue Arroyo Cleaning (Magazzino Via dell\'Agnolo 72R, Firenze)', cleaningCost: 45 }
+              { id: 'b3', guest: 'Marco Verdi', channel: 'Richiesta Diretta (0%)', guests: 2, checkin: '2026-10-27', checkout: '2026-11-02', nights: 6, amount: 1510, alloggiatiSent: true, inviato_at: '27/10 16:15', inviato_da: 'Operatore Firenze', cleaningStatus: 'Completata', cleaner: '3. Blue Arroyo Cleaning (Magazzino Via dell\'Agnolo 72R, Firenze)', cleaningCost: 45 }
             ],
             expenses: [
-              { id: 'e1', date: '02/11/2026', title: '3. Blue Arroyo Cleaning — Turnover + Kit Bio Gratuiti + 4 Foto SHA-256', category: 'Pulizie & Biancheria 60°C', amount: 45, paid: false },
+              { id: 'e1', date: '02/11/2026', title: '3. Blue Arroyo Cleaning — Coordinamento Turnover + Kit Bio Gratuiti', category: 'Pulizie & Biancheria 60°C', amount: 45, paid: false },
               { id: 'e2', date: '28/10/2026', title: '1. Toscan Costruzioni — Verifica impianto e serratura smart', category: 'Manutenzione (30€)', amount: 30, paid: true }
             ]
           },
@@ -1103,29 +1100,29 @@
             apartment: {
               name: 'Suite Palazzo Oltrarno',
               address: 'Via Santo Spirito 42, 50125 Firenze (FI)',
-              cin: 'IT048017C2F4E19284',
+              cin: '[DA CONFERMARE]',
               ownerCode: 'ITA-FIRENZE-02',
-              doorCode: '7710# (Portone) / Smart Lock 4491#',
+              doorCode: '[DA CONFERMARE]',
               floor: 'Piano Nobile (1° Piano)',
               elevator: 'Sì (ascensore storico)',
               wifi: 'Palazzo_Oltrarno_Fast',
-              pass: 'PittiPalace2026!',
+              pass: '[DA CONFERMARE]',
               ztl: 'ZTL Settore B · Garage Anglo-Americano a 200m',
               trash: 'Passaggio porta a porta Lun-Sab ore 07:30-08:30',
-              checkout: 'Entro le ore 10:00 · Runner Bagagli Smartbookings disponibile',
+              checkout: 'Orario check-out 10:00 · Deposito bagagli Stazione SMN',
               addon10Active: true,
               reportTime: '08:00',
               reportChannel: 'whatsapp_email',
-              ownerPhone: '+39 351 038 0392',
+              ownerPhone: '+39 349 177 5561',
               ownerEmail: 'info@itadreamteam.com'
             },
             bookings: [
               { id: 'b201', guest: 'Famiglia Van Der Berg', channel: 'Booking.com', guests: 4, checkin: '2026-11-02', checkout: '2026-11-05', nights: 3, amount: 690, alloggiatiSent: true, cleaningStatus: ' Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Magazzino Via dell\'Agnolo 72R, Firenze)', cleaningCost: 55 },
               { id: 'b202', guest: 'Sophie & Claire Dubois', channel: 'Airbnb', guests: 2, checkin: '2026-11-06', checkout: '2026-11-10', nights: 4, amount: 840, alloggiatiSent: false, cleaningStatus: 'Programmata 11:00 (Magazzino Via dell\'Agnolo 72R)', cleaner: '3. Blue Arroyo Cleaning (Magazzino Via dell\'Agnolo 72R, Firenze)', cleaningCost: 55 },
-              { id: 'b203', guest: 'Dr. Richard Sterling', channel: 'Smartbookings (Diretta 0%)', guests: 2, checkin: '2026-11-11', checkout: '2026-11-15', nights: 4, amount: 880, alloggiatiSent: true, cleaningStatus: ' Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Magazzino Via dell\'Agnolo 72R, Firenze)', cleaningCost: 55 }
+              { id: 'b203', guest: 'Dr. Richard Sterling', channel: 'Richiesta Diretta (0%)', guests: 2, checkin: '2026-11-11', checkout: '2026-11-15', nights: 4, amount: 880, alloggiatiSent: true, cleaningStatus: ' Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Magazzino Via dell\'Agnolo 72R, Firenze)', cleaningCost: 55 }
             ],
             expenses: [
-              { id: 'e201', date: '02/11/2026', title: '3. Blue Arroyo Cleaning — Turnover Suite + Biancheria 60°C + Foto SHA-256', category: 'Pulizie & Biancheria 60°C', amount: 55, paid: true }
+              { id: 'e201', date: '02/11/2026', title: '3. Blue Arroyo Cleaning — Coordinamento Turnover Suite + Biancheria 60°C', category: 'Pulizie & Biancheria 60°C', amount: 55, paid: true }
             ]
           },
           cmState: {
@@ -1151,24 +1148,24 @@
             apartment: {
               name: 'Santa Croce Design Loft',
               address: 'Via dei Benci 14, 50122 Firenze (FI)',
-              cin: 'IT048017C2D9C30115',
+              cin: '[DA CONFERMARE]',
               ownerCode: 'ITA-FIRENZE-03',
-              doorCode: '1920# (Portone) / Tastierino Smart 8812#',
+              doorCode: '[DA CONFERMARE]',
               floor: 'Piano 3 · Con ascensore nuovo Toscan Costruzioni',
               elevator: 'Sì (nuovo impianto certificato)',
               wifi: 'SantaCroce_Fiber_1Gbps',
-              pass: 'Michelangelo2026!',
+              pass: '[DA CONFERMARE]',
               ztl: 'ZTL Settore A · Parcheggio Sant\'Ambrogio a 350m',
               trash: 'Isole ecologiche interrate con tessera magnetica',
-              checkout: 'Entro le ore 10:00 · Deposito valigie con Runner Smartbookings',
+              checkout: 'Orario check-out 10:00 · Deposito valigie SMN',
               addon10Active: true,
               reportTime: '08:00',
               reportChannel: 'whatsapp_email',
-              ownerPhone: '+39 351 038 0392',
+              ownerPhone: '+39 349 177 5561',
               ownerEmail: 'info@itadreamteam.com'
             },
             bookings: [
-              { id: 'b301', guest: 'Michael & Sarah O\'Connor', channel: 'Smartbookings (Diretta 0%)', guests: 2, checkin: '2026-11-03', checkout: '2026-11-06', nights: 3, amount: 480, alloggiatiSent: false, cleaningStatus: 'Programmata 11:00 (Magazzino Via dell\'Agnolo 72R)', cleaner: '3. Blue Arroyo Cleaning (Magazzino Via dell\'Agnolo 72R, Firenze)', cleaningCost: 45 },
+              { id: 'b301', guest: 'Michael & Sarah O\'Connor', channel: 'Richiesta Diretta (0%)', guests: 2, checkin: '2026-11-03', checkout: '2026-11-06', nights: 3, amount: 480, alloggiatiSent: false, cleaningStatus: 'Programmata 11:00 (Magazzino Via dell\'Agnolo 72R)', cleaner: '3. Blue Arroyo Cleaning (Magazzino Via dell\'Agnolo 72R, Firenze)', cleaningCost: 45 },
               { id: 'b302', guest: 'Elena Rostova', channel: 'Airbnb', guests: 2, checkin: '2026-11-07', checkout: '2026-11-11', nights: 4, amount: 640, alloggiatiSent: true, cleaningStatus: ' Turno confermato h 15:00', cleaner: '3. Blue Arroyo Cleaning (Magazzino Via dell\'Agnolo 72R, Firenze)', cleaningCost: 45 }
             ],
             expenses: [
@@ -1309,18 +1306,18 @@
           pass: 'Toscan Suite2026!',
           ztl: 'ZTL Centro Storico · Partenza turni PBA da Magazzino Via dell\'Agnolo 72R, Firenze',
           trash: 'Passaggio porta a porta Lun-Sab ore 07:30-08:30',
-          checkout: 'Entro le ore 10:00 · Runner Bagagli Smartbookings attivo',
+          checkout: 'Orario check-out 10:00',
           addon10Active: true,
           reportTime: '08:00',
           reportChannel: 'whatsapp_email',
-          ownerPhone: '+39 351 038 0392',
+          ownerPhone: '+39 349 177 5561',
           ownerEmail: 'info@itadreamteam.com'
         },
         bookings: [
           {
             id: 'bt_' + Date.now(),
             guest: 'Lord Arthur Pendelton (1ª Prenotazione Post-Collaudo)',
-            channel: 'Smartbookings (Diretta 0%)',
+            channel: 'Richiesta Diretta (0%)',
             guests: 2,
             checkin: '2026-11-04',
             checkout: '2026-11-08',
@@ -1488,7 +1485,7 @@
         admRaw.leads.unshift({
           id: 'l_tc_' + Date.now(),
           name: ' [CRM TOSCAN COSTRUZIONI] ' + entry.name,
-          phone: entry.phone || entry.email || '+39 351 038 0392',
+          phone: entry.phone || entry.email || '+39 349 177 5561',
           zone: 'Real Estate · ' + entry.budgetRange,
           source: entry.goalType + ' (' + entry.source + ')',
           stage: 'Caldo (Pronto)',
@@ -1737,15 +1734,12 @@
     };
   }
 
-  // Scaglione Pareto #1: Blocco Quotazione Giornaliera (99,00 € – 289,50 €/mese) per 24 Ore su WhatsApp e CRM
+  // Scaglione Pareto #1: Attivazione Quota Fissa Unica (99,00 € / mese IVA inclusa) su WhatsApp e CRM
   async function lockDynamicPriceLead(input) {
     var inp = input || {};
-    var dynCfg = (typeof window !== 'undefined' && window.SITE_CONFIG && typeof window.SITE_CONFIG.getDynamicPricing === 'function')
-      ? window.SITE_CONFIG.getDynamicPricing()
-      : { todayMonthlyEur: 99, todayFormatted: '99,00 €', yearlyEquivalentEur: 1188, slotsAvailable: 4 };
     var lockCode = 'LOCK-FI-' + Math.floor(1000 + Math.random() * 9000);
-    var priceEur = Number(inp.lockedMonthlyEur) || dynCfg.todayMonthlyEur || 99;
-    var fmtPrice = priceEur.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    var priceEur = 99.00;
+    var fmtPrice = '99,00 €';
 
     var rec = {
       id: 'lock_' + Date.now(),
@@ -1754,14 +1748,13 @@
       name: (inp.name || 'Proprietario Firenze').trim(),
       phone: (inp.phone || '').trim(),
       email: (inp.email || '').trim(),
-      lockedMonthlyEur: priceEur,
+      lockedMonthlyEur: 99.00,
       lockedFormatted: fmtPrice,
-      slotsAvailable: dynCfg.slotsAvailable || 3,
       annualRevenue: 30000,
       pmPct: 20,
-      netSaving: Math.max(0, Math.round(6000 - priceEur * 12)),
+      netSaving: Math.max(0, Math.round(6000 - 99 * 12)),
       addon10Interest: false,
-      status: 'Tariffa Bloccata 24h (' + fmtPrice + '/mese · ' + lockCode + ')'
+      status: 'Quota Fissa Unica Attiva (' + fmtPrice + '/mese · ' + lockCode + ')'
     };
 
     try {
@@ -1779,10 +1772,7 @@
   function computeFreedomCapitalSalProgress() {
     var pf = saveCurrentAptIntoPortfolio();
     var aptsCount = (pf && pf.apartments && pf.apartments.length) ? pf.apartments.length : 1;
-    var dynCfg = (typeof window !== 'undefined' && window.SITE_CONFIG && typeof window.SITE_CONFIG.getDynamicPricing === 'function')
-      ? window.SITE_CONFIG.getDynamicPricing()
-      : { todayMonthlyEur: 99, yearlyEquivalentEur: 1188 };
-    var savedPmPerApt = Math.max(2400, Math.round(6400 - (dynCfg.yearlyEquivalentEur || 1188)));
+    var savedPmPerApt = Math.max(2400, Math.round(6400 - 1188));
     var revenueUpliftPerApt = 1820;
     var annualFreedomCapital = (savedPmPerApt + revenueUpliftPerApt) * aptsCount;
     var firstSalTargetEur = 10200; // 1° SAL (15% su cantiere tipo 68.000 € di 1. Toscan Costruzioni)
@@ -1814,7 +1804,7 @@
 
     if (Array.isArray(ownerState.bookings)) {
       ownerState.bookings.forEach(function (b) {
-        b.cleaner = '3. Blue Arroyo Cleaning · Turno garantito 10:00–15:00 + 4 foto SHA-256';
+        b.cleaner = '3. Blue Arroyo Cleaning · Coordinamento turno garantito 10:00–15:00 e verifica dotazioni';
       });
     }
 
@@ -1828,7 +1818,7 @@
       apartmentName: ownerState.apartment.name || 'Appartamento Firenze',
       ownerCode: ownerState.apartment.ownerCode || 'ITA-FIRENZE-01',
       monthlyKitSavingEur: 232,
-      protocol: 'Biancheria 60°C + Kit Bio e Spugne Sigillate 0€ PM + 4 Foto Danni SHA-256',
+      protocol: 'Coordinamento Operativo Turnover + Biancheria 60°C + Kit Bio e Spugne Sigillate 0€ PM',
       activatedAt: new Date().toISOString()
     };
 
@@ -1843,45 +1833,34 @@
       var raw = localStorage.getItem(OWNER_KEY);
       ownerState = raw ? JSON.parse(raw) : null;
     } catch (e) {}
-    if (!ownerState) ownerState = { apartment: { name: 'Appartamento Santo Spirito' }, bookings: [], expenses: [] };
+    if (!ownerState) ownerState = { apartment: { name: 'Appartamento Firenze' }, bookings: [], expenses: [] };
     if (!ownerState.apartment) ownerState.apartment = {};
 
-    ownerState.apartment.smartsBookingsDirectActive = true;
+    ownerState.apartment.directBookingConsent = true;
     try {
       localStorage.setItem(OWNER_KEY, JSON.stringify(ownerState));
     } catch (e) {}
 
-    var cm = getChannelRevenueState();
-    if (cm && Array.isArray(cm.portals)) {
-      cm.portals.forEach(function (p) {
-        if (/smart/i.test(p.name || p.id)) {
-          p.connected = true;
-          p.statusLabel = 'Attivo · Payout 85% + Cashback 15% Ospite';
-        }
-      });
-      saveChannelRevenueState(cm);
-    }
     saveCurrentAptIntoPortfolio();
 
     var record = {
-      id: 'sb_' + Date.now(),
+      id: 'db_' + Date.now(),
       apartmentName: ownerState.apartment.name || 'Appartamento Firenze',
       ownerCode: ownerState.apartment.ownerCode || 'ITA-FIRENZE-01',
-      ownerPayoutPct: 85,
-      guestCashbackPct: 15,
-      guestCashbackEur: 15,
+      directBookingConsent: true,
+      commissionPct: 0,
       activatedAt: new Date().toISOString()
     };
-    var directUrl = 'https://www.smartsbookings.com/firenze/' + encodeURIComponent(record.ownerCode);
+    var directUrl = 'https://www.itadreamteam.com/#prenota-casa';
 
-    await syncSnapshotToSupabase('smartsbookings_channel_activated', record);
-    broadcastStateChange('smartsbookings_channel_activated', record);
-    return { ok: true, record: record, directUrl: directUrl, ownerPayoutPct: 85, guestCashbackPct: 15, guestCashbackEur: 15 };
+    await syncSnapshotToSupabase('direct_booking_channel_activated', record);
+    broadcastStateChange('direct_booking_channel_activated', record);
+    return { ok: true, record: record, directUrl: directUrl, commissionPct: 0 };
   }
 
   /* ────────────────────────────────────────────────────────
      14. ESPORTAZIONE CALENDARIO .ICS UNIFICATO BIDIREZIONALE
-         Genera tracciato RFC 5545 VCALENDAR di uscita per Airbnb/Booking/Vrbo
+         Genera tracciato RFC 5545 VCALENDAR per il coordinamento operativo del calendario condiviso della struttura
   ──────────────────────────────────────────────────────── */
   function exportUnifiedICalFeed() {
     var ownerState = null;
@@ -1892,11 +1871,12 @@
     var aptName = (ownerState && ownerState.apartment && ownerState.apartment.name) || 'Appartamento Firenze';
     var ownerCode = (ownerState && ownerState.apartment && ownerState.apartment.ownerCode) || 'ITA-FIRENZE-01';
     var bks = (ownerState && Array.isArray(ownerState.bookings)) ? ownerState.bookings : [];
+    var calUnits = (typeof getStructureCalendars === 'function') ? getStructureCalendars() : [];
 
     var lines = [
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
-      'PRODID:-//itassistance Blue Arroyo SRL//Unified Anti-Overbooking Calendar 2026//IT',
+      'PRODID:-//itassistance Blue Arroyo SRL//Coordinamento Operativo Calendario Condiviso 2026//IT',
       'CALSCALE:GREGORIAN',
       'X-WR-CALNAME:' + aptName + ' (' + ownerCode + ')'
     ];
@@ -1910,7 +1890,7 @@
       lines.push('DTSTART;VALUE=DATE:' + ci);
       lines.push('DTEND;VALUE=DATE:' + co);
       lines.push('SUMMARY:Reserved - ' + (b.guest || 'Ospite') + ' (' + (b.channel || 'itassistance') + ')');
-      lines.push('DESCRIPTION:Blocco anti-overbooking certificato itassistance · ' + aptName);
+      lines.push('DESCRIPTION:Coordinamento operativo del calendario condiviso della struttura · ' + aptName);
       lines.push('END:VEVENT');
     }
 
@@ -1925,13 +1905,14 @@
       ownerCode: ownerCode,
       apartmentName: aptName,
       eventsCount: bks.length,
+      structureCalendarsCount: Array.isArray(calUnits) ? calUnits.length : 0,
       icsFeedUrl: icsFeedUrl,
       icsContent: icsContent
     };
   }
 
   /* ────────────────────────────────────────────────────────
-     15. VERBALE CERTIFICATO 4 FOTO ANTI-DANNI SHA-256 (3. BLUE ARROYO CLEANING)
+     15. VERBALE COORDINAMENTO OPERATIVO TURNOVER E VERIFICA DOTAZIONI (3. BLUE ARROYO CLEANING)
          & VOUCHER RI-PRENOTAZIONE DIRETTA 4. SMARTSBOOKINGS.COM
   ──────────────────────────────────────────────────────── */
   function generateBlueArroyoSha256DamageReport(ownerStateInput) {
@@ -1947,12 +1928,12 @@
     var ownerCode = (ownerState && ownerState.apartment && ownerState.apartment.ownerCode) || 'ITA-FIRENZE-01';
     var bks = (ownerState && Array.isArray(ownerState.bookings)) ? ownerState.bookings : [];
     var latestBooking = bks.length > 0 ? bks[0] : { guest: 'Ospite in Check-out', channel: 'Airbnb / Booking.com', dates: 'Oggi · Ore 11:00–14:00' };
-    var reportId = 'BAC-SHA256-' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + '-01';
+    var reportId = 'BAC-OPS-' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + '-01';
     var photos = [
-      { slot: 'Foto 1 di 4 · Zona Giorno, Cucina e Piano Cottura', status: 'Integro · Rifornito Kit Cucina (spugna sigillata + tabs)', sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' },
-      { slot: 'Foto 2 di 4 · Camera Padronale e Biancheria 60°C', status: 'Allestito · Set lenzuola cotone certificato 60°C', sha256: '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4' },
-      { slot: 'Foto 3 di 4 · Bagno Suite e Kit Cortesia Biologici', status: 'Sanificato · Kit bagno biologico + asciugamani 500g/mq', sha256: '2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae' },
-      { slot: 'Foto 4 di 4 · Dotazioni Sicurezza (Estintore, Rilevatori Gas/CO, CIN)', status: 'Verificato · Presidi a norma Legge 191/2023', sha256: '4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a' }
+      { slot: 'Punto 1 di 4 · Zona Giorno, Cucina e Piano Cottura', status: 'Verificato · Rifornito Kit Cucina (spugna sigillata + tabs)', sha256: 'VERIFICA-OPERATIVA-ZONA-GIORNO-OK' },
+      { slot: 'Punto 2 di 4 · Camera Padronale e Biancheria 60°C', status: 'Allestito · Set lenzuola cotone certificato 60°C', sha256: 'VERIFICA-OPERATIVA-CAMERA-60C-OK' },
+      { slot: 'Punto 3 di 4 · Bagno Suite e Kit Cortesia Biologici', status: 'Sanificato · Kit bagno biologico + asciugamani 500g/mq', sha256: 'VERIFICA-OPERATIVA-BAGNO-KIT-OK' },
+      { slot: 'Punto 4 di 4 · Dotazioni Sicurezza (Estintore, Rilevatori Gas/CO, CIN)', status: 'Verificato · Presidi a norma Legge 191/2023', sha256: 'VERIFICA-OPERATIVA-SICUREZZA-CIN-OK' }
     ];
     return {
       ok: true,
@@ -1977,17 +1958,17 @@
       var p = rep.photos[i];
       rowsHtml += '<tr><td><strong>' + p.slot + '</strong></td><td>' + p.status + '</td><td style="font-family:monospace;font-size:11px;word-break:break-all;">' + p.sha256 + '</td></tr>';
     }
-    w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Verbale 4 Foto Anti-Danni SHA-256 — ' + rep.reportId + '</title>' +
+    w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Riepilogo Coordinamento Operativo Turnover — ' + rep.reportId + ' · Palazzo by Blue Arroyo</title>' +
       '<style>body{font-family:sans-serif;padding:36px;color:#1E1035;line-height:1.5;max-width:820px;margin:0 auto}h1{font-size:22px;margin-bottom:6px}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #7C3AED;padding:10px;text-align:left;vertical-align:top}th{background:#F5F3FF}.box{background:#ECFDF5;border:1.5px solid #065F46;padding:14px;border-radius:8px;margin-top:16px}</style></head><body>' +
-      '<div style="font-size:12px;font-weight:700;letter-spacing:1px;color:#5B21B6;">3. BLUE ARROYO CLEANING · VERBALE ISPEZIONE E SANIFICAZIONE 60°C · FIRENZE</div>' +
-      '<h1>Certificato 4 Foto Anti-Danni SHA-256 e Rifornimento Kit (' + rep.reportId + ')</h1>' +
+      '<div style="font-size:12px;font-weight:700;letter-spacing:1px;color:#5B21B6;">3. BLUE ARROYO CLEANING · VERBALE COORDINAMENTO TURNOVER E SANIFICAZIONE 60°C · FIRENZE</div>' +
+      '<h1>Riepilogo Coordinamento Operativo e Rifornimento Kit (' + rep.reportId + ')</h1>' +
       '<p><strong>Immobile:</strong> ' + rep.apartmentName + ' · <strong>CIN:</strong> ' + rep.cin + ' · <strong>Codice Proprietario:</strong> ' + rep.ownerCode + '<br/>' +
       '<strong>Soggiorno verificato:</strong> ' + rep.guestName + ' (' + rep.channel + ') · <strong>Finestra operativa:</strong> Ore 11:00 – 14:00</p>' +
-      '<table><thead><tr><th>Ambiente e Punto di Controllo</th><th>Esito Ispezione e Rifornimento</th><th>Impronta Digitale SHA-256 (Prova AirCover / Booking)</th></tr></thead><tbody>' +
+      '<table><thead><tr><th>Ambiente e Punto di Controllo</th><th>Esito Coordinamento e Rifornimento</th><th>Codice Verifica Operativa</th></tr></thead><tbody>' +
       rowsHtml +
       '</tbody></table>' +
       '<div class="box"><strong>Fornitura Kit Cortesia Inclusa (0 € di ricarico PM):</strong> Kit Bagno Biologico, Kit Cucina con spugna sigillata e Kit Benvenuto riforniti gratuitamente per ogni soggiorno. Risparmio medio certificato per il proprietario: <strong>' + rep.monthlyKitSavingEur + ' €/mese (' + rep.annualKitSavingEur + ' €/anno)</strong>.</div>' +
-      '<p style="margin-top:24px;font-size:12px;color:#4C3D63;">Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]</p>' +
+      '<p style="margin-top:24px;font-size:12px;color:#4C3D63;">Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v.</p>' +
       '<script>window.onload=function(){window.print();}<\/script></body></html>');
     w.document.close();
     return rep;
@@ -2001,17 +1982,17 @@
         ownerState = raw ? JSON.parse(raw) : null;
       } catch (e) {}
     }
-    var aptName = (ownerState && ownerState.apartment && ownerState.apartment.name) || 'Appartamento Santo Spirito';
+    var aptName = (ownerState && ownerState.apartment && ownerState.apartment.name) || 'Appartamento Firenze';
     var ownerCode = (ownerState && ownerState.apartment && ownerState.apartment.ownerCode) || 'ITA-FIRENZE-01';
     var bks = (ownerState && Array.isArray(ownerState.bookings)) ? ownerState.bookings : [];
     var b = bookingInput || (bks.length > 0 ? bks[0] : { guest: 'Gentile Ospite', phone: '393510380392' });
     var guestName = b.guest || 'Gentile Ospite';
-    var voucherCode = 'FIRENZE15-' + ownerCode.replace(/[^A-Z0-9]/gi, '').slice(-4).toUpperCase();
-    var directUrl = 'https://www.smartsbookings.com/firenze/' + encodeURIComponent(ownerCode) + '?voucher=' + encodeURIComponent(voucherCode);
+    var voucherCode = 'DIRETTO-' + ownerCode.replace(/[^A-Z0-9]/gi, '').slice(-4).toUpperCase();
+    var directUrl = 'https://www.itadreamteam.com/#prenota-casa';
     var message = 'Grazie per aver soggiornato presso ' + aptName + ' a Firenze, ' + guestName + '.\n' +
-      'Per il tuo prossimo soggiorno a Firenze o per consigliare il nostro appartamento a un amico, prenota direttamente su 4. SmartsBookings.com senza commissioni dei portali:\n' +
+      'Per il tuo prossimo soggiorno a Firenze o per consigliare il nostro appartamento a un amico, puoi inviare una richiesta di prenotazione diretta senza commissioni di intermediazione (0%):\n' +
       directUrl + '\n' +
-      'Codice Voucher: ' + voucherCode + ' — Ricevi il 15% (15 €) di cashback reale accreditato entro 48 ore dal check-out.';
+      'Codice Riferimento Ospite: ' + voucherCode;
     var cleanPhone = String(b.phone || '393510380392').replace(/[^0-9]/g, '');
     if (!cleanPhone) cleanPhone = '393510380392';
     var whatsappUrl = 'https://wa.me/' + cleanPhone + '?text=' + encodeURIComponent(message);
@@ -2022,9 +2003,7 @@
       guestName: guestName,
       voucherCode: voucherCode,
       directUrl: directUrl,
-      ownerPayoutPct: 85,
-      guestCashbackPct: 15,
-      guestCashbackEur: 15,
+      commissionPct: 0,
       message: message,
       whatsappUrl: whatsappUrl
     };
@@ -2055,41 +2034,38 @@
       '<tr><td>2° SAL · Impianti Idrici, Elettrici e Cablaggio Smart Lock</td><td>25%</td><td><strong>' + s25 + ' €</strong></td><td>Predisposizione DM 37/08 e rete fibra</td></tr>' +
       '<tr><td>3° SAL · Massetti, Intonaci, Infissi e Insonorizzazione</td><td>25%</td><td><strong>' + s25 + ' €</strong></td><td>Verifica acustica e termica</td></tr>' +
       '<tr><td>4° SAL · Pavimenti, Rivestimenti e Bagni Suite</td><td>25%</td><td><strong>' + s25 + ' €</strong></td><td>Controllo qualità finiture</td></tr>' +
-      '<tr><td>5° SAL · Fine Lavori, Collaudo Finale e Subentro Ciclo Blue Arroyo</td><td>10%</td><td><strong>' + s10 + ' €</strong></td><td>Certificazioni DM 37/08, APE e ingresso in Piano 4 · Itassistance + Piano 2 · PBA + Piano 3 · SmartsBookings</td></tr>' +
+      '<tr><td>5° SAL · Fine Lavori, Collaudo Finale e Subentro Ciclo Blue Arroyo</td><td>10%</td><td><strong>' + s10 + ' €</strong></td><td>Certificazioni DM 37/08, APE e ingresso in Piano 4 · Itassistance + Piano 2 · PBA</td></tr>' +
       '</tbody></table>' +
       '<div class="box"><strong>Riepilogo Finanziario Stimato:</strong><br/>Investimento Lavori Chiavi in Mano: <strong>' + cap.toLocaleString('it-IT') + ' €</strong> · Flusso Annuo Combinato: <strong>' + boost + '</strong> · Tempo di Rientro Stimato: <strong>' + payback + '</strong>.</div>' +
-      '<p style="margin-top:24px;font-size:12px;color:#4C3D63;">Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]</p>' +
+      '<p style="margin-top:24px;font-size:12px;color:#4C3D63;">Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v.</p>' +
       '<script>window.onload=function(){window.print();}<\/script></body></html>');
     w.document.close();
   }
 
-  // Generatore Distinta / Fattura Pro-Forma con Quotazione Giornaliera Bloccata (99,00 € – 289,50 € / mese)
+  // Generatore Distinta / Fattura Pro-Forma con Quota Fissa Unica (99,00 € / mese IVA inclusa)
   function openDynamicInvoicePrint() {
     var act = null;
     try {
       act = JSON.parse(localStorage.getItem('itassistance_last_activation') || 'null');
     } catch (e) {}
-    var dynCfg = (typeof window !== 'undefined' && window.SITE_CONFIG && typeof window.SITE_CONFIG.getDynamicPricing === 'function')
-      ? window.SITE_CONFIG.getDynamicPricing()
-      : { todayMonthlyEur: 99, todayFormatted: '99,00 €' };
     var ownerName = (act && act.ownerName) || 'Proprietario Firenze';
     var aptName = (act && act.apartmentName) || 'Appartamento Firenze';
     var ownerCode = (act && act.ownerCode) || 'ITA-FIRENZE-01';
     var invId = (act && act.invoiceId) || 'FATT-2026-101';
-    var amountEur = (act && act.amountEur) || dynCfg.todayMonthlyEur || 99;
-    var fmtAmt = Number(amountEur).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    var amountEur = 99.00;
+    var fmtAmt = '99,00 €';
     var guaranteeUntil = (act && act.guaranteeUntil) || new Date(Date.now() + 14 * 86400000).toLocaleDateString('it-IT');
 
     var w = window.open('', '_blank');
     if (!w) return;
-    w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Distinta Attivazione e Tariffa Bloccata — ' + invId + '</title>' +
+    w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><title>Distinta Attivazione Quota Fissa 99,00 €/mese — ' + invId + '</title>' +
       '<style>body{font-family:sans-serif;padding:36px;color:#1E1035;line-height:1.5;max-width:760px;margin:0 auto}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #7C3AED;padding:10px;text-align:left}th{background:#F5F3FF}</style></head><body>' +
-      '<div style="font-size:12px;font-weight:700;color:#5B21B6;">Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]</div>' +
-      '<h1>Certificato di Attivazione e Blocco Tariffa (' + invId + ')</h1>' +
+      '<div style="font-size:12px;font-weight:700;color:#5B21B6;">Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v.</div>' +
+      '<h1>Certificato di Attivazione Quota Fissa Unica (' + invId + ')</h1>' +
       '<p><strong>Intestatario:</strong> ' + ownerName + ' · <strong>Immobile:</strong> ' + aptName + '<br/>' +
       '<strong>Codice Proprietario Personale:</strong> ' + ownerCode + ' · <strong>Garanzia 100% Rimborso fino al:</strong> ' + guaranteeUntil + '</p>' +
-      '<table><thead><tr><th>Descrizione Servizio</th><th>Commissioni Prenotazioni</th><th>Importo Bloccato (IVA incl.)</th></tr></thead><tbody>' +
-      '<tr><td>Abbonamento Piattaforma itassistance Firenze (Price Lock Giornaliero)</td><td>0% (Zero)</td><td><strong>' + fmtAmt + '</strong></td></tr>' +
+      '<table><thead><tr><th>Descrizione Servizio</th><th>Commissioni Prenotazioni</th><th>Quota Fissa Unica (IVA incl.)</th></tr></thead><tbody>' +
+      '<tr><td>Abbonamento Piattaforma itassistance Firenze (Quota Fissa Unica: 99,00 € / mese IVA inclusa)</td><td>0% (Zero)</td><td><strong>' + fmtAmt + '</strong></td></tr>' +
       '</tbody></table>' +
       '<p><strong>Coordinate Bonifico Bancario:</strong> Intestatario: <strong>Blue Arroyo SRL</strong> · Causale: <strong>' + invId + ' - ' + ownerCode + '</strong></p>' +
       '<script>window.onload=function(){window.print();}<\/script></body></html>');
@@ -2103,38 +2079,16 @@
          - Interrompibile e riprendibile dal punto esatto con barra di avanzamento sempre visibile
   ──────────────────────────────────────────────────────── */
   var ONBOARDING_KEY = 'itassistance_onboarding_wizard_v1';
+  var STRUCTURES_CALENDARS_KEY = 'ita_structures_calendars_v1';
 
   function getDefaultOnboardingUnit(idx) {
     var num = idx || 1;
+    // JUL-038: zero seed finti (niente Suite 101, KEY-101, 4829#, KB-9101, TURNO-11:00-14:00-FI-01, /assets/florence-window.webp)
     return {
       id: 'unit_' + num + '_' + Date.now(),
-      name: num === 1 ? 'Suite 101 · Santo Spirito' : ('Camera / Unità ' + num),
-      unitType: num === 1 ? 'Suite / Appartamento intero' : 'Camera Matrimoniale Deluxe',
-      sizeSqm: num === 1 ? 52 : 28,
-      floor: num === 1 ? 'Secondo piano (con ascensore)' : 'Secondo piano',
-      maxGuests: num === 1 ? 4 : 2,
-      bedsDouble: 1,
-      bedsSingle: 0,
-      bedsSofa: num === 1 ? 1 : 0,
-      bathrooms: 1,
-      amenities: 'Wi-Fi Fibra, Aria condizionata, Smart TV, Cucina attrezzata, Macchina caffè, Cassaforte',
-      photoUrl: '/assets/florence-window.webp',
-      descIt: 'Elegante unità nel centro storico di Firenze, sanificata a 60 gradi secondo il protocollo 3. Blue Arroyo Cleaning.',
-      descEn: 'Elegant unit in the historic center of Florence, sanitized at 60 degrees under the 3. Blue Arroyo Cleaning protocol.',
-      // Dati operativi collegati a 3. Blue Arroyo Cleaning turni ed etichette (Magazzino Via dell'Agnolo 72R, Firenze)
-      keyCode: 'KEY-10' + num,
-      keyHook: 'Gancio B-' + num + ' (Magazzino Via dell\'Agnolo 72R, Firenze)',
-      doorCode: '4829# (Tastiera a sinistra del portone)',
-      keyBoxCode: 'KB-910' + num,
-      accessInstructions: 'Suonare campanello Blue Arroyo / inserire codice portone 4829#, salire al 2° piano e ritirare la chiave nella KeyBox accanto alla porta.',
-      standardLinenKit: '1 Set Matrimoniale 60°C + 4 Spugne Bagno 500g/mq + Kit Bio Bagno/Cucina/Benvenuto',
-      standardCleaningMinutes: num === 1 ? 90 : 60,
-      blueArroyoShiftTag: 'TURNO-11:00-14:00-FI-0' + num,
-      // Regole unità
-      minStayNights: 2,
-      maxStayNights: 29,
-      securityDepositEur: 150,
-      houseRules: 'Vietato fumare · Animali ammessi su richiesta · Vietate feste ed eventi · Orario silenzio 22:00–08:00'
+      commercialName: '',
+      name: '',
+      calendarUrl: ''
     };
   }
 
@@ -2146,44 +2100,35 @@
       progressPct: 25,
       lastSavedAt: new Date().toISOString(),
       structure: {
-        propertyType: 'Micro albergo',
-        commercialName: 'Residenza Palazzo Santo Spirito Firenze',
-        legalName: 'Palazzo Santo Spirito Hospitality SRL',
-        vatOrTaxCode: '07480210488',
-        address: 'Via Maggio 18, 50125 Firenze (FI)',
-        phone: '+39 351 038 0392',
-        email: 'proprietario@itadreamteam.com',
-        logoUrl: '/brand/logo.png',
-        coverPhotoUrl: '/assets/florence-window.webp',
-        // Codici obbligatori
-        cin: 'IT048017C200001234',
-        cir: '048017-ALB-0042',
-        alloggiatiUsername: 'FI048017_HOST01',
-        alloggiatiWsKey: 'WSKEY-QUESTURA-FI-2026-OK',
-        istatCode: 'ROSS1000-FI-048017',
-        cityTaxRateEur: 5.50,
-        cityTaxMaxNights: 7,
-        cityTaxExemptions: 'Minori fino a 12 anni, disabili e accompagnatori, forze dell’ordine in servizio, autisti pullman',
-        // Orari, lingue, fuso orario e valuta
+        propertyType: '[DA CONFERMARE]',
+        commercialName: '[DA CONFERMARE]',
+        legalName: '[DA CONFERMARE]',
+        vatOrTaxCode: '[DA CONFERMARE]',
+        address: '[DA CONFERMARE]',
+        city: 'Firenze',
+        province: 'FI',
+        postalCode: '[DA CONFERMARE]',
+        operationalPhone: '[DA CONFERMARE]',
+        phone: '[DA CONFERMARE]',
+        invoiceEmail: '[DA CONFERMARE]',
+        email: '[DA CONFERMARE]',
+        // Orario check-in, Orario check-out, Lingue, Fuso orario e Valuta (JUL-037: nessun campo legale/logo)
         checkInTime: '15:00',
         checkOutTime: '10:00',
         languages: 'IT, EN',
         timezone: 'Europe/Rome',
         currency: 'EUR'
       },
-      units: [
-        getDefaultOnboardingUnit(1)
-      ],
+      // JUL-038: se non è stata ancora salvata alcuna struttura/unità, la lista parte vuota (nessun seed finto)
+      units: [],
       bookingEngine: {
         directEngineActive: true,
-        smartsBookingsActive: true,
-        otaMarkupCompensationPct: 18,
-        cancellationPolicy: 'Flessibile 5 giorni (rimborso 100% fino a 5 giorni prima del check-in)',
-        payoutIban: 'IT60X0306902887100000007480',
-        airbnbIcalUrl: 'https://www.airbnb.it/calendar/ical/12345678.ics',
-        bookingIcalUrl: 'https://admin.booking.com/hotel/hoteladmin/ical.html?t=87654321',
+        cancellationPolicy: '[DA CONFERMARE]',
+        payoutIban: '[DA CONFERMARE]',
+        airbnbIcalUrl: '',
+        bookingIcalUrl: '',
         vrboIcalUrl: '',
-        instantBookEnabled: true
+        instantBookEnabled: false
       },
       revenueAuto: {
         active: true,
@@ -2204,7 +2149,6 @@
       if (raw) {
         var parsed = JSON.parse(raw);
         if (parsed && parsed.structure && Array.isArray(parsed.units)) {
-          if (parsed.units.length === 0) parsed.units = [getDefaultOnboardingUnit(1)];
           if (!parsed.bookingEngine) parsed.bookingEngine = getDefaultOnboardingState().bookingEngine;
           if (!parsed.revenueAuto) parsed.revenueAuto = getDefaultOnboardingState().revenueAuto;
           return parsed;
@@ -2224,25 +2168,50 @@
     var u0 = (obState.units && obState.units[0]) || getDefaultOnboardingUnit(1);
     var rev = obState.revenueAuto || {};
     var be = obState.bookingEngine || {};
+    var invoiceEmailVal = (s.invoiceEmail && s.invoiceEmail !== '[DA CONFERMARE]')
+      ? s.invoiceEmail
+      : ((s.email && s.email !== '[DA CONFERMARE]') ? s.email : '');
+    var operationalPhoneVal = (s.operationalPhone && s.operationalPhone !== '[DA CONFERMARE]')
+      ? s.operationalPhone
+      : ((s.phone && s.phone !== '[DA CONFERMARE]') ? s.phone : '');
 
-    // 1. Aggiorna stato proprietario (/app.html)
+    // 1. Aggiorna stato proprietario (/app.html) senza sovrascrivere campi legali (JUL-037)
     try {
       var rawOwner = localStorage.getItem(OWNER_KEY);
       var ownerState = rawOwner ? JSON.parse(rawOwner) : { apartment: {}, bookings: [], expenses: [] };
       if (!ownerState.apartment) ownerState.apartment = {};
-      ownerState.apartment.name = s.commercialName || u0.name || ownerState.apartment.name || 'Struttura Firenze';
-      ownerState.apartment.propertyType = s.propertyType || 'Micro albergo';
-      ownerState.apartment.legalName = s.legalName || '';
-      ownerState.apartment.vatOrTaxCode = s.vatOrTaxCode || '';
-      ownerState.apartment.address = s.address || ownerState.apartment.address || 'Firenze';
-      ownerState.apartment.cin = s.cin || ownerState.apartment.cin || 'IT048017C200001234';
-      ownerState.apartment.cir = s.cir || '';
-      ownerState.apartment.alloggiatiUsername = s.alloggiatiUsername || '';
-      ownerState.apartment.istatCode = s.istatCode || '';
-      ownerState.apartment.cityTaxRateEur = Number(s.cityTaxRateEur) || 5.5;
-      ownerState.apartment.cityTaxMaxNights = Number(s.cityTaxMaxNights) || 7;
+      if (s.commercialName && s.commercialName !== '[DA CONFERMARE]') {
+        ownerState.apartment.name = s.commercialName;
+      }
+      if (s.propertyType && s.propertyType !== '[DA CONFERMARE]') {
+        ownerState.apartment.propertyType = s.propertyType;
+      }
+      if (s.legalName && s.legalName !== '[DA CONFERMARE]') {
+        ownerState.apartment.legalName = s.legalName;
+      }
+      if (s.vatOrTaxCode && s.vatOrTaxCode !== '[DA CONFERMARE]') {
+        ownerState.apartment.vatOrTaxCode = s.vatOrTaxCode;
+      }
+      if (s.address && s.address !== '[DA CONFERMARE]') {
+        ownerState.apartment.address = s.address;
+      }
+      if (s.city) ownerState.apartment.city = s.city;
+      if (s.province) ownerState.apartment.province = s.province;
+      if (s.postalCode && s.postalCode !== '[DA CONFERMARE]') ownerState.apartment.postalCode = s.postalCode;
+      if (invoiceEmailVal) {
+        ownerState.apartment.invoiceEmail = invoiceEmailVal;
+        ownerState.apartment.ownerEmail = invoiceEmailVal;
+      }
+      if (operationalPhoneVal) {
+        ownerState.apartment.operationalPhone = operationalPhoneVal;
+        ownerState.apartment.ownerPhone = operationalPhoneVal;
+      }
       ownerState.apartment.checkInTime = s.checkInTime || '15:00';
-      ownerState.apartment.checkout = 'Entro le ore ' + (s.checkOutTime || '10:00');
+      ownerState.apartment.checkOutTime = s.checkOutTime || '10:00';
+      ownerState.apartment.checkout = 'Orario check-out: ' + (s.checkOutTime || '10:00');
+      ownerState.apartment.languages = s.languages || 'IT, EN';
+      ownerState.apartment.timezone = s.timezone || 'Europe/Rome';
+      ownerState.apartment.currency = s.currency || 'EUR';
       ownerState.apartment.doorCode = u0.doorCode || ownerState.apartment.doorCode || '';
       ownerState.apartment.floor = u0.floor || ownerState.apartment.floor || '';
       ownerState.apartment.unitsCount = Array.isArray(obState.units) ? obState.units.length : 1;
@@ -2253,7 +2222,31 @@
       localStorage.setItem(OWNER_KEY, JSON.stringify(ownerState));
     } catch (e) {}
 
-    // 2. Aggiorna stato Channel Manager & Revenue Automatico
+    // 2. Sincronizza Email per ricevere le fatture e Telefono operativo con il Pro-Forma in "My Box" (JUL-036 / JUL-037)
+    try {
+      if (typeof saveMyBoxProforma === 'function') {
+        var proformaPatch = {};
+        if (invoiceEmailVal) {
+          proformaPatch.email = invoiceEmailVal;
+          proformaPatch.invoiceEmail = invoiceEmailVal;
+        }
+        if (operationalPhoneVal) {
+          proformaPatch.phone = operationalPhoneVal;
+          proformaPatch.operationalPhone = operationalPhoneVal;
+        }
+        if (s.address && s.address !== '[DA CONFERMARE]') {
+          proformaPatch.propertyAddress = s.address;
+        }
+        if (s.vatOrTaxCode && s.vatOrTaxCode !== '[DA CONFERMARE]') {
+          proformaPatch.taxId = s.vatOrTaxCode;
+        }
+        if (Object.keys(proformaPatch).length > 0) {
+          saveMyBoxProforma(proformaPatch);
+        }
+      }
+    } catch (eProformaSync) {}
+
+    // 3. Aggiorna stato Channel Manager & Revenue Automatico
     try {
       var cm = getChannelRevenueState();
       cm.baseRate = Number(rev.baseRateEur) || cm.baseRate || 165;
@@ -2287,7 +2280,18 @@
     } catch (e) {}
 
     propagateOnboardingToCoreState(current);
-    await syncSnapshotToSupabase('onboarding_wizard_step_' + step, current);
+    // JUL-037: non inviare mai a servizi esterni campi legali/chiavi (cin, cir, alloggiatiUser, alloggiatiKey, istatCode, logoUrl)
+    var sanitizedForSync = {
+      completed: current.completed,
+      currentStep: current.currentStep,
+      progressPct: current.progressPct,
+      apartment: {
+        name: (current.structure && current.structure.commercialName) || 'Struttura Firenze',
+        ownerEmail: (current.structure && (current.structure.invoiceEmail || current.structure.email)) || 'info@itadreamteam.com',
+        ownerPhone: (current.structure && (current.structure.operationalPhone || current.structure.phone)) || '+393510380392'
+      }
+    };
+    await syncSnapshotToSupabase('onboarding_wizard_step_' + step, sanitizedForSync);
     broadcastStateChange('onboarding_wizard_updated', {
       step: step,
       completed: current.completed,
@@ -2309,17 +2313,15 @@
   function duplicateOnboardingUnit(unitIndex) {
     var st = getOnboardingState();
     if (!Array.isArray(st.units) || st.units.length === 0) {
-      st.units = [getDefaultOnboardingUnit(1)];
+      return st;
     }
     var idx = (typeof unitIndex === 'number' && st.units[unitIndex]) ? unitIndex : (st.units.length - 1);
     var src = JSON.parse(JSON.stringify(st.units[idx]));
     var nextNum = st.units.length + 1;
     src.id = 'unit_' + nextNum + '_' + Date.now();
-    src.name = src.name + ' (Copia ' + nextNum + ')';
-    src.keyCode = 'KEY-10' + nextNum;
-    src.keyHook = 'Gancio B-' + nextNum + ' (Magazzino Via dell\'Agnolo 72R, Firenze)';
-    src.keyBoxCode = 'KB-910' + nextNum;
-    src.blueArroyoShiftTag = 'TURNO-11:00-14:00-FI-0' + nextNum;
+    var baseLabel = src.commercialName || src.name || 'Struttura';
+    src.commercialName = baseLabel + ' (Copia ' + nextNum + ')';
+    src.name = src.commercialName;
     st.units.push(src);
     saveOnboardingWizardStep(st.currentStep || 2, st, false);
     return st;
@@ -2327,7 +2329,7 @@
 
   function removeOnboardingUnit(unitIndex) {
     var st = getOnboardingState();
-    if (!Array.isArray(st.units) || st.units.length <= 1) return st;
+    if (!Array.isArray(st.units) || st.units.length === 0) return st;
     st.units.splice(unitIndex, 1);
     saveOnboardingWizardStep(st.currentStep || 2, st, false);
     return st;
@@ -2345,6 +2347,117 @@
     } catch (e) {}
     propagateOnboardingToCoreState(fresh);
     return fresh;
+  }
+
+  // JUL-038: Validazione e persistenza link calendario per ogni struttura/unità (ita_structures_calendars_v1)
+  function validateCalendarUrl(rawUrl) {
+    var raw = String(rawUrl || '').trim();
+    if (!raw) {
+      return { valid: false, error: 'Inserisci un link calendario valido (https:// o webcal://)' };
+    }
+    var normalized = raw;
+    if (/^webcal:\/\//i.test(raw)) {
+      normalized = 'https://' + raw.replace(/^webcal:\/\//i, '');
+    }
+    if (!/^https:\/\//i.test(normalized)) {
+      return { valid: false, error: 'Inserisci un link calendario valido (https:// o webcal://)' };
+    }
+    try {
+      var parsedUrl = new URL(normalized);
+      if (parsedUrl.protocol !== 'https:' || !parsedUrl.hostname || parsedUrl.hostname.indexOf('.') === -1) {
+        return { valid: false, error: 'Inserisci un link calendario valido (https:// o webcal://)' };
+      }
+      return { valid: true, normalizedUrl: parsedUrl.toString() };
+    } catch (eUrl) {
+      return { valid: false, error: 'Inserisci un link calendario valido (https:// o webcal://)' };
+    }
+  }
+
+  function getStructureCalendars() {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        var raw = localStorage.getItem(STRUCTURES_CALENDARS_KEY);
+        if (raw) {
+          var parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            return parsed.filter(function (item) {
+              return item && typeof item === 'object' && String(item.commercialName || item.name || '').trim() !== '';
+            }).map(function (item, idx) {
+              return {
+                id: String(item.id || ('cal_unit_' + (idx + 1))),
+                commercialName: String(item.commercialName || item.name || '').trim(),
+                calendarUrl: String(item.calendarUrl || '').trim(),
+                updatedAt: item.updatedAt || null
+              };
+            });
+          }
+        }
+      }
+    } catch (e) {}
+    // Se l'utente non ha ancora salvato alcuna struttura, restituisce lista vuota (nessun seed finto)
+    return [];
+  }
+
+  function saveStructureCalendars(items) {
+    if (!Array.isArray(items)) {
+      return { ok: false, error: 'Formato strutture non valido.' };
+    }
+    var sanitized = [];
+    var nowIso = new Date().toISOString();
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i] || {};
+      var commercialName = String(item.commercialName !== undefined ? item.commercialName : (item.name || '')).trim();
+      var rawCalUrl = String(item.calendarUrl !== undefined ? item.calendarUrl : (item.icalUrl || '')).trim();
+      if (!commercialName) {
+        return {
+          ok: false,
+          index: i,
+          error: 'Inserisci il Nome commerciale della struttura (riga ' + (i + 1) + ').'
+        };
+      }
+      var calCheck = validateCalendarUrl(rawCalUrl);
+      if (!calCheck.valid) {
+        return {
+          ok: false,
+          index: i,
+          error: calCheck.error
+        };
+      }
+      sanitized.push({
+        id: String(item.id || ('cal_unit_' + (i + 1) + '_' + Date.now())),
+        commercialName: commercialName,
+        calendarUrl: calCheck.normalizedUrl,
+        updatedAt: nowIso
+      });
+    }
+
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(STRUCTURES_CALENDARS_KEY, JSON.stringify(sanitized));
+        var onb = getOnboardingState();
+        onb.units = sanitized.map(function (u) {
+          return {
+            id: u.id,
+            commercialName: u.commercialName,
+            name: u.commercialName,
+            calendarUrl: u.calendarUrl
+          };
+        });
+        localStorage.setItem(ONBOARDING_KEY, JSON.stringify(onb));
+      }
+    } catch (eSave) {}
+
+    // Non stampare mai i link calendario in console.log e non esporli ad altri ruoli
+    broadcastStateChange('structure_calendars_updated', {
+      count: sanitized.length,
+      updatedAt: nowIso
+    });
+
+    return {
+      ok: true,
+      items: sanitized,
+      count: sanitized.length
+    };
   }
 
   /* ────────────────────────────────────────────────────────
@@ -2834,8 +2947,8 @@
               statusLabel: 'Prezzi + disponibilità (API)',
               provider: 'Channex.io Official OAuth2',
               markupPct: 0,
-              icalImportUrl: 'https://www.airbnb.it/calendar/ical/10293847.ics',
-              icalExportUrl: 'https://www.itadreamteam.com/ical/APT-FI-01.ics',
+              icalImportUrl: '',
+              icalExportUrl: '',
               lastSyncAt: '08/11/2026, 08:00'
             },
             {
@@ -2845,8 +2958,8 @@
               statusLabel: 'Prezzi + disponibilità (API)',
               provider: 'Channex.io Connectivity Partner',
               markupPct: 15,
-              icalImportUrl: 'https://admin.booking.com/hotel/hoteladmin/ical.html?t=884120',
-              icalExportUrl: 'https://www.itadreamteam.com/ical/APT-FI-01.ics',
+              icalImportUrl: '',
+              icalExportUrl: '',
               lastSyncAt: '08/11/2026, 08:00'
             },
             {
@@ -2856,8 +2969,8 @@
               statusLabel: 'Solo disponibilità (iCal)',
               provider: 'Feed iCal Standard (No prezzi)',
               markupPct: 12,
-              icalImportUrl: 'https://www.vrbo.com/icalendar/7738291.ics',
-              icalExportUrl: 'https://www.itadreamteam.com/ical/APT-FI-01.ics',
+              icalImportUrl: '',
+              icalExportUrl: '',
               lastSyncAt: '08/11/2026, 08:00'
             },
             {
@@ -2867,8 +2980,8 @@
               statusLabel: 'Solo disponibilità (iCal)',
               provider: 'Feed iCal Standard (No prezzi)',
               markupPct: 18,
-              icalImportUrl: 'https://www.expediapartnercentral.com/ical/441920.ics',
-              icalExportUrl: 'https://www.itadreamteam.com/ical/APT-FI-01.ics',
+              icalImportUrl: '',
+              icalExportUrl: '',
               lastSyncAt: '08/11/2026, 08:00'
             }
           ],
@@ -2888,8 +3001,8 @@
               statusLabel: 'Prezzi + disponibilità (API)',
               provider: 'Channex.io Official OAuth2',
               markupPct: 0,
-              icalImportUrl: 'https://www.airbnb.it/calendar/ical/20394857.ics',
-              icalExportUrl: 'https://www.itadreamteam.com/ical/APT-FI-02.ics',
+              icalImportUrl: '',
+              icalExportUrl: '',
               lastSyncAt: '08/11/2026, 08:00'
             },
             {
@@ -2899,8 +3012,8 @@
               statusLabel: 'Prezzi + disponibilità (API)',
               provider: 'Channex.io Connectivity Partner',
               markupPct: 15,
-              icalImportUrl: 'https://admin.booking.com/hotel/hoteladmin/ical.html?t=992831',
-              icalExportUrl: 'https://www.itadreamteam.com/ical/APT-FI-02.ics',
+              icalImportUrl: '',
+              icalExportUrl: '',
               lastSyncAt: '08/11/2026, 08:00'
             },
             {
@@ -2910,8 +3023,8 @@
               statusLabel: 'Solo disponibilità (iCal)',
               provider: 'Feed iCal Standard (No prezzi)',
               markupPct: 12,
-              icalImportUrl: 'https://www.vrbo.com/icalendar/8849201.ics',
-              icalExportUrl: 'https://www.itadreamteam.com/ical/APT-FI-02.ics',
+              icalImportUrl: '',
+              icalExportUrl: '',
               lastSyncAt: '08/11/2026, 08:00'
             }
           ],
@@ -3729,7 +3842,7 @@
           category: 'pulizie_biancheria',
           unitId: 'APT-FI-02',
           unitName: 'Santa Croce Suite · Firenze',
-          title: 'Controllo qualità fotografico post-pulizia (12 foto archiviate)',
+          title: 'Coordinamento operativo post-pulizia e verifica checklist dotazioni',
           internalNotes: 'Standard 100% conforme. Appartamento pronto in anticipo alle 14:10.',
           ownerFacingText: '',
           assignedTo: 'Elena R. (Field & Housekeeping P.IVA)',
@@ -4076,7 +4189,7 @@
         },
         {
           key: 'calendar_sync',
-          label: 'Sincronizzazione calendari (iCal + anti-overbooking)',
+          label: 'Coordinamento operativo del calendario condiviso della struttura (iCal)',
           autoCount: 310,
           manualCount: 6
         },
@@ -4214,20 +4327,21 @@
   //    (Task #43, #62, #63, #64, #65, #66, #67, #68, #70, #82, #83, #85, #86, #91, #92 · JUL-007)
   // ============================================================================
   var BLUE_ARROYO_OFFICIAL_LOCATIONS = {
-    companyLegalHeader: 'Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]',
-    officeName: 'Ufficio Blue Arroyo Srl (Sede Legale e Operativa)',
-    officeAddress: 'Via Matteo Palmieri 20R, 50122 Firenze',
+    brandName: 'ITASSISTANCEDREAMTEAM.IT',
+    companyLegalHeader: 'BLUEARROYO S.R.L. – Sede legale: Via Matteo Palmieri 20/R, 50122 Firenze (FI) · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v.',
+    officeName: 'Sede legale BLUEARROYO S.R.L.',
+    officeAddress: 'Via Matteo Palmieri 20/R, 50122 Firenze (FI)',
     vatAndTaxCode: '07480210488',
     reaCode: 'FI-706161',
     sdiCode: 'M5UXCR1',
-    pec: '[DA CONFERMARE]',
-    shareCapital: '[DA CONFERMARE]',
+    pec: 'bluearroyosrl@pec.it',
+    shareCapital: '€ 50.000,00 i.v.',
     warehouseName: 'Magazzino Operativo & Biancheria PBA (Solo Uso Interno)',
     warehouseAddress: 'Via dell\'Agnolo 72R, Firenze',
     warehouseInternalOnly: true,
     internalOnly: true,
     hubId: 'MAG-AGNOLO-72R',
-    name: 'Magazzino Via dell\'Agnolo 72R, Firenze (Solo Uso Operativo Interno · Sede Legale: Via Matteo Palmieri 20R, Firenze)',
+    name: 'Magazzino Via dell\'Agnolo 72R, Firenze (Solo Uso Operativo Interno · Sede legale: Via Matteo Palmieri 20/R, 50122 Firenze)',
     districts: ['Centro Storico', 'Santa Croce', 'Duomo', 'Sant\'Ambrogio', 'Santo Spirito', 'Oltrarno', 'San Frediano', 'Pitti', 'San Lorenzo', 'SMN', 'Fortezza', 'Tornabuoni'],
     linenSetsStock: 164,
     minThreshold: 50,
@@ -4240,7 +4354,7 @@
 
   function resolveZtlHubForAddress(addressOrDistrict) {
     // JUL-007: Non esistono i "3 Hub ZTL". Tutti i turni PBA partono e rientrano esclusivamente
-    // dal Magazzino di Via dell'Agnolo 72R, Firenze; l'ufficio operativo/amministrativo è Via Matteo Palmieri 20R, 50122 Firenze.
+    // dal Magazzino di Via dell'Agnolo 72R, Firenze; la sede legale è Via Matteo Palmieri 20R, 50122 Firenze.
     return Object.assign({}, BLUE_ARROYO_OFFICIAL_LOCATIONS, {
       targetApartmentReference: String(addressOrDistrict || 'Firenze').trim()
     });
@@ -4272,7 +4386,7 @@
       gpsCheckInVerified: true,
       gpsCoords: '43.7674, 11.2481 (Firenze ZTL)',
       keyBarcodeScan: {
-        barcode: p.keyCode || 'KEY-101',
+        barcode: p.keyCode || '[DA CONFERMARE]',
         hook: 'Gancio B-1 (Magazzino ' + BLUE_ARROYO_OFFICIAL_LOCATIONS.warehouseAddress + ')',
         pickedUpAt: nowRome.dateIso + ' 09:52',
         returnedAt: nowRome.dateIso + ' 14:18'
@@ -4296,7 +4410,7 @@
         guestCleanlinessRating: 4.95,
         overallScore: 4.98
       },
-      status: 'COMPLETATO_CON_SIGILLO_SHA256'
+      status: 'COMPLETATO_COORDINAMENTO_OPERATIVO'
     };
     broadcastStateChange('pba_ztl_shift_completed', shiftRecord);
     return { ok: true, shift: shiftRecord };
@@ -4353,7 +4467,7 @@
       status: 'COLLAUDATO_LIVE_OK'
     };
 
-    // 2. Endpoint 2: Itassitance (Piano 4) <-> PBA Palazzo by Blue Arroyo (Piano 2) Turni 10:00-14:30 da Magazzino Via dell'Agnolo 72R, Firenze + Foto SHA-256 + Consuntivo ARM Pass-Through
+    // 2. Endpoint 2: Itassitance (Piano 4) <-> PBA Palazzo by Blue Arroyo (Piano 2) Turni 10:00-14:30 da Magazzino Via dell'Agnolo 72R, Firenze + Coordinamento Operativo + Consuntivo ARM Pass-Through
     var pbaShift = dispatchPbaZtlCleaningShiftsWebhook({
       unitId: 'APT-FI-01',
       unitName: 'Residenza Palazzo Santo Spirito Firenze',
@@ -4363,7 +4477,7 @@
     var endpoint2Result = {
       endpoint: 'POST /api/interfloor/pba-ztl-shifts-sha256 (Piano 4 <-> Piano 2)',
       tasksUnlocked: { pba: ['#28', '#83'], itassitance: ['#29', '#62', '#63', '#64', '#65', '#66', '#67', '#68', '#69', '#70', '#85', '#86'] },
-      hubZtlRouted: 'Magazzino Via dell\'Agnolo 72R, Firenze (Ufficio: Via Matteo Palmieri 20R, 50122 Firenze)',
+      hubZtlRouted: 'Magazzino Via dell\'Agnolo 72R, Firenze (Sede legale: Via Matteo Palmieri 20R, 50122 Firenze)',
       warehouseAddress: 'Via dell\'Agnolo 72R, Firenze',
       officeAddress: 'Via Matteo Palmieri 20R, 50122 Firenze',
       shiftWindow: '10:00–14:30',
@@ -4372,17 +4486,16 @@
       status: 'COLLAUDATO_LIVE_OK'
     };
 
-    // 3. Endpoint 3: Itassitance (Piano 4) <-> SmartsBookings.com (Piano 3) Feed Alloggi/iCal SOURCE_ITASSITANCE (DEC-04) + Payout 85% 12:00 + Cashback 15% 48h
+    // 3. Endpoint 3: Itassitance (Piano 4) · Coordinamento operativo del calendario condiviso della struttura + Modulo Richiesta Prenotazione Diretta (0% commissioni)
     var icalFeed = exportUnifiedICalFeed();
     var voucher = buildSmartsBookingsGuestRepeatVoucher();
     var endpoint3Result = {
-      endpoint: 'POST /api/interfloor/smartsbookings-feed-source-itassitance (Piano 4 <-> Piano 3 · DEC-04)',
-      tasksUnlocked: { smartsbookings: ['#58'], itassitance: ['#54', '#55', '#61'] },
+      endpoint: 'POST /api/interfloor/direct-booking-calendar-sync (Piano 4 · JUL-033 / JUL-039)',
+      tasksUnlocked: { itassitance: ['#54', '#55', '#61'] },
       sourcePortTag: 'SOURCE_ITASSITANCE',
       icalFeedUrl: icalFeed.icsFeedUrl,
       eventsSyncedCount: icalFeed.eventsCount,
-      payout85At1200Checkout: 'VERIFICATO (Bonifico 85% disposto entro ore 12:00 del check-out)',
-      cashback15At48hPostCheckout: 'VERIFICATO (Rilascio 15% cashback ospite a 48h sbloccato da verbale 4 foto SHA-256 PBA senza danni · Voucher ' + voucher.voucherCode + ')',
+      directBookingZeroCommission: 'VERIFICATO (Richieste di prenotazione diretta a 0% commissioni con incasso diretto del proprietario · Rif. ' + voucher.voucherCode + ')',
       status: 'COLLAUDATO_LIVE_OK'
     };
 
@@ -4462,9 +4575,9 @@
       ],
       floorAllocationMatrix: {
         piano1_toscan: '5 SAL attivi cantiere (15/25/25/25/10%), fatture subappaltatori/materiali, verifica DURC e marginalità per commessa.',
-        piano2_pba: 'Consuntivo turni pulizie (da 33 €), lavanderia 90°C, costi scorte Magazzino Via dell\'Agnolo 72R, Firenze (Ufficio Blue Arroyo Srl: Via Matteo Palmieri 20R, 50122 Firenze) e fatturazione cumulativa SDI verso PM/Itassitance.',
-        piano3_smartsbookings: 'Incassi diretti Stripe (0% fee OTA), scorporo Payout 85% al Partner entro le ore 12:00 del check-out e gestione conto custodia 15% Cashback a 48h.',
-        piano4_itassitance: 'Fatturazione canoni fissi Price Lock (99–299 €/mese), fee +10% Revenue Team (solo se attivo), costi variabili pass-through e Rendiconto Mensile ARM proprietari su conti dedicati.'
+        piano2_pba: 'Consuntivo turni pulizie (da 33 €), lavanderia 90°C, costi scorte Magazzino Via dell\'Agnolo 72R, Firenze (Sede legale Blue Arroyo S.r.l.: Via Matteo Palmieri 20R, 50122 Firenze) e fatturazione cumulativa SDI verso PM/Itassitance.',
+        piano3_direct: 'Richieste di prenotazione diretta (0% commissioni di intermediazione) con incasso diretto sul conto del proprietario.',
+        piano4_itassitance: 'Fatturazione Quota Fissa Unica (99,00 € / mese IVA inclusa) previa conferma pro-forma in My Box, commissione opzionale 10% Revenue Plan (sul netto spettante al proprietario prima delle sue tasse personali = incasso ospite meno commissioni piattaforme, imposta di soggiorno e costi di pulizia, fatturata a fine mese), costi variabili pass-through e Rendiconto Mensile ARM proprietari.'
       }
     };
   }
@@ -4519,6 +4632,9 @@
     duplicateOnboardingUnit: duplicateOnboardingUnit,
     removeOnboardingUnit: removeOnboardingUnit,
     resetOnboardingForFirstAccess: resetOnboardingForFirstAccess,
+    validateCalendarUrl: validateCalendarUrl,
+    getStructureCalendars: getStructureCalendars,
+    saveStructureCalendars: saveStructureCalendars,
     // Nuovi motori A, B, C, E (Pareto 20/80, Prezzi API Canali, Automazione >=70%)
     getUnitChannelPricing: getUnitChannelPricing,
     updateUnitChannelSettings: updateUnitChannelSettings,
@@ -4550,7 +4666,7 @@
     logCrossCrmFollowup: logCrossCrmFollowup,
     approveCrossCrmProspectToClient: approveCrossCrmProspectToClient,
     getDedicatedClientAreaForProspect: getDedicatedClientAreaForProspect,
-    // Motore J: Tariffa al Momento (Quotazione Giornaliera 199 €) + Preventivo PDF ARM Scaricabile
+    // Motore J: Quota Fissa Unica (99,00 € / mese IVA inclusa) + Preventivo PDF ARM Scaricabile (JUL-028)
     getCurrentItassitanceMomentTariff: getCurrentItassitanceMomentTariff,
     setCurrentItassitanceMomentTariff: setCurrentItassitanceMomentTariff,
     rollRandomItassitanceMomentTariff: rollRandomItassitanceMomentTariff,
@@ -4562,10 +4678,58 @@
     acceptMaintenanceJobByMaintainer: acceptMaintenanceJobByMaintainer,
     completeMaintenanceJobByMaintainer: completeMaintenanceJobByMaintainer,
     liquidateAndResetMaintainerMonthlyCounter: liquidateAndResetMaintainerMonthlyCounter,
-    // Motore L: Contratto Produzione Contenuti & Liberatoria Immobile (Creator / Marketing · JUL-011 & JUL-012)
+    // Motore L: Contratto di Servizio e Autorizzazione Operativa Itassistance (JUL-035 · Senza Blocco B)
     getCreatorPropertyReleaseContracts: getCreatorPropertyReleaseContracts,
     openCreatorPropertyReleaseContractPrint: openCreatorPropertyReleaseContractPrint,
-    downloadCreatorContractCompiledPdf: downloadCreatorContractCompiledPdf
+    downloadCreatorContractCompiledPdf: downloadCreatorContractCompiledPdf,
+    // Motore M: Booking Interno Richieste Prenotazione Diretta (JUL-033 · Solo Alloggi con Consenso Esplicito)
+    getDirectBookingUnits: getDirectBookingUnits,
+    saveDirectBookingUnitSettings: saveDirectBookingUnitSettings,
+    getDirectBookingRequests: getDirectBookingRequests,
+    submitDirectBookingRequest: submitDirectBookingRequest,
+    confirmDirectBookingRequest: confirmDirectBookingRequest,
+    rejectDirectBookingRequest: rejectDirectBookingRequest,
+    getDirectBookingBlockedDates: getDirectBookingBlockedDates,
+    isDirectBookingUnitAvailable: isDirectBookingUnitAvailable,
+    // Motore N: Pro-Forma in "My Box" del Cliente & Coda Manuale Fatturazione Admin (JUL-036 · Solo Fattura, Zero Carta)
+    getMyBoxProforma: getMyBoxProforma,
+    saveMyBoxProforma: saveMyBoxProforma,
+    confirmMyBoxProforma: confirmMyBoxProforma,
+    getAdminProformaQueue: getAdminProformaQueue,
+    updateAdminProformaStatus: updateAdminProformaStatus,
+    getProformaAuditLog: getProformaAuditLog,
+    downloadMyBoxProformaPdf: downloadMyBoxProformaPdf,
+    // Motore O: Contatti Ufficiali JUL-043 + Metodi Condivisi 2 Pannelli Clienti vs Itassistance Team JUL-044 + Lead Submit CRM/Email/Yarvis JUL-045
+    OFFICIAL_ITASSISTANCE_CONTACTS: OFFICIAL_ITASSISTANCE_CONTACTS,
+    getTeamStructures: getTeamStructures,
+    saveTeamStructure: saveTeamStructure,
+    deleteTeamStructure: deleteTeamStructure,
+    getTeamClients: getTeamClients,
+    saveTeamClient: saveTeamClient,
+    getMaintenanceTickets: getMaintenanceTickets,
+    saveMaintenanceTicket: saveMaintenanceTicket,
+    getTeamCrmLeads: getTeamCrmLeads,
+    saveTeamCrmLead: saveTeamCrmLead,
+    convertCrmLeadToActiveClient: convertCrmLeadToActiveClient,
+    submitInterestedLead: submitInterestedLead,
+    syncRemoteCrmLeads: syncRemoteCrmLeads,
+    // Motore P (JUL-056): Zero Link Check-in Online + Foto Check-in Caricata dal Concierge in Reports "My Box"
+    getConciergeCheckinPhotos: getConciergeCheckinPhotos,
+    saveConciergeCheckinPhoto: saveConciergeCheckinPhoto,
+    deleteConciergeCheckinPhoto: deleteConciergeCheckinPhoto,
+    // Motore Q (JUL-057): Inbox Unico "My Box" + Report 08:00 AM + To-Do List Proprietario + Chiusura Contabile Fine Mese
+    getMyBoxOwnerTodos: getMyBoxOwnerTodos,
+    toggleMyBoxOwnerTodo: toggleMyBoxOwnerTodo,
+    triggerMonthEndAccountingClose: triggerMonthEndAccountingClose,
+    // Motore R (JUL-061): Sistema Credenziali Accesso Interno (Super Admin, Customer Care OM, Cliente; Usuario = Turista)
+    hashCredentialSha256: hashCredentialSha256,
+    getAuthSession: getAuthSession,
+    setAuthSession: setAuthSession,
+    logoutAuthSession: logoutAuthSession,
+    getManagedAccounts: getManagedAccounts,
+    saveManagedAccount: saveManagedAccount,
+    toggleManagedAccountStatus: toggleManagedAccountStatus,
+    authenticateInternalUser: authenticateInternalUser
   };
 
   // ============================================================================
@@ -4587,10 +4751,10 @@
           alloggiati_web_100pct: true
         },
         agente_2_canali_revenue_10pct: {
-          descrizione: 'Report canali OTA/Diretto SmartsBookings e commissione opzionale +10% Revenue Team',
+          descrizione: 'Report canali OTA/Diretto e commissione opzionale +10% Revenue Plan (sul netto spettante al proprietario prima delle sue tasse personali, fatturata a fine mese)',
           incasso_lordo_soggiorni_eur: 3420.00,
           quota_revenue_team_10pct_eur: 342.00,
-          canali_attivi: ['Airbnb API', 'Booking.com API', 'SmartsBookings Diretto (SOURCE_ITASSITANCE)']
+          canali_attivi: ['Airbnb API', 'Booking.com API', 'Richiesta Prenotazione Diretta (0%)']
         },
         agente_3_passthrough_arm: {
           descrizione: 'Consuntivi spese variabili pass-through (0% ricarico) e bozze rendiconto mensile ARM',
@@ -4601,7 +4765,7 @@
           saldo_netto_proprietario_arm_eur: 2866.00
         },
         agente_4_contratti_price_lock: {
-          descrizione: 'Nuovi contratti Price Lock 99-299 €/mese IVA inclusa e slot attivi',
+          descrizione: 'Contratti attivi Quota Fissa Unica 99,00 €/mese IVA inclusa',
           contratti_attivi_count: 5,
           canone_fisso_unitario_eur: 99.00,
           mrr_canoni_fissi_eur: 495.00,
@@ -4710,13 +4874,17 @@
         passThroughZeroMarkup: true
       },
       armSimulation: {
-        recommendedPlan: '199 €/mese (Price Lock 24 Mesi · Promo -50% 1° mese da PBA)',
-        monthlyPlanFeeEur: 199.00,
-        firstMonthPromoFeeEur: 99.50,
-        estimatedGrossMonthlyEur: 3450.00,
-        estimatedTurnsMonthly: 6,
-        estimatedPbaPassThroughMonthlyEur: 516.00,
-        estimatedNetOwnerArmEur: 2735.00
+        recommendedPlan: 'Quota Fissa Unica: 99,00 € / mese (IVA inclusa)',
+        tariffaAlMomentoLabel: 'Quota Fissa Unica: 99,00 € / mese (IVA inclusa)',
+        canoneFissoItassitance: 99.00,
+        monthlyPlanFeeEur: 99.00,
+        firstMonthPromoFeeEur: 49.50,
+        estimatedGrossMonthlyEur: 2082.50,
+        estimatedTurnsMonthly: 1,
+        estimatedPbaPassThroughMonthlyEur: 86.00,
+        quotaRevenue10PctEur: 208.25,
+        bonificoNettoProprietario: 1689.25,
+        estimatedNetOwnerArmEur: 1689.25
       },
       status: 'PROSPECT_IN_ATTESA',
       pipelineStageLabel: 'Prospect in Attesa di Approvazione',
@@ -4728,7 +4896,7 @@
           id: 'FB-INIT-01',
           timestamp: '09/11/2026, 17:48',
           channel: 'Cross-CRM Preventivo Generale PBA (preventivo.html)',
-          action: 'Preventivo Generale PBA generato con consenso esplicito "SÌ, voglio ricevere anche un preventivo Itassistance" (itassistanceRequested=true, itassistanceConsent=true) · Scheda ARM (ARM-2026-MP86) auto-compilata.',
+          action: 'Preventivo Generale PBA generato con consenso esplicito "SÌ, voglio ricevere anche un preventivo Itassistance" (Richiesta Itassistance: Sì, Consenso esplicito: Sì) · Scheda ARM (ARM-2026-MP86) auto-compilata.',
           actor: 'Sistema Cross-CRM Holding (Piano 2 PBA -> Piano 4 Itassistance)'
         }
       ]
@@ -4772,16 +4940,29 @@
       if (raw) {
         var list = JSON.parse(raw);
         if (Array.isArray(list) && list.length > 0) {
-          // Migrazione compatibile per eventuale record Marco Palumbo salvato prima di JUL-009 senza source esplicito
+          // Migrazione compatibile per eventuale record Marco Palumbo salvato prima di JUL-009 / JUL-028
           list = list.map(function (item) {
-            if (item && (item.id === defMarco.id || item.armCode === 'ARM-2026-MP86') && !item.source && item.itassistanceRequested !== false && item.itassistanceConsent !== false) {
+            if (item && (item.id === defMarco.id || item.armCode === 'ARM-2026-MP86')) {
               return Object.assign({}, defMarco, item, {
                 source: 'pba-preventivo',
                 sourceLabel: 'Preventivo Generale PBA (preventivo.html)',
                 itassistanceRequested: true,
                 itassistanceConsent: true,
                 consentBadge: 'Consenso Esplicito Preventivo Generale PBA: VERIFICATO',
-                entryChannelRule: 'Canale unico di ingresso: Preventivo Generale PBA con consenso esplicito Itassistance'
+                entryChannelRule: 'Canale unico di ingresso: Preventivo Generale PBA con consenso esplicito Itassistance',
+                armSimulation: Object.assign({}, defMarco.armSimulation, item.armSimulation || {}, {
+                  recommendedPlan: 'Quota Fissa Unica: 99,00 € / mese (IVA inclusa)',
+                  tariffaAlMomentoLabel: 'Quota Fissa Unica: 99,00 € / mese (IVA inclusa)',
+                  canoneFissoItassitance: 99.00,
+                  monthlyPlanFeeEur: 99.00,
+                  firstMonthPromoFeeEur: 49.50,
+                  estimatedGrossMonthlyEur: 2082.50,
+                  estimatedTurnsMonthly: 1,
+                  estimatedPbaPassThroughMonthlyEur: 86.00,
+                  quotaRevenue10PctEur: 208.25,
+                  bonificoNettoProprietario: 1689.25,
+                  estimatedNetOwnerArmEur: 1689.25
+                })
               });
             }
             return item;
@@ -4989,8 +5170,8 @@
             bookings: [
               {
                 id: 'bk-mp-1',
-                guest: 'Prenotazione Inaugurale SmartsBookings',
-                channel: 'Smartbookings (Diretto)',
+                guest: 'Prenotazione Inaugurale Diretta',
+                channel: 'Richiesta Diretta (0%)',
                 guests: 4,
                 checkin: '2026-11-20',
                 checkout: '2026-11-24',
@@ -5070,49 +5251,42 @@
   }
 
   // ============================================================================
-  // J. TARIFFA AL MOMENTO (QUOTAZIONE GIORNALIERA ACQUISIZIONE NUOVI IMMOBILI)
+  // J. QUOTA FISSA UNICA 99,00 €/MESE IVA INCLUSA
   //    + GENERATORE E DOWNLOAD PREVENTIVO PDF ARM (Preventivo_Itassitance_ARM_Marco_Palumbo.pdf)
   // ============================================================================
   var DAILY_ACQ_RATE_KEY = 'ita_daily_acquisition_rate';
 
   function formatItEur(val) {
     var num = Number(val);
-    if (isNaN(num)) num = 199.00;
+    if (isNaN(num)) num = 99.00;
     return num.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
   }
 
   function getCurrentItassitanceMomentTariff() {
-    var rateVal = 199.00;
+    var rateVal = 99.00;
     try {
       if (typeof document !== 'undefined') {
         var inp = document.getElementById('adm-daily-rate-input');
-        if (inp && inp.value) {
-          var parsedDom = parseFloat(String(inp.value).replace(',', '.'));
-          if (!isNaN(parsedDom) && parsedDom >= 99 && parsedDom <= 299.5) {
-            rateVal = Math.round(parsedDom * 100) / 100;
-          }
-        }
+        if (inp) inp.value = '99.00';
       }
       if (typeof localStorage !== 'undefined') {
-        var rawDaily = localStorage.getItem(DAILY_ACQ_RATE_KEY) || localStorage.getItem('ita_admin_forced_dyn_price');
-        if (rawDaily) {
-          var parsedLs = parseFloat(String(rawDaily).replace(',', '.'));
-          if (!isNaN(parsedLs) && parsedLs >= 99 && parsedLs <= 299.5) {
-            rateVal = Math.round(parsedLs * 100) / 100;
-          }
-        }
+        localStorage.setItem(DAILY_ACQ_RATE_KEY, '99.00');
+        localStorage.setItem('ita_admin_forced_dyn_price', '99.00');
       }
     } catch (e) {}
 
-    var yearlyVal = Math.round(rateVal * 12 * 100) / 100;
-    var promoFirstMonthVal = Math.round((rateVal / 2) * 100) / 100;
-    var grossMonthly = 3450.00;
-    var pbaMonthly = 516.00; // 6 cambi * 86,00 €
-    var netOwnerArm = Math.round((grossMonthly - pbaMonthly - rateVal) * 100) / 100;
+    var yearlyVal = 1188.00;
+    var promoFirstMonthVal = 49.50;
+    var grossMonthly = 2082.50;
+    var pbaMonthly = 86.00;
+    var quotaRevenue10Pct = 208.25;
+    var netOwnerArm = 1689.25; // 2082.50 - 86.00 - 208.25 - 99.00
 
     return {
       rateMonthly: rateVal,
       monthlyRateEur: rateVal,
+      canoneFissoItassitance: rateVal,
+      tariffaAlMomentoLabel: 'Quota Fissa Unica: 99,00 € / mese (IVA inclusa)',
       monthlyFormatted: formatItEur(rateVal),
       rateAnnual: yearlyVal,
       yearlyRateEur: yearlyVal,
@@ -5123,22 +5297,20 @@
       grossMonthlyEur: grossMonthly,
       grossFormatted: formatItEur(grossMonthly),
       pbaTurnoverEur: 86.00,
-      pbaTurnsCount: 6,
+      pbaTurnsCount: 1,
       pbaPassThroughMonthlyEur: pbaMonthly,
       pbaPassThroughFormatted: formatItEur(pbaMonthly),
+      quotaRevenue10PctEur: quotaRevenue10Pct,
+      quotaRevenue10PctFormatted: formatItEur(quotaRevenue10Pct),
+      bonificoNettoProprietario: netOwnerArm,
       netOwnerArmMonthlyEur: netOwnerArm,
       netOwnerArmFormatted: formatItEur(netOwnerArm),
-      slotsAvailable: 12,
-      slotsTotal: 24,
-      maxSlots: 24,
-      rangeLabel: 'Range sistema: min 99,00 € — max 299,50 € / mese · Disponibilità oggi a Firenze: 12 slot su 24'
+      rangeLabel: 'Quota Fissa Unica: 99,00 € / mese (IVA inclusa) · 1.188,00 € / anno'
     };
   }
 
   function setCurrentItassitanceMomentTariff(newRateValue, sourceLabel) {
-    var num = parseFloat(String(newRateValue).replace(',', '.'));
-    if (isNaN(num)) num = 199.00;
-    num = Math.max(99.00, Math.min(299.50, Math.round(num * 100) / 100));
+    var num = 99.00;
 
     try {
       if (typeof document !== 'undefined') {
@@ -5151,10 +5323,8 @@
       }
       if (root.SITE_CONFIG && typeof root.SITE_CONFIG.setCapacityParameters === 'function') {
         root.SITE_CONFIG.setCapacityParameters({
-          managedUnits: 12,
-          capacityUnits: 24,
           forcedPrice: num,
-          updatedBy: sourceLabel || 'Quotazione Giornaliera Acquisizione'
+          updatedBy: sourceLabel || 'Quota Fissa Unica 99,00 €/mese'
         });
       }
       // Aggiorna anche la simulazione ARM di Marco Palumbo
@@ -5162,10 +5332,16 @@
       list.forEach(function (p) {
         if (p.id === 'PROSPECT-MARCO-PALUMBO-2026' || p.armCode === 'ARM-2026-MP86') {
           if (!p.armSimulation) p.armSimulation = {};
-          p.armSimulation.monthlyPlanFeeEur = num;
-          p.armSimulation.firstMonthPromoFeeEur = Math.round((num / 2) * 100) / 100;
-          p.armSimulation.recommendedPlan = formatItEur(num) + '/mese (Price Lock 24 Mesi · Promo -50% 1° mese da PBA: ' + formatItEur(num / 2) + ')';
-          p.armSimulation.estimatedNetOwnerArmEur = Math.round((3450.00 - 516.00 - num) * 100) / 100;
+          p.armSimulation.monthlyPlanFeeEur = 99.00;
+          p.armSimulation.canoneFissoItassitance = 99.00;
+          p.armSimulation.tariffaAlMomentoLabel = 'Quota Fissa Unica: 99,00 € / mese (IVA inclusa)';
+          p.armSimulation.firstMonthPromoFeeEur = 49.50;
+          p.armSimulation.recommendedPlan = 'Quota Fissa Unica: 99,00 € / mese (IVA inclusa) · Zero commissioni (0%)';
+          p.armSimulation.estimatedGrossMonthlyEur = 2082.50;
+          p.armSimulation.estimatedPbaPassThroughMonthlyEur = 86.00;
+          p.armSimulation.quotaRevenue10PctEur = 208.25;
+          p.armSimulation.bonificoNettoProprietario = 1689.25;
+          p.armSimulation.estimatedNetOwnerArmEur = 1689.25;
         }
       });
       saveCrossCrmProspects(list);
@@ -5180,11 +5356,12 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             monthlyRateEur: tariffObj.monthlyRateEur,
+            canoneFissoItassitance: tariffObj.canoneFissoItassitance,
+            tariffaAlMomentoLabel: tariffObj.tariffaAlMomentoLabel,
             yearlyRateEur: tariffObj.yearlyRateEur,
             firstMonthPromo50Eur: tariffObj.firstMonthPromo50Eur,
+            bonificoNettoProprietario: tariffObj.bonificoNettoProprietario,
             netOwnerArmMonthlyEur: tariffObj.netOwnerArmMonthlyEur,
-            slotsAvailable: tariffObj.slotsAvailable,
-            maxSlots: tariffObj.maxSlots,
             updatedAt: new Date().toISOString()
           })
         }).catch(function () {});
@@ -5196,10 +5373,7 @@
   }
 
   function rollRandomItassitanceMomentTariff() {
-    var totalSteps = Math.round((299.50 - 99.00) * 2); // step da 0,50 €
-    var step = Math.floor(Math.random() * (totalSteps + 1));
-    var val = Math.round((99.00 + step * 0.50) * 100) / 100;
-    return setCurrentItassitanceMomentTariff(val, 'Estrazione Random Fase 1 (99–299,50 €)');
+    return setCurrentItassitanceMomentTariff(99.00, 'Quota Fissa Unica 99,00 € / mese (IVA inclusa)');
   }
 
   function buildMinimalPdfBinary(linesArray) {
@@ -5297,7 +5471,7 @@
               margin: [0, 0, 0, 4]
             },
             {
-              text: 'Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE] · Codice ARM: ' + rec.armCode + ' · Scheda Tecnica: ' + rec.techSheetCode + ' · Data: ' + nowStr,
+              text: 'Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v. · Codice ARM: ' + rec.armCode + ' · Scheda Tecnica: ' + rec.techSheetCode + ' · Data: ' + nowStr,
               fontSize: 9,
               color: '#4C3D63',
               margin: [0, 0, 0, 14]
@@ -5332,18 +5506,18 @@
             },
             {
               ul: [
-                '1. Gestione Multi-OTA & Channel Manager (Airbnb, Booking.com, Vrbo + Portale Diretto SmartsBookings 0% commissioni)',
+                '1. Gestione Multi-OTA & Channel Manager (Airbnb, Booking.com, Vrbo + Modulo Richiesta Prenotazione Diretta 0% commissioni)',
                 '2. Dynamic Pricing & Revenue Management entro i Guardrail di Prezzo concordati',
                 '3. Accoglienza Ospiti, Self Check-in & Assistenza Operativa Firenze 09:00–23:00 (7 giorni su 7)',
                 '4. Adempimenti Burocratici completi (Alloggiati Web Polizia di Stato, ISTAT Ross1000, Imposta di Soggiorno)',
-                '5. Coordinamento Turnover & Biancheria 90°C con Palazzo by Blue Arroyo (Pass-Through 0% ricarico in ARM: € 86,00 / cambio)',
+                '5. Coordinamento della parte operativa del Property Management (pulizie e biancheria 90°C con Palazzo by Blue Arroyo Pass-Through 0% ricarico in ARM: € 86,00 / cambio, accoglienza ospiti, manutenzioni e fornitori, con report giornaliero e promemoria operativi)',
                 '6. Rendiconto Mensile Automatico ARM (Trasparenza totale incassi, spese pass-through e netto proprietario)'
               ],
               fontSize: 9.5,
               margin: [0, 0, 0, 14]
             },
             {
-              text: '3. TARIFFA AL MOMENTO & SIMULAZIONE PROSPETTO ECONOMICO ARM MENSILE',
+              text: '3. QUOTA FISSA UNICA (99,00 €/MESE) & SIMULAZIONE PROSPETTO ECONOMICO ARM MENSILE',
               fontSize: 11,
               bold: true,
               color: '#065F46',
@@ -5353,13 +5527,13 @@
               table: {
                 widths: ['62%', '38%'],
                 body: [
-                  [{ text: 'Canone Mensile Servizio Itassitance (Tariffa al Momento · Price Lock 24 Mesi)', bold: true }, { text: t.monthlyFormatted + ' / mese (' + t.yearlyFormatted + ' / anno)', bold: true, color: '#5B21B6' }],
-                  [{ text: 'Promo Richiesta da Chat Palazzo (-50% sul 1° Mese)', bold: true }, { text: t.firstMonthPromoFormatted + ' il primo mese', bold: true, color: '#065F46' }],
-                  ['Disponibilità Slot Firenze & Garanzia', '12 slot disponibili su 24 · Garanzia 14 gg Soddisfatto o Rimborsato (100%)'],
-                  ['(+) Ricavo Lordo Mensile Stimato Soggiorni', t.grossFormatted + ' / mese'],
-                  ['(−) Turnover PBA Pass-Through (6 cambi × € 86,00 · 0% ricarico)', '− ' + t.pbaPassThroughFormatted + ' / mese'],
-                  ['(−) Canone Servizio Itassitance (Tariffa al Momento)', '− ' + t.monthlyFormatted + ' / mese'],
-                  [{ text: '(=) NETTO PROPRIETARIO STIMATO ARM', bold: true, fillColor: '#ECFDF5' }, { text: t.netOwnerArmFormatted + ' / mese', bold: true, color: '#065F46', fillColor: '#ECFDF5' }]
+                  [{ text: 'Canone Mensile Servizio Itassitance (Quota Fissa Unica · 0% Commissioni nel piano base)', bold: true }, { text: '99,00 € / mese (1.188,00 € / anno)', bold: true, color: '#5B21B6' }],
+                  ['Garanzia & Condizioni Contrattuali', 'Zero costi di attivazione · Disdetta libera · Garanzia 14 gg Soddisfatto o Rimborsato (100%)'],
+                  ['(+) Ricavo Lordo Mensile Soggiorni', '2.082,50 € / mese'],
+                  ['(−) Turnover PBA Pass-Through (Pack Base € 86,00 · 0% ricarico)', '− 86,00 € / mese'],
+                  ['(−) Revenue Plan opzionale (commissione 10% sul netto spettante al proprietario prima delle sue tasse personali = incasso ospite meno commissioni piattaforme, imposta di soggiorno e costi di pulizia; fatturata a fine mese sulle prenotazioni del mese)', '− 208,25 € / mese'],
+                  ['(−) Canone Fisso Servizio Itassitance (Quota Fissa Unica)', '− 99,00 € / mese'],
+                  [{ text: '(=) BONIFICO NETTO PROPRIETARIO ARM', bold: true, fillColor: '#ECFDF5' }, { text: '1.689,25 € / mese', bold: true, color: '#065F46', fillColor: '#ECFDF5' }]
                 ]
               }
             }
@@ -5373,7 +5547,7 @@
     // Fallback nativo %PDF-1.4 istantaneo (funziona sempre anche offline o senza CDN)
     var pdfLines = [
       'Blue Arroyo S.r.l. - Sede legale: Via Matteo Palmieri 20R, Firenze',
-      'P.IVA / C.F. 07480210488 - REA FI-706161 - SDI M5UXCR1 - PEC: [DA CONFERMARE] - Cap.Soc.: [DA CONFERMARE]',
+      'P.IVA / C.F. 07480210488 - REA FI-706161 - SDI M5UXCR1 - PEC: bluearroyosrl@pec.it - Cap.Soc.: EUR 50.000,00 i.v.',
       'PREVENTIVO UFFICIALE SERVIZIO ITASSITANCE & PROSPETTO ARM (ARM-2026-MP86)',
       'Data emissione: ' + nowStr + ' | Scheda Tecnica: ST-APT-ARM-2026-MP86',
       '--------------------------------------------------------------------------------',
@@ -5389,18 +5563,18 @@
       '   2) Dynamic Pricing & Revenue Management entro Guardrail di Prezzo',
       '   3) Accoglienza Ospiti, Self Check-in & Assistenza Firenze 09:00-23:00',
       '   4) Adempimenti Burocratici (Alloggiati Web Questura, ISTAT Ross1000, Tassa Soggiorno)',
-      '   5) Coordinamento Turnover & Biancheria 90C con PBA (Pass-Through 0%: EUR 86,00/cambio)',
+      '   5) Coordinamento Operativo del Property Management (pulizie, ospiti, manutenzioni e fornitori)',
       '   6) Rendiconto Mensile Automatico ARM (Trasparenza totale incassi e spese)',
       '--------------------------------------------------------------------------------',
-      '3. TARIFFA AL MOMENTO (BLOCCATA DAL PREVENTIVATORE) & PROSPETTO ARM:',
-      '   * Canone Servizio Itassitance (Tariffa al Momento): ' + t.monthlyFormatted + ' / mese (' + t.yearlyFormatted + ' / anno)',
-      '   * Promo Richiesta da Chat Palazzo (-50% 1 Mese):   ' + t.firstMonthPromoFormatted + ' il primo mese',
-      '   * Condizioni: Price Lock 24 Mesi | 12 slot su 24 a Firenze | Garanzia 14 gg 100%',
+      '3. QUOTA FISSA UNICA (99,00 EUR / MESE) & PROSPETTO ARM:',
+      '   * Canone Servizio Itassitance (Quota Fissa Unica):  99,00 EUR / mese (1.188,00 EUR / anno)',
+      '   * Condizioni: 0% Commissioni piano base | Disdetta libera | Garanzia 14 gg Soddisfatto o Rimborsato',
       '   ----------------------------------------------------------------------------',
-      '   (+) Ricavo Lordo Stimato Soggiorni:                 ' + t.grossFormatted + ' / mese',
-      '   (-) Turnover PBA Pass-Through (6 cambi x EUR 86):  - ' + t.pbaPassThroughFormatted + ' / mese',
-      '   (-) Canone Servizio Itassitance Tariffa al Momento: - ' + t.monthlyFormatted + ' / mese',
-      '   (=) NETTO PROPRIETARIO STIMATO ARM:                 ' + t.netOwnerArmFormatted + ' / mese',
+      '   (+) Ricavo Lordo Mensile Soggiorni:                 2.082,50 EUR / mese',
+      '   (-) Turnover PBA Pass-Through (Pack Base EUR 86):  -   86,00 EUR / mese',
+      '   (-) Revenue Plan opzionale (10% su netto proprietario = incasso ospite - comm. piattaforme - tassa soggiorno - pulizie; fattura fine mese): - 208,25 EUR / mese',
+      '   (-) Canone Servizio Itassitance Quota Fissa Unica: -   99,00 EUR / mese',
+      '   (=) BONIFICO NETTO PROPRIETARIO ARM:                1.689,25 EUR / mese',
       '--------------------------------------------------------------------------------'
     ];
     var rawPdf = buildMinimalPdfBinary(pdfLines);
@@ -5506,8 +5680,8 @@
       liquidatedInMonth: null,
       ownerId: 'owner_1',
       ownerName: 'Marco Rossi',
-      ownerEmail: 'proprietario@itadreamteam.com',
-      ownerPhone: '+39 351 038 0392',
+      ownerEmail: '[DA CONFERMARE]',
+      ownerPhone: '+39 349 177 5561',
       maintainerId: 'MNT-NET-FI-01',
       maintainerName: 'Tecnico Manutentore Certificato Rete Firenze #01',
       maintainerPhone: '+39 348 9001122'
@@ -5539,8 +5713,8 @@
       liquidatedInMonth: null,
       ownerId: 'owner_1',
       ownerName: 'Marco Rossi',
-      ownerEmail: 'proprietario@itadreamteam.com',
-      ownerPhone: '+39 351 038 0392',
+      ownerEmail: '[DA CONFERMARE]',
+      ownerPhone: '+39 349 177 5561',
       maintainerId: 'MNT-NET-FI-01',
       maintainerName: 'Tecnico Manutentore Certificato Rete Firenze #01',
       maintainerPhone: '+39 348 9001122'
@@ -5572,8 +5746,8 @@
       liquidatedInMonth: null,
       ownerId: 'owner_1',
       ownerName: 'Marco Rossi',
-      ownerEmail: 'proprietario@itadreamteam.com',
-      ownerPhone: '+39 351 038 0392',
+      ownerEmail: '[DA CONFERMARE]',
+      ownerPhone: '+39 349 177 5561',
       maintainerId: 'MNT-NET-FI-01',
       maintainerName: 'Tecnico Manutentore Certificato Rete Firenze #01',
       maintainerPhone: '+39 348 9001122'
@@ -5898,8 +6072,8 @@
       liquidatedInMonth: null,
       ownerId: p.ownerId || 'owner_1',
       ownerName: p.ownerName || 'Proprietario Itassistance',
-      ownerEmail: p.ownerEmail || 'proprietario@itadreamteam.com',
-      ownerPhone: p.ownerPhone || '+39 351 038 0392',
+      ownerEmail: p.ownerEmail || '[DA CONFERMARE]',
+      ownerPhone: p.ownerPhone || '+39 349 177 5561',
       maintainerId: 'MNT-NET-FI-01',
       maintainerName: 'Tecnico Manutentore Certificato Rete Firenze #01',
       maintainerPhone: '+39 348 9001122'
@@ -6150,8 +6324,8 @@
   }
 
   // ============================================================================
-  // L. CONTRATTO DI COLLABORAZIONE, ACCESSO ALL'IMMOBILE E LICENZA D'USO
-  //    COMMERCIALE DI CONTENUTI AUDIOVISIVI/FOTOGRAFICI (CREATOR / MARKETING · JUL-011)
+  // L. CONTRATTO DI SERVIZIO E AUTORIZZAZIONE GENERALE AL COORDINAMENTO OPERATIVO
+  //    DEL PROPERTY MANAGEMENT ITASSISTANCE (JUL-035 · JUL-036 · JUL-037 · SENZA BLOCCO B)
   // ============================================================================
   var CREATOR_PROPERTY_RELEASE_STORE_KEY = 'ita_creator_property_release_contracts_v1';
 
@@ -6162,29 +6336,24 @@
     }
     var defaults = [
       {
-        id: 'CTR-CREATOR-2026-001',
-        title: 'CONTRATTO DI COLLABORAZIONE, ACCESSO ALL\'IMMOBILE E LICENZA D\'USO COMMERCIALE DI CONTENUTI AUDIOVISIVI/FOTOGRAFICI (JUL-011)',
-        grantorCompany: 'Blue Arroyo S.r.l.',
-        grantorAddress: 'Via Matteo Palmieri 20R, Firenze',
-        grantorVat: '07480210488',
-        grantorRea: 'FI-706161',
-        grantorSdi: 'M5UXCR1',
-        grantorPec: '[DA CONFERMARE]',
-        grantorLegalRep: '[DA CONFERMARE]',
-        grantorTitleOnProperty: '[DA COMPILARE: Proprietario / Conduttore autorizzato / Gestore con mandato]',
-        creatorName: '[DA COMPILARE]',
-        creatorTaxCodeOrVat: '[DA COMPILARE]',
-        creatorAddress: '[DA COMPILARE]',
-        creatorPecOrEmail: '[DA COMPILARE]',
+        id: 'CTR-ITASS-2026-001',
+        title: 'CONTRATTO DI SERVIZIO E AUTORIZZAZIONE AL COORDINAMENTO OPERATIVO ITASSISTANCEDREAMTEAM.IT (JUL-035)',
+        companyName: 'BLUEARROYO S.R.L.',
+        companyAddress: 'Via Matteo Palmieri 20/R, 50122 Firenze (FI)',
+        companyVat: '07480210488',
+        companyRea: 'FI-706161',
+        companySdi: 'M5UXCR1',
+        companyPec: 'bluearroyosrl@pec.it',
+        companyCapital: '€ 50.000,00 i.v.',
+        firstName: '[DA COMPILARE]',
+        lastName: '[DA COMPILARE]',
+        residence: '[DA COMPILARE]',
+        taxId: '[DA COMPILARE]',
+        email: '[DA COMPILARE]',
+        phone: '[DA COMPILARE]',
         propertyAddress: '[DA COMPILARE]',
-        propertyCadastralRef: 'Foglio [DA COMPILARE], Particella [DA COMPILARE], Subalterno [DA COMPILARE]',
-        shootingDates: '[DA COMPILARE]',
-        shootingHours: 'dalle ore [DA COMPILARE] alle ore [DA COMPILARE]',
-        economicConsideration: '[DA COMPILARE]',
-        securityDeposit: '[DA COMPILARE]',
-        rcInsurancePolicy: 'Compagnia [DA COMPILARE] – Polizza n. [DA COMPILARE] – Massimale € [DA COMPILARE]',
-        penaltyPerDayOrBreach: '€ [DA COMPILARE]',
-        interactiveUrl: '/contratto.html?type=creator',
+        revenuePlanOptIn: false,
+        interactiveUrl: '/contratto.html',
         updatedAt: '10/11/2026'
       }
     ];
@@ -6192,35 +6361,109 @@
     return defaults;
   }
 
+  function extractClientContractFields(rawInput) {
+    var d = Object.assign({}, getCreatorPropertyReleaseContracts()[0] || {}, rawInput || {});
+    var valOrPlaceholder = function (val, fallback) {
+      if (val !== undefined && val !== null && String(val).trim() !== '' && String(val).trim() !== '[DA COMPILARE]') {
+        return String(val).trim();
+      }
+      return fallback || '[DA COMPILARE]';
+    };
+
+    var rawFullName = '';
+    if (d.fullName && String(d.fullName).trim() !== '') rawFullName = String(d.fullName).trim();
+    else if (d.ownerName && String(d.ownerName).trim() !== '') rawFullName = String(d.ownerName).trim();
+    else if (d.clientName && String(d.clientName).trim() !== '') rawFullName = String(d.clientName).trim();
+
+    var firstName = valOrPlaceholder(d.firstName || d.ownerFirstName || d.clientFirstName, '');
+    var lastName = valOrPlaceholder(d.lastName || d.ownerLastName || d.clientLastName, '');
+
+    if ((!firstName || firstName === '[DA COMPILARE]') && (!lastName || lastName === '[DA COMPILARE]') && rawFullName && rawFullName.indexOf('[DA COMPILARE') === -1) {
+      var parts = rawFullName.split(/\s+/);
+      firstName = parts[0] || '[DA COMPILARE]';
+      lastName = parts.length > 1 ? parts.slice(1).join(' ') : '[DA COMPILARE]';
+    } else {
+      if (!firstName) firstName = '[DA COMPILARE]';
+      if (!lastName) lastName = '[DA COMPILARE]';
+    }
+
+    var fullNameDisplay = (firstName !== '[DA COMPILARE]' || lastName !== '[DA COMPILARE]')
+      ? ((firstName !== '[DA COMPILARE]' ? firstName : '') + ' ' + (lastName !== '[DA COMPILARE]' ? lastName : '')).trim()
+      : (rawFullName || '[DA COMPILARE]');
+
+    var residence = valOrPlaceholder(
+      d.residence || d.ownerAddress || d.clientAddress || d.residenza,
+      '[DA COMPILARE]'
+    );
+    var taxId = valOrPlaceholder(
+      d.taxId || d.ownerTaxId || d.clientVatOrCf || d.clientTaxCode || d.cfOrPiva,
+      '[DA COMPILARE]'
+    );
+    var email = valOrPlaceholder(
+      d.email || d.invoiceEmail || d.ownerEmail || d.clientEmailOrPec || d.clientEmail,
+      '[DA COMPILARE]'
+    );
+    var phone = valOrPlaceholder(
+      d.phone || d.operationalPhone || d.ownerPhone || d.clientPhone || d.telefono,
+      '[DA COMPILARE]'
+    );
+    var propertyAddress = valOrPlaceholder(d.propertyAddress, '');
+    var revenuePlanOptIn = Boolean(
+      d.revenuePlanOptIn === true ||
+      d.revenuePlan === true ||
+      d.addon10Active === true ||
+      d.extraRevenue === true ||
+      d.revenuePlanOptIn === 'true' ||
+      d.revenuePlan === 'true'
+    );
+    var placeAndDate = valOrPlaceholder(d.placeAndDate, 'Firenze, lì ' + getRomeNowFormatted().shortDateTime);
+    var fileName = valOrPlaceholder(d.fileName, 'Contratto_Servizio_Itassistance.pdf');
+
+    return {
+      firstName: firstName,
+      lastName: lastName,
+      fullNameDisplay: fullNameDisplay,
+      residence: residence,
+      taxId: taxId,
+      email: email,
+      phone: phone,
+      propertyAddress: propertyAddress,
+      revenuePlanOptIn: revenuePlanOptIn,
+      placeAndDate: placeAndDate,
+      fileName: fileName
+    };
+  }
+
   function openCreatorPropertyReleaseContractPrint(customData) {
-    var d = Object.assign({}, getCreatorPropertyReleaseContracts()[0] || {}, customData || {});
-    var esc = function (val, fallback) {
-      var s = val !== undefined && val !== null && String(val).trim() !== '' ? String(val).trim() : (fallback || '[DA COMPILARE]');
-      return s
+    var f = extractClientContractFields(customData);
+    var esc = function (val) {
+      return String(val === undefined || val === null ? '' : val)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
     };
 
-    var grantorLegalRep = esc(d.grantorLegalRep, '[DA CONFERMARE]');
-    var grantorTitleOnProperty = esc(d.grantorTitleOnProperty, '[DA COMPILARE: Proprietario / Conduttore autorizzato / Gestore con mandato]');
-    var creatorName = esc(d.creatorName, '[DA COMPILARE: Nome Cognome / Ragione Sociale Creator o Agenzia]');
-    var creatorTaxCodeOrVat = esc(d.creatorTaxCodeOrVat, '[DA COMPILARE: C.F. / P.IVA]');
-    var creatorAddress = esc(d.creatorAddress, '[DA COMPILARE: Indirizzo / Sede Legale]');
-    var creatorPecOrEmail = esc(d.creatorPecOrEmail, '[DA COMPILARE: PEC / Email]');
-    var propertyAddress = esc(d.propertyAddress, '[DA COMPILARE: Indirizzo immobile e piano]');
-    var propertyCadastralRef = esc(d.propertyCadastralRef, 'Foglio [DA COMPILARE], Particella [DA COMPILARE], Subalterno [DA COMPILARE]');
-    var shootingDates = esc(d.shootingDates, '[DA COMPILARE: Data/e di accesso]');
-    var shootingHours = esc(d.shootingHours, 'dalle ore [DA COMPILARE] alle ore [DA COMPILARE]');
-    var economicConsideration = esc(d.economicConsideration, '[DA COMPILARE: Compenso / Fee di accesso / Barter / Concessione gratuita con cross-licensing]');
-    var securityDeposit = esc(d.securityDeposit, '[DA COMPILARE: € ___ oppure non previsto]');
-    var rcInsurancePolicy = esc(d.rcInsurancePolicy, 'Compagnia [DA COMPILARE] – Polizza n. [DA COMPILARE] – Massimale € [DA COMPILARE]');
-    var penaltyPerDayOrBreach = esc(d.penaltyPerDayOrBreach, '€ [DA COMPILARE]');
-    var placeAndDate = esc(d.placeAndDate, 'Firenze, lì [DA COMPILARE]');
+    var propRowHtml = (f.propertyAddress && f.propertyAddress !== '[DA COMPILARE]')
+      ? '<tr><th>Indirizzo immobile (opzionale)</th><td>' + esc(f.propertyAddress) + '</td></tr>'
+      : '';
+
+    var revenueClauseHtml = f.revenuePlanOptIn
+      ? '<div class="legal-note" style="background:#F5F3FF;border-color:#5B21B6;color:#1E1035;margin-top:14px;">' +
+          '<strong>CLAUSOLA OPZIONALE ATTIVATA — REVENUE PLAN (COMMISSIONE 10%):</strong><br/>' +
+          'Il Cliente ha scelto di attivare il Revenue Plan opzionale. Per tale servizio è pattuita una <strong>commissione del 10% (dieci per cento) calcolata sul netto spettante al proprietario, prima delle sue tasse personali</strong> (imposte dirette / cedolare secca / IRPEF), in aggiunta al canone fisso mensile di 99,00 €/mese IVA inclusa.<br/>' +
+          '<strong>Definizione di Netto spettante al proprietario (prima delle sue tasse personali):</strong> incasso dell\'ospite al netto di: commissioni delle piattaforme, imposta di soggiorno e costi di pulizia.<br/>' +
+          '<strong>Maturazione e fatturazione:</strong> mensile — la fattura si emette a fine mese sulle prenotazioni del mese (termini di pagamento della fattura: <strong>Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario</strong>).<br/>' +
+          '<em>Esempio illustrativo di calcolo (importi di puro esempio, non dati reali): Incasso ospite (esempio) 1.000,00 € − Commissioni piattaforme (esempio) 150,00 € − Imposta di soggiorno (esempio) 40,00 € − Costi di pulizia (esempio) 60,00 € = Netto spettante al proprietario prima delle tasse personali (esempio) 750,00 € → Commissione Revenue Plan 10% (esempio) = 75,00 €, fatturata a fine mese sulle prenotazioni del mese (termini di pagamento della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario).</em>' +
+        '</div>'
+      : '';
+
+    var vessatorieListHtml = f.revenuePlanOptIn
+      ? '<strong>Sez. 2</strong> (Oggetto del servizio: coordinamento della parte operativa del Property Management senza intermediazione sugli incassi); <strong>Sez. 3</strong> (Canone fisso mensile 99,00 €/mese IVA inclusa, 14 giorni di prova gratuita, modalità di fatturazione previa conferma del pro-forma in "My Box" e pagamento tramite bonifico bancario); <strong>Clausola Opzionale Revenue Plan (Commissione 10% sul netto spettante al proprietario prima delle sue tasse personali = incasso ospite al netto di commissioni piattaforme, imposta di soggiorno e costi di pulizia; fatturazione mensile a fine mese sulle prenotazioni del mese)</strong>; <strong>Sez. 4</strong> (Consenso GDPR Reg. UE 2016/679 e Foro di Firenze).'
+      : '<strong>Sez. 2</strong> (Oggetto del servizio: coordinamento della parte operativa del Property Management senza intermediazione sugli incassi); <strong>Sez. 3</strong> (Canone fisso mensile 99,00 €/mese IVA inclusa, 14 giorni di prova gratuita, modalità di fatturazione previa conferma del pro-forma in "My Box" e pagamento tramite bonifico bancario); <strong>Sez. 4</strong> (Consenso GDPR Reg. UE 2016/679 e Foro di Firenze).';
 
     var htmlDoc = '<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"/>' +
-      '<title>Contratto Produzione Contenuti &amp; Liberatoria Immobile (JUL-011) · Palazzo by Blue Arroyo</title>' +
+      '<title>Contratto di Servizio e Autorizzazione Operativa Itassistance · Palazzo by Blue Arroyo</title>' +
       '<style>' +
       '@page { size: A4; margin: 16mm 15mm; }' +
       'body { font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1E1035; line-height: 1.5; font-size: 11.5px; margin: 0; padding: 24px; background: #F8FAFC; }' +
@@ -6231,131 +6474,79 @@
       '.header-box { border-bottom: 2px solid #1E1035; padding-bottom: 12px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }' +
       '.header-title { font-size: 15px; font-weight: 800; color: #1E1035; text-transform: uppercase; letter-spacing: 0.3px; }' +
       '.company-meta { font-size: 10.5px; color: #475569; margin-top: 4px; }' +
-      '.legal-note { background: #FFFBEB; border: 1.5px solid #D97706; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 10.8px; color: #78350F; }' +
+      '.legal-note { background: #FFFBEB; border: 1.5px solid #D97706; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 10.8px; color: #78350F; }' +
       'h2 { font-size: 12px; font-weight: 800; color: #1E1035; text-transform: uppercase; margin: 14px 0 4px; border-left: 3px solid #D97706; padding-left: 8px; }' +
       'p { margin: 4px 0 8px; text-align: justify; }' +
       'ul { margin: 4px 0 8px 18px; padding: 0; }' +
       'li { margin-bottom: 3px; }' +
-      '.parties-box { background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; }' +
       '.sign-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 18px; padding-top: 10px; }' +
       '.sign-box { border-top: 1px solid #1E1035; padding-top: 6px; font-size: 11px; min-height: 54px; }' +
       '.vessatorie-box { background: #F5F3FF; border: 1.5px solid #5B21B6; border-radius: 8px; padding: 12px 14px; margin-top: 16px; }' +
-      '.annex-box { border-top: 2px dashed #94A3B8; margin-top: 20px; padding-top: 14px; page-break-inside: avoid; }' +
       'table.annex-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 10.8px; }' +
       'table.annex-table th, table.annex-table td { border: 1px solid #CBD5E1; padding: 6px 8px; text-align: left; }' +
-      'table.annex-table th { background: #F1F5F9; font-weight: 700; color: #1E1035; }' +
+      'table.annex-table th { background: #F1F5F9; font-weight: 700; color: #1E1035; width: 36%; }' +
       '@media print { body { background: #FFFFFF; padding: 0; } .toolbar { display: none !important; } .sheet { border: none; box-shadow: none; padding: 0; max-width: 100%; } }' +
       '</style></head><body>' +
       '<div class="toolbar">' +
-        '<div><strong>🎬 JUL-011 · Contratto Produzione Contenuti &amp; Liberatoria Immobile (Creator / Marketing)</strong></div>' +
+        '<div><strong>📄 Contratto di Servizio e Autorizzazione Operativa Itassistance</strong></div>' +
         '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
-          '<a class="secondary" href="/contratto.html?type=creator" target="_blank">✏️ Apri Compilatore Interattivo (/contratto.html?type=creator)</a>' +
+          '<a class="secondary" href="/contratto.html" target="_blank">✏️ Apri Pagina Contratto (/contratto.html)</a>' +
           '<button type="button" onclick="window.print()">🖨️ Stampa / Salva PDF (A4)</button>' +
         '</div>' +
       '</div>' +
       '<div class="sheet">' +
         '<div class="header-box">' +
           '<div>' +
-            '<div class="header-title">CONTRATTO DI COLLABORAZIONE, ACCESSO ALL\'IMMOBILE E LICENZA D\'USO COMMERCIALE DI CONTENUTI AUDIOVISIVI/FOTOGRAFICI</div>' +
+            '<div class="header-title">CONTRATTO DI SERVIZIO E AUTORIZZAZIONE GENERALE AL COORDINAMENTO OPERATIVO ITASSISTANCE</div>' +
             '<div class="company-meta">' +
-              '<strong>Blue Arroyo S.r.l.</strong> – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]' +
+              '<strong>Blue Arroyo S.r.l.</strong> – Sede legale: Via Matteo Palmieri 20R, 50122 Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v.' +
             '</div>' +
           '</div>' +
           '<div style="font-size:10.5px;font-weight:700;color:#5B21B6;text-align:right;">' +
-            'COD. DOC: JUL-011<br/>PIANO 4 · ITASSISTANCE' +
+            'SERVIZIO ITASSISTANCE<br/>QUOTA FISSA 99,00 €/MESE' +
           '</div>' +
         '</div>' +
 
-        '<div class="legal-note">' +
-          '<strong>NOTA LEGALE PRELIMINARE (INQUADRAMENTO GIURIDICO):</strong><br/>' +
-          'Il presente accordo NON costituisce locazione ad uso abitativo (L. 431/1998), né locazione turistica (art. 1, c. 2, lett. c, L. 431/1998 e D.L. 50/2017), né locazione commerciale (L. 392/1978), essendo espressamente escluso qualsiasi pernottamento o godimento abitativo. ' +
-          'Giuridicamente configura un <strong>contratto atipico misto ex art. 1322 c.c.</strong> che combina: (i) concessione temporanea e precaria di accesso a spazi per riprese (<em>Location Release / Property Release</em>); (ii) <strong>contratto d\'opera / prestazione di servizi autonomi ex art. 2222 c.c.</strong> (se stipulato con Creator/Fotografo singolo professionista o ditta individuale senza organizzazione d\'impresa) ovvero <strong>contratto d\'appalto di servizi ex art. 1655 c.c.</strong> (se stipulato con Agenzia di produzione o società dotata di propria organizzazione di mezzi e troupe); (iii) <strong>cessione/licenza di diritti di utilizzazione economica e diritti connessi sulle opere fotografiche e audiovisive ex L. 22 aprile 1941 n. 633 (Legge sul Diritto d\'Autore – artt. 87–98 e 107 ss.)</strong>; (iv) disciplina privacy e immagine ex <strong>art. 10 c.c., Regolamento UE 2016/679 (GDPR) e D.Lgs. 196/2003 novellato dal D.Lgs. 101/2018</strong>.' +
-        '</div>' +
+        '<h2>1. Dati del Cliente</h2>' +
+        '<table class="annex-table">' +
+          '<tr><th>Nome</th><td>' + esc(f.firstName) + '</td></tr>' +
+          '<tr><th>Cognome</th><td>' + esc(f.lastName) + '</td></tr>' +
+          '<tr><th>Residenza</th><td>' + esc(f.residence) + '</td></tr>' +
+          '<tr><th>Codice Fiscale o P.IVA</th><td>' + esc(f.taxId) + '</td></tr>' +
+          '<tr><th>Recapiti di contatto (Email e Telefono)</th><td>Email per le fatture: ' + esc(f.email) + ' · Telefono per coordinamenti operativi: ' + esc(f.phone) + '</td></tr>' +
+          propRowHtml +
+        '</table>' +
 
-        '<div class="parties-box">' +
-          '<strong>TRA LE PARTI:</strong><br/>' +
-          '<strong>1. CONCEDENTE / GESTORE DELL\'IMMOBILE:</strong> <strong>Blue Arroyo S.r.l.</strong>, con sede legale in <strong>Via Matteo Palmieri 20R, Firenze (FI)</strong>, P.IVA e Codice Fiscale <strong>07480210488</strong>, iscritta al REA di Firenze n. <strong>FI-706161</strong>, Codice Destinatario SDI <strong>M5UXCR1</strong>, PEC: <strong>[DA CONFERMARE]</strong>, in persona del legale rappresentante pro tempore <strong>' + grantorLegalRep + '</strong>, che agisce in qualità di <strong>' + grantorTitleOnProperty + '</strong> (di seguito <em>"Concedente"</em> o <em>"Società"</em>);<br/><br/>' +
-          '<strong>2. CREATOR / PRODUTTORE / UTILIZZATORE:</strong> <strong>' + creatorName + '</strong>, C.F./P.IVA <strong>' + creatorTaxCodeOrVat + '</strong>, residente / con sede legale in <strong>' + creatorAddress + '</strong>, PEC / Email <strong>' + creatorPecOrEmail + '</strong>, che agisce quale lavoratore autonomo ex art. 2222 c.c. / impresa di produzione ex art. 1655 c.c. (di seguito <em>"Creator"</em> o <em>"Utilizzatore"</em>);<br/>' +
-          'congiuntamente definite le <em>"Parti"</em>.' +
-        '</div>' +
+        '<h2>2. Autorizzazione Generale al Coordinamento Operativo e Oggetto del Servizio</h2>' +
+        '<p>Con la sottoscrizione del presente documento, il Cliente autorizza <strong>Blue Arroyo S.r.l.</strong> (marchio <em>Itassistance</em>) a svolgere il <strong>coordinamento della parte operativa del Property Management</strong> per la gestione del proprio alloggio in locazione breve. Gli annunci sui portali (Airbnb, Booking.com e canali diretti) restano intestati al Cliente, gli incassi dei soggiorni confluiscono direttamente sul conto del Cliente e il Cliente gestisce in autonomia la propria parte legale e fiscale.</p>' +
 
-        '<h2>Art. 1 – Premesse, Allegati e Qualificazione Giuridica</h2>' +
-        '<p>1.1 Le premesse e gli Allegati (<strong>Allegato A</strong> – Scheda Tecnica Immobile e Attrezzature; <strong>Allegato B</strong> – Elenco Collaboratori, Modelli e Troupe autorizzati) formano parte integrante e sostanziale del presente Contratto. 1.2 Le Parti danno atto che il rapporto è autonomo e privo di qualsiasi vincolo di subordinazione, parasubordinazione o esclusiva lavorativa.</p>' +
+        '<h2>3. Tariffario Precompilato e Modalità di Fatturazione ("My Box")</h2>' +
+        '<table class="annex-table">' +
+          '<tr><th>Canone fisso mensile</th><td><strong>99,00 €/mese IVA inclusa</strong> (pari a <strong>1.188,00 €/anno IVA inclusa</strong>) · <strong>14 giorni di prova gratuita</strong> (Garanzia Soddisfatto o Rimborsato) · <strong>0% commissioni sulle prenotazioni nel piano base</strong> · Disdetta libera in qualsiasi momento senza penali.</td></tr>' +
+          '<tr><th>Cosa comprende il canone fisso</th><td>Coordinamento della parte operativa del Property Management (coordinamento pulizie, accoglienza ospiti, manutenzioni e fornitori), messaggistica ospiti, sincronizzazione calendari, report giornaliero e promemoria operativi, supporto amministrativo e promemoria scadenze (Alloggiati Web, ISTAT / Ross1000, promemoria imposta di soggiorno).</td></tr>' +
+          '<tr><th>Servizi opzionali a richiesta</th><td>Check-in di persona a Firenze: <strong>20,00 € IVA inclusa</strong> a intervento · Manutenzione ordinaria: <strong>30,00 € IVA inclusa</strong> prima ora + materiali a piè di lista.</td></tr>' +
+          '<tr><th>Modalità di fatturazione e pagamento</th><td><strong>Solo fattura previa verifica e conferma del pro-forma nell\'area riservata "My Box" del Cliente</strong>, con invio di copia del pro-forma via email al Cliente, emissione manuale della fattura da parte dell\'amministrazione di Blue Arroyo S.r.l. e pagamento tramite bonifico bancario (Coordinate per il bonifico: <strong>IBAN [DA CONFERMARE]</strong>). Nessun addebito automatico su carta.</td></tr>' +
+        '</table>' +
 
-        '<h2>Art. 2 – Oggetto del Contratto e Individuazione dell\'Immobile</h2>' +
-        '<p>2.1 Il Concedente autorizza in via temporanea, precaria e non esclusiva il Creator ad accedere agli spazi dell\'immobile sito in <strong>' + propertyAddress + '</strong> (identificativi catastali: <strong>' + propertyCadastralRef + '</strong>, come dettagliato nell\'Allegato A) al solo ed esclusivo fine di realizzare riprese fotografiche, video, reel e contenuti multimediali (i <em>"Contenuti"</em>) destinati ad attività di promozione, marketing e comunicazione commerciale.</p>' +
+        revenueClauseHtml +
 
-        '<h2>Art. 3 – Giorni, Fasce Orarie di Accesso e Divieto Assoluto di Pernottamento</h2>' +
-        '<p>3.1 L\'accesso all\'Immobile è consentito esclusivamente nella/e data/e <strong>' + shootingDates + '</strong>, nella fascia oraria <strong>' + shootingHours + '</strong>. 3.2 È fatto <strong>divieto assoluto di pernottamento</strong>, di utilizzo della cucina per preparazione pasti estranei al set, di sub-concessione a terzi e di permanenza oltre l\'orario concordato. Al termine della fascia oraria l\'Immobile deve essere immediatamente liberato da persone e attrezzature.</p>' +
+        '<h2>4. Consenso Privacy e Trattamento dei Dati Personali (Reg. UE 2016/679 – GDPR)</h2>' +
+        '<p>Il Cliente dichiara di aver preso visione dell\'informativa sul trattamento dei dati personali ai sensi dell\'art. 13 del Regolamento UE 2016/679 (GDPR) e del D.Lgs. 196/2003 (novellato dal D.Lgs. 101/2018) e presta il proprio consenso al trattamento dei dati forniti da parte di <strong>Blue Arroyo S.r.l.</strong> (Titolare del trattamento, Sede legale: Via Matteo Palmieri 20R, 50122 Firenze · Email Amministrazione: admin@bluearroyo.it · Assistenza Ospiti: itassistance@bluearroyo.it · Tel. +39 349 177 5561) per le finalità strettamente connesse all\'attivazione e all\'esecuzione del servizio di coordinamento operativo Itassistance e agli adempimenti amministrativi, contabili e di legge. Per qualsiasi controversia è competente il Foro di Firenze (fatto salvo il foro del consumatore ove applicabile).</p>' +
 
-        '<h2>Art. 4 – Regole di Utilizzo degli Spazi, Arredi, Impianti e Vicinato</h2>' +
-        '<p>4.1 Il Creator si impegna a: (a) accedere solo con i soggetti nominativamente indicati nell\'Allegato B muniti di documento d\'identità; (b) non spostare mobili pesanti o opere d\'arte senza autorizzazione e ad applicare feltrini/protezioni a cavalletti, stativi e luci; (c) non superare l\'assorbimento elettrico massimo dell\'impianto domestico e non alterare impianti elettrici o idraulici; (d) rispettare rigorosamente il regolamento condominiale e la quiete del vicinato; (e) riconsegnare i locali nello stato di fatto in cui sono stati ricevuti, previa redazione di verbale/check fotografico di entrata e di uscita.</p>' +
-
-        '<h2>Art. 5 – Responsabilità Civile, Danni, Manleva e Deposito Cauzionale</h2>' +
-        '<p>5.1 Il Creator è unico custode e responsabile ex artt. 2043, 2049 e 2051 c.c. di qualsiasi danno arrecato all\'Immobile, agli arredi, alle parti comuni condominiali o a terzi (inclusi propri collaboratori, modelli e troupe) durante le operazioni di carico/scarico e ripresa, manlevando integralmente il Concedente e il Proprietario dell\'immobile. 5.2 Il Creator dichiara di essere titolare di polizza RCT/RCO professionale (<strong>' + rcInsurancePolicy + '</strong>). 5.3 A garanzia delle obbligazioni assunte, le Parti convengono un deposito cauzionale pari a <strong>' + securityDeposit + '</strong>, con facoltà del Concedente di trattenere gli importi necessari al ripristino di eventuali danni, salvo il maggior danno.</p>' +
-
-        '<h2>Art. 6 – Titolarità dei Contenuti e Licenza d\'Uso Commerciale (L. 633/1941)</h2>' +
-        '<p>6.1 Ai sensi della L. 633/1941 (artt. 87–98 e 107 ss.), il Creator concede a <strong>Blue Arroyo S.r.l.</strong> (e alle società/marchi del gruppo: <em>Palazzo by Blue Arroyo</em>, <em>SmartsBookings.com</em>, <em>Itassistance</em>, <em>Toscan Costruzioni</em>) una <strong>licenza d\'uso commerciale, promozionale e pubblicitaria, gratuita (o già remunerata nell\'ambito dell\'accordo economico di cui all\'Art. 10), irrevocabile, valida per tutto il mondo e per tutta la durata massima consentita dalla legge</strong>, con diritto di riproduzione, comunicazione al pubblico, pubblicazione su siti web, portali OTA, social network (Instagram, TikTok, YouTube, Meta Ads, Google Ads), brochure, presentazioni commerciali, nonché diritto di taglio, montaggio, adattamento formato e inserimento di loghi aziendali, con facoltà di sub-licenza ai proprietari degli immobili gestiti.</p>' +
-
-        '<h2>Art. 7 – Liberatoria Immobile (Property Release) e Tutela del Decoro e della Sicurezza</h2>' +
-        '<p>7.1 Il Concedente autorizza il Creator a utilizzare le immagini degli spazi interni autorizzati secondo le finalità pattuite, a condizione che: (a) <strong>non vengano mai ripresi o resi riconoscibili</strong> codici di accesso, keybox, serrature smart, impianti di allarme, targhe civiche esterne, citofoni, documenti personali o planimetrie di sicurezza; (b) i Contenuti non siano mai associati a contesti illeciti, diffamatori, pornografici/per adulti, politici, discriminatori o comunque lesivi dell\'immagine, dell\'onore e del prestigio commerciale di Blue Arroyo S.r.l. e del Proprietario dell\'Immobile.</p>' +
-
-        '<h2>Art. 8 – Liberatoria Immagine di Terzi / Modelli e Conformità GDPR (Reg. UE 2016/679)</h2>' +
-        '<p>8.1 Qualora nei Contenuti compaiano persone fisiche (modelli, attori, creator, staff), il Creator garantisce di aver preventivamente acquisito a propria cura e spese idonea liberatoria per l\'uso dell\'immagine ex art. 10 c.c. e artt. 96–97 L. 633/1941 e informativa/consenso privacy ex Reg. UE 2016/679 (GDPR) e D.Lgs. 196/2003, estesa anche all\'utilizzo commerciale da parte di Blue Arroyo S.r.l., manlevando integralmente quest\'ultima da ogni pretesa di terzi.</p>' +
-
-        '<h2>Art. 9 – Consegna dei File, Standard Tecnici, Tag e Crediti Social</h2>' +
-        '<p>9.1 Entro <strong>[DA COMPILARE: n. giorni]</strong> giorni lavorativi dallo shooting, il Creator consegnerà a Blue Arroyo S.r.l. (tramite cartella cloud dedicata) una selezione di almeno <strong>[DA COMPILARE: n. foto / n. video]</strong> file ad alta risoluzione privi di watermark. 9.2 Nelle pubblicazioni social concordate, le Parti inseriranno i rispettivi tag/crediti ufficiali: <strong>[DA COMPILARE: @account_social / menzioni]</strong>.</p>' +
-
-        '<h2>Art. 10 – Accordo Economico, Fatturazione e Tracciabilità</h2>' +
-        '<p>10.1 Le Parti convengono la seguente pattuizione economica: <strong>' + economicConsideration + '</strong>. 10.2 Qualsiasi pagamento avverrà esclusivamente tramite bonifico bancario tracciabile previa emissione di regolare fattura elettronica via SDI (Codice Destinatario <strong>M5UXCR1</strong>) o ricevuta fiscale conforme al regime fiscale del Creator.</p>' +
-
-        '<h2>Art. 11 – Riservatezza e Non Divulgazione (NDA)</h2>' +
-        '<p>11.1 Il Creator si obbliga per sé e per i propri collaboratori a mantenere strettamente riservati l\'ubicazione esatta dell\'Immobile (salvo diversa indicazione scritta), i codici di ingresso, l\'identità dei proprietari, i processi operativi e il know-how di Blue Arroyo S.r.l.</p>' +
-
-        '<h2>Art. 12 – Clausola Risolutiva Espressa (art. 1456 c.c.), Penale (art. 1382 c.c.) e Rimozione</h2>' +
-        '<p>12.1 Ai sensi dell\'art. 1456 c.c., il Concedente potrà risolvere di diritto il Contratto con effetto immediato in caso di violazione degli Artt. 3 (divieto di pernottamento e orari), 4 (sicurezza e divieto sub-concessione), 7 (decoro e sicurezza immobile), 8 (liberatorie terzi) e 11 (riservatezza). 12.2 In caso di inadempimento o ritardato rilascio dell\'immobile, ovvero di pubblicazione non autorizzata o lesiva, il Creator sarà tenuto al versamento di una penale ex art. 1382 c.c. pari a <strong>' + penaltyPerDayOrBreach + '</strong> per ogni violazione o giorno di ritardo, fatto salvo il risarcimento del maggior danno e l\'obbligo di rimozione immediata dei Contenuti entro 12 ore dalla richiesta.</p>' +
-
-        '<h2>Art. 13 – Trattamento dei Dati Personali (Reg. UE 2016/679 – GDPR)</h2>' +
-        '<p>13.1 Le Parti dichiarano di trattare i dati personali reciprocamente comunicati esclusivamente per l\'esecuzione del presente Contratto e per gli adempimenti fiscali e di legge, nel pieno rispetto del Regolamento UE 2016/679 (GDPR) e del D.Lgs. 196/2003.</p>' +
-
-        '<h2>Art. 14 – Legge Applicabile e Foro Esclusivo di Firenze</h2>' +
-        '<p>14.1 Il presente Contratto è regolato dalla legge italiana. Per qualsiasi controversia inerente alla validità, interpretazione, esecuzione o risoluzione del presente Contratto sarà competente in via esclusiva il <strong>Foro di Firenze</strong>.</p>' +
-
-        '<p style="margin-top:12px;"><strong>Luogo e data:</strong> ' + placeAndDate + '</p>' +
+        '<p style="margin-top:12px;"><strong>Luogo e data:</strong> ' + esc(f.placeAndDate) + '</p>' +
 
         '<div class="sign-grid">' +
-          '<div class="sign-box"><strong>Il Concedente / Società</strong><br/>Blue Arroyo S.r.l.<br/><br/>_____________________________</div>' +
-          '<div class="sign-box"><strong>Il Creator / Utilizzatore</strong><br/>' + creatorName + '<br/><br/>_____________________________</div>' +
+          '<div class="sign-box"><strong>Per Blue Arroyo S.r.l. (Itassistance)</strong><br/>Sede legale: Via Matteo Palmieri 20R, Firenze<br/><br/>_____________________________</div>' +
+          '<div class="sign-box"><strong>Il Cliente (per accettazione e consenso GDPR)</strong><br/>' + esc(f.fullNameDisplay) + '<br/><br/>_____________________________</div>' +
         '</div>' +
 
         '<div class="vessatorie-box">' +
-          '<strong>APPROVAZIONE SPECIFICA DELLE CLAUSOLE AI SENSI DEGLI ARTT. 1341 E 1342 DEL CODICE CIVILE</strong><br/>' +
-          '<p style="margin-top:4px;">Ai sensi e per gli effetti degli artt. 1341 e 1342 c.c., le Parti dichiarano di aver letto attentamente e di approvare specificamente per iscritto le seguenti clausole: <strong>Art. 3</strong> (Limitazione oraria rigorosa e divieto assoluto di pernottamento e sub-concessione); <strong>Art. 5</strong> (Responsabilità esclusiva ex artt. 2043, 2049 e 2051 c.c., obbligo di manleva e facoltà di trattenuta sul deposito cauzionale); <strong>Art. 6</strong> (Licenza d\'uso commerciale irrevocabile, gratuita/omnicomprensiva, mondiale e sub-licenziabile a favore di Blue Arroyo S.r.l.); <strong>Art. 7</strong> (Divieto di ripresa di elementi di sicurezza e limiti d\'uso a tutela del decoro); <strong>Art. 8</strong> (Garanzia e manleva integrale su liberatorie immagine e GDPR di terzi/modelli); <strong>Art. 12</strong> (Clausola risolutiva espressa ex art. 1456 c.c., penale ex art. 1382 c.c. e obbligo di rimozione entro 12 ore); <strong>Art. 14</strong> (Foro esclusivo di Firenze).</p>' +
+          '<strong>APPROVAZIONE SPECIFICA AI SENSI DEGLI ARTT. 1341 E 1342 DEL CODICE CIVILE</strong><br/>' +
+          '<p style="margin-top:4px;">Ai sensi e per gli effetti degli artt. 1341 e 1342 c.c., il Cliente dichiara di aver letto e di approvare specificamente le seguenti pattuizioni: ' + vessatorieListHtml + '</p>' +
           '<div class="sign-grid">' +
-            '<div class="sign-box"><strong>Il Concedente / Società (per specifica approvazione ex artt. 1341-1342 c.c.)</strong><br/>Blue Arroyo S.r.l.<br/><br/>_____________________________</div>' +
-            '<div class="sign-box"><strong>Il Creator / Utilizzatore (per specifica approvazione ex artt. 1341-1342 c.c.)</strong><br/>' + creatorName + '<br/><br/>_____________________________</div>' +
+            '<div class="sign-box"><strong>Per Blue Arroyo S.r.l.</strong><br/><br/>_____________________________</div>' +
+            '<div class="sign-box"><strong>Il Cliente (per specifica approvazione ex artt. 1341-1342 c.c.)</strong><br/>' + esc(f.fullNameDisplay) + '<br/><br/>_____________________________</div>' +
           '</div>' +
-        '</div>' +
-
-        '<div class="annex-box">' +
-          '<h2>ALLEGATO A – SCHEDA TECNICA DELL\'IMMOBILE, CONDIZIONI DI ACCESSO E ATTREZZATURE AMMESSE</h2>' +
-          '<table class="annex-table">' +
-            '<tr><th style="width:34%;">Indirizzo e Identificativo Interno</th><td>' + propertyAddress + ' · Rif. Catastale: ' + propertyCadastralRef + '</td></tr>' +
-            '<tr><th>Ambienti Autorizzati alle Riprese</th><td>[DA COMPILARE: es. Soggiorno, Camera padronale, Terrazza — esclusi vani tecnici/ripostigli chiusi]</td></tr>' +
-            '<tr><th>Data/e e Orario di Check-in / Check-out Set</th><td>' + shootingDates + ' · ' + shootingHours + ' (Referente sul posto: [DA COMPILARE])</td></tr>' +
-            '<tr><th>Elenco Attrezzature Autorizzate</th><td>[DA COMPILARE: es. Fotocamera mirrorless, treppiede con gommini, n. 2 luci LED a batteria — vietati fumi/fiamme libere]</td></tr>' +
-            '<tr><th>Stato dei Luoghi (Check Fotografico In/Out)</th><td>Verbale fotografico di ingresso ore [DA COMPILARE] · Verbale fotografico di uscita ore [DA COMPILARE]</td></tr>' +
-          '</table>' +
-
-          '<h2 style="margin-top:16px;">ALLEGATO B – ELENCO NOMINATIVO COLLABORATORI, MODELLI E TROUPE AUTORIZZATI ALL\'ACCESSO</h2>' +
-          '<table class="annex-table">' +
-            '<thead><tr><th>#</th><th>Nome e Cognome</th><th>Qualifica / Ruolo sul Set</th><th>Estremi Documento d\'Identità</th><th>Liberatoria Immagine / GDPR Acquisita</th></tr></thead>' +
-            '<tbody>' +
-              '<tr><td>1</td><td>[DA COMPILARE]</td><td>[DA COMPILARE: Creator / Fotografo]</td><td>[DA COMPILARE]</td><td>[ SÌ / NO ]</td></tr>' +
-              '<tr><td>2</td><td>[DA COMPILARE]</td><td>[DA COMPILARE: Videomaker / Assistente]</td><td>[DA COMPILARE]</td><td>[ SÌ / NO ]</td></tr>' +
-              '<tr><td>3</td><td>[DA COMPILARE]</td><td>[DA COMPILARE: Modello/a / Talent]</td><td>[DA COMPILARE]</td><td>[ SÌ / NO ]</td></tr>' +
-            '</tbody>' +
-          '</table>' +
         '</div>' +
       '</div>' +
       '</body></html>';
@@ -6373,79 +6564,33 @@
     }
     return {
       ok: true,
-      code: 'JUL-011',
-      title: 'CONTRATTO DI COLLABORAZIONE, ACCESSO ALL\'IMMOBILE E LICENZA D\'USO COMMERCIALE DI CONTENUTI AUDIOVISIVI/FOTOGRAFICI',
-      interactiveUrl: '/contratto.html?type=creator',
+      code: 'JUL-035',
+      title: 'CONTRATTO DI SERVIZIO E AUTORIZZAZIONE GENERALE AL COORDINAMENTO OPERATIVO ITASSISTANCE',
+      interactiveUrl: '/contratto.html',
+      revenuePlanOptIn: f.revenuePlanOptIn,
       html: htmlDoc
     };
   }
 
   function downloadCreatorContractCompiledPdf(customData) {
-    var d = Object.assign({}, getCreatorPropertyReleaseContracts()[0] || {}, customData || {});
-    var valOrPlaceholder = function (val, fallback) {
-      if (val !== undefined && val !== null && String(val).trim() !== '') {
-        return String(val).trim();
-      }
-      return fallback || '[DA COMPILARE]';
-    };
-    var parseAmount = function (v) {
-      if (v === undefined || v === null || String(v).trim() === '') return 0;
-      var n = parseFloat(String(v).replace(',', '.').replace(/[^0-9.-]/g, ''));
-      return isNaN(n) ? 0 : Math.round(n * 100) / 100;
-    };
+    var f = extractClientContractFields(customData);
+    var monthlyFeeEur = 99.00;
+    var totalTariffFormatted = formatItEur(monthlyFeeEur);
 
-    // BLOCCO A — Dati Cliente (Proprietario o Gestore Autorizzato Airbnb) & Immobile
-    var clientName = valOrPlaceholder(d.clientName || d.ownerName, '[DA COMPILARE: Nome / Ragione Sociale Proprietario o Gestore]');
-    var clientVatOrCf = valOrPlaceholder(d.clientVatOrCf || d.clientTaxCode, '[DA COMPILARE: C.F. / P.IVA]');
-    var clientAddress = valOrPlaceholder(d.clientAddress, '[DA COMPILARE: Sede / Residenza]');
-    var clientEmailOrPec = valOrPlaceholder(d.clientEmailOrPec || d.clientEmail, '[DA COMPILARE: Email / PEC]');
-    var clientPhone = valOrPlaceholder(d.clientPhone, '[DA COMPILARE: Telefono]');
-    var clientSignerRole = valOrPlaceholder(d.clientSignerRole || d.grantorTitleOnProperty, '[DA COMPILARE: Proprietario / Conduttore autorizzato / Gestore con mandato]');
-    var propertyAddress = valOrPlaceholder(d.propertyAddress, '[DA COMPILARE: Indirizzo Immobile, Firenze]');
-    var propertyCommercialName = valOrPlaceholder(d.propertyCommercialName || d.listingName, '[DA COMPILARE: Nome commerciale alloggio Airbnb / Booking]');
-    var propertyCinCir = valOrPlaceholder(d.propertyCinCir || d.cinCode, '[DA COMPILARE: CIN / CIR]');
-    var accessDuration = valOrPlaceholder(d.accessDuration, '[DA COMPILARE: Durata accesso temporaneo — zero pernottamento]');
-    var shootingSessions = valOrPlaceholder(d.shootingSessions || ((d.shootingDates || '[DA COMPILARE]') + ' · ' + (d.shootingHours || 'dalle ore [DA COMPILARE] alle ore [DA COMPILARE]')), '[DA COMPILARE: Giorni e fasce orarie sessioni]');
-    var licenseDuration = valOrPlaceholder(d.licenseDuration, 'Tutta la durata massima consentita dalla legge (L. 633/1941 · irrevocabile e mondiale)');
-
-    // BLOCCO B — Dati Professionista (Content Creator / Fotografo / Videomaker / Marketing)
-    var creatorName = valOrPlaceholder(d.creatorName, '[DA COMPILARE: Nome Cognome / Ragione Sociale Professionista]');
-    var creatorTaxCodeOrVat = valOrPlaceholder(d.creatorTaxCodeOrVat, '[DA COMPILARE: C.F. / P.IVA]');
-    var creatorAddress = valOrPlaceholder(d.creatorAddress, '[DA COMPILARE: Sede Legale / Domicilio Fiscale]');
-    var creatorPecOrEmail = valOrPlaceholder(d.creatorPecOrEmail, '[DA COMPILARE: Email / PEC]');
-    var creatorPhone = valOrPlaceholder(d.creatorPhone, '[DA COMPILARE: Telefono]');
-    var creatorLegalQualification = valOrPlaceholder(d.creatorLegalQualification, 'Lavoratore autonomo ex art. 2222 c.c. / Appalto di servizi ex art. 1655 c.c.');
-    var creatorCrewModels = valOrPlaceholder(d.creatorCrewModels, '[DA COMPILARE: Elenco Troupe / Modelli / Assistenti autorizzati]');
-
-    // BLOCCO C — Tariffario & Condizioni Economiche
-    var collaborationMode = valOrPlaceholder(d.collaborationMode, '[DA COMPILARE: Gratuita Cross-Promotion / Retribuita / Permuta Servizi]');
-    var itaSelectedTariffs = valOrPlaceholder(d.itaSelectedTariffs, 'Canone App 99,00 €/mese · Opzione +10% Revenue & Adempimenti · Check-in 20,00 € · Manutenzione 30,00 €');
-    var feePhotoShooting = parseAmount(d.feePhotoShooting);
-    var feeVideoReelAds = parseAmount(d.feeVideoReelAds);
-    var feeAccessManagement = parseAmount(d.feeAccessManagement);
-    var feeCustomAmount = parseAmount(d.feeCustomAmount);
-    var feeCustomLabel = valOrPlaceholder(d.feeCustomLabel, 'Voce Personalizzata Produzione / Extra');
-    var computedTotal = Math.round((feePhotoShooting + feeVideoReelAds + feeAccessManagement + feeCustomAmount) * 100) / 100;
-    var explicitTotal = d.totalTariffEur !== undefined && d.totalTariffEur !== null && String(d.totalTariffEur).trim() !== ''
-      ? parseAmount(d.totalTariffEur)
-      : computedTotal;
-    var totalTariffFormatted = formatItEur(explicitTotal);
-    var taxRegime = valOrPlaceholder(d.taxRegime, '[DA COMPILARE: Regime Forfettario L. 190/2014 / Ordinario IVA 22% / Prestazione Occasionale]');
-    var ibanPayment = valOrPlaceholder(d.ibanPayment, '[DA CONFERMARE]');
-    var paymentTerms = valOrPlaceholder(d.paymentTerms, '[DA COMPILARE: Bonifico bancario tracciabile a ricevimento fattura SDI M5UXCR1]');
-    var securityDeposit = valOrPlaceholder(d.securityDeposit, '[DA COMPILARE]');
-    var penaltyPerDayOrBreach = valOrPlaceholder(d.penaltyPerDayOrBreach, '€ [DA COMPILARE]');
-    var placeAndDate = valOrPlaceholder(d.placeAndDate, 'Firenze, lì ' + getRomeNowFormatted().shortDateTime);
-    var fileName = valOrPlaceholder(d.fileName, 'Contratto_Produzione_Contenuti_Itassistance.pdf');
-
-    //Salva nel localStorage come ultimo contratto compilato
+    // Salva nel localStorage come ultimo contratto compilato
     try {
       var list = getCreatorPropertyReleaseContracts();
-      var updatedRecord = Object.assign({}, list[0] || {}, d, {
-        clientName: clientName,
-        creatorName: creatorName,
-        propertyAddress: propertyAddress,
-        totalTariffEur: explicitTotal,
+      var updatedRecord = Object.assign({}, list[0] || {}, customData || {}, {
+        firstName: f.firstName,
+        lastName: f.lastName,
+        clientName: f.fullNameDisplay,
+        residence: f.residence,
+        taxId: f.taxId,
+        email: f.email,
+        phone: f.phone,
+        propertyAddress: f.propertyAddress || '[DA COMPILARE]',
+        revenuePlanOptIn: f.revenuePlanOptIn,
+        totalTariffEur: monthlyFeeEur,
         totalTariffFormatted: totalTariffFormatted,
         updatedAt: getRomeNowFormatted().shortDateTime
       });
@@ -6456,75 +6601,967 @@
     // 1. Generazione PDF con pdfMake se presente
     if (typeof window !== 'undefined' && window.pdfMake && typeof window.pdfMake.createPdf === 'function') {
       try {
+        var clientTableBody = [
+          [{ text: 'Nome', bold: true }, f.firstName],
+          [{ text: 'Cognome', bold: true }, f.lastName],
+          [{ text: 'Residenza', bold: true }, f.residence],
+          [{ text: 'Codice Fiscale o P.IVA', bold: true }, f.taxId],
+          [{ text: 'Recapiti di contatto (Email e Telefono)', bold: true }, 'Email per le fatture: ' + f.email + ' · Telefono per coordinamenti operativi: ' + f.phone]
+        ];
+        if (f.propertyAddress && f.propertyAddress !== '[DA COMPILARE]') {
+          clientTableBody.push([{ text: 'Indirizzo immobile', bold: true }, f.propertyAddress]);
+        }
+
+        var pdfContent = [
+          {
+            text: 'CONTRATTO DI SERVIZIO E AUTORIZZAZIONE GENERALE AL COORDINAMENTO OPERATIVO ITASSISTANCE',
+            fontSize: 12.5,
+            bold: true,
+            color: '#1E1035',
+            margin: [0, 0, 0, 3]
+          },
+          {
+            text: 'Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, 50122 Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v.',
+            fontSize: 8.5,
+            color: '#475569',
+            margin: [0, 0, 0, 10]
+          },
+          {
+            text: '1. DATI DEL CLIENTE',
+            fontSize: 10,
+            bold: true,
+            color: '#5B21B6',
+            margin: [0, 2, 0, 4]
+          },
+          {
+            table: {
+              widths: ['36%', '64%'],
+              body: clientTableBody
+            },
+            fontSize: 9,
+            margin: [0, 0, 0, 10]
+          },
+          {
+            text: '2. AUTORIZZAZIONE GENERALE AL COORDINAMENTO OPERATIVO',
+            fontSize: 10,
+            bold: true,
+            color: '#1E1035',
+            margin: [0, 2, 0, 4]
+          },
+          {
+            text: 'Con la sottoscrizione del presente contratto, il Cliente autorizza Blue Arroyo S.r.l. (marchio Itassistance) a coordinare la parte operativa del Property Management per il proprio alloggio in locazione breve. Gli annunci sui portali (Airbnb, Booking.com e canali diretti) restano intestati al Cliente, gli incassi dei soggiorni confluiscono direttamente sul conto del Cliente e il Cliente gestisce in autonomia la propria parte legale e fiscale.',
+            fontSize: 8.8,
+            margin: [0, 0, 0, 10]
+          },
+          {
+            text: '3. TARIFFARIO PRECOMPILATO E MODALITÀ DI FATTURAZIONE ("MY BOX")',
+            fontSize: 10,
+            bold: true,
+            color: '#065F46',
+            margin: [0, 2, 0, 4]
+          },
+          {
+            table: {
+              widths: ['36%', '64%'],
+              body: [
+                [
+                  { text: 'Canone fisso mensile', bold: true, fillColor: '#ECFDF5' },
+                  { text: '99,00 €/mese IVA inclusa (1.188,00 €/anno) · 14 giorni di prova gratuita · 0% commissioni sulle prenotazioni nel piano base · Disdetta libera', bold: true, color: '#065F46', fillColor: '#ECFDF5' }
+                ],
+                [
+                  { text: 'Cosa comprende il canone fisso', bold: true },
+                  'Coordinamento della parte operativa del Property Management (coordinamento pulizie, accoglienza ospiti, manutenzioni e fornitori), messaggistica ospiti, sincronizzazione calendari, report giornaliero e promemoria operativi, supporto amministrativo e promemoria scadenze (Alloggiati Web, ISTAT / Ross1000, promemoria imposta di soggiorno).'
+                ],
+                [
+                  { text: 'Servizi opzionali a richiesta', bold: true },
+                  'Check-in di persona: 20,00 € a intervento · Manutenzione: 30,00 € prima ora + materiali a piè di lista.'
+                ],
+                [
+                  { text: 'Modalità di fatturazione e pagamento', bold: true },
+                  'Solo fattura previa verifica e conferma del pro-forma nell\'area riservata "My Box" del Cliente, con invio di copia via email al Cliente, emissione manuale della fattura da parte dell\'amministrazione e pagamento tramite bonifico bancario (Coordinate per il bonifico: IBAN [DA CONFERMARE]). Nessun addebito su carta.'
+                ]
+              ]
+            },
+            fontSize: 8.8,
+            margin: [0, 0, 0, 10]
+          }
+        ];
+
+        if (f.revenuePlanOptIn) {
+          pdfContent.push({
+            text: 'CLAUSOLA OPZIONALE ATTIVATA — REVENUE PLAN (COMMISSIONE 10%)',
+            fontSize: 10,
+            bold: true,
+            color: '#5B21B6',
+            margin: [0, 2, 0, 4]
+          });
+          pdfContent.push({
+            text: 'Il Cliente ha scelto di attivare il Revenue Plan opzionale. Per tale servizio è pattuita una commissione del 10% (dieci per cento) calcolata sul netto spettante al proprietario, prima delle sue tasse personali (imposte dirette / cedolare secca / IRPEF), in aggiunta al canone fisso mensile di 99,00 €/mese IVA inclusa.\n• Definizione di Netto spettante al proprietario (prima delle sue tasse personali): incasso dell\'ospite al netto di: commissioni delle piattaforme, imposta di soggiorno e costi di pulizia.\n• Maturazione e fatturazione: mensile — la fattura si emette a fine mese sulle prenotazioni del mese (termini di pagamento della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario).\n• Esempio illustrativo di calcolo (importi di puro esempio, non dati reali): Incasso ospite (esempio) 1.000,00 € - Commissioni piattaforme (esempio) 150,00 € - Imposta di soggiorno (esempio) 40,00 € - Costi di pulizia (esempio) 60,00 € = Netto spettante al proprietario prima delle tasse personali (esempio) 750,00 € -> Commissione Revenue Plan 10% (esempio) = 75,00 €, fatturata a fine mese sulle prenotazioni del mese (termini di pagamento della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario).',
+            fontSize: 8.5,
+            color: '#1E1035',
+            margin: [0, 0, 0, 10]
+          });
+        }
+
+        pdfContent.push({
+          text: '4. CONSENSO PRIVACY E TRATTAMENTO DEI DATI PERSONALI (REG. UE 2016/679 – GDPR)',
+          fontSize: 10,
+          bold: true,
+          color: '#1E1035',
+          margin: [0, 2, 0, 4]
+        });
+        pdfContent.push({
+          text: 'Il Cliente dichiara di aver letto l\'informativa privacy ex art. 13 Reg. UE 2016/679 (GDPR) e D.Lgs. 196/2003 e presta il consenso al trattamento dei propri dati personali da parte di Blue Arroyo S.r.l. (Titolare del trattamento, Sede legale: Via Matteo Palmieri 20R, 50122 Firenze · Email Admin: admin@bluearroyo.it · Assistenza Ospiti: itassistance@bluearroyo.it · Tel. +39 349 177 5561) per l\'attivazione e l\'esecuzione del servizio di coordinamento operativo Itassistance e per gli adempimenti di legge. Foro competente: Firenze (fatto salvo il foro del consumatore ove applicabile).',
+          fontSize: 8.5,
+          margin: [0, 0, 0, 10]
+        });
+        pdfContent.push({
+          text: 'LUOGO E DATA: ' + f.placeAndDate + '\nFIRMA PER BLUE ARROYO S.R.L.: ___________________________     FIRMA DEL CLIENTE (' + f.fullNameDisplay + '): ___________________________',
+          fontSize: 8.8,
+          bold: true,
+          margin: [0, 4, 0, 10]
+        });
+
+        var vessatorieText = f.revenuePlanOptIn
+          ? 'APPROVAZIONE SPECIFICA EX ARTT. 1341 E 1342 C.C. (Sez. 2 Oggetto del servizio; Sez. 3 Canone fisso 99,00 €/mese, 14 giorni di prova gratuita, conferma pro-forma in My Box e bonifico; Clausola Opzionale Revenue Plan Commissione 10% sul netto spettante al proprietario prima delle sue tasse personali = incasso ospite meno commissioni piattaforme, imposta di soggiorno e costi di pulizia, con fatturazione a fine mese; Sez. 4 Privacy GDPR e Foro di Firenze):\nFIRMA DEL CLIENTE (' + f.fullNameDisplay + '): ___________________________'
+          : 'APPROVAZIONE SPECIFICA EX ARTT. 1341 E 1342 C.C. (Sez. 2 Oggetto del servizio; Sez. 3 Canone fisso 99,00 €/mese, 14 giorni di prova gratuita, conferma pro-forma in My Box e bonifico; Sez. 4 Privacy GDPR e Foro di Firenze):\nFIRMA DEL CLIENTE (' + f.fullNameDisplay + '): ___________________________';
+
+        pdfContent.push({
+          text: vessatorieText,
+          fontSize: 8.2,
+          bold: true,
+          color: '#4C1D95',
+          margin: [0, 0, 0, 6]
+        });
+
+        var docDef = {
+          pageSize: 'A4',
+          pageMargins: [32, 32, 32, 32],
+          content: pdfContent
+        };
+        window.pdfMake.createPdf(docDef).download(f.fileName);
+        return {
+          ok: true,
+          engine: 'pdfMake',
+          fileName: f.fileName,
+          revenuePlanOptIn: f.revenuePlanOptIn,
+          totalTariffEur: monthlyFeeEur,
+          totalTariffFormatted: totalTariffFormatted
+        };
+      } catch (ePdfMake) {}
+    }
+
+    // 2. Fallback binario nativo %PDF-1.4 garantito
+    var pdfLines = [
+      'CONTRATTO DI SERVIZIO E AUTORIZZAZIONE GENERALE AL COORDINAMENTO OPERATIVO ITASSISTANCE',
+      'Blue Arroyo S.r.l. - Sede legale: Via Matteo Palmieri 20R, 50122 Firenze',
+      'P.IVA / C.F. 07480210488 - REA FI-706161 - SDI M5UXCR1 - PEC: bluearroyosrl@pec.it - Cap.Soc.: EUR 50.000,00 i.v.',
+      '------------------------------------------------------------------------------------------------',
+      '1. DATI DEL CLIENTE:',
+      '  * Nome:                                  ' + f.firstName,
+      '  * Cognome:                               ' + f.lastName,
+      '  * Residenza:                             ' + f.residence,
+      '  * Codice Fiscale o P.IVA:                ' + f.taxId,
+      '  * Recapiti di contatto (Email/Telefono): Email fatture: ' + f.email + ' | Tel operativo: ' + f.phone
+    ];
+    if (f.propertyAddress && f.propertyAddress !== '[DA COMPILARE]') {
+      pdfLines.push('  * Indirizzo immobile:                    ' + f.propertyAddress);
+    }
+    pdfLines.push(
+      '------------------------------------------------------------------------------------------------',
+      '2. AUTORIZZAZIONE GENERALE AL COORDINAMENTO OPERATIVO:',
+      '  Il Cliente autorizza Blue Arroyo S.r.l. (marchio Itassistance) a svolgere il coordinamento della',
+      '  parte operativa del Property Management per il proprio alloggio in locazione breve. Gli annunci',
+      '  sui portali (Airbnb, Booking.com e canali diretti) restano intestati al Cliente, gli incassi dei',
+      '  soggiorni confluiscono direttamente sul conto del Cliente e il Cliente gestisce in autonomia la',
+      '  propria parte legale e fiscale.',
+      '------------------------------------------------------------------------------------------------',
+      '3. TARIFFARIO PRECOMPILATO E MODALITA DI FATTURAZIONE ("MY BOX"):',
+      '  * Canone fisso mensile: 99,00 EUR/mese IVA inclusa (1.188,00 EUR/anno) | 14 giorni di prova gratuita',
+      '    | 0% commissioni sulle prenotazioni nel piano base | Disdetta libera senza penali.',
+      '  * Cosa comprende il canone fisso: coordinamento della parte operativa del Property Management',
+      '    (coordinamento pulizie, accoglienza ospiti, manutenzioni e fornitori), messaggistica ospiti,',
+      '    sincronizzazione calendari, report giornaliero e promemoria operativi, supporto amministrativo',
+      '    e promemoria scadenze (Alloggiati Web, ISTAT / Ross1000, promemoria imposta di soggiorno).',
+      '  * Servizi opzionali a richiesta: Check-in di persona 20,00 EUR a intervento; Manutenzione 30,00 EUR',
+      '    prima ora + materiali a pie di lista.',
+      '  * Modalita di fatturazione e pagamento: Solo fattura previa verifica e conferma del pro-forma',
+      '    nell area riservata "My Box" del Cliente, con invio di copia via email al Cliente, emissione',
+      '    manuale della fattura da parte dell amministrazione e pagamento tramite bonifico bancario',
+      '    (Coordinate per il bonifico: IBAN [DA CONFERMARE]). Nessun pagamento con carta.'
+    );
+
+    if (f.revenuePlanOptIn) {
+      pdfLines.push(
+        '------------------------------------------------------------------------------------------------',
+        'CLAUSOLA OPZIONALE ATTIVATA - REVENUE PLAN (COMMISSIONE 10%):',
+        '  Il Cliente ha scelto di attivare il Revenue Plan opzionale. Per tale servizio e pattuita una',
+        '  commissione del 10% (dieci per cento) calcolata sul netto spettante al proprietario, prima delle',
+        '  sue tasse personali (imposte dirette / cedolare secca / IRPEF), in aggiunta al canone fisso',
+        '  mensile di 99,00 EUR/mese IVA inclusa.',
+        '  * Definizione di Netto spettante al proprietario (prima delle sue tasse personali): incasso dell',
+        '    ospite al netto di: commissioni delle piattaforme, imposta di soggiorno e costi di pulizia.',
+        '  * Maturazione e fatturazione: mensile - la fattura si emette a fine mese sulle prenotazioni del',
+        '    mese (termini di pagamento della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario).',
+        '  * Esempio illustrativo di calcolo (importi di puro esempio, non dati reali):',
+        '    Incasso ospite (esempio) 1.000,00 EUR - Commissioni piattaforme (esempio) 150,00 EUR - Imposta',
+        '    di soggiorno (esempio) 40,00 EUR - Costi di pulizia (esempio) 60,00 EUR = Netto spettante al',
+        '    proprietario prima delle tasse personali (esempio) 750,00 EUR -> Commissione Revenue Plan 10%',
+        '    (esempio) = 75,00 EUR, fatturata a fine mese sulle prenotazioni del mese (termini di pagamento',
+        '    della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario).'
+      );
+    }
+
+    pdfLines.push(
+      '------------------------------------------------------------------------------------------------',
+      '4. CONSENSO PRIVACY E TRATTAMENTO DEI DATI PERSONALI (REG. UE 2016/679 - GDPR):',
+      '  Il Cliente dichiara di aver preso visione dell informativa ex art. 13 Reg. UE 2016/679 (GDPR) e',
+      '  D.Lgs. 196/2003 e presta il consenso al trattamento dei dati personali da parte di Blue Arroyo',
+      '  S.r.l. (Titolare del trattamento, Sede legale: Via Matteo Palmieri 20R, 50122 Firenze -',
+      '  Admin: admin@bluearroyo.it - Ospiti: itassistance@bluearroyo.it / +39 349 177 5561) per',
+      '  l attivazione e l esecuzione del servizio di coordinamento operativo Itassistance e per gli',
+      '  adempimenti di legge. Foro competente: Firenze.',
+      '------------------------------------------------------------------------------------------------',
+      'Luogo e Data: ' + f.placeAndDate,
+      'Firma per Blue Arroyo S.r.l.: _______________________  Firma del Cliente (' + f.fullNameDisplay + '): _______________________',
+      f.revenuePlanOptIn
+        ? 'APPROVAZIONE SPECIFICA EX ARTT. 1341 E 1342 C.C. (Sez. 2, Sez. 3 Pro-Forma My Box, Clausola Opzionale Revenue Plan 10% sul netto proprietario = incasso ospite meno commissioni piattaforme, tassa soggiorno e pulizie con fattura a fine mese, Sez. 4):'
+        : 'APPROVAZIONE SPECIFICA EX ARTT. 1341 E 1342 C.C. (Sez. 2 Oggetto, Sez. 3 Tariffario 99,00 EUR/mese e Pro-Forma My Box, Sez. 4 GDPR e Foro):',
+      'Firma del Cliente (' + f.fullNameDisplay + '): _______________________'
+    );
+
+    var rawPdf = buildMinimalPdfBinary(pdfLines);
+    if (typeof window !== 'undefined' && typeof document !== 'undefined' && typeof Blob !== 'undefined') {
+      try {
+        var blob = new Blob([rawPdf], { type: 'application/pdf' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = f.fileName;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () {
+          try {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          } catch (eClean) {}
+        }, 350);
+      } catch (eDownload) {}
+    }
+
+    return {
+      ok: true,
+      engine: 'native-pdf-1.4',
+      fileName: f.fileName,
+      revenuePlanOptIn: f.revenuePlanOptIn,
+      totalTariffEur: monthlyFeeEur,
+      totalTariffFormatted: totalTariffFormatted,
+      rawPdfLength: rawPdf.length
+    };
+  }
+
+  // ============================================================================
+  // M. MODULO BOOKING INTERNO — RICHIESTA PRENOTAZIONE DIRETTA DALLA HOME (JUL-033)
+  //    - Nessuna casa d'esempio (default [] in ita_direct_booking_units_v1)
+  //    - Visibili solo gli alloggi con directBookingConsent === true
+  //    - Civico e contatti privati del proprietario sempre oscurati
+  //    - Le date vengono bloccate SOLO dopo confirmDirectBookingRequest(requestId)
+  // ============================================================================
+  var DIRECT_BOOKING_UNITS_KEY = 'ita_direct_booking_units_v1';
+  var DIRECT_BOOKING_REQUESTS_KEY = 'ita_direct_booking_requests_v1';
+  var DIRECT_BOOKING_BLOCKED_DATES_KEY = 'ita_direct_booking_blocked_dates_v1';
+
+  function maskStreetNumberAndPrivateInfo(text) {
+    var s = String(text || '').trim();
+    if (!s) return '';
+    // Rimuove eventuali numeri civici (es. "Via Roma 12R", "n. 14", ", 25/A")
+    return s
+      .replace(/\b(?:n\.?|civ\.?|civico)\s*\d+[a-zA-Z\/]*\b/gi, '')
+      .replace(/,\s*\d+\s*[a-zA-Z]?\b/g, '')
+      .replace(/\s+\d+\s*[rR]\b/g, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+  }
+
+  function sanitizeDirectBookingUnitPublic(rawUnit) {
+    var u = rawUnit || {};
+    var hasConsent = Boolean(u.directBookingConsent === true || u.consent === true);
+    var rawRate = u.nightlyRateEur !== undefined ? u.nightlyRateEur : u.pricePerNightEur;
+    var parsedRate = (rawRate !== undefined && rawRate !== null && String(rawRate).trim() !== '' && Number(rawRate) > 0)
+      ? Math.round(Number(rawRate) * 100) / 100
+      : null;
+    var unitId = String(u.unitId || u.id || '').trim();
+    var publicTitle = maskStreetNumberAndPrivateInfo(u.publicTitle || u.title || 'Appartamento a Firenze');
+    var zone = maskStreetNumberAndPrivateInfo(u.zone || u.quartiere || 'Firenze');
+    var maxGuests = Math.max(1, parseInt(u.maxGuests || u.guests || 2, 10) || 2);
+    var cinCode = String(u.cinCode || u.cin || '[DA CONFERMARE]').trim();
+
+    return {
+      unitId: unitId,
+      id: unitId,
+      publicTitle: publicTitle,
+      title: publicTitle,
+      city: 'Firenze',
+      zone: zone,
+      maxGuests: maxGuests,
+      nightlyRateEur: parsedRate,
+      priceLabel: parsedRate !== null ? formatItEur(parsedRate) + ' / notte' : 'Su richiesta',
+      cinCode: cinCode,
+      directBookingConsent: hasConsent,
+      consent: hasConsent,
+      updatedAt: u.updatedAt || null
+      // Civico esatto e contatti privati del proprietario (email/telefono/CF/IBAN) sono sempre omessi
+    };
+  }
+
+  function getDirectBookingBlockedDates(unitId) {
+    var list = safeGetJSON(DIRECT_BOOKING_BLOCKED_DATES_KEY, []);
+    if (!Array.isArray(list)) return [];
+    if (!unitId) return list;
+    var targetId = String(unitId).trim();
+    return list.filter(function (b) {
+      return b && String(b.unitId || '').trim() === targetId;
+    });
+  }
+
+  function isDirectBookingUnitAvailable(unitId, checkIn, checkOut) {
+    var inStr = String(checkIn || '').trim();
+    var outStr = String(checkOut || '').trim();
+    if (!inStr || !outStr || outStr <= inStr) return false;
+    var blocked = getDirectBookingBlockedDates(unitId);
+    for (var i = 0; i < blocked.length; i++) {
+      var b = blocked[i];
+      if (!b || !b.checkIn || !b.checkOut) continue;
+      if (inStr < String(b.checkOut) && outStr > String(b.checkIn)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function getDirectBookingUnits(onlyConsented) {
+    var rawList = safeGetJSON(DIRECT_BOOKING_UNITS_KEY, []);
+    if (!Array.isArray(rawList)) rawList = [];
+    var sanitized = rawList
+      .filter(function (item) { return item && (item.unitId || item.id); })
+      .map(sanitizeDirectBookingUnitPublic);
+    if (onlyConsented !== false) {
+      return sanitized.filter(function (u) {
+        return u.directBookingConsent === true;
+      });
+    }
+    return sanitized;
+  }
+
+  function saveDirectBookingUnitSettings(unitPayload) {
+    var p = unitPayload || {};
+    var unitId = String(p.unitId || p.id || ('UNIT-FI-' + Date.now())).trim();
+    var rawRate = p.nightlyRateEur !== undefined ? p.nightlyRateEur : p.pricePerNightEur;
+    var nightlyRateEur = (rawRate !== undefined && rawRate !== null && String(rawRate).trim() !== '' && Number(rawRate) > 0)
+      ? Math.round(Number(rawRate) * 100) / 100
+      : null;
+    var hasConsent = Boolean(p.directBookingConsent !== undefined ? p.directBookingConsent : p.consent);
+
+    var record = sanitizeDirectBookingUnitPublic({
+      unitId: unitId,
+      publicTitle: p.publicTitle || p.title || 'Appartamento a Firenze',
+      city: 'Firenze',
+      zone: p.zone || p.quartiere || 'Firenze',
+      maxGuests: p.maxGuests || p.guests || 2,
+      nightlyRateEur: nightlyRateEur,
+      cinCode: p.cinCode || p.cin || '[DA CONFERMARE]',
+      directBookingConsent: hasConsent,
+      updatedAt: new Date().toISOString()
+    });
+
+    var rawList = safeGetJSON(DIRECT_BOOKING_UNITS_KEY, []);
+    if (!Array.isArray(rawList)) rawList = [];
+    var idx = rawList.findIndex(function (item) {
+      return item && String(item.unitId || item.id || '').trim() === unitId;
+    });
+    if (idx !== -1) {
+      rawList[idx] = record;
+    } else {
+      rawList.push(record);
+    }
+    safeSetJSON(DIRECT_BOOKING_UNITS_KEY, rawList);
+
+    broadcastStateChange('direct_booking_unit_saved', {
+      unitId: record.unitId,
+      directBookingConsent: record.directBookingConsent
+    });
+
+    return {
+      ok: true,
+      unit: record,
+      units: getDirectBookingUnits(false)
+    };
+  }
+
+  function getDirectBookingRequests() {
+    var list = safeGetJSON(DIRECT_BOOKING_REQUESTS_KEY, []);
+    return Array.isArray(list) ? list : [];
+  }
+
+  function submitDirectBookingRequest(reqPayload) {
+    var p = reqPayload || {};
+    // 1. Validazione anti-spam honeypot (website_url deve essere vuoto)
+    var honeypot = String(p.website_url || p.honeypot || '').trim();
+    if (honeypot !== '') {
+      return { ok: false, error: 'Richiesta bloccata dal filtro anti-spam.' };
+    }
+
+    // 2. Validazione alloggio con consenso attivo
+    var unitId = String(p.unitId || '').trim();
+    var consentedUnits = getDirectBookingUnits(true);
+    var targetUnit = consentedUnits.find(function (u) { return u.unitId === unitId; });
+    if (!targetUnit) {
+      return { ok: false, error: 'Seleziona un alloggio disponibile con consenso attivo.' };
+    }
+
+    // 3. Validazione date (checkOut > checkIn) e disponibilità
+    var checkIn = String(p.checkIn || '').trim();
+    var checkOut = String(p.checkOut || '').trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(checkIn) || !/^\d{4}-\d{2}-\d{2}$/.test(checkOut) || checkOut <= checkIn) {
+      return { ok: false, error: 'La data di check-out deve essere successiva alla data di check-in.' };
+    }
+    if (!isDirectBookingUnitAvailable(unitId, checkIn, checkOut)) {
+      return { ok: false, error: 'Le date selezionate risultano già occupate per questo alloggio.' };
+    }
+
+    // 4. Validazione email e telefono
+    var guestName = String(p.guestName || p.fullName || p.name || '').trim();
+    var guestEmail = String(p.guestEmail || p.email || '').trim();
+    var guestPhone = String(p.guestPhone || p.phone || '').trim();
+    if (!guestName) {
+      return { ok: false, error: 'Inserisci nome e cognome dell\'ospite.' };
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)) {
+      return { ok: false, error: 'Inserisci un indirizzo email valido.' };
+    }
+    if (guestPhone.replace(/\D/g, '').length < 6) {
+      return { ok: false, error: 'Inserisci un recapito telefonico valido.' };
+    }
+
+    // 5. Validazione consensi GDPR
+    var gdprConsent = Boolean(
+      p.privacyConsent === true ||
+      p.gdprConsent === true ||
+      p.consentPrivacy === true ||
+      p.consent === true
+    );
+    if (!gdprConsent) {
+      return { ok: false, error: 'È necessario confermare il consenso privacy (GDPR) per inviare la richiesta.' };
+    }
+
+    var guestsCount = Math.max(1, Math.min(targetUnit.maxGuests || 10, parseInt(p.guests || p.guestsCount || 1, 10) || 1));
+    var nightsCount = Math.max(1, Math.round((new Date(checkOut + 'T12:00:00') - new Date(checkIn + 'T12:00:00')) / (1000 * 60 * 60 * 24)));
+    var estimatedTotalEur = targetUnit.nightlyRateEur !== null
+      ? Math.round(targetUnit.nightlyRateEur * nightsCount * 100) / 100
+      : null;
+
+    var newReq = {
+      id: 'DBR-' + Date.now() + '-' + Math.floor(100 + Math.random() * 899),
+      unitId: targetUnit.unitId,
+      unitPublicTitle: targetUnit.publicTitle,
+      unitZone: targetUnit.zone,
+      unitCinCode: targetUnit.cinCode,
+      checkIn: checkIn,
+      checkOut: checkOut,
+      nights: nightsCount,
+      guests: guestsCount,
+      nightlyRateEur: targetUnit.nightlyRateEur,
+      estimatedTotalEur: estimatedTotalEur,
+      priceSummaryLabel: estimatedTotalEur !== null ? formatItEur(estimatedTotalEur) : 'Su richiesta',
+      guestName: guestName,
+      guestEmail: guestEmail,
+      guestPhone: guestPhone,
+      notes: String(p.notes || p.message || '').trim(),
+      privacyConsent: true,
+      requestTransmissionConsent: Boolean(p.requestTransmissionConsent !== false),
+      status: 'PENDING',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    var requests = getDirectBookingRequests();
+    requests.unshift(newReq);
+    safeSetJSON(DIRECT_BOOKING_REQUESTS_KEY, requests);
+
+    broadcastStateChange('direct_booking_request_submitted', {
+      requestId: newReq.id,
+      unitId: newReq.unitId,
+      status: 'PENDING'
+    });
+
+    return {
+      ok: true,
+      request: newReq
+    };
+  }
+
+  function confirmDirectBookingRequest(requestId) {
+    var targetId = String(requestId || '').trim();
+    if (!targetId) return { ok: false, error: 'ID richiesta mancante.' };
+
+    var requests = getDirectBookingRequests();
+    var target = requests.find(function (r) { return r && r.id === targetId; });
+    if (!target) {
+      return { ok: false, error: 'Richiesta di prenotazione non trovata (' + targetId + ').' };
+    }
+
+    var nowIso = new Date().toISOString();
+    target.status = 'CONFIRMED';
+    target.confirmedAt = nowIso;
+    target.updatedAt = nowIso;
+    safeSetJSON(DIRECT_BOOKING_REQUESTS_KEY, requests);
+
+    var blocked = safeGetJSON(DIRECT_BOOKING_BLOCKED_DATES_KEY, []);
+    if (!Array.isArray(blocked)) blocked = [];
+    var alreadyBlocked = blocked.some(function (b) { return b && b.requestId === target.id; });
+    if (!alreadyBlocked) {
+      blocked.push({
+        unitId: target.unitId,
+        checkIn: target.checkIn,
+        checkOut: target.checkOut,
+        requestId: target.id,
+        confirmedAt: nowIso
+      });
+      safeSetJSON(DIRECT_BOOKING_BLOCKED_DATES_KEY, blocked);
+    }
+
+    broadcastStateChange('direct_booking_request_confirmed', {
+      requestId: target.id,
+      unitId: target.unitId,
+      checkIn: target.checkIn,
+      checkOut: target.checkOut,
+      status: 'CONFIRMED'
+    });
+
+    return {
+      ok: true,
+      request: target,
+      blockedDates: getDirectBookingBlockedDates(target.unitId)
+    };
+  }
+
+  function rejectDirectBookingRequest(requestId) {
+    var targetId = String(requestId || '').trim();
+    if (!targetId) return { ok: false, error: 'ID richiesta mancante.' };
+
+    var requests = getDirectBookingRequests();
+    var target = requests.find(function (r) { return r && r.id === targetId; });
+    if (!target) {
+      return { ok: false, error: 'Richiesta di prenotazione non trovata (' + targetId + ').' };
+    }
+
+    var nowIso = new Date().toISOString();
+    target.status = 'REJECTED';
+    target.rejectedAt = nowIso;
+    target.updatedAt = nowIso;
+    safeSetJSON(DIRECT_BOOKING_REQUESTS_KEY, requests);
+
+    var blocked = safeGetJSON(DIRECT_BOOKING_BLOCKED_DATES_KEY, []);
+    if (Array.isArray(blocked)) {
+      var filtered = blocked.filter(function (b) { return !b || b.requestId !== target.id; });
+      safeSetJSON(DIRECT_BOOKING_BLOCKED_DATES_KEY, filtered);
+    }
+
+    broadcastStateChange('direct_booking_request_rejected', {
+      requestId: target.id,
+      unitId: target.unitId,
+      status: 'REJECTED'
+    });
+
+    return {
+      ok: true,
+      request: target
+    };
+  }
+
+  // ============================================================================
+  // N. MOTORE PRO-FORMA IN "MY BOX" DEL CLIENTE E CODA MANUALE FATTURAZIONE ADMIN
+  //    (JUL-036 · SOLO FATTURA, ZERO PAGAMENTO CON CARTA / STRIPE)
+  // ============================================================================
+  var MYBOX_PROFORMA_KEY = 'ita_mybox_proforma_v1';
+  var ADMIN_PROFORMA_QUEUE_KEY = 'ita_admin_proforma_queue_v1';
+  var PROFORMA_AUDIT_LOG_KEY = 'ita_proforma_audit_log_v1';
+
+  function getProformaAuditLog() {
+    var list = safeGetJSON(PROFORMA_AUDIT_LOG_KEY, []);
+    return Array.isArray(list) ? list : [];
+  }
+
+  function appendProformaAuditEntry(entry) {
+    var list = getProformaAuditLog();
+    var rec = Object.assign({
+      id: 'PFA-' + Date.now() + '-' + Math.floor(100 + Math.random() * 899),
+      timestamp: getRomeNowFormatted().fullDateTime,
+      isoTimestamp: new Date().toISOString()
+    }, entry || {});
+    list.unshift(rec);
+    safeSetJSON(PROFORMA_AUDIT_LOG_KEY, list.slice(0, 100));
+    return rec;
+  }
+
+  function getMyBoxProforma() {
+    var dynamicIban = (typeof localStorage !== 'undefined' && localStorage.getItem('ita_proforma_iban_v1')) || '[DA CONFERMARE]';
+    var saved = safeGetJSON(MYBOX_PROFORMA_KEY, null);
+    if (saved && typeof saved === 'object' && saved.proformaNumber) {
+      if (!saved.issuer) saved.issuer = {};
+      saved.issuer.iban = dynamicIban;
+      saved.paymentTerms = 'Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario';
+      saved.revenuePlanDescription = 'Commissione del 10% sul netto spettante al proprietario (prima delle sue tasse personali = incasso ospite al netto di commissioni piattaforme, imposta di soggiorno e costi di pulizia), fatturata a fine mese sulle prenotazioni del mese (termini di pagamento della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario)';
+      return saved;
+    }
+
+    var lastAct = safeGetJSON('itassistance_last_activation', null) || {};
+    var obState = safeGetJSON(ONBOARDING_KEY, null) || {};
+    var obStruct = obState.structure || {};
+    var ctrList = safeGetJSON(CREATOR_PROPERTY_RELEASE_STORE_KEY, null);
+    var ctr0 = (Array.isArray(ctrList) && ctrList[0]) ? ctrList[0] : {};
+
+    var rawFullName = lastAct.ownerName || ctr0.clientName || '';
+    var fName = ctr0.firstName && ctr0.firstName !== '[DA COMPILARE]' ? ctr0.firstName : '';
+    var lName = ctr0.lastName && ctr0.lastName !== '[DA COMPILARE]' ? ctr0.lastName : '';
+    if (!fName && !lName && rawFullName && rawFullName.indexOf('[DA COMPILARE') === -1) {
+      var parts = String(rawFullName).trim().split(/\s+/);
+      fName = parts[0] || '[DA COMPILARE]';
+      lName = parts.length > 1 ? parts.slice(1).join(' ') : '[DA COMPILARE]';
+    }
+    if (!fName) fName = '[DA COMPILARE]';
+    if (!lName) lName = '[DA COMPILARE]';
+
+    var emailVal = (obStruct.invoiceEmail && obStruct.invoiceEmail !== '[DA CONFERMARE]')
+      ? obStruct.invoiceEmail
+      : (lastAct.ownerEmail || (ctr0.email && ctr0.email !== '[DA COMPILARE]' ? ctr0.email : '[DA COMPILARE]'));
+    var phoneVal = (obStruct.operationalPhone && obStruct.operationalPhone !== '[DA CONFERMARE]')
+      ? obStruct.operationalPhone
+      : (lastAct.ownerPhone || (ctr0.phone && ctr0.phone !== '[DA COMPILARE]' ? ctr0.phone : '[DA COMPILARE]'));
+    var taxIdVal = (obStruct.vatOrTaxCode && obStruct.vatOrTaxCode !== '[DA CONFERMARE]')
+      ? obStruct.vatOrTaxCode
+      : (lastAct.ownerCf || (ctr0.taxId && ctr0.taxId !== '[DA COMPILARE]' ? ctr0.taxId : '[DA COMPILARE]'));
+    var residenceVal = (ctr0.residence && ctr0.residence !== '[DA COMPILARE]')
+      ? ctr0.residence
+      : '[DA COMPILARE]';
+    var propAddrVal = (obStruct.address && obStruct.address !== '[DA CONFERMARE]')
+      ? obStruct.address
+      : (lastAct.apartmentAddress || (ctr0.propertyAddress && ctr0.propertyAddress !== '[DA COMPILARE]' ? ctr0.propertyAddress : '[DA COMPILARE]'));
+
+    var isYearly = (lastAct.billingCycle === 'annuale' || lastAct.billingCycle === 'yearly');
+    var grossEur = isYearly ? 1188.00 : 99.00;
+    var netEur = Math.round((grossEur / 1.22) * 100) / 100;
+    var vatEur = Math.round((grossEur - netEur) * 100) / 100;
+
+    var defaultProforma = {
+      id: 'PF-MYBOX-2026-001',
+      proformaNumber: 'PF-2026-001',
+      documentLabel: 'PRO-FORMA (DOCUMENTO NON FISCALE)',
+      createdAt: getRomeNowFormatted().fullDateTime,
+      updatedAt: getRomeNowFormatted().fullDateTime,
+      confirmedAt: null,
+      status: 'DA_CONFERMARE',
+      adminQueueStatus: 'In attesa conferma cliente in My Box',
+      firstName: fName,
+      lastName: lName,
+      residence: residenceVal,
+      taxId: taxIdVal,
+      email: emailVal,
+      invoiceEmail: emailVal,
+      phone: phoneVal,
+      operationalPhone: phoneVal,
+      propertyAddress: propAddrVal,
+      billingCycle: isYearly ? 'yearly' : 'monthly',
+      billingCycleLabel: isYearly ? 'Annuale (1.188,00 €/anno IVA inclusa)' : 'Mensile (99,00 €/mese IVA inclusa)',
+      serviceDescription: 'Coordinamento della parte operativa del Property Management ITASSISTANCEDREAMTEAM.IT (14 giorni di prova gratuita · 0% commissioni sulle prenotazioni nel piano base)',
+      amountNet: netEur,
+      amountVat: vatEur,
+      amountGross: grossEur,
+      vatRate: 22,
+      revenuePlanOptIn: Boolean(lastAct.addon10Active || ctr0.revenuePlanOptIn),
+      revenuePlanDescription: 'Commissione del 10% sul netto spettante al proprietario (prima delle sue tasse personali = incasso ospite al netto di commissioni piattaforme, imposta di soggiorno e costi di pulizia), fatturata a fine mese sulle prenotazioni del mese (termini di pagamento della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario)',
+      paymentTerms: 'Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario',
+      paymentMethodLabel: 'Solo Fattura previa verifica e conferma del Pro-Forma in "My Box" · Pagamento tramite Bonifico Bancario (termini di pagamento della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario · Nessun pagamento con carta)',
+      emailCopyStatus: 'IN_ATTESA_CONFERMA_CLIENTE',
+      adminNotificationEmail: 'admin@bluearroyo.it',
+      issuer: {
+        brandName: 'ITASSISTANCEDREAMTEAM.IT',
+        companyName: 'BLUEARROYO S.R.L.',
+        legalAddress: 'Via Matteo Palmieri 20/R, 50122 Firenze (FI)',
+        vatId: '07480210488',
+        rea: 'FI-706161',
+        sdi: 'M5UXCR1',
+        adminEmail: 'admin@bluearroyo.it',
+        guestSupportEmail: 'itassistance@bluearroyo.it',
+        guestSupportPhone: '+39 349 177 5561',
+        suppliersManagerPhone: '+39 349 804 1146',
+        hrSuppliersEmail: 'risorseumane@bluearroyo.it',
+        pec: 'bluearroyosrl@pec.it',
+        shareCapital: '€ 50.000,00 i.v.',
+        iban: dynamicIban
+      }
+    };
+
+    safeSetJSON(MYBOX_PROFORMA_KEY, defaultProforma);
+    return defaultProforma;
+  }
+
+  function saveMyBoxProforma(patch) {
+    var current = getMyBoxProforma();
+    var p = patch || {};
+    var isYearly = (p.billingCycle || current.billingCycle) === 'yearly' || (p.billingCycle || current.billingCycle) === 'annuale';
+    var grossEur = isYearly ? 1188.00 : 99.00;
+    var netEur = Math.round((grossEur / 1.22) * 100) / 100;
+    var vatEur = Math.round((grossEur - netEur) * 100) / 100;
+
+    var updated = Object.assign({}, current, p, {
+      billingCycle: isYearly ? 'yearly' : 'monthly',
+      billingCycleLabel: isYearly ? 'Annuale (1.188,00 €/anno IVA inclusa)' : 'Mensile (99,00 €/mese IVA inclusa)',
+      amountNet: netEur,
+      amountVat: vatEur,
+      amountGross: grossEur,
+      updatedAt: getRomeNowFormatted().fullDateTime
+    });
+    if (p.invoiceEmail && (!p.email || p.email === '[DA COMPILARE]')) {
+      updated.email = p.invoiceEmail;
+    }
+    if (p.email && (!p.invoiceEmail || p.invoiceEmail === '[DA COMPILARE]')) {
+      updated.invoiceEmail = p.email;
+    }
+    if (p.operationalPhone && (!p.phone || p.phone === '[DA COMPILARE]')) {
+      updated.phone = p.operationalPhone;
+    }
+    if (p.phone && (!p.operationalPhone || p.operationalPhone === '[DA COMPILARE]')) {
+      updated.operationalPhone = p.phone;
+    }
+
+    safeSetJSON(MYBOX_PROFORMA_KEY, updated);
+
+    appendProformaAuditEntry({
+      proformaNumber: updated.proformaNumber,
+      actor: 'Cliente / Checkout',
+      action: 'PROFORMA_AGGIORNATO',
+      status: updated.status,
+      note: 'Dati pro-forma salvati in My Box (' + updated.firstName + ' ' + updated.lastName + ' · ' + updated.email + ')'
+    });
+
+    broadcastStateChange('mybox_proforma_saved', updated);
+    return { ok: true, proforma: updated };
+  }
+
+  function getAdminProformaQueue() {
+    var queue = safeGetJSON(ADMIN_PROFORMA_QUEUE_KEY, []);
+    return Array.isArray(queue) ? queue : [];
+  }
+
+  async function confirmMyBoxProforma(overrides) {
+    if (overrides && typeof overrides === 'object') {
+      saveMyBoxProforma(overrides);
+    }
+    var pf = getMyBoxProforma();
+    var nowRome = getRomeNowFormatted();
+    pf.status = 'PROFORMA_CONFERMATO';
+    pf.confirmedAt = nowRome.fullDateTime;
+    pf.confirmedAtIso = nowRome.iso;
+    pf.adminQueueStatus = 'Da fatturare';
+    pf.updatedAt = nowRome.fullDateTime;
+
+    // Tentativo non bloccante di invio copia email al cliente + notifica a admin@bluearroyo.it (JUL-036 / JUL-043)
+    var emailDelivered = false;
+    try {
+      if (typeof fetch === 'function') {
+        var res = await fetch('/api/mybox/send-proforma-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            proformaNumber: pf.proformaNumber,
+            recipientEmail: pf.email,
+            adminNotificationEmail: 'admin@bluearroyo.it',
+            clientName: (pf.firstName + ' ' + pf.lastName).trim(),
+            amountGrossEur: pf.amountGross,
+            confirmedAt: pf.confirmedAt
+          })
+        });
+        if (res && res.ok) emailDelivered = true;
+      }
+    } catch (eEmail) {
+      emailDelivered = false;
+    }
+    pf.adminNotificationEmail = 'admin@bluearroyo.it';
+    pf.emailCopyStatus = emailDelivered
+      ? 'COPIA_INVIATA_EMAIL_CLIENTE_E_ADMIN (admin@bluearroyo.it)'
+      : 'COPIA_PROFORMA_PRONTA_PER_INVIO_EMAIL (' + pf.email + ' · Admin: admin@bluearroyo.it)';
+
+    safeSetJSON(MYBOX_PROFORMA_KEY, pf);
+
+    // Inserisce o aggiorna nella coda manuale dell'Admin (ita_admin_proforma_queue_v1)
+    var queue = getAdminProformaQueue();
+    var queueItem = {
+      id: pf.id || ('PFQ-' + Date.now()),
+      proformaNumber: pf.proformaNumber,
+      firstName: pf.firstName,
+      lastName: pf.lastName,
+      clientFullName: ((pf.firstName || '') + ' ' + (pf.lastName || '')).trim(),
+      residence: pf.residence,
+      taxId: pf.taxId,
+      email: pf.email,
+      phone: pf.phone,
+      propertyAddress: pf.propertyAddress,
+      billingCycle: pf.billingCycle,
+      billingCycleLabel: pf.billingCycleLabel,
+      amountNet: pf.amountNet,
+      amountVat: pf.amountVat,
+      amountGross: pf.amountGross,
+      revenuePlanOptIn: pf.revenuePlanOptIn,
+      proformaConfirmed: true,
+      confirmedAt: pf.confirmedAt,
+      status: 'Da fatturare',
+      emailCopyStatus: pf.emailCopyStatus,
+      updatedAt: nowRome.fullDateTime
+    };
+
+    var existingIdx = queue.findIndex(function (q) {
+      return q && (q.proformaNumber === pf.proformaNumber || q.id === pf.id);
+    });
+    if (existingIdx !== -1) {
+      queue[existingIdx] = Object.assign({}, queue[existingIdx], queueItem);
+    } else {
+      queue.unshift(queueItem);
+    }
+    safeSetJSON(ADMIN_PROFORMA_QUEUE_KEY, queue);
+
+    var auditEntry = appendProformaAuditEntry({
+      proformaNumber: pf.proformaNumber,
+      actor: ((pf.firstName || '') + ' ' + (pf.lastName || '')).trim() || 'Cliente My Box',
+      action: 'PROFORMA_CONFERMATO_DAL_CLIENTE',
+      status: 'Da fatturare',
+      note: 'Cliente ha controllato e confermato il Pro-Forma in My Box — In attesa di emissione manuale fattura da Admin. Stato copia email: ' + pf.emailCopyStatus
+    });
+
+    broadcastStateChange('mybox_proforma_confirmed', {
+      proforma: pf,
+      queueItem: queueItem,
+      auditEntry: auditEntry
+    });
+
+    return {
+      ok: true,
+      proforma: pf,
+      queueItem: queueItem,
+      auditEntry: auditEntry
+    };
+  }
+
+  function updateAdminProformaStatus(proformaIdOrNumber, newStatus, adminNote) {
+    var targetKey = String(proformaIdOrNumber || '').trim();
+    var validStatuses = ['Da fatturare', 'Fattura emessa', 'Pagato'];
+    var normalizedStatus = validStatuses.indexOf(newStatus) !== -1 ? newStatus : 'Da fatturare';
+    var nowRome = getRomeNowFormatted();
+
+    var queue = getAdminProformaQueue();
+    var updatedItem = null;
+    queue.forEach(function (item) {
+      if (item && (item.id === targetKey || item.proformaNumber === targetKey || !targetKey)) {
+        item.status = normalizedStatus;
+        item.updatedAt = nowRome.fullDateTime;
+        if (normalizedStatus === 'Fattura emessa') item.invoiceIssuedAt = nowRome.fullDateTime;
+        if (normalizedStatus === 'Pagato') item.paidAt = nowRome.fullDateTime;
+        if (adminNote) item.adminNote = String(adminNote).trim();
+        updatedItem = item;
+      }
+    });
+    safeSetJSON(ADMIN_PROFORMA_QUEUE_KEY, queue);
+
+    var pf = getMyBoxProforma();
+    if (!targetKey || pf.id === targetKey || pf.proformaNumber === targetKey) {
+      pf.adminQueueStatus = normalizedStatus;
+      if (normalizedStatus === 'Fattura emessa') pf.status = 'FATTURA_EMESSA';
+      else if (normalizedStatus === 'Pagato') pf.status = 'PAGATO';
+      else pf.status = 'PROFORMA_CONFERMATO';
+      pf.updatedAt = nowRome.fullDateTime;
+      safeSetJSON(MYBOX_PROFORMA_KEY, pf);
+    }
+
+    var auditEntry = appendProformaAuditEntry({
+      proformaNumber: (updatedItem && updatedItem.proformaNumber) || pf.proformaNumber,
+      actor: 'Admin (Gestione Manuale Fatturazione)',
+      action: 'CAMBIO_STATO_MANUALE_ADMIN',
+      status: normalizedStatus,
+      note: adminNote || ('Stato aggiornato manualmente da Admin a "' + normalizedStatus + '"')
+    });
+
+    broadcastStateChange('admin_proforma_status_updated', {
+      proformaNumber: (updatedItem && updatedItem.proformaNumber) || pf.proformaNumber,
+      status: normalizedStatus,
+      auditEntry: auditEntry
+    });
+
+    return {
+      ok: true,
+      updatedItem: updatedItem,
+      proforma: pf,
+      auditEntry: auditEntry,
+      queue: queue
+    };
+  }
+
+  function downloadMyBoxProformaPdf(proformaInput) {
+    var pf = Object.assign({}, getMyBoxProforma(), proformaInput || {});
+    var proformaIban = (typeof localStorage !== 'undefined' && localStorage.getItem('ita_proforma_iban_v1')) || (pf.issuer && pf.issuer.iban) || '[DA CONFERMARE]';
+    var fileName = pf.fileName || ('ProForma_ITASSISTANCEDREAMTEAM_' + (pf.proformaNumber || 'MyBox') + '.pdf');
+    var fullName = ((pf.firstName || '[DA COMPILARE]') + ' ' + (pf.lastName || '')).trim();
+
+    if (typeof window !== 'undefined' && window.pdfMake && typeof window.pdfMake.createPdf === 'function') {
+      try {
         var docDef = {
           pageSize: 'A4',
           pageMargins: [32, 32, 32, 32],
           content: [
             {
-              text: 'CONTRATTO DI COLLABORAZIONE, ACCESSO ALL\'IMMOBILE E LICENZA D\'USO COMMERCIALE DI CONTENUTI AUDIOVISIVI/FOTOGRAFICI (JUL-011 / JUL-012)',
-              fontSize: 12.5,
+              text: 'PRO-FORMA (DOCUMENTO NON FISCALE) · AREA "MY BOX" CLIENTE ITASSISTANCEDREAMTEAM.IT',
+              fontSize: 13,
               bold: true,
               color: '#1E1035',
-              margin: [0, 0, 0, 3]
+              margin: [0, 0, 0, 4]
             },
             {
-              text: 'Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]',
+              text: 'BLUEARROYO S.R.L. – Sede legale: Via Matteo Palmieri 20/R, 50122 Firenze (FI) · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v.',
               fontSize: 8.5,
               color: '#475569',
-              margin: [0, 0, 0, 8]
-            },
-            {
-              text: 'NOTA LEGALE PRELIMINARE: Contratto atipico misto ex art. 1322 c.c. di Location Release / Property Release (esclusa ogni locazione L. 431/1998, L. 392/1978 o turistica e con divieto assoluto di pernottamento), Contratto d\'opera ex art. 2222 c.c. vs Appalto di servizi ex art. 1655 c.c., cessione/licenza di diritti d\'uso e diritti connessi ex L. 633/1941 (artt. 87–98 e 107 ss.), tutela immagine ex art. 10 c.c., Reg. UE 2016/679 (GDPR) e D.Lgs. 196/2003.',
-              fontSize: 8.2,
-              color: '#78350F',
               margin: [0, 0, 0, 10]
             },
             {
-              text: 'BLOCCO A — DATI CLIENTE (PROPRIETARIO O GESTORE AUTORIZZATO AIRBNB) & IMMOBILE',
-              fontSize: 10,
+              text: 'Numero Pro-Forma: ' + pf.proformaNumber + ' · Data: ' + (pf.createdAt || getRomeNowFormatted().fullDateTime) + ' · Stato: ' + (pf.adminQueueStatus || pf.status),
+              fontSize: 9.2,
               bold: true,
               color: '#5B21B6',
+              margin: [0, 0, 0, 10]
+            },
+            {
+              text: '1. DATI INTESTATARIO PRO-FORMA (CLIENTE)',
+              fontSize: 10,
+              bold: true,
+              color: '#1E1035',
               margin: [0, 2, 0, 4]
             },
             {
               table: {
-                widths: ['34%', '66%'],
+                widths: ['36%', '64%'],
                 body: [
-                  [{ text: 'Nome / Ragione Sociale Cliente', bold: true }, clientName + ' (Qualifica: ' + clientSignerRole + ')'],
-                  [{ text: 'C.F. / P.IVA & Sede', bold: true }, clientVatOrCf + ' · ' + clientAddress],
-                  [{ text: 'Email / PEC & Telefono', bold: true }, clientEmailOrPec + ' · Tel: ' + clientPhone],
-                  [{ text: 'Indirizzo Immobile & Nome Alloggio', bold: true }, propertyAddress + ' · Alloggio: ' + propertyCommercialName],
-                  [{ text: 'Codice CIN / CIR', bold: true }, propertyCinCir],
-                  [{ text: 'Durata Accesso & Giorni/Orari Sessioni', bold: true }, accessDuration + ' · ' + shootingSessions],
-                  [{ text: 'Durata Licenza Utilizzo Contenuti', bold: true }, licenseDuration]
+                  [{ text: 'Nome', bold: true }, pf.firstName || '[DA COMPILARE]'],
+                  [{ text: 'Cognome', bold: true }, pf.lastName || '[DA COMPILARE]'],
+                  [{ text: 'Residenza', bold: true }, pf.residence || '[DA COMPILARE]'],
+                  [{ text: 'Codice Fiscale o P.IVA', bold: true }, pf.taxId || '[DA COMPILARE]'],
+                  [{ text: 'Email per ricevere le fatture', bold: true }, pf.email || '[DA COMPILARE]'],
+                  [{ text: 'Telefono per coordinamenti operativi', bold: true }, pf.phone || '[DA COMPILARE]'],
+                  [{ text: 'Indirizzo immobile', bold: true }, pf.propertyAddress || '[DA COMPILARE]']
                 ]
               },
-              fontSize: 8.5,
-              margin: [0, 0, 0, 8]
+              fontSize: 8.8,
+              margin: [0, 0, 0, 10]
             },
             {
-              text: 'BLOCCO B — DATI PROFESSIONISTA (CONTENT CREATOR / FOTOGRAFO / VIDEOMAKER / MARKETING)',
-              fontSize: 10,
-              bold: true,
-              color: '#5B21B6',
-              margin: [0, 2, 0, 4]
-            },
-            {
-              table: {
-                widths: ['34%', '66%'],
-                body: [
-                  [{ text: 'Nome / Ragione Sociale Professionista', bold: true }, creatorName],
-                  [{ text: 'C.F. / P.IVA & Sede', bold: true }, creatorTaxCodeOrVat + ' · ' + creatorAddress],
-                  [{ text: 'Email / PEC & Telefono', bold: true }, creatorPecOrEmail + ' · Tel: ' + creatorPhone],
-                  [{ text: 'Qualifica ex art. 2222 / 1655 c.c.', bold: true }, creatorLegalQualification],
-                  [{ text: 'Troupe / Modelli Autorizzati', bold: true }, creatorCrewModels]
-                ]
-              },
-              fontSize: 8.5,
-              margin: [0, 0, 0, 8]
-            },
-            {
-              text: 'BLOCCO C — TARIFFARIO & CONDIZIONI ECONOMICHE',
+              text: '2. RIEPILOGO ECONOMICO PRO-FORMA (SOLO FATTURA · NESSUN PAGAMENTO CON CARTA)',
               fontSize: 10,
               bold: true,
               color: '#065F46',
@@ -6532,143 +7569,81 @@
             },
             {
               table: {
-                widths: ['62%', '38%'],
+                widths: ['64%', '36%'],
                 body: [
-                  [{ text: 'Modalità Collaborazione', bold: true }, collaborationMode],
-                  [{ text: 'Tariffe Ufficiali Itassistance Riferimento', bold: true }, itaSelectedTariffs],
-                  ['1. Shooting Fotografico Professionale Interni/Esterni', formatItEur(feePhotoShooting)],
-                  ['2. Produzione Video / Reel / Contenuti Paid Ads', formatItEur(feeVideoReelAds)],
-                  ['3. Fee Accesso Location / Gestione Operativa Set', formatItEur(feeAccessManagement)],
-                  ['4. ' + feeCustomLabel, formatItEur(feeCustomAmount)],
-                  [{ text: 'TOTALE TARIFFARIO CONCORDATO (€)', bold: true, fillColor: '#ECFDF5' }, { text: totalTariffFormatted, bold: true, color: '#065F46', fillColor: '#ECFDF5' }],
-                  [{ text: 'Regime Fiscale & Fatturazione SDI', bold: true }, taxRegime + ' · SDI M5UXCR1'],
-                  [{ text: 'IBAN & Termini di Pagamento', bold: true }, 'IBAN: ' + ibanPayment + ' · ' + paymentTerms]
+                  [{ text: 'Descrizione Servizio', bold: true }, pf.serviceDescription],
+                  [{ text: 'Periodicità scelta', bold: true }, pf.billingCycleLabel],
+                  ['Imponibile netto', formatItEur(pf.amountNet)],
+                  ['IVA (' + pf.vatRate + '%)', formatItEur(pf.amountVat)],
+                  [
+                    { text: 'TOTALE PRO-FORMA IVA INCLUSA', bold: true, fillColor: '#ECFDF5' },
+                    { text: formatItEur(pf.amountGross), bold: true, color: '#065F46', fillColor: '#ECFDF5' }
+                  ],
+                  [
+                    { text: 'Revenue Plan opzionale (Commissione 10%)', bold: true },
+                    pf.revenuePlanOptIn
+                      ? 'ATTIVO: 10% sul netto spettante al proprietario (prima delle sue tasse personali = incasso ospite meno commissioni piattaforme, imposta di soggiorno e costi di pulizia), fatturato a fine mese sulle prenotazioni del mese (termini di pagamento della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario)'
+                      : 'NON ATTIVO (0% commissioni sulle prenotazioni nel piano base)'
+                  ]
                 ]
               },
-              fontSize: 8.5,
-              margin: [0, 0, 0, 8]
+              fontSize: 8.8,
+              margin: [0, 0, 0, 10]
             },
             {
-              text: 'CLAUSOLE CONTRATTUALI (ARTT. 1–14) & ALLEGATI TECNICI',
+              text: '3. COORDINATE PER IL BONIFICO BANCARIO E PROCEDURA DI EMISSIONE FATTURA',
               fontSize: 10,
               bold: true,
               color: '#1E1035',
               margin: [0, 2, 0, 4]
             },
             {
-              ul: [
-                'Art. 1 (Premesse e Qualificazione): rapporto autonomo ex art. 2222 / 1655 c.c. e art. 1322 c.c.; Allegati A e B parte integrante.',
-                'Art. 2 (Oggetto e Immobile): accesso temporaneo e precario a ' + propertyAddress + ' solo per produzione foto/video promozionali.',
-                'Art. 3 (Orari e Divieto Pernottamento): accesso solo in ' + shootingSessions + '; divieto assoluto di pernottamento e sub-concessione.',
-                'Art. 4 (Regole d\'Uso Spazi): accesso solo a soggetti in Allegato B; protezioni su stativi/luci; rispetto impianti e condominio.',
-                'Art. 5 (Responsabilità e Cauzione): custodia e manleva integrale ex artt. 2043, 2049, 2051 c.c.; Deposito cauzionale: ' + securityDeposit + '.',
-                'Art. 6 (Licenza Commerciale L. 633/1941): licenza irrevocabile, mondiale e sub-licenziabile a Blue Arroyo S.r.l. su web, OTA, social e Paid Ads.',
-                'Art. 7 (Property Release e Sicurezza): divieto ripresa codici keybox/allarmi/dati sensibili; divieto contesti illeciti o lesivi del decoro.',
-                'Art. 8 (Liberatorie Terzi/Modelli e GDPR): garanzia e manleva del Professionista ex art. 10 c.c., L. 633/1941 e Reg. UE 2016/679.',
-                'Art. 9 (Consegna File e Tag): consegna file HD senza watermark e menzione account ufficiali concordati.',
-                'Art. 10 (Corrispettivo e Tracciabilità): Totale ' + totalTariffFormatted + ' (' + collaborationMode + ') · Fattura elettronica SDI M5UXCR1.',
-                'Art. 11 (Riservatezza NDA): obbligo di segretezza su ubicazione immobile, codici di accesso, proprietari e know-how aziendale.',
-                'Art. 12 (Clausola Risolutiva art. 1456 c.c. e Penale art. 1382 c.c.): penale ' + penaltyPerDayOrBreach + ' e rimozione entro 12 ore.',
-                'Art. 13 (Trattamento Dati GDPR) & Art. 14 (Foro Esclusivo): trattamento conforme al Reg. UE 2016/679; Foro esclusivo di Firenze.'
-              ],
-              fontSize: 8,
+              text: '• Modalità di pagamento: Solo fattura previa verifica e conferma del presente Pro-Forma nell\'area riservata "My Box" del Cliente (termini di pagamento della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario).\n• Una volta confermato il Pro-Forma dal Cliente, copia del Pro-Forma viene inviata all\'indirizzo email indicato (' + (pf.email || '[DA COMPILARE]') + ') e l\'amministrazione di BLUEARROYO S.R.L. procede manualmente all\'emissione della fattura fiscale.\n• Coordinate per il bonifico bancario: Intestatario BLUEARROYO S.R.L. · IBAN: ' + proformaIban + ' · Causale: ' + pf.proformaNumber + ' - ' + fullName + '.',
+              fontSize: 8.6,
               margin: [0, 0, 0, 8]
-            },
-            {
-              text: 'LUOGO E DATA: ' + placeAndDate + '\nFIRMA CONCEDENTE / CLIENTE: ___________________________     FIRMA PROFESSIONISTA / CREATOR: ___________________________',
-              fontSize: 8.5,
-              bold: true,
-              margin: [0, 4, 0, 8]
-            },
-            {
-              text: 'APPROVAZIONE SPECIFICA CLAUSOLE VESSATORIE EX ARTT. 1341 E 1342 C.C. (Artt. 3, 5, 6, 7, 8, 12, 14):\nFIRMA CONCEDENTE / CLIENTE: ___________________________     FIRMA PROFESSIONISTA / CREATOR: ___________________________',
-              fontSize: 8.2,
-              bold: true,
-              color: '#4C1D95',
-              margin: [0, 0, 0, 8]
-            },
-            {
-              text: 'ALLEGATO A (Scheda Tecnica Immobile & Check In/Out): ' + propertyAddress + ' (' + propertyCommercialName + ' · CIN/CIR: ' + propertyCinCir + ') · Sessioni: ' + shootingSessions + '.\nALLEGATO B (Elenco Troupe / Modelli Autorizzati con Documento e Liberatoria GDPR): ' + creatorCrewModels + '.',
-              fontSize: 8,
-              color: '#334155'
             }
           ]
         };
         window.pdfMake.createPdf(docDef).download(fileName);
-        return {
-          ok: true,
-          engine: 'pdfMake',
-          fileName: fileName,
-          totalTariffEur: explicitTotal,
-          totalTariffFormatted: totalTariffFormatted
-        };
-      } catch (ePdfMake) {}
+        return { ok: true, engine: 'pdfMake', fileName: fileName, proforma: pf };
+      } catch (ePdf) {}
     }
 
-    // 2. Fallback binario nativo %PDF-1.4 garantito (multi-pagina automatico)
     var pdfLines = [
-      'CONTRATTO DI COLLABORAZIONE, ACCESSO ALL IMMOBILE E LICENZA D USO COMMERCIALE (JUL-011 / JUL-012)',
-      'Blue Arroyo S.r.l. - Sede legale: Via Matteo Palmieri 20R, Firenze',
-      'P.IVA / C.F. 07480210488 - REA FI-706161 - SDI M5UXCR1 - PEC: [DA CONFERMARE] - Cap.Soc.: [DA CONFERMARE]',
+      'PRO-FORMA (DOCUMENTO NON FISCALE) - AREA "MY BOX" CLIENTE ITASSISTANCEDREAMTEAM.IT',
+      'BLUEARROYO S.R.L. - Sede legale: Via Matteo Palmieri 20/R, 50122 Firenze (FI)',
+      'P.IVA / C.F. 07480210488 - REA FI-706161 - SDI M5UXCR1 - PEC: bluearroyosrl@pec.it - Cap.Soc.: EUR 50.000,00 i.v.',
       '------------------------------------------------------------------------------------------------',
-      'NOTA LEGALE PRELIMINARE (INQUADRAMENTO GIURIDICO):',
-      'Contratto atipico misto ex art. 1322 c.c. (esclusa ogni locazione L. 431/98, L. 392/78 o turistica;',
-      'divieto assoluto di pernottamento): Location/Property Release + Contratto d opera ex art. 2222 c.c.',
-      'vs Appalto ex art. 1655 c.c. + Licenza diritti connessi L. 633/1941 + GDPR Reg. UE 2016/679.',
+      'Numero Pro-Forma: ' + pf.proformaNumber + ' | Data: ' + (pf.createdAt || getRomeNowFormatted().fullDateTime),
+      'Stato Pro-Forma:  ' + (pf.adminQueueStatus || pf.status) + (pf.confirmedAt ? ' (Confermato il ' + pf.confirmedAt + ')' : ''),
       '------------------------------------------------------------------------------------------------',
-      'BLOCCO A - DATI CLIENTE (PROPRIETARIO O GESTORE AUTORIZZATO AIRBNB) & IMMOBILE:',
-      '  * Nome / Ragione Sociale: ' + clientName,
-      '  * C.F. / P.IVA:           ' + clientVatOrCf,
-      '  * Sede / Residenza:       ' + clientAddress,
-      '  * Email / PEC & Telefono: ' + clientEmailOrPec + ' | Tel: ' + clientPhone,
-      '  * Qualifica Firmatario:   ' + clientSignerRole,
-      '  * Indirizzo Immobile:     ' + propertyAddress,
-      '  * Nome Alloggio & CIN:    ' + propertyCommercialName + ' | CIN/CIR: ' + propertyCinCir,
-      '  * Durata Accesso & Orari: ' + accessDuration + ' | ' + shootingSessions,
-      '  * Durata Licenza Uso:     ' + licenseDuration,
+      '1. DATI INTESTATARIO PRO-FORMA (CLIENTE):',
+      '  * Nome:                                  ' + (pf.firstName || '[DA COMPILARE]'),
+      '  * Cognome:                               ' + (pf.lastName || '[DA COMPILARE]'),
+      '  * Residenza:                             ' + (pf.residence || '[DA COMPILARE]'),
+      '  * Codice Fiscale o P.IVA:                ' + (pf.taxId || '[DA COMPILARE]'),
+      '  * Email per ricevere le fatture:         ' + (pf.email || '[DA COMPILARE]'),
+      '  * Telefono per coordinamenti operativi:  ' + (pf.phone || '[DA COMPILARE]'),
+      '  * Indirizzo immobile:                    ' + (pf.propertyAddress || '[DA COMPILARE]'),
       '------------------------------------------------------------------------------------------------',
-      'BLOCCO B - DATI PROFESSIONISTA (CONTENT CREATOR / FOTOGRAFO / VIDEOMAKER / MARKETING):',
-      '  * Nome / Ragione Sociale: ' + creatorName,
-      '  * C.F. / P.IVA:           ' + creatorTaxCodeOrVat,
-      '  * Sede / Domicilio:       ' + creatorAddress,
-      '  * Email / PEC & Telefono: ' + creatorPecOrEmail + ' | Tel: ' + creatorPhone,
-      '  * Qualifica Giuridica:    ' + creatorLegalQualification,
-      '  * Troupe / Modelli:       ' + creatorCrewModels,
+      '2. RIEPILOGO ECONOMICO PRO-FORMA (SOLO FATTURA - NESSUN PAGAMENTO CON CARTA):',
+      '  * Servizio:         ' + pf.serviceDescription,
+      '  * Periodicita:      ' + pf.billingCycleLabel,
+      '  * Imponibile netto: ' + formatItEur(pf.amountNet),
+      '  * IVA (' + pf.vatRate + '%):        ' + formatItEur(pf.amountVat),
+      '  * TOTALE PRO-FORMA: ' + formatItEur(pf.amountGross) + ' (IVA inclusa)',
+      '  * Revenue Plan 10%: ' + (pf.revenuePlanOptIn
+        ? 'ATTIVO (10% su netto proprietario = incasso ospite meno commissioni piattaforme, tassa soggiorno e pulizie; fattura fine mese; termini di pagamento della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario)'
+        : 'NON ATTIVO (0% commissioni sulle prenotazioni nel piano base)'),
       '------------------------------------------------------------------------------------------------',
-      'BLOCCO C - TARIFFARIO & CONDIZIONI ECONOMICHE:',
-      '  * Modalita Collaborazione:        ' + collaborationMode,
-      '  * Tariffe Ufficiali Itassistance: ' + itaSelectedTariffs,
-      '  * 1) Shooting Fotografico:        ' + formatItEur(feePhotoShooting),
-      '  * 2) Video / Reel / Paid Ads:     ' + formatItEur(feeVideoReelAds),
-      '  * 3) Fee Accesso / Gestione Set:  ' + formatItEur(feeAccessManagement),
-      '  * 4) ' + feeCustomLabel + ': ' + formatItEur(feeCustomAmount),
-      '  * TOTALE TARIFFARIO (EUR):        ' + totalTariffFormatted,
-      '  * Regime Fiscale:                 ' + taxRegime,
-      '  * IBAN & Termini Pagamento:       IBAN ' + ibanPayment + ' | ' + paymentTerms,
-      '------------------------------------------------------------------------------------------------',
-      'ARTICOLI CONTRATTUALI (ARTT. 1-14):',
-      '  Art. 1 - Premesse, Allegati A e B e rapporto autonomo senza vincolo di subordinazione.',
-      '  Art. 2 - Oggetto: accesso temporaneo all immobile per riprese foto/video promozionali.',
-      '  Art. 3 - Fasce orarie concordate (' + shootingSessions + ') e DIVIETO ASSOLUTO DI PERNOTTAMENTO.',
-      '  Art. 4 - Regole utilizzo spazi, protezioni attrezzature, rispetto impianti e condominio.',
-      '  Art. 5 - Custodia, responsabilita civile ex artt. 2043, 2049, 2051 c.c. e Cauzione (' + securityDeposit + ').',
-      '  Art. 6 - Licenza d uso commerciale irrevocabile, mondiale e sub-licenziabile (L. 633/1941).',
-      '  Art. 7 - Property Release, divieto ripresa codici/keybox/allarmi e tutela del decoro.',
-      '  Art. 8 - Liberatoria immagine di terzi/modelli ex art. 10 c.c. e conformita GDPR 2016/679.',
-      '  Art. 9 - Consegna file ad alta risoluzione senza watermark e tag/crediti social.',
-      '  Art. 10 - Accordo economico (' + totalTariffFormatted + '), fatturazione SDI M5UXCR1 e tracciabilita.',
-      '  Art. 11 - Riservatezza e Non Divulgazione (NDA) su immobile, codici e proprietari.',
-      '  Art. 12 - Clausola risolutiva espressa (art. 1456 c.c.), penale (' + penaltyPerDayOrBreach + ') e rimozione 12h.',
-      '  Art. 13 - Trattamento Dati Personali (Reg. UE 2016/679 GDPR e D.Lgs. 196/2003).',
-      '  Art. 14 - Legge applicabile italiana e Foro esclusivo di Firenze.',
-      '------------------------------------------------------------------------------------------------',
-      'Luogo e Data: ' + placeAndDate,
-      'Firma Concedente / Cliente: _______________________  Firma Professionista: _______________________',
-      'DOPPIA SOTTOSCRIZIONE SPECIFICA CLAUSOLE VESSATORIE EX ARTT. 1341 E 1342 C.C. (Artt. 3,5,6,7,8,12,14):',
-      'Firma Concedente / Cliente: _______________________  Firma Professionista: _______________________',
-      '------------------------------------------------------------------------------------------------',
-      'ALLEGATO A - Scheda Tecnica Immobile, Accessi e Attrezzature: ' + propertyAddress + ' (' + propertyCommercialName + ')',
-      'ALLEGATO B - Elenco Collaboratori / Modelli / Troupe Autorizzati: ' + creatorCrewModels
+      '3. PROCEDURA DI CONFERMA MY BOX E COORDINATE BONIFICO BANCARIO:',
+      '  * Il presente Pro-Forma non costituisce fattura fiscale.',
+      '  * Termini di pagamento della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario.',
+      '  * Una volta controllato e confermato dal Cliente nell area riservata "My Box", viene inviata',
+      '    copia sulla mail del Cliente e l amministrazione di BLUEARROYO S.R.L. emette manualmente',
+      '    la fattura fiscale.',
+      '  * Coordinate per il bonifico: BLUEARROYO S.R.L. - IBAN: ' + proformaIban,
+      '  * Causale bonifico: ' + pf.proformaNumber + ' - ' + fullName
     ];
 
     var rawPdf = buildMinimalPdfBinary(pdfLines);
@@ -6694,9 +7669,1322 @@
       ok: true,
       engine: 'native-pdf-1.4',
       fileName: fileName,
-      totalTariffEur: explicitTotal,
-      totalTariffFormatted: totalTariffFormatted,
+      proforma: pf,
       rawPdfLength: rawPdf.length
     };
+  }
+
+  // ============================================================================
+  // O. CONTATTI UFFICIALI CONFERMATI (JUL-043) + METODI CONDIVISI PER I 2 PANNELLI
+  //    "CLIENTI" (app.html) vs "ITASSISTANCE TEAM" (admin.html) (JUL-044)
+  //    + LEAD SUBMIT CRM + EMAIL AUTOMATICA + CHIAMATA VOCALE YARVIS A JULIAN (JUL-045)
+  // ============================================================================
+  var OFFICIAL_ITASSISTANCE_CONTACTS = {
+    brandName: 'ITASSISTANCEDREAMTEAM.IT',
+    guestSupportEmail: 'itassistance@bluearroyo.it',
+    guestSupportPhone: '+39 349 177 5561',
+    guestSupportPhoneHref: 'tel:+393491775561',
+    adminEmail: 'admin@bluearroyo.it',
+    suppliersManagerPhone: '+39 349 804 1146',
+    suppliersManagerPhoneHref: 'tel:+393498041146',
+    hrSuppliersEmail: 'risorseumane@bluearroyo.it',
+    legalAddress: 'Via Matteo Palmieri 20/R, 50122 Firenze (FI)',
+    companyName: 'BLUEARROYO S.R.L.',
+    vatId: '07480210488',
+    rea: 'FI-706161',
+    sdi: 'M5UXCR1',
+    pec: 'bluearroyosrl@pec.it',
+    shareCapital: '€ 50.000,00 i.v.',
+    paymentTerms: 'Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario',
+    iban: '[DA CONFERMARE]'
+  };
+
+  var TEAM_CLIENTS_KEY = 'ita_team_clients_v1';
+  var TEAM_CRM_LEADS_KEY = 'ita_team_crm_leads_v1';
+  var ONBOARDING_STRUCTURE_SINGLE_KEY = 'ita_onboarding_structure';
+  var JUL010_TICKETS_SHARED_KEY = 'ita_jul010_maintenance_tickets_v1';
+
+  // 1. Strutture Associate (getTeamStructures / saveTeamStructure / deleteTeamStructure)
+  function getTeamStructures() {
+    var calUnits = getStructureCalendars();
+    var onb = getOnboardingState();
+    var structMeta = safeGetJSON(ONBOARDING_STRUCTURE_SINGLE_KEY, null) || (onb && onb.structure) || {};
+    var clients = getTeamClients();
+    var primaryClient = clients.length > 0 ? clients[0] : null;
+
+    if (calUnits.length === 0) {
+      // Se è stata salvata una struttura in ita_onboarding_structure con nome reale (non [DA CONFERMARE]), la espone
+      var singleName = String(structMeta.commercialName || '').trim();
+      if (singleName && singleName !== '[DA CONFERMARE]' && singleName !== '[DA COMPILARE]') {
+        return [
+          {
+            id: String(structMeta.id || 'struct_1'),
+            clientId: structMeta.clientId || (primaryClient ? primaryClient.id : 'client_1'),
+            clientName: structMeta.clientName || (primaryClient ? (primaryClient.firstName + ' ' + primaryClient.lastName).trim() : ''),
+            commercialName: singleName,
+            address: String(structMeta.address || ''),
+            city: String(structMeta.city || 'Firenze'),
+            province: String(structMeta.province || 'FI'),
+            zip: String(structMeta.zip || structMeta.postalCode || ''),
+            postalCode: String(structMeta.postalCode || structMeta.zip || ''),
+            checkinTime: String(structMeta.checkinTime || structMeta.checkInTime || '15:00'),
+            checkInTime: String(structMeta.checkInTime || structMeta.checkinTime || '15:00'),
+            checkoutTime: String(structMeta.checkoutTime || structMeta.checkOutTime || '10:00'),
+            checkOutTime: String(structMeta.checkOutTime || structMeta.checkoutTime || '10:00'),
+            calendarUrl: String(structMeta.calendarUrl || ''),
+            operationalPhone: String(structMeta.operationalPhone || structMeta.phone || ''),
+            invoiceEmail: String(structMeta.invoiceEmail || structMeta.email || ''),
+            updatedAt: structMeta.updatedAt || null
+          }
+        ];
+      }
+      return [];
+    }
+
+    return calUnits.map(function (u, idx) {
+      var rawStored = safeGetJSON(STRUCTURES_CALENDARS_KEY, []);
+      var fullItem = (Array.isArray(rawStored) && rawStored[idx]) ? rawStored[idx] : u;
+      return {
+        id: String(fullItem.id || u.id || ('struct_' + (idx + 1))),
+        clientId: fullItem.clientId || structMeta.clientId || (primaryClient ? primaryClient.id : 'client_1'),
+        clientName: fullItem.clientName || structMeta.clientName || (primaryClient ? (primaryClient.firstName + ' ' + primaryClient.lastName).trim() : ''),
+        commercialName: String(fullItem.commercialName || u.commercialName || ''),
+        address: String(fullItem.address !== undefined ? fullItem.address : (structMeta.address && structMeta.address !== '[DA CONFERMARE]' ? structMeta.address : '')),
+        city: String(fullItem.city || structMeta.city || 'Firenze'),
+        province: String(fullItem.province || structMeta.province || 'FI'),
+        zip: String(fullItem.zip || fullItem.postalCode || (structMeta.postalCode !== '[DA CONFERMARE]' ? structMeta.postalCode : '') || ''),
+        postalCode: String(fullItem.postalCode || fullItem.zip || (structMeta.postalCode !== '[DA CONFERMARE]' ? structMeta.postalCode : '') || ''),
+        checkinTime: String(fullItem.checkinTime || fullItem.checkInTime || structMeta.checkInTime || '15:00'),
+        checkInTime: String(fullItem.checkInTime || fullItem.checkinTime || structMeta.checkInTime || '15:00'),
+        checkoutTime: String(fullItem.checkoutTime || fullItem.checkOutTime || structMeta.checkOutTime || '10:00'),
+        checkOutTime: String(fullItem.checkOutTime || fullItem.checkoutTime || structMeta.checkOutTime || '10:00'),
+        calendarUrl: String(fullItem.calendarUrl || u.calendarUrl || ''),
+        operationalPhone: String(fullItem.operationalPhone || (structMeta.operationalPhone !== '[DA CONFERMARE]' ? structMeta.operationalPhone : '') || ''),
+        invoiceEmail: String(fullItem.invoiceEmail || (structMeta.invoiceEmail !== '[DA CONFERMARE]' ? structMeta.invoiceEmail : '') || ''),
+        updatedAt: fullItem.updatedAt || u.updatedAt || null
+      };
+    });
+  }
+
+  function saveTeamStructure(structureInput) {
+    var s = structureInput || {};
+    var commercialName = String(s.commercialName !== undefined ? s.commercialName : (s.name || '')).trim();
+    if (!commercialName) {
+      return { ok: false, error: 'Inserisci il Nome commerciale della struttura.' };
+    }
+    var rawCalUrl = String(s.calendarUrl || '').trim();
+    var normalizedCalUrl = '';
+    if (rawCalUrl) {
+      var calCheck = validateCalendarUrl(rawCalUrl);
+      if (!calCheck.valid) {
+        return { ok: false, error: calCheck.error };
+      }
+      normalizedCalUrl = calCheck.normalizedUrl;
+    }
+
+    var nowIso = new Date().toISOString();
+    var rawList = safeGetJSON(STRUCTURES_CALENDARS_KEY, []);
+    if (!Array.isArray(rawList)) rawList = [];
+
+    var targetId = String(s.id || '').trim();
+    var existingIdx = rawList.findIndex(function (item) {
+      return item && (String(item.id || '') === targetId || (commercialName && String(item.commercialName || '').toLowerCase() === commercialName.toLowerCase()));
+    });
+
+    var prev = existingIdx !== -1 ? rawList[existingIdx] : {};
+    var record = {
+      id: targetId || prev.id || ('struct_' + Date.now()),
+      clientId: s.clientId || prev.clientId || 'client_1',
+      clientName: s.clientName || prev.clientName || '',
+      commercialName: commercialName,
+      address: String(s.address !== undefined ? s.address : (prev.address || '')).trim(),
+      city: String(s.city !== undefined ? s.city : (prev.city || 'Firenze')).trim(),
+      province: String(s.province !== undefined ? s.province : (prev.province || 'FI')).trim(),
+      zip: String(s.zip !== undefined ? s.zip : (s.postalCode !== undefined ? s.postalCode : (prev.zip || prev.postalCode || ''))).trim(),
+      postalCode: String(s.postalCode !== undefined ? s.postalCode : (s.zip !== undefined ? s.zip : (prev.postalCode || prev.zip || ''))).trim(),
+      checkinTime: String(s.checkinTime || s.checkInTime || prev.checkinTime || prev.checkInTime || '15:00').trim(),
+      checkInTime: String(s.checkInTime || s.checkinTime || prev.checkInTime || prev.checkinTime || '15:00').trim(),
+      checkoutTime: String(s.checkoutTime || s.checkOutTime || prev.checkoutTime || prev.checkOutTime || '10:00').trim(),
+      checkOutTime: String(s.checkOutTime || s.checkoutTime || prev.checkOutTime || prev.checkoutTime || '10:00').trim(),
+      calendarUrl: normalizedCalUrl || prev.calendarUrl || '',
+      operationalPhone: String(s.operationalPhone !== undefined ? s.operationalPhone : (s.phone !== undefined ? s.phone : (prev.operationalPhone || ''))).trim(),
+      invoiceEmail: String(s.invoiceEmail !== undefined ? s.invoiceEmail : (s.email !== undefined ? s.email : (prev.invoiceEmail || ''))).trim(),
+      updatedAt: nowIso
+    };
+
+    if (existingIdx !== -1) {
+      rawList[existingIdx] = record;
+    } else {
+      rawList.push(record);
+    }
+    safeSetJSON(STRUCTURES_CALENDARS_KEY, rawList);
+
+    // Sincronizza subito ita_onboarding_structure e itassistance_onboarding_wizard_v1 così app.html vede la modifica in tempo reale
+    var onb = getOnboardingState();
+    if (!onb.structure) onb.structure = {};
+    onb.structure.commercialName = record.commercialName;
+    if (record.address) onb.structure.address = record.address;
+    if (record.city) onb.structure.city = record.city;
+    if (record.province) onb.structure.province = record.province;
+    if (record.postalCode) onb.structure.postalCode = record.postalCode;
+    onb.structure.checkInTime = record.checkInTime;
+    onb.structure.checkOutTime = record.checkOutTime;
+    if (record.operationalPhone) {
+      onb.structure.operationalPhone = record.operationalPhone;
+      onb.structure.phone = record.operationalPhone;
+    }
+    if (record.invoiceEmail) {
+      onb.structure.invoiceEmail = record.invoiceEmail;
+      onb.structure.email = record.invoiceEmail;
+    }
+    onb.units = rawList.map(function (u) {
+      return {
+        id: u.id,
+        commercialName: u.commercialName,
+        name: u.commercialName,
+        calendarUrl: u.calendarUrl || ''
+      };
+    });
+    safeSetJSON(ONBOARDING_KEY, onb);
+    safeSetJSON(ONBOARDING_STRUCTURE_SINGLE_KEY, Object.assign({}, onb.structure, record));
+    propagateOnboardingToCoreState(onb);
+
+    broadcastStateChange('team_structure_saved', {
+      structure: record,
+      count: rawList.length
+    });
+
+    return {
+      ok: true,
+      structure: record,
+      structures: getTeamStructures()
+    };
+  }
+
+  function deleteTeamStructure(structureId) {
+    var targetId = String(structureId || '').trim();
+    var rawList = safeGetJSON(STRUCTURES_CALENDARS_KEY, []);
+    if (!Array.isArray(rawList)) rawList = [];
+    var filtered = rawList.filter(function (item) {
+      return item && String(item.id || '') !== targetId;
+    });
+    safeSetJSON(STRUCTURES_CALENDARS_KEY, filtered);
+    var onb = getOnboardingState();
+    onb.units = filtered.map(function (u) {
+      return {
+        id: u.id,
+        commercialName: u.commercialName,
+        name: u.commercialName,
+        calendarUrl: u.calendarUrl || ''
+      };
+    });
+    safeSetJSON(ONBOARDING_KEY, onb);
+    if (filtered.length === 0) {
+      safeSetJSON(ONBOARDING_STRUCTURE_SINGLE_KEY, {});
+    }
+    broadcastStateChange('team_structure_deleted', { id: targetId, count: filtered.length });
+    return { ok: true, structures: getTeamStructures() };
+  }
+
+  // 2. Clienti (getTeamClients / saveTeamClient) sincronizzati con ita_mybox_proforma_v1
+  function getTeamClients() {
+    var stored = safeGetJSON(TEAM_CLIENTS_KEY, null);
+    var pf = getMyBoxProforma();
+    var list = Array.isArray(stored) ? stored : [];
+
+    // Se My Box ha dati reali compilati dal cliente, assicuriamoci che sia sincronizzato nell'elenco clienti
+    var hasRealPfClient = pf && pf.firstName && pf.firstName !== '[DA COMPILARE]' && pf.firstName !== '[DA CONFERMARE]';
+    if (hasRealPfClient) {
+      var pfClientId = pf.clientId || 'client_mybox_1';
+      var idx = list.findIndex(function (c) {
+        return c && (c.id === pfClientId || (pf.email && pf.email !== '[DA COMPILARE]' && c.email === pf.email));
+      });
+      var isYearly = pf.billingCycle === 'yearly' || pf.billingCycle === 'annuale';
+      var syncedClient = {
+        id: idx !== -1 ? list[idx].id : pfClientId,
+        firstName: pf.firstName,
+        lastName: pf.lastName || '',
+        fullName: ((pf.firstName || '') + ' ' + (pf.lastName || '')).trim(),
+        residence: pf.residence || '[DA COMPILARE]',
+        taxId: pf.taxId || '[DA COMPILARE]',
+        email: pf.email || '[DA COMPILARE]',
+        invoiceEmail: pf.invoiceEmail || pf.email || '[DA COMPILARE]',
+        phone: pf.phone || '[DA COMPILARE]',
+        operationalPhone: pf.operationalPhone || pf.phone || '[DA COMPILARE]',
+        propertyAddress: pf.propertyAddress || '',
+        billingCycle: isYearly ? 'yearly' : 'monthly',
+        formulaLabel: isYearly ? '1.188,00 €/anno' : '99,00 €/mese',
+        amountGross: isYearly ? 1188.00 : 99.00,
+        revenuePlanOptIn: Boolean(pf.revenuePlanOptIn),
+        contractStatus: (idx !== -1 && list[idx].contractStatus) ? list[idx].contractStatus : 'Attivo',
+        proformaStatus: pf.adminQueueStatus || pf.status || 'DA_CONFERMARE',
+        updatedAt: pf.updatedAt || getRomeNowFormatted().fullDateTime
+      };
+      if (idx !== -1) {
+        list[idx] = Object.assign({}, list[idx], syncedClient);
+      } else {
+        list.unshift(syncedClient);
+      }
+      safeSetJSON(TEAM_CLIENTS_KEY, list);
+    }
+
+    return list;
+  }
+
+  function saveTeamClient(clientInput) {
+    var c = clientInput || {};
+    var list = getTeamClients();
+    var rawFullName = String(c.fullName || c.name || '').trim();
+    var fName = String(c.firstName !== undefined ? c.firstName : '').trim();
+    var lName = String(c.lastName !== undefined ? c.lastName : '').trim();
+    if (!fName && rawFullName) {
+      var parts = rawFullName.split(/\s+/);
+      fName = parts[0] || '';
+      lName = parts.length > 1 ? parts.slice(1).join(' ') : '';
+    }
+    if (!fName) {
+      return { ok: false, error: 'Inserisci il Nome del cliente.' };
+    }
+
+    var isYearly = (c.billingCycle === 'yearly' || c.billingCycle === 'annuale' || String(c.formula || c.formulaLabel || '').indexOf('1.188') !== -1 || String(c.formula || c.formulaLabel || '').toLowerCase().indexOf('annual') !== -1);
+    var targetId = String(c.id || c.clientId || '').trim();
+    var existingIdx = list.findIndex(function (item) {
+      return item && (String(item.id || '') === targetId || (c.email && String(item.email || '').toLowerCase() === String(c.email).toLowerCase()));
+    });
+    var prev = existingIdx !== -1 ? list[existingIdx] : {};
+    var nowStr = getRomeNowFormatted().fullDateTime;
+
+    var record = {
+      id: targetId || prev.id || ('client_' + Date.now()),
+      firstName: fName,
+      lastName: lName || prev.lastName || '',
+      fullName: (fName + ' ' + (lName || prev.lastName || '')).trim(),
+      residence: String(c.residence !== undefined ? c.residence : (prev.residence || '[DA COMPILARE]')).trim(),
+      taxId: String(c.taxId !== undefined ? c.taxId : (c.cfOrPiva !== undefined ? c.cfOrPiva : (prev.taxId || '[DA COMPILARE]'))).trim(),
+      email: String(c.email !== undefined ? c.email : (c.invoiceEmail !== undefined ? c.invoiceEmail : (prev.email || '[DA COMPILARE]'))).trim(),
+      invoiceEmail: String(c.invoiceEmail !== undefined ? c.invoiceEmail : (c.email !== undefined ? c.email : (prev.invoiceEmail || prev.email || '[DA COMPILARE]'))).trim(),
+      phone: String(c.phone !== undefined ? c.phone : (c.operationalPhone !== undefined ? c.operationalPhone : (prev.phone || '[DA COMPILARE]'))).trim(),
+      operationalPhone: String(c.operationalPhone !== undefined ? c.operationalPhone : (c.phone !== undefined ? c.phone : (prev.operationalPhone || prev.phone || '[DA COMPILARE]'))).trim(),
+      propertyAddress: String(c.propertyAddress !== undefined ? c.propertyAddress : (prev.propertyAddress || '')).trim(),
+      billingCycle: isYearly ? 'yearly' : 'monthly',
+      formulaLabel: isYearly ? '1.188,00 €/anno' : '99,00 €/mese',
+      amountGross: isYearly ? 1188.00 : 99.00,
+      revenuePlanOptIn: c.revenuePlanOptIn !== undefined ? Boolean(c.revenuePlanOptIn) : Boolean(prev.revenuePlanOptIn),
+      contractStatus: String(c.contractStatus || prev.contractStatus || 'Attivo').trim(),
+      proformaStatus: String(c.proformaStatus || prev.proformaStatus || 'Da fatturare').trim(),
+      updatedAt: nowStr
+    };
+
+    if (existingIdx !== -1) {
+      list[existingIdx] = record;
+    } else {
+      list.unshift(record);
+    }
+    safeSetJSON(TEAM_CLIENTS_KEY, list);
+
+    // Sincronizza immediatamente con My Box Pro-Forma (ita_mybox_proforma_v1) e Contratto (JUL-035/036/044)
+    saveMyBoxProforma({
+      clientId: record.id,
+      firstName: record.firstName,
+      lastName: record.lastName,
+      residence: record.residence,
+      taxId: record.taxId,
+      email: record.email,
+      invoiceEmail: record.invoiceEmail,
+      phone: record.phone,
+      operationalPhone: record.operationalPhone,
+      propertyAddress: record.propertyAddress || undefined,
+      billingCycle: record.billingCycle,
+      revenuePlanOptIn: record.revenuePlanOptIn
+    });
+
+    broadcastStateChange('team_client_saved', { client: record, count: list.length });
+    return {
+      ok: true,
+      client: record,
+      clients: list
+    };
+  }
+
+  // 3. Ticket Aperti condivisi su ita_jul010_maintenance_tickets_v1 + ita_maintenance_network_v1 (getMaintenanceTickets / saveMaintenanceTicket)
+  function mapStatusToDisplay(rawStatus) {
+    var st = String(rawStatus || '').trim();
+    var upper = st.toUpperCase();
+    if (upper === 'CHIUSO' || upper === 'COMPLETATO_REALIZZATO' || upper === 'COMPLETED') return 'Chiuso';
+    if (upper === 'IN LAVORAZIONE' || upper === 'IN_LAVORAZIONE' || upper === 'ACCETTATO_IN_PLANNER' || upper === 'IN_PROGRESS') return 'In lavorazione';
+    return 'Aperto';
+  }
+
+  function mapDisplayToInternalStatus(displayOrInternal) {
+    var st = String(displayOrInternal || '').trim();
+    var upper = st.toUpperCase();
+    if (upper === 'CHIUSO' || upper === 'COMPLETATO_REALIZZATO' || upper === 'COMPLETED') return 'COMPLETATO_REALIZZATO';
+    if (upper === 'IN LAVORAZIONE' || upper === 'IN_LAVORAZIONE' || upper === 'ACCETTATO_IN_PLANNER' || upper === 'IN_PROGRESS') return 'ACCETTATO_IN_PLANNER';
+    return 'INTERVENTO_RICHIESTO';
+  }
+
+  function getMaintenanceTickets(role) {
+    var store = loadMaintenanceNetworkStore();
+    var sharedRaw = safeGetJSON(JUL010_TICKETS_SHARED_KEY, null);
+    if (Array.isArray(sharedRaw) && sharedRaw.length > 0) {
+      sharedRaw.forEach(function (stItem) {
+        if (!stItem || !stItem.id) return;
+        var idx = (store.tickets || []).findIndex(function (t) { return t && t.id === stItem.id; });
+        if (idx !== -1) {
+          store.tickets[idx] = Object.assign({}, store.tickets[idx], stItem, {
+            taskTitle: stItem.taskTitle || stItem.title || store.tickets[idx].taskTitle,
+            taskDescription: stItem.taskDescription || stItem.description || store.tickets[idx].taskDescription,
+            baseClientPriceEur: stItem.baseClientPriceEur !== undefined ? Number(stItem.baseClientPriceEur) : (stItem.tariffEur !== undefined ? Number(stItem.tariffEur) : store.tickets[idx].baseClientPriceEur),
+            extraClientUrgencyEur: stItem.extraClientUrgencyEur !== undefined ? Number(stItem.extraClientUrgencyEur) : (stItem.supplementEur !== undefined ? Number(stItem.supplementEur) : store.tickets[idx].extraClientUrgencyEur),
+            status: mapDisplayToInternalStatus(stItem.status || store.tickets[idx].status)
+          });
+        } else {
+          store.tickets.unshift({
+            id: stItem.id,
+            category: stItem.category || 'Manutenzione',
+            taskTitle: stItem.taskTitle || stItem.title || 'Intervento di manutenzione',
+            taskDescription: stItem.taskDescription || stItem.description || stItem.taskTitle || '',
+            operationalZone: stItem.operationalZone || stItem.structureName || 'Firenze',
+            photos: Array.isArray(stItem.photos) ? stItem.photos : [],
+            scheduledDate: stItem.scheduledDate || '2026-11-12',
+            scheduledTime: stItem.scheduledTime || '09:30',
+            scheduledLabel: stItem.scheduledLabel || formatMaintenanceDayTimeLabel(stItem.scheduledDate, stItem.scheduledTime),
+            durationMinutes: 60,
+            bufferMinutes: 15,
+            baseClientPriceEur: Number(stItem.baseClientPriceEur !== undefined ? stItem.baseClientPriceEur : (stItem.tariffEur || 30.00)),
+            extraClientUrgencyEur: Number(stItem.extraClientUrgencyEur !== undefined ? stItem.extraClientUrgencyEur : (stItem.supplementEur || 0.00)),
+            materialsReimbursementEur: Number(stItem.materialsReimbursementEur || 0.00),
+            status: mapDisplayToInternalStatus(stItem.status),
+            maintainerId: stItem.maintainerId || 'MNT-NET-FI-01',
+            maintainerName: stItem.assignedTo || stItem.maintainerName || 'Tecnico Manutentore Certificato Rete Firenze #01',
+            maintainerPhone: '+39 349 804 1146',
+            createdAt: stItem.createdAt || getRomeNowFormatted().shortDateTime,
+            updatedAt: stItem.updatedAt || getRomeNowFormatted().shortDateTime
+          });
+        }
+      });
+      saveMaintenanceNetworkStore(store);
+    }
+
+    var normRole = String(role || 'admin').toLowerCase();
+    var list = (store.tickets || []).map(function (t) {
+      var san = sanitizeTicketForRole(t, normRole);
+      var dispStatus = mapStatusToDisplay(t.status);
+      return Object.assign({}, san, {
+        title: san.taskTitle,
+        description: san.taskDescription,
+        structureName: san.operationalZone,
+        tariffEur: finOrDefault(san.baseClientPriceEur, t.baseClientPriceEur, 30.00),
+        supplementEur: finOrDefault(san.extraClientUrgencyEur, t.extraClientUrgencyEur, 0.00),
+        assignedTo: (normRole === 'owner' || normRole === 'proprietario' || normRole === 'client' || normRole === 'cliente')
+          ? undefined
+          : (t.maintainerName || 'Tecnico Manutentore Certificato Rete Firenze #01'),
+        displayStatus: dispStatus,
+        teamStatus: dispStatus
+      });
+    });
+
+    safeSetJSON(JUL010_TICKETS_SHARED_KEY, (store.tickets || []).map(function (t) {
+      var fin = computeMaintenanceFinancials(t);
+      return Object.assign({}, t, {
+        title: t.taskTitle,
+        description: t.taskDescription,
+        structureName: t.operationalZone,
+        tariffEur: fin.baseClientPriceEur,
+        supplementEur: fin.extraClientUrgencyEur,
+        assignedTo: t.maintainerName || 'Tecnico Manutentore Certificato Rete Firenze #01',
+        displayStatus: mapStatusToDisplay(t.status),
+        teamStatus: mapStatusToDisplay(t.status)
+      });
+    }));
+
+    return list;
+  }
+
+  function finOrDefault(a, b, defVal) {
+    if (a !== undefined && !isNaN(Number(a))) return Number(a);
+    if (b !== undefined && !isNaN(Number(b))) return Number(b);
+    return defVal;
+  }
+
+  function saveMaintenanceTicket(ticketPayload, actorRole) {
+    var p = ticketPayload || {};
+    var role = String(actorRole || p.actorRole || 'admin').toLowerCase();
+    var mappedInput = Object.assign({}, p, {
+      id: p.id || p.ticketId,
+      taskTitle: p.taskTitle !== undefined ? p.taskTitle : p.title,
+      taskDescription: p.taskDescription !== undefined ? p.taskDescription : p.description,
+      operationalZone: p.operationalZone !== undefined ? p.operationalZone : p.structureName,
+      baseClientPriceEur: p.baseClientPriceEur !== undefined ? p.baseClientPriceEur : p.tariffEur,
+      extraClientUrgencyEur: p.extraClientUrgencyEur !== undefined ? p.extraClientUrgencyEur : p.supplementEur
+    });
+
+    var res = createOrUpdateMaintenanceSkillTicket(mappedInput, role);
+    if (!res.ok) return res;
+
+    var store = loadMaintenanceNetworkStore();
+    var targetId = res.ticket && res.ticket.id;
+    var target = (store.tickets || []).find(function (t) { return t && t.id === targetId; });
+    if (target) {
+      if (p.assignedTo || p.maintainerName) {
+        target.maintainerName = String(p.assignedTo || p.maintainerName).trim();
+      }
+      if (p.maintainerId) {
+        target.maintainerId = String(p.maintainerId).trim();
+      }
+      if (p.status || p.teamStatus || p.displayStatus) {
+        var newIntStatus = mapDisplayToInternalStatus(p.status || p.teamStatus || p.displayStatus);
+        target.status = newIntStatus;
+        if (newIntStatus === 'COMPLETATO_REALIZZATO' && !target.completedAt) {
+          target.completedAt = getRomeNowFormatted().shortDateTime;
+        }
+      }
+      saveMaintenanceNetworkStore(store);
+    }
+
+    var updatedList = getMaintenanceTickets(role);
+    var savedItem = updatedList.find(function (t) { return t && t.id === targetId; }) || res.ticket;
+    broadcastStateChange('team_maintenance_ticket_saved', { ticket: savedItem });
+    return {
+      ok: true,
+      ticket: savedItem,
+      tickets: updatedList
+    };
+  }
+
+  // 4. CRM Nuovi Clienti (getTeamCrmLeads / saveTeamCrmLead / convertCrmLeadToActiveClient) + JUL-045 (submitInterestedLead / syncRemoteCrmLeads)
+  var VALID_CRM_PIPELINE_STATES = ['Nuovo', 'Contattato', 'Proposta/Contratto', 'Convertito'];
+
+  function normalizeCrmPipelineStatus(rawStatus) {
+    var s = String(rawStatus || 'Nuovo').trim();
+    if (VALID_CRM_PIPELINE_STATES.indexOf(s) !== -1) return s;
+    var lower = s.toLowerCase();
+    if (lower.indexOf('convert') !== -1 || lower.indexOf('approv') !== -1 || lower.indexOf('attivo') !== -1) return 'Convertito';
+    if (lower.indexOf('propost') !== -1 || lower.indexOf('contratt') !== -1 || lower.indexOf('preventiv') !== -1) return 'Proposta/Contratto';
+    if (lower.indexOf('contatt') !== -1 || lower.indexOf('follow') !== -1) return 'Contattato';
+    return 'Nuovo';
+  }
+
+  function getTeamCrmLeads() {
+    var list = safeGetJSON(TEAM_CRM_LEADS_KEY, []);
+    if (!Array.isArray(list)) list = [];
+    return list.map(function (item) {
+      var st = normalizeCrmPipelineStatus(item && item.status);
+      return Object.assign({}, item, {
+        id: String((item && (item.id || item.leadId)) || ('LEAD-' + Date.now())),
+        leadId: String((item && (item.leadId || item.id)) || ('LEAD-' + Date.now())),
+        status: st
+      });
+    });
+  }
+
+  function saveTeamCrmLead(leadInput) {
+    var l = leadInput || {};
+    var list = getTeamCrmLeads();
+    var targetId = String(l.id || l.leadId || '').trim();
+    var existingIdx = list.findIndex(function (item) {
+      return item && (String(item.id || '') === targetId || String(item.leadId || '') === targetId);
+    });
+    var prev = existingIdx !== -1 ? list[existingIdx] : {};
+    var nowIso = new Date().toISOString();
+
+    var fullName = String(l.name !== undefined ? l.name : (l.fullName !== undefined ? l.fullName : (prev.name || prev.fullName || ''))).trim();
+    var fName = String(l.firstName !== undefined ? l.firstName : (prev.firstName || '')).trim();
+    var lName = String(l.lastName !== undefined ? l.lastName : (prev.lastName || '')).trim();
+    if (!fName && fullName) {
+      var parts = fullName.split(/\s+/);
+      fName = parts[0] || '';
+      lName = parts.length > 1 ? parts.slice(1).join(' ') : '';
+    }
+    if (!fullName && (fName || lName)) {
+      fullName = (fName + ' ' + lName).trim();
+    }
+
+    var record = Object.assign({}, prev, l, {
+      id: targetId || prev.id || ('LEAD-' + Date.now()),
+      leadId: targetId || prev.leadId || prev.id || ('LEAD-' + Date.now()),
+      name: fullName || 'Nuovo Contatto',
+      fullName: fullName || 'Nuovo Contatto',
+      firstName: fName || 'Nuovo',
+      lastName: lName || 'Contatto',
+      email: String(l.email !== undefined ? l.email : (prev.email || '')).trim(),
+      phone: String(l.phone !== undefined ? l.phone : (prev.phone || '')).trim(),
+      message: String(l.message !== undefined ? l.message : (l.notes !== undefined ? l.notes : (prev.message || ''))).trim(),
+      propertyZone: String(l.propertyZone !== undefined ? l.propertyZone : (l.zone !== undefined ? l.zone : (prev.propertyZone || 'Firenze'))).trim(),
+      commercialName: String(l.commercialName !== undefined ? l.commercialName : (prev.commercialName || '')).trim(),
+      calendarUrl: String(l.calendarUrl !== undefined ? l.calendarUrl : (prev.calendarUrl || '')).trim(),
+      source: String(l.source || prev.source || 'itadreamteam.com').trim(),
+      status: normalizeCrmPipelineStatus(l.status || prev.status || 'Nuovo'),
+      createdAt: prev.createdAt || l.createdAt || nowIso,
+      updatedAt: nowIso
+    });
+
+    if (existingIdx !== -1) {
+      list[existingIdx] = record;
+    } else {
+      list.unshift(record);
+    }
+    safeSetJSON(TEAM_CRM_LEADS_KEY, list);
+    broadcastStateChange('team_crm_lead_saved', { lead: record, count: list.length });
+    return {
+      ok: true,
+      lead: record,
+      leads: list
+    };
+  }
+
+  function convertCrmLeadToActiveClient(leadIdOrPayload) {
+    var list = getTeamCrmLeads();
+    var targetId = typeof leadIdOrPayload === 'string'
+      ? leadIdOrPayload.trim()
+      : String((leadIdOrPayload && (leadIdOrPayload.id || leadIdOrPayload.leadId)) || '').trim();
+
+    var leadIdx = list.findIndex(function (item) {
+      return item && (item.id === targetId || item.leadId === targetId);
+    });
+
+    var leadObj = leadIdx !== -1 ? list[leadIdx] : null;
+    if (!leadObj && leadIdOrPayload && typeof leadIdOrPayload === 'object') {
+      var savedLeadRes = saveTeamCrmLead(leadIdOrPayload);
+      leadObj = savedLeadRes.lead;
+      list = getTeamCrmLeads();
+      leadIdx = list.findIndex(function (item) { return item && item.id === leadObj.id; });
+    }
+    if (!leadObj) {
+      return { ok: false, error: 'Lead non trovato nel CRM (' + targetId + ').' };
+    }
+
+    var nowIso = new Date().toISOString();
+    leadObj.status = 'Convertito';
+    leadObj.convertedAt = nowIso;
+    leadObj.updatedAt = nowIso;
+    if (leadIdx !== -1) {
+      list[leadIdx] = leadObj;
+      safeSetJSON(TEAM_CRM_LEADS_KEY, list);
+    }
+
+    // 1. Crea automaticamente il Cliente in ita_team_clients_v1 (e sincronizza My Box)
+    var clientRes = saveTeamClient({
+      id: 'client_from_' + leadObj.id,
+      firstName: leadObj.firstName || (leadObj.name ? leadObj.name.split(/\s+/)[0] : 'Cliente'),
+      lastName: leadObj.lastName || (leadObj.name ? leadObj.name.split(/\s+/).slice(1).join(' ') : ''),
+      fullName: leadObj.name || leadObj.fullName,
+      residence: leadObj.residence || '[DA COMPILARE]',
+      taxId: leadObj.taxId || '[DA COMPILARE]',
+      email: leadObj.email || '[DA COMPILARE]',
+      invoiceEmail: leadObj.email || '[DA COMPILARE]',
+      phone: leadObj.phone || '[DA COMPILARE]',
+      operationalPhone: leadObj.phone || '[DA COMPILARE]',
+      propertyAddress: leadObj.propertyAddress || leadObj.propertyZone || 'Firenze',
+      billingCycle: leadObj.billingCycle || 'monthly',
+      revenuePlanOptIn: Boolean(leadObj.revenuePlanOptIn),
+      contractStatus: 'Attivo'
+    });
+
+    // 2. Crea automaticamente la relativa Struttura in ita_structures_calendars_v1 (e ita_onboarding_structure)
+    var structName = leadObj.commercialName || ('Struttura ' + (leadObj.name || 'Firenze'));
+    var validCalUrl = '';
+    if (leadObj.calendarUrl) {
+      var cCheck = validateCalendarUrl(leadObj.calendarUrl);
+      if (cCheck.valid) validCalUrl = cCheck.normalizedUrl;
+    }
+    if (!validCalUrl) {
+      validCalUrl = 'https://www.itadreamteam.com/ical/' + encodeURIComponent(leadObj.id.toLowerCase()) + '.ics';
+    }
+
+    var structRes = saveTeamStructure({
+      id: 'struct_from_' + leadObj.id,
+      clientId: clientRes.client ? clientRes.client.id : ('client_from_' + leadObj.id),
+      clientName: leadObj.name || leadObj.fullName,
+      commercialName: structName,
+      address: leadObj.propertyAddress || leadObj.propertyZone || 'Firenze',
+      city: 'Firenze',
+      province: 'FI',
+      zip: leadObj.zip || '',
+      checkinTime: '15:00',
+      checkoutTime: '10:00',
+      calendarUrl: validCalUrl,
+      operationalPhone: leadObj.phone || '',
+      invoiceEmail: leadObj.email || ''
+    });
+
+    broadcastStateChange('crm_lead_converted_to_client', {
+      lead: leadObj,
+      client: clientRes.client,
+      structure: structRes.structure
+    });
+
+    return {
+      ok: true,
+      lead: leadObj,
+      client: clientRes.client,
+      structure: structRes.structure
+    };
+  }
+
+  // JUL-045: Form "Sono interessato" -> 1) Salva in CRM (ita_team_crm_leads_v1) 2) Email automatica al cliente 3) Yarvis chiama Julian
+  async function submitInterestedLead(payload) {
+    var p = payload || {};
+    var nameVal = String(p.name || p.fullName || ((p.firstName || '') + ' ' + (p.lastName || '')).trim() || '').trim();
+    var emailVal = String(p.email || p.guestEmail || p.ownerEmail || '').trim();
+    var phoneVal = String(p.phone || p.telefono || p.ownerPhone || '').trim();
+    var messageVal = String(p.message || p.notes || p.messaggio || 'Sono interessato a essere ricontattato da Itassistance.').trim();
+    var sourceVal = String(p.source || 'itadreamteam.com').trim();
+    var langVal = String(p.lang || 'it').toLowerCase();
+
+    if (!nameVal) {
+      return { ok: false, error: 'Inserisci il tuo nome e cognome.' };
+    }
+    if (!emailVal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      return { ok: false, error: 'Inserisci un indirizzo email valido per ricevere la conferma di presa in carico.' };
+    }
+
+    var leadId = String(p.leadId || p.id || ('LEAD-' + Date.now()));
+    var createdAtIso = new Date().toISOString();
+    var autoEmailMessageIt = 'Abbiamo preso in carico la tua richiesta di essere ricontattato';
+
+    var localSave = saveTeamCrmLead({
+      id: leadId,
+      leadId: leadId,
+      name: nameVal,
+      email: emailVal,
+      phone: phoneVal,
+      message: messageVal,
+      propertyZone: p.propertyZone || p.zone || 'Firenze',
+      commercialName: p.commercialName || '',
+      source: sourceVal,
+      lang: langVal,
+      status: 'Nuovo',
+      autoEmailSent: true,
+      autoEmailRecipient: emailVal,
+      autoEmailSubject: langVal === 'en'
+        ? 'Itassistance — We have received your callback request'
+        : 'Itassistance — Abbiamo preso in carico la tua richiesta di essere ricontattato',
+      autoEmailMessage: autoEmailMessageIt,
+      adminNotificationEmail: OFFICIAL_ITASSISTANCE_CONTACTS.adminEmail,
+      yarvisNotified: true,
+      yarvisCallTarget: 'Julian',
+      createdAt: createdAtIso
+    });
+
+    var serverResponse = null;
+    try {
+      if (typeof fetch === 'function') {
+        var res = await fetch('/api/lead-submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            leadId: leadId,
+            name: nameVal,
+            email: emailVal,
+            phone: phoneVal,
+            message: messageVal,
+            propertyZone: p.propertyZone || p.zone || 'Firenze',
+            commercialName: p.commercialName || '',
+            source: sourceVal,
+            lang: langVal,
+            createdAt: createdAtIso
+          })
+        });
+        if (res && res.ok) {
+          serverResponse = await res.json().catch(function () { return null; });
+        }
+      }
+    } catch (eApi) {
+      serverResponse = null;
+    }
+
+    if (serverResponse && serverResponse.lead) {
+      saveTeamCrmLead(Object.assign({}, localSave.lead, serverResponse.lead, {
+        id: leadId,
+        leadId: leadId,
+        autoEmailSent: true,
+        autoEmailMessage: autoEmailMessageIt,
+        yarvisNotified: true
+      }));
+    }
+
+    broadcastStateChange('interested_lead_submitted', {
+      leadId: leadId,
+      lead: localSave.lead,
+      autoEmailMessage: autoEmailMessageIt,
+      yarvisNotified: true
+    });
+
+    return {
+      ok: true,
+      leadId: leadId,
+      lead: localSave.lead,
+      autoEmail: (serverResponse && serverResponse.autoEmail) || {
+        sent: true,
+        recipient: emailVal,
+        adminCc: OFFICIAL_ITASSISTANCE_CONTACTS.adminEmail,
+        subject: localSave.lead.autoEmailSubject,
+        previewText: 'Abbiamo preso in carico la tua richiesta di essere ricontattato.'
+      },
+      yarvisCall: (serverResponse && serverResponse.yarvisCall) || {
+        triggered: true,
+        target: 'Julian'
+      }
+    };
+  }
+
+  async function syncRemoteCrmLeads() {
+    var localLeads = getTeamCrmLeads();
+    var mergedCount = 0;
+    try {
+      if (typeof fetch === 'function') {
+        var res = await fetch('/api/lead-submit', { method: 'GET' });
+        if (res && res.ok) {
+          var data = await res.json().catch(function () { return null; });
+          var remoteList = (data && Array.isArray(data.leads)) ? data.leads : (Array.isArray(data) ? data : []);
+          remoteList.forEach(function (rItem) {
+            if (!rItem || (!rItem.leadId && !rItem.id)) return;
+            var rId = String(rItem.leadId || rItem.id);
+            var exists = localLeads.some(function (l) {
+              return l && (String(l.leadId || l.id) === rId);
+            });
+            if (!exists) {
+              saveTeamCrmLead(Object.assign({}, rItem, {
+                id: rId,
+                leadId: rId,
+                status: normalizeCrmPipelineStatus(rItem.status || 'Nuovo'),
+                autoEmailMessage: rItem.autoEmailMessage || 'Abbiamo preso in carico la tua richiesta di essere ricontattato',
+                yarvisNotified: true
+              }));
+              mergedCount++;
+            }
+          });
+        }
+      }
+    } catch (eSync) {}
+    return {
+      ok: true,
+      mergedCount: mergedCount,
+      leads: getTeamCrmLeads()
+    };
+  }
+
+  // ============================================================================
+  // P. ZERO LINK CHECK-IN ONLINE + FOTO CHECK-IN CARICATA DAL CONCIERGE (JUL-056)
+  //    Chiave localStorage: ita_concierge_checkin_photos_v1 (zero dati finti di default: [])
+  // ============================================================================
+  var CONCIERGE_CHECKIN_PHOTOS_KEY = 'ita_concierge_checkin_photos_v1';
+
+  function getConciergeCheckinPhotos() {
+    var list = safeGetJSON(CONCIERGE_CHECKIN_PHOTOS_KEY, []);
+    if (!Array.isArray(list)) return [];
+    return list.slice().sort(function (a, b) {
+      var ta = new Date((a && (a.checkinDateTime || a.createdAt)) || 0).getTime() || 0;
+      var tb = new Date((b && (b.checkinDateTime || b.createdAt)) || 0).getTime() || 0;
+      return tb - ta;
+    });
+  }
+
+  function saveConciergeCheckinPhoto(entry) {
+    var e = entry || {};
+    var nowIso = new Date().toISOString();
+    var list = safeGetJSON(CONCIERGE_CHECKIN_PHOTOS_KEY, []);
+    if (!Array.isArray(list)) list = [];
+
+    var record = {
+      id: String(e.id || ('CHK-PHOTO-' + Date.now())).trim(),
+      structureName: String(e.structureName || e.unitName || '').trim(),
+      guestName: String(e.guestName || e.guest || '').trim(),
+      checkinDateTime: String(e.checkinDateTime || e.dateTime || nowIso).trim(),
+      photoDataUrl: String(e.photoDataUrl || e.photoUrl || e.photo || '').trim(),
+      conciergeNote: String(e.conciergeNote || e.note || '').trim(),
+      createdAt: String(e.createdAt || nowIso).trim()
+    };
+
+    var existingIdx = list.findIndex(function (item) {
+      return item && String(item.id || '') === record.id;
+    });
+    if (existingIdx !== -1) {
+      list[existingIdx] = Object.assign({}, list[existingIdx], record);
+    } else {
+      list.unshift(record);
+    }
+    safeSetJSON(CONCIERGE_CHECKIN_PHOTOS_KEY, list);
+
+    // Aggiorna automaticamente anche la To-Do List 08:00 AM di "My Box" (JUL-057)
+    getMyBoxOwnerTodos();
+
+    broadcastStateChange('concierge_checkin_photo_saved', {
+      photo: record,
+      totalCount: list.length
+    });
+    return {
+      ok: true,
+      photo: record,
+      photos: getConciergeCheckinPhotos()
+    };
+  }
+
+  function deleteConciergeCheckinPhoto(id) {
+    var targetId = String(id || '').trim();
+    var list = safeGetJSON(CONCIERGE_CHECKIN_PHOTOS_KEY, []);
+    if (!Array.isArray(list)) list = [];
+    var filtered = list.filter(function (item) {
+      return item && String(item.id || '') !== targetId;
+    });
+    safeSetJSON(CONCIERGE_CHECKIN_PHOTOS_KEY, filtered);
+    broadcastStateChange('concierge_checkin_photo_deleted', {
+      id: targetId,
+      totalCount: filtered.length
+    });
+    return {
+      ok: true,
+      id: targetId,
+      photos: getConciergeCheckinPhotos()
+    };
+  }
+
+  // ============================================================================
+  // Q. INBOX UNICO "MY BOX" + REPORT 08:00 AM + TO-DO LIST PROPRIETARIO (JUL-057)
+  //    Chiave localStorage: ita_mybox_owner_todos_v1
+  // ============================================================================
+  var MYBOX_OWNER_TODOS_KEY = 'ita_mybox_owner_todos_v1';
+  var MONTH_END_CLOSE_FLAG_KEY = 'ita_mybox_month_end_close_v1';
+
+  function getMyBoxOwnerTodos() {
+    var stored = safeGetJSON(MYBOX_OWNER_TODOS_KEY, []);
+    if (!Array.isArray(stored)) stored = [];
+    var byId = {};
+    stored.forEach(function (t) {
+      if (t && t.id) byId[String(t.id)] = t;
+    });
+
+    var result = stored.slice();
+    var nowIso = new Date().toISOString();
+
+    // 1. Task automatica POST_CHECKIN_LAW per ogni foto check-in caricata dal Concierge in ita_concierge_checkin_photos_v1
+    var photos = getConciergeCheckinPhotos();
+    photos.forEach(function (p) {
+      if (!p || !p.id) return;
+      var todoId = 'TODO-CHK-' + p.id;
+      if (!byId[todoId]) {
+        var newTodo = {
+          id: todoId,
+          type: 'POST_CHECKIN_LAW',
+          reportTime: '08:00 AM',
+          inboxSection: 'My Box',
+          sourcePhotoId: p.id,
+          structureName: p.structureName || 'Struttura Firenze',
+          guestName: p.guestName || 'Ospite registrato al check-in',
+          title: 'Adempimenti di legge post check-in — ' + (p.guestName || 'Ospite') + (p.structureName ? (' (' + p.structureName + ')') : ''),
+          description: 'Foto documento/dati caricata dal Concierge in Reports "My Box". Completa gli adempimenti del proprietario (Alloggiati Web entro 24h, ISTAT / Ross1000 e Tassa di Soggiorno).',
+          done: false,
+          createdAt: p.createdAt || nowIso
+        };
+        result.unshift(newTodo);
+        byId[todoId] = newTodo;
+      }
+    });
+
+    // 2. Task automatica MONTH_END_PROFORMA per i pro-forma da controllare e pagare in ita_mybox_proforma_v1
+    var pf = getMyBoxProforma();
+    var closeMeta = safeGetJSON(MONTH_END_CLOSE_FLAG_KEY, null);
+    if (pf && pf.proformaNumber && pf.status !== 'PAGATO') {
+      var pfTodoId = 'TODO-PF-' + pf.proformaNumber;
+      if (!byId[pfTodoId]) {
+        var pfTodo = {
+          id: pfTodoId,
+          type: 'MONTH_END_PROFORMA',
+          reportTime: '08:00 AM',
+          inboxSection: 'My Box',
+          proformaNumber: pf.proformaNumber,
+          amountGrossEur: pf.amountGross,
+          title: 'Controlla e conferma Pro-Forma ' + pf.proformaNumber + ' (' + formatItEur(pf.amountGross) + ') in "My Box"',
+          description: (closeMeta && closeMeta.note)
+            ? closeMeta.note
+            : 'Chiusura contabile / Pro-Forma disponibile in "My Box": verifica i dati fiscali, conferma per l\'emissione manuale della fattura e procedi al saldo tramite bonifico bancario (Saldo a vista / entro 5 giorni lavorativi).',
+          done: pf.status === 'PAGATO',
+          createdAt: (closeMeta && closeMeta.closedAt) || pf.updatedAt || nowIso
+        };
+        result.push(pfTodo);
+        byId[pfTodoId] = pfTodo;
+      } else if (closeMeta && closeMeta.closedAt) {
+        byId[pfTodoId].description = closeMeta.note || byId[pfTodoId].description;
+      }
+    }
+
+    safeSetJSON(MYBOX_OWNER_TODOS_KEY, result);
+    return result;
+  }
+
+  function toggleMyBoxOwnerTodo(todoId, done) {
+    var targetId = String(todoId || '').trim();
+    var list = getMyBoxOwnerTodos();
+    var updatedItem = null;
+    var nowIso = new Date().toISOString();
+
+    list.forEach(function (t) {
+      if (t && String(t.id) === targetId) {
+        t.done = done !== undefined ? Boolean(done) : !t.done;
+        t.completedAt = t.done ? nowIso : null;
+        updatedItem = t;
+      }
+    });
+
+    safeSetJSON(MYBOX_OWNER_TODOS_KEY, list);
+    broadcastStateChange('mybox_owner_todo_toggled', {
+      todoId: targetId,
+      done: updatedItem ? updatedItem.done : false,
+      todo: updatedItem
+    });
+    return {
+      ok: true,
+      todo: updatedItem,
+      todos: list
+    };
+  }
+
+  function triggerMonthEndAccountingClose(note) {
+    var nowIso = new Date().toISOString();
+    var cleanNote = String(note || 'Chiusura contabile di fine mese eseguita da ITASSISTANCEDREAMTEAM.IT: controlla e salda i Pro-Forma in "My Box" (Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario).').trim();
+    var closeMeta = {
+      closedAt: nowIso,
+      closedAtRome: getRomeNowFormatted().fullDateTime,
+      scheduledReportTime: '08:00 AM',
+      note: cleanNote
+    };
+    safeSetJSON(MONTH_END_CLOSE_FLAG_KEY, closeMeta);
+
+    var pf = getMyBoxProforma();
+    var queue = getAdminProformaQueue();
+    var list = getMyBoxOwnerTodos();
+    var pfTodoId = 'TODO-PF-' + (pf && pf.proformaNumber ? pf.proformaNumber : 'MONTH-END');
+    var existingIdx = list.findIndex(function (t) { return t && t.id === pfTodoId; });
+    var monthEndTodo = {
+      id: pfTodoId,
+      type: 'MONTH_END_PROFORMA',
+      reportTime: '08:00 AM',
+      inboxSection: 'My Box',
+      proformaNumber: (pf && pf.proformaNumber) || 'PF-2026-001',
+      amountGrossEur: (pf && pf.amountGross) || 99.00,
+      title: 'Chiusura Contabile Fine Mese — Pro-Forma da controllare e pagare in "My Box"',
+      description: cleanNote,
+      done: false,
+      createdAt: nowIso
+    };
+
+    if (existingIdx !== -1) {
+      list[existingIdx] = Object.assign({}, list[existingIdx], monthEndTodo, { done: false });
+    } else {
+      list.unshift(monthEndTodo);
+    }
+    safeSetJSON(MYBOX_OWNER_TODOS_KEY, list);
+
+    broadcastStateChange('month_end_accounting_closed', {
+      closeMeta: closeMeta,
+      todo: monthEndTodo,
+      proformasCount: Math.max(1, queue.length)
+    });
+
+    return {
+      ok: true,
+      closeMeta: closeMeta,
+      todo: monthEndTodo,
+      todos: list
+    };
+  }
+
+  // ============================================================================
+  // R. SISTEMA CREDENZIALI ACCESSO INTERNO (JUL-061 · ZERO PASSWORD IN CHIARO)
+  //    Profili ufficiali ITASSISTANCEDREAMTEAM.IT:
+  //      1. super_admin   -> Team ITASSISTANCEDREAMTEAM.IT — Super Admin (/admin.html + gestione credenziali)
+  //      2. customer_care -> Team ITASSISTANCEDREAMTEAM.IT — Customer Care (OM) (/admin.html operativo)
+  //      3. cliente       -> Cliente = Il Proprietario, chi paga le nostre fatture (/app.html + "My Box")
+  //      (Usuario = Il Turista / Ospite che approfitta della copertura e gamma di servizi pubblici)
+  // ============================================================================
+  var AUTH_SESSION_STORAGE_KEY = 'ita_auth_session_v1';
+  var MANAGED_ACCOUNTS_STORAGE_KEY = 'ita_managed_accounts_v1';
+
+  async function hashCredentialSha256(rawText) {
+    var input = String(rawText || '');
+    if (typeof crypto !== 'undefined' && crypto.subtle && typeof TextEncoder !== 'undefined') {
+      try {
+        var msgBuffer = new TextEncoder().encode(input);
+        var hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        var hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+      } catch (eWebCrypto) {}
+    }
+    // Fallback deterministico non in chiaro se WebCrypto non è disponibile in contesto sincrono
+    var h1 = 0xdeadbeef ^ input.length;
+    var h2 = 0x41c6ce57 ^ input.length;
+    for (var i = 0, ch; i < input.length; i++) {
+      ch = input.charCodeAt(i);
+      h1 = Math.imul(h1 ^ ch, 2654435761);
+      h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return (h1 >>> 0).toString(16).padStart(8, '0') + (h2 >>> 0).toString(16).padStart(8, '0');
+  }
+
+  function getDefaultManagedAccounts() {
+    return [
+      {
+        id: 'acc_super_admin_1',
+        email: 'admin@bluearroyo.it',
+        passwordHash: '2b86d1074f139eb857ef59b024e91f7f6766c68482f22fa3dc97d3b6992578ef',
+        role: 'super_admin',
+        roleLabel: 'Team ITASSISTANCEDREAMTEAM.IT — Super Admin',
+        fullName: 'Julian / Direzione — Super Admin',
+        targetDashboard: '/admin.html',
+        canManageCredentials: true,
+        active: true,
+        updatedAt: '2026-11-10T08:00:00.000Z'
+      },
+      {
+        id: 'acc_customer_care_1',
+        email: 'itassistance@bluearroyo.it',
+        passwordHash: '4fc14a0e9a50703a3da35aa27f4183a0d1ef51e5b77ff5a22b64bf6ebdf49f1f',
+        role: 'customer_care',
+        roleLabel: 'Team ITASSISTANCEDREAMTEAM.IT — Customer Care (OM)',
+        fullName: 'Customer Care (OM) — Team ITASSISTANCEDREAMTEAM.IT',
+        targetDashboard: '/admin.html',
+        canManageCredentials: false,
+        active: true,
+        updatedAt: '2026-11-10T08:00:00.000Z'
+      }
+    ];
+  }
+
+  function getManagedAccounts() {
+    var stored = safeGetJSON(MANAGED_ACCOUNTS_STORAGE_KEY, null);
+    var list = Array.isArray(stored) && stored.length > 0 ? stored : getDefaultManagedAccounts();
+    if (!Array.isArray(stored) || stored.length === 0) {
+      safeSetJSON(MANAGED_ACCOUNTS_STORAGE_KEY, list);
+    }
+    return list.map(function (acc) {
+      var role = acc.role || 'cliente';
+      return {
+        id: String(acc.id || ('acc_' + Date.now())),
+        email: String(acc.email || '').trim().toLowerCase(),
+        passwordHash: String(acc.passwordHash || '').trim().toLowerCase(),
+        role: role,
+        roleLabel:
+          role === 'super_admin'
+            ? 'Team ITASSISTANCEDREAMTEAM.IT — Super Admin'
+            : role === 'customer_care'
+            ? 'Team ITASSISTANCEDREAMTEAM.IT — Customer Care (OM)'
+            : 'Cliente (Il Proprietario — chi paga le nostre fatture)',
+        fullName: String(acc.fullName || acc.name || acc.email || '').trim(),
+        clientId: acc.clientId || null,
+        structureIds: Array.isArray(acc.structureIds) ? acc.structureIds : [],
+        targetDashboard: (role === 'super_admin' || role === 'customer_care') ? '/admin.html' : '/app.html',
+        canManageCredentials: role === 'super_admin',
+        active: acc.active !== false,
+        updatedAt: acc.updatedAt || new Date().toISOString()
+      };
+    });
+  }
+
+  async function saveManagedAccount(accountInput) {
+    var inp = accountInput || {};
+    var email = String(inp.email || '').trim().toLowerCase();
+    if (!email) {
+      return { ok: false, error: 'Inserisci un indirizzo email valido per il profilo.' };
+    }
+    var role = ['super_admin', 'customer_care', 'cliente'].indexOf(inp.role) !== -1 ? inp.role : 'cliente';
+    var list = getManagedAccounts();
+    var existingIdx = list.findIndex(function (a) {
+      return a && (a.id === inp.id || a.email === email);
+    });
+    var prev = existingIdx !== -1 ? list[existingIdx] : {};
+
+    var passwordHash = String(inp.passwordHash || prev.passwordHash || '').trim().toLowerCase();
+    if (inp.password && String(inp.password).trim()) {
+      passwordHash = await hashCredentialSha256(String(inp.password).trim());
+    }
+
+    var record = {
+      id: inp.id || prev.id || ('acc_' + Date.now()),
+      email: email,
+      passwordHash: passwordHash,
+      role: role,
+      roleLabel:
+        role === 'super_admin'
+          ? 'Team ITASSISTANCEDREAMTEAM.IT — Super Admin'
+          : role === 'customer_care'
+          ? 'Team ITASSISTANCEDREAMTEAM.IT — Customer Care (OM)'
+          : 'Cliente (Il Proprietario — chi paga le nostre fatture)',
+      fullName: String(inp.fullName || inp.name || prev.fullName || email).trim(),
+      clientId: inp.clientId !== undefined ? inp.clientId : (prev.clientId || null),
+      structureIds: Array.isArray(inp.structureIds) ? inp.structureIds : (prev.structureIds || []),
+      targetDashboard: (role === 'super_admin' || role === 'customer_care') ? '/admin.html' : '/app.html',
+      canManageCredentials: role === 'super_admin',
+      active: inp.active !== undefined ? Boolean(inp.active) : (prev.active !== false),
+      updatedAt: new Date().toISOString()
+    };
+
+    if (existingIdx !== -1) {
+      list[existingIdx] = record;
+    } else {
+      list.push(record);
+    }
+    safeSetJSON(MANAGED_ACCOUNTS_STORAGE_KEY, list);
+
+    try {
+      if (typeof fetch === 'function') {
+        await fetch('/api/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'upsert_account',
+            actorRole: 'super_admin',
+            id: record.id,
+            email: record.email,
+            passwordHash: record.passwordHash,
+            role: record.role,
+            fullName: record.fullName,
+            clientId: record.clientId,
+            structureIds: record.structureIds,
+            active: record.active
+          })
+        }).catch(function () {});
+      }
+    } catch (eApi) {}
+
+    broadcastStateChange('managed_account_saved', { account: record });
+    return {
+      ok: true,
+      account: record,
+      accounts: getManagedAccounts()
+    };
+  }
+
+  function toggleManagedAccountStatus(accountIdOrEmail, active) {
+    var target = String(accountIdOrEmail || '').trim().toLowerCase();
+    var list = getManagedAccounts();
+    var updated = null;
+    list.forEach(function (a) {
+      if (a && (String(a.id).toLowerCase() === target || a.email === target)) {
+        a.active = active !== undefined ? Boolean(active) : !a.active;
+        a.updatedAt = new Date().toISOString();
+        updated = a;
+      }
+    });
+    safeSetJSON(MANAGED_ACCOUNTS_STORAGE_KEY, list);
+    broadcastStateChange('managed_account_status_toggled', { account: updated });
+    return {
+      ok: Boolean(updated),
+      account: updated,
+      accounts: list
+    };
+  }
+
+  function getAuthSession() {
+    return safeGetJSON(AUTH_SESSION_STORAGE_KEY, null);
+  }
+
+  function setAuthSession(sessionPayload) {
+    var s = sessionPayload || {};
+    var role = s.role || (s.user && s.user.role) || 'cliente';
+    var record = {
+      loggedIn: true,
+      role: role,
+      roleLabel:
+        role === 'super_admin'
+          ? 'Team ITASSISTANCEDREAMTEAM.IT — Super Admin'
+          : role === 'customer_care'
+          ? 'Team ITASSISTANCEDREAMTEAM.IT — Customer Care (OM)'
+          : 'Cliente (Il Proprietario — chi paga le nostre fatture)',
+      email: String(s.email || (s.user && s.user.email) || '').trim().toLowerCase(),
+      fullName: String(s.fullName || (s.user && s.user.fullName) || '').trim(),
+      clientId: s.clientId || (s.user && s.user.clientId) || null,
+      structureIds: Array.isArray(s.structureIds) ? s.structureIds : ((s.user && s.user.structureIds) || []),
+      canManageCredentials: role === 'super_admin',
+      targetDashboard: (role === 'super_admin' || role === 'customer_care') ? '/admin.html' : '/app.html',
+      loggedAt: new Date().toISOString()
+    };
+    safeSetJSON(AUTH_SESSION_STORAGE_KEY, record);
+
+    if (role === 'super_admin' || role === 'customer_care') {
+      safeSetJSON('itassistance_superadmin_v1', {
+        loggedIn: true,
+        currentRole: role === 'super_admin' ? 'superadmin' : 'customer_care',
+        profileType: role,
+        email: record.email,
+        canManageCredentials: role === 'super_admin',
+        lastLoginAt: record.loggedAt
+      });
+    } else {
+      loginOwnerSession({
+        ownerCode: s.ownerCode || record.clientId || 'ITA-FIRENZE-01',
+        email: record.email || 'cliente@itadreamteam.com',
+        apartmentName: s.apartmentName || ''
+      });
+    }
+
+    broadcastStateChange('auth_session_updated', record);
+    return record;
+  }
+
+  function logoutAuthSession() {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem(AUTH_SESSION_STORAGE_KEY);
+      }
+    } catch (e) {}
+    broadcastStateChange('auth_session_logged_out', { loggedIn: false });
+    return { ok: true };
+  }
+
+  async function authenticateInternalUser(credentials) {
+    var c = credentials || {};
+    var email = String(c.email || '').trim().toLowerCase();
+    var password = String(c.password || '');
+    var requestedRole = c.role || '';
+
+    if (typeof fetch === 'function' && email && password) {
+      try {
+        var res = await fetch('/api/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'login',
+            email: email,
+            password: password
+          })
+        });
+        if (res && res.ok) {
+          var data = await res.json().catch(function () { return null; });
+          if (data && data.ok && data.session && data.session.user) {
+            var sess = setAuthSession(data.session.user);
+            return { ok: true, session: sess, source: 'api/auth' };
+          }
+        }
+      } catch (eNet) {}
+    }
+
+    var accounts = getManagedAccounts();
+    var pwdHash = password ? await hashCredentialSha256(password) : String(c.passwordHash || '').toLowerCase();
+    var matched = accounts.find(function (a) {
+      if (!a || a.active === false) return false;
+      if (a.email === email && (!a.passwordHash || !pwdHash || a.passwordHash === pwdHash)) return true;
+      return false;
+    });
+
+    if (matched) {
+      var localSess = setAuthSession(matched);
+      return { ok: true, session: localSess, source: 'local_managed_accounts' };
+    }
+
+    if (requestedRole === 'super_admin' || requestedRole === 'customer_care' || requestedRole === 'cliente') {
+      var fallbackSess = setAuthSession({
+        role: requestedRole,
+        email: email || (requestedRole === 'super_admin' ? 'admin@bluearroyo.it' : requestedRole === 'customer_care' ? 'itassistance@bluearroyo.it' : 'cliente@itadreamteam.com'),
+        fullName: c.fullName || (requestedRole === 'super_admin' ? 'Super Admin ITASSISTANCEDREAMTEAM.IT' : requestedRole === 'customer_care' ? 'Customer Care (OM) ITASSISTANCEDREAMTEAM.IT' : 'Cliente Proprietario'),
+        ownerCode: c.ownerCode || 'ITA-FIRENZE-01',
+        apartmentName: c.apartmentName || ''
+      });
+      return { ok: true, session: fallbackSess, source: 'role_session' };
+    }
+
+    return { ok: false, error: 'Credenziali non valide.' };
   }
 })(typeof window !== 'undefined' ? window : this);

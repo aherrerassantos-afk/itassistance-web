@@ -1,43 +1,35 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Accedi al tuo appartamento — itassistance</title>
-  <meta name="description" content="Accedi all'Area Riservata di itassistance per aprire il Riepilogo delle 08:00, inviare i dati alla Questura e gestire i Gradi di Autonomia a Firenze."/>
-  <meta name="robots" content="noindex, follow"/>
-  <link rel="canonical" href="https://itadreamteam.com/login"/>
-  <link rel="icon" type="image/png" href="/brand/logo.png"/>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Accedi al tuo appartamento — itassistance",
-    "url": "https://itadreamteam.com/login",
-    "description": "Accesso riservato ai proprietari di immobili in affitto breve a Firenze iscritti a itassistance."
-  }
-  </script>
+  <title>Accesso Riservato Cliente &amp; Team · ITASSISTANCEDREAMTEAM.IT · Palazzo by Blue Arroyo</title>
+  <meta name="description" content="Portale di accesso riservato ITASSISTANCEDREAMTEAM.IT: Area Cliente (Proprietario — Fatturazione e My Box) e Dashboard Team ITASSISTANCEDREAMTEAM.IT (Customer Care OM e Super Admin)."/>
+  <link rel="canonical" href="https://www.itadreamteam.com/login.html"/>
+  <link rel="icon" type="image/webp" href="/brand/logo.webp"/>
+  <meta name="theme-color" content="#FFFFFF"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet"/>
-  <script src="/site-config.js"></script>
-  <script src="/cloud-sync.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/styles.css"/>
+  <script src="/site-config.js" defer></script>
+  <script src="/cloud-sync.js" defer></script>
   <style>
     :root {
       --bg-light: #FFFFFF;
       --bg-stone: #F5F3FF;
       --ink-navy: #1E1035;
       --ink-muted: #4C3D63;
-      --ink-on-dark-muted: #DDD6FE;
       --gold-accent: #C4B5FD;
       --gold-text-light: #5B21B6;
-      --border-control: #7C3AED;
+      --border-hairline: rgba(124, 58, 237, 0.22);
+      --border-control: #6D28D9;
       --status-ok-bg: #ECFDF5;
       --status-ok-text: #065F46;
       --error-bg: #FEF2F2;
       --error-text: #991B1B;
-      --font-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     *, *::before, *::after {
@@ -47,140 +39,160 @@
     }
 
     html {
+      font-size: 16px;
       -webkit-text-size-adjust: 100%;
-      
     }
 
     body {
-      font-family: var(--font-sans);
-      font-size: 1rem;
-      line-height: 1.6;
-      background-color: var(--bg-light);
+      background-color: var(--bg-stone);
       color: var(--ink-navy);
-      min-height: 100svh;
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
-      
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    :focus-visible {
-      outline: 3px solid var(--gold-accent);
-      outline-offset: 2px;
-    }
-
-    .onion-header {
-      min-height: 64px;
-      background-color: var(--ink-navy);
-      color: var(--bg-light);
-      border-bottom: 2px solid var(--gold-accent);
-      display: flex;
-      align-items: center;
-    }
-
-    .onion-header-inner {
-      width: 100%;
-      max-width: 1360px;
-      margin: 0 auto;
-      padding: 0 clamp(16px, 3vw, 40px);
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .onion-header-brand {
       text-align: center;
-      font-weight: 800;
-      font-size: 1.125rem;
-      white-space: nowrap;
     }
 
-    .back-link {
+    a { color: inherit; text-decoration: none; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background-color: var(--bg-light);
+      border-bottom: 1.5px solid var(--border-control);
+      padding-top: env(safe-area-inset-top);
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
+    }
+
+    .header-grid {
+      max-width: 960px;
+      margin: 0 auto;
+      min-height: 64px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+    }
+
+    .brand-link {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      min-height: 44px;
-      padding: 8px 14px;
-      border: 1.5px solid var(--ink-on-dark-muted);
-      border-radius: 12px;
-      font-weight: 700;
-      white-space: nowrap;
+      min-width: 0;
+      max-width: 100%;
+      font-weight: 800;
+      font-size: clamp(0.75rem, 3.2vw, 1.05rem);
+      color: var(--ink-navy);
+      text-align: left;
+    }
+
+    .brand-link img {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
       flex-shrink: 0;
     }
 
-    .wrap {
+    .brand-link span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      line-height: 1.15;
+    }
+
+    .main-wrap {
       flex: 1;
       width: 100%;
-      max-width: 520px;
+      max-width: 760px;
       margin: 0 auto;
-      padding: 32px 16px 48px;
+      padding-top: 28px;
+      padding-bottom: max(36px, env(safe-area-inset-bottom));
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
+      text-align: center;
     }
 
     .login-card {
       background-color: var(--bg-light);
-      border: 2px solid var(--border-control);
-      border-radius: 12px;
-      padding: 24px 16px;
-    }
-
-    @media (min-width: 640px) {
-      .login-card {
-        padding: 32px 24px;
-      }
+      border: 1.5px solid var(--border-control);
+      border-radius: 16px;
+      padding: 24px 18px;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto 22px;
+      text-align: center;
     }
 
     .kicker {
       display: inline-block;
-      font-size: 1rem;
+      font-size: 0.8125rem;
       font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
       color: var(--gold-text-light);
-      margin-bottom: 8px;
+      background-color: var(--bg-stone);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
     }
 
     h1 {
       font-family: var(--font-display);
-      font-size: clamp(2rem, 4vw, 2.5rem);
+      font-size: clamp(1.75rem, 5vw, 2.35rem);
       line-height: 1.15;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      color: var(--ink-navy);
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.35rem, 4vw, 1.75rem);
+      line-height: 1.2;
+      margin-bottom: 8px;
+      color: var(--ink-navy);
+      text-align: center;
+      overflow-wrap: anywhere;
     }
 
     .sub {
       color: var(--ink-muted);
-      margin-bottom: 24px;
+      font-size: 0.96rem;
+      max-width: 60ch;
+      margin: 0 auto 18px;
+      text-align: center;
     }
 
     .field-group {
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+      text-align: center;
     }
 
     .field-label {
       display: block;
-      font-size: 1rem;
+      font-size: 0.9rem;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+      color: var(--ink-navy);
+      text-align: center;
     }
 
     .field-input {
       width: 100%;
-      min-height: 56px;
-      padding: 12px 16px;
+      max-width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border-control);
+      border-radius: 10px;
       font-family: var(--font-sans);
       font-size: 1rem;
       color: var(--ink-navy);
       background-color: var(--bg-light);
-      border: 2px solid var(--border-control);
-      border-radius: 8px;
-    }
-
-    @media (min-width: 769px) {
-      .field-input {
-        min-height: 48px;
-      }
+      text-align: center;
     }
 
     .btn {
@@ -189,161 +201,243 @@
       justify-content: center;
       width: 100%;
       min-height: 52px;
-      padding: 10px 20px;
+      padding: 12px 18px;
+      border-radius: 14px;
       font-family: var(--font-sans);
-      font-size: 0.9375rem;
+      font-size: 0.96rem;
       font-weight: 700;
-      border-radius: 15px;
-      border: 2px solid transparent;
-      cursor: pointer;
       text-align: center;
-      white-space: nowrap;
+      cursor: pointer;
+      border: 2px solid transparent;
     }
 
-    @media (min-width: 769px) {
+    @media (max-width: 420px) {
+      .login-card {
+        padding: 20px 14px;
+      }
       .btn {
-        min-height: 48px;
+        padding: 10px 14px;
+        font-size: 0.875rem;
       }
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #6D28D9 0%, #5B21B6 100%);
-      background-color: #6D28D9;
-      color: #FFFFFF;
-      border-color: #7C3AED;
+      background-color: var(--gold-accent);
+      color: var(--ink-navy);
+      border-color: var(--ink-navy);
     }
 
     .btn-secondary {
-      background-color: transparent;
+      background-color: var(--bg-light);
       color: var(--ink-navy);
       border-color: var(--ink-navy);
-      margin-top: 12px;
+      margin-top: 10px;
     }
 
-    .error-box {
-      display: none;
-      background-color: var(--error-bg);
-      color: var(--error-text);
-      border: 2px solid var(--error-text);
-      padding: 12px 16px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      font-weight: 600;
+    .btn-small {
+      width: auto;
+      min-height: 44px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      flex-shrink: 0;
     }
-  
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin: 14px auto 18px;
+      text-align: center;
+    }
+
+    @media (min-width: 640px) {
+      .profile-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .profile-pill {
+      background: var(--bg-stone);
+      border: 1px solid var(--border-hairline);
+      border-radius: 12px;
+      padding: 12px 10px;
+      font-size: 0.85rem;
+      min-width: 0;
+    }
+
+    .profile-pill strong {
+      display: block;
+      color: var(--ink-navy);
+      margin-bottom: 4px;
+      font-size: 0.92rem;
+    }
+
+    .error-msg {
+      display: none;
+      margin-bottom: 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background-color: var(--error-bg);
+      border: 1.5px solid var(--error-text);
+      color: var(--error-text);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--gold-accent, #C4B5FD);
+      outline-offset: 2px;
+    }
   </style>
 </head>
 <body>
-  <header class="onion-header">
-    <div class="onion-header-inner">
-      <a href="/" class="back-link">&larr; Home</a>
-      <strong class="onion-header-brand">itassistance</strong>
-      <a href="/checkout.html" style="color: var(--gold-accent); font-weight: 700; white-space: nowrap; font-size: 0.9375rem;">Attiva prova</a>
+
+  <header class="site-header">
+    <div class="header-grid">
+      <a href="/" class="brand-link" aria-label="Torna alla home page di ITASSISTANCEDREAMTEAM.IT">
+        <img src="/brand/logo.webp" width="28" height="28" alt="Logo ITASSISTANCEDREAMTEAM.IT"/>
+        <span>ITASSISTANCEDREAMTEAM.IT</span>
+      </a>
+      <a href="/" class="btn btn-secondary btn-small" style="margin-top: 0;">Torna al sito</a>
     </div>
   </header>
 
-  <main class="wrap">
-    <div class="login-card">
-      <span class="kicker">Accesso Proprietario-Gestore e Property Manager</span>
-      <h1>Accedi al tuo appartamento</h1>
+  <main class="main-wrap">
+
+    <!-- INTRO PROFILI UFFICIALI ITASSISTANCEDREAMTEAM.IT -->
+    <div class="login-card" style="background: var(--bg-light);">
+      <span class="kicker">Sistema Accessi &amp; Profili · ITASSISTANCEDREAMTEAM.IT</span>
+      <h1>Accesso Riservato Cliente &amp; Team ITASSISTANCEDREAMTEAM.IT</h1>
       <p class="sub">
-        Inserisci il tuo codice proprietario o la tua email per aprire il Riepilogo delle 08:00.
+        Seleziona il tuo profilo di accesso interno: <strong>Cliente</strong> (il proprietario, chi paga le nostre fatture e usa l'inbox <strong>"My Box"</strong>) oppure <strong>Team ITASSISTANCEDREAMTEAM.IT</strong> (<strong>Customer Care OM</strong> e <strong>Super Admin</strong>).
+      </p>
+      <div class="profile-grid">
+        <div class="profile-pill">
+          <strong>1. Cliente (Proprietario)</strong>
+          <span>Chi paga le nostre fatture: accede a <code>app.html</code>, alle proprie strutture e all'inbox unico <strong>"My Box"</strong> (Report 08:00 AM, foto check-in del Concierge e Pro-Forma).</span>
+        </div>
+        <div class="profile-pill">
+          <strong>2. Team — Customer Care (OM) &amp; Super Admin</strong>
+          <span>Stessa dashboard operativa <code>admin.html</code> con due profili distinti: <strong>Customer Care (OM)</strong> per l'operatività e <strong>Super Admin</strong> con gestione credenziali.</span>
+        </div>
+        <div class="profile-pill">
+          <strong>3. Usuario (Turista / Ospite)</strong>
+          <span>Chi approfitta della nostra copertura e gamma di servizi: non serve login interno. Assistenza diretta 7/7 al <strong>+39 349 177 5561</strong> · <strong>itassistance@bluearroyo.it</strong>.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. ACCESSO CLIENTE (PROPRIETARIO — CHI PAGA LE NOSTRE FATTURE -> /app.html) -->
+    <div class="login-card">
+      <span class="kicker">1. Profilo Cliente · Proprietario Immobile</span>
+      <h2>Accesso Cliente (Proprietario — "My Box" &amp; Report 08:00 AM)</h2>
+      <p class="sub">
+        Riservato al <strong>Cliente</strong> (il proprietario che paga le nostre fatture): consulta le foto del check-in caricate dal Concierge, la To-Do List del Report delle 08:00 AM e i Pro-Forma da confermare in <strong>"My Box"</strong>.
       </p>
 
-      <div id="login-error-box" class="error-box" role="alert"></div>
+      <div id="login-error-box" class="error-msg" role="alert"></div>
 
       <div class="field-group">
-        <label for="lg-code" class="field-label">Codice appartamento o indirizzo email *</label>
-        <input type="text" id="lg-code" class="field-input" value="ITA-FIRENZE-01" placeholder="Es. ITA-FIRENZE-01 oppure nome@esempio.it"/>
+        <label for="lg-code" class="field-label">Codice Struttura o Email Cliente *</label>
+        <input type="text" id="lg-code" class="field-input" value="ITA-FIRENZE-01" placeholder="Es. ITA-FIRENZE-01 oppure la tua email" required/>
       </div>
 
-      <details style="margin-bottom: 24px; padding: 12px 16px; background-color: var(--bg-stone); border: 1px solid var(--border-control); border-radius: 8px;">
-        <summary style="font-weight: 700; cursor: pointer;">Opzionale: specifica nome immobile o email secondaria</summary>
-        <div style="margin-top: 16px;">
+      <details style="margin-bottom: 16px; padding: 12px 14px; background-color: var(--bg-stone); border: 1px solid var(--border-hairline); border-radius: 10px;">
+        <summary style="font-weight: 600; cursor: pointer; font-size: 0.9rem;">Opzioni aggiuntive Cliente (Email o Nome struttura)</summary>
+        <div style="margin-top: 12px;">
           <div class="field-group">
-            <label for="lg-email" class="field-label">Email proprietario</label>
-            <input type="email" id="lg-email" class="field-input" value="proprietario@itadreamteam.com"/>
+            <label for="lg-email" class="field-label">Email per ricevere il Report delle 08:00 AM e i Pro-Forma</label>
+            <input type="email" id="lg-email" class="field-input" value="proprietario@itadreamteam.com" placeholder="nome@email.it"/>
           </div>
           <div class="field-group" style="margin-bottom: 0;">
-            <label for="lg-apt" class="field-label">Nome appartamento</label>
-            <input type="text" id="lg-apt" class="field-input" placeholder="Es. Appartamento Santo Spirito"/>
+            <label for="lg-apt" class="field-label">Nome appartamento (opzionale)</label>
+            <input type="text" id="lg-apt" class="field-input" placeholder="Es. Appartamento Santo Spirito Firenze"/>
           </div>
         </div>
       </details>
 
       <button type="button" class="btn btn-primary" onclick="doOwnerLogin()">
-        Apri area riservata
+        Entra nell'Area Cliente
       </button>
 
-      <button type="button" class="btn btn-secondary" onclick="doFirstAccessOnboardingLogin()">
-        Primo accesso nuova struttura
+      <button type="button" id="btn-first-access-onboarding" class="btn btn-secondary" onclick="doFirstAccessOnboardingLogin()">
+        Primo accesso struttura
       </button>
 
-      <p style="margin-top: 16px; margin-bottom: 6px; font-size: 0.9375rem; color: var(--ink-muted); text-align: center;">
-        Non hai ancora un codice proprietario?
+      <p style="margin-top: 14px; margin-bottom: 6px; font-size: 0.9rem; color: var(--ink-muted);">
+        Non sei ancora Cliente?
       </p>
       <a href="/checkout.html" class="btn btn-secondary" style="margin-top: 0;">
-        Attiva prova 14 giorni
+        Prova 14 giorni · 99 €/mese
       </a>
     </div>
 
-    <!-- ACCESSO DIREZIONE / SUPER ADMIN — PANNELLO DI CONTROLLO (/admin.html) -->
-    <div class="login-card" style="margin-top: 24px; background-color: var(--bg-stone); border-color: var(--ink-navy);">
-      <span class="kicker">Direzione Blue Arroyo SRL · Console Centrale</span>
-      <h2 style="font-family: var(--font-display); font-size: 1.5rem; line-height: 1.2; margin-bottom: 8px; color: var(--ink-navy);">
-        Account Super Admin — Pannello di Controllo
-      </h2>
-      <p class="sub" style="margin-bottom: 16px; font-size: 0.9375rem;">
-        Accesso riservato alla Presidenza e ai General Director per governare la quotazione giornaliera (99,00 € – 289,50 €), i 4 Gradi di Autonomia, la fatturazione e i lead di Toscan Costruzioni.
+    <!-- 2. ACCESSO TEAM ITASSISTANCEDREAMTEAM.IT: CUSTOMER CARE (OM) & SUPER ADMIN (/admin.html) -->
+    <div class="login-card" style="background-color: var(--bg-stone); border-color: var(--ink-navy);">
+      <span class="kicker">2. Team ITASSISTANCEDREAMTEAM.IT · Console Operativa</span>
+      <h2>Dashboard Team: Customer Care (OM) &amp; Super Admin</h2>
+      <p class="sub">
+        La dashboard operativa è identica per <strong>Customer Care (OM)</strong> e <strong>Super Admin</strong>, con due profili distinti: <strong>Customer Care</strong> governa check-in, foto Concierge in <em>"My Box"</em>, manutenzioni e calendario; <strong>Super Admin</strong> dispone inoltre della gestione credenziali e chiusura contabile.
       </p>
 
-      <div style="padding: 12px 14px; background-color: var(--bg-light); border: 1.5px solid var(--border-control); border-radius: 10px; margin-bottom: 16px; font-size: 0.875rem;">
-        <div style="font-weight: 700; color: var(--ink-navy);">Credenziali Super Admin preconfigurate:</div>
-        <div style="color: var(--ink-muted); margin-top: 4px;">
-          Utente: <strong>Julian Herrera (Presidente &amp; Super Admin)</strong><br/>
-          Email / Codice: <code>superadmin@itadreamteam.com</code> oppure <code>SUPERADMIN</code> · PIN: <code>2026</code>
-        </div>
+      <div id="team-login-error-box" class="error-msg" role="alert"></div>
+
+      <div class="field-group">
+        <label for="sa-role" class="field-label">Seleziona Profilo Team ITASSISTANCEDREAMTEAM.IT</label>
+        <select id="sa-role" class="field-input" onchange="syncSuperAdminRoleEmail(this.value)">
+          <option value="superadmin" selected>Team ITASSISTANCEDREAMTEAM.IT — Super Admin (Accesso Totale + Credenziali)</option>
+          <option value="customer_care">Team ITASSISTANCEDREAMTEAM.IT — Customer Care (OM · Stessa Dashboard Operativa)</option>
+          <option value="billing">Amministrazione &amp; Chiusura Contabile Fine Mese ("My Box")</option>
+          <option value="partners">Coordinamento Rete Manutentori &amp; Fornitori</option>
+        </select>
       </div>
 
-      <button type="button" class="btn btn-primary" onclick="doSuperAdminLogin('superadmin')">
-        Apri Pannello Super Admin
+      <div class="field-group">
+        <label for="sa-email" class="field-label">Email Account Team</label>
+        <input type="email" id="sa-email" class="field-input" value="admin@bluearroyo.it" autocomplete="username"/>
+      </div>
+
+      <div class="field-group">
+        <label for="sa-pin" class="field-label">Password / Credenziale di Accesso (verifica cifrata SHA-256)</label>
+        <input type="password" id="sa-pin" class="field-input" placeholder="Inserisci la tua credenziale riservata" autocomplete="current-password"/>
+      </div>
+
+      <button type="button" class="btn btn-primary" onclick="doSuperAdminLogin()">
+        Entra nella Dashboard Team
       </button>
 
-      <details style="margin-top: 14px; padding: 12px 16px; background-color: var(--bg-light); border: 1px solid var(--border-control); border-radius: 8px;">
-        <summary style="font-weight: 700; cursor: pointer; font-size: 0.9375rem;">Accedi con Ruolo Specifico o PIN Direzione</summary>
-        <div style="margin-top: 14px;">
-          <div class="field-group">
-            <label for="sa-role" class="field-label">Ruolo Direzione</label>
-            <select id="sa-role" class="field-input" onchange="syncSuperAdminRoleEmail(this.value)">
-              <option value="superadmin" selected>Holding / Super Admin (Accesso Totale)</option>
-              <option value="hr">1. General Director Operatività (Turni 09–23 &amp; RM)</option>
-              <option value="billing">2. General Director Amministrazione (Fatture &amp; Rimborsi 14gg)</option>
-              <option value="partners">3. General Director Vendite (PM, Lead &amp; Partner)</option>
-            </select>
-          </div>
-          <div class="field-group">
-            <label for="sa-email" class="field-label">Email Account Admin</label>
-            <input type="email" id="sa-email" class="field-input" value="superadmin@itadreamteam.com"/>
-          </div>
-          <div class="field-group">
-            <label for="sa-pin" class="field-label">Codice PIN Direzione</label>
-            <input type="password" id="sa-pin" class="field-input" value="2026" placeholder="2026"/>
-          </div>
-          <button type="button" class="btn btn-secondary" style="margin-top: 4px;" onclick="doSuperAdminLogin()">
-            Entra nel Pannello di Controllo
-          </button>
-        </div>
-      </details>
+      <button type="button" class="btn btn-secondary" onclick="doSuperAdminLogin('customer_care')">
+        Accesso Customer Care (OM)
+      </button>
     </div>
+
+    <!-- 3. BOX INFORMATIVO USUARIO (IL TURISTA / OSPITE) -->
+    <div class="login-card">
+      <span class="kicker">3. Sei un Usuario (Turista / Ospite in soggiorno a Firenze)?</span>
+      <h2>Servizi e Copertura Diretta per l'Usuario (Ospite)</h2>
+      <p class="sub">
+        L'<strong>Usuario</strong> è il turista che soggiorna nelle strutture seguite da <strong>ITASSISTANCEDREAMTEAM.IT</strong> e approfitta della nostra copertura e gamma di servizi: non si compilano link di check-in online prima dell'arrivo e non serve alcun login interno. Il Concierge ti accoglie direttamente al check-in!
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
+        <a href="tel:+393491775561" class="btn btn-primary" style="max-width:320px;">Chiama +39 349 177 5561</a>
+        <a href="mailto:itassistance@bluearroyo.it" class="btn btn-secondary" style="margin-top:0;max-width:320px;">Scrivi all'Assistenza Ospiti</a>
+      </div>
+    </div>
+
+    <footer style="text-align:center;font-size:0.8125rem;color:var(--ink-muted);margin-top:24px;">
+      <strong>ITASSISTANCEDREAMTEAM.IT</strong> — <strong>BLUEARROYO S.R.L.</strong> – Sede legale: Via Matteo Palmieri 20/R, 50122 Firenze (FI) · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v.<br/>
+      Assistenza Ospiti (Usuario): +39 349 177 5561 · itassistance@bluearroyo.it · Admin / Clienti: admin@bluearroyo.it · Fornitori: +39 349 804 1146 · risorseumane@bluearroyo.it
+    </footer>
   </main>
 
   <script>
     var ADMIN_ROLE_EMAILS = {
-      superadmin: 'superadmin@itadreamteam.com',
-      hr: 'hr@itadreamteam.com',
-      billing: 'fatturazione@itadreamteam.com',
-      partners: 'fornitori@itadreamteam.com'
+      superadmin: 'admin@bluearroyo.it',
+      customer_care: 'itassistance@bluearroyo.it',
+      hr: 'itassistance@bluearroyo.it',
+      billing: 'admin@bluearroyo.it',
+      partners: 'risorseumane@bluearroyo.it'
     };
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -364,17 +458,36 @@
       }
     }
 
-    function doSuperAdminLogin(forcedRole) {
+    async function doSuperAdminLogin(forcedRole) {
       var roleSel = document.getElementById('sa-role');
       var role = forcedRole || (roleSel ? roleSel.value : 'superadmin') || 'superadmin';
-      try {
-        var raw = localStorage.getItem('itassistance_superadmin_v1');
-        var st = raw ? JSON.parse(raw) : {};
-        st.loggedIn = true;
-        st.currentRole = role;
-        st.lastLoginAt = new Date().toISOString();
-        localStorage.setItem('itassistance_superadmin_v1', JSON.stringify(st));
-      } catch (e) {}
+      var emailEl = document.getElementById('sa-email');
+      var pinEl = document.getElementById('sa-pin');
+      var email = (emailEl && emailEl.value ? emailEl.value : ADMIN_ROLE_EMAILS[role] || 'admin@bluearroyo.it').trim().toLowerCase();
+      var pwd = (pinEl && pinEl.value ? pinEl.value : '').trim();
+
+      var normalizedProfile = (role === 'customer_care' || role === 'hr') ? 'customer_care' : 'super_admin';
+
+      if (window.ITACloudSync && typeof ITACloudSync.authenticateInternalUser === 'function') {
+        await ITACloudSync.authenticateInternalUser({
+          role: normalizedProfile,
+          email: email,
+          password: pwd
+        });
+      } else {
+        try {
+          var raw = localStorage.getItem('itassistance_superadmin_v1');
+          var st = raw ? JSON.parse(raw) : {};
+          st.loggedIn = true;
+          st.currentRole = role;
+          st.profileType = normalizedProfile;
+          st.email = email;
+          st.canManageCredentials = normalizedProfile === 'super_admin';
+          st.lastLoginAt = new Date().toISOString();
+          localStorage.setItem('itassistance_superadmin_v1', JSON.stringify(st));
+        } catch (e) {}
+      }
+
       window.location.href = '/admin.html?role=' + encodeURIComponent(role);
     }
 
@@ -384,7 +497,7 @@
       if (!rawInput) {
         if (errBox) {
           errBox.style.display = 'block';
-          errBox.textContent = 'Inserisci il tuo codice appartamento (es. ITA-FIRENZE-01) oppure il tuo indirizzo email.';
+          errBox.textContent = 'Inserisci il tuo codice appartamento (es. ITA-FIRENZE-01) oppure il tuo indirizzo email Cliente.';
         }
         return;
       }
@@ -394,23 +507,23 @@
       if (
         lower === 'superadmin' ||
         lower === 'admin' ||
+        lower === 'admin@bluearroyo.it' ||
         lower === 'superadmin@itadreamteam.com' ||
         lower === 'admin@itadreamteam.com' ||
-        lower === 'julian@itadreamteam.com' ||
-        lower === 'info@itadreamteam.com'
+        lower === 'julian@itadreamteam.com'
       ) {
         doSuperAdminLogin('superadmin');
+        return;
+      }
+      if (lower === 'itassistance@bluearroyo.it' || lower === 'customercare' || lower === 'customer_care') {
+        doSuperAdminLogin('customer_care');
         return;
       }
       if (lower === 'fatturazione@itadreamteam.com') {
         doSuperAdminLogin('billing');
         return;
       }
-      if (lower === 'hr@itadreamteam.com') {
-        doSuperAdminLogin('hr');
-        return;
-      }
-      if (lower === 'fornitori@itadreamteam.com') {
+      if (lower === 'hr@itadreamteam.com' || lower === 'risorseumane@bluearroyo.it') {
         doSuperAdminLogin('partners');
         return;
       }
@@ -420,7 +533,14 @@
       var email = isEmailInput ? rawInput : ((document.getElementById('lg-email').value || 'proprietario@itadreamteam.com').trim());
       var apt = (document.getElementById('lg-apt').value || '').trim();
 
-      if (window.ITACloudSync && typeof ITACloudSync.loginOwnerSession === 'function') {
+      if (window.ITACloudSync && typeof ITACloudSync.setAuthSession === 'function') {
+        ITACloudSync.setAuthSession({
+          role: 'cliente',
+          email: email,
+          ownerCode: code,
+          apartmentName: apt
+        });
+      } else if (window.ITACloudSync && typeof ITACloudSync.loginOwnerSession === 'function') {
         ITACloudSync.loginOwnerSession({
           ownerCode: code,
           email: email,
@@ -438,7 +558,14 @@
       var email = isEmailInput ? rawInput : ((document.getElementById('lg-email').value || 'proprietario@itadreamteam.com').trim());
       var apt = (document.getElementById('lg-apt').value || '').trim();
 
-      if (window.ITACloudSync && typeof ITACloudSync.loginOwnerSession === 'function') {
+      if (window.ITACloudSync && typeof ITACloudSync.setAuthSession === 'function') {
+        ITACloudSync.setAuthSession({
+          role: 'cliente',
+          email: email,
+          ownerCode: code,
+          apartmentName: apt
+        });
+      } else if (window.ITACloudSync && typeof ITACloudSync.loginOwnerSession === 'function') {
         ITACloudSync.loginOwnerSession({
           ownerCode: code,
           email: email,

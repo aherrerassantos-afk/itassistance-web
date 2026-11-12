@@ -1,0 +1,12 @@
+Ruolo,Missione,Input,Output,KPI,Contatto col proprietario
+Direzione,"Strategia, capacità, prezzi, qualità","KPI di tutti i reparti, controllo di gestione","Decisioni, listino, piano capacità","Margine per unità, saturazione, % automazione",No (solo comunicazioni ufficiali)
+Commerciale,Acquisire proprietari nel profilo ideale,"Lead, prezzo live, simulatore",Contratti firmati con prezzo bloccato,"Conversione, tempo alla firma","Sì, prima della firma"
+Onboarding Specialist,Portare l'unità online,"Contratto firmato, dati del wizard",Unità attiva su canali e planner,Giorni al go-live,"Sì, durante l'onboarding"
+Front Desk Proprietari,Rispondere a dubbi e ticket dei proprietari,Ticket dai form dell'app,"Risposte, ticket assegnati, escalation","Tempo di risposta, ticket chiusi, NPS",Sì: è il suo unico interlocutore
+Property Manager,"Gestire clienti, check-in, proprietà e bill fornitori","Prenotazioni, report fornitori, fatture","Check-in ok, proprietà controllate, bill approvate","Recensioni, anomalie risolte, bill nei tempi",Solo tramite escalation
+Guest Experience,Assistenza ospiti 7/7,Messaggi da tutti i canali,"Risposte, richieste extra, segnalazioni","Tempo di risposta, rating ospiti",No
+Revenue Manager (servizio 10%),Massimizzare il ricavo delle unità con revenue attivo,"Dati di mercato, calendario, limiti min/max","Prezzi aggiornati, report revenue","RevPAR, occupazione vs obiettivo",Tramite report e approvazioni nell'inbox
+Coordinatore fornitori / planner,"Coprire tutti i turni generati in automatico (Magazzino Via dell'Agnolo 72R, Firenze · Ufficio Blue Arroyo Srl Via Matteo Palmieri 20R, 50122 Firenze)","Turni del planner, disponibilità fornitori","Turni coperti, eccezioni risolte","% turni coperti, puntualità",No
+"Fornitori (pulizie, lavanderia, manutenzione)",Eseguire i servizi e aggiornare l'app in automatico,"Turni assegnati, checklist","Stato, foto, anomalie, bozza fattura","Puntualità, qualità, contestazioni",No
+Amministrazione,"Fatture, pagamenti, rendiconti ARM","Fatture passive, ARM, registro attività","Pagamenti, rendiconti approvati, fatture attive","Quadratura, ritardi pagamento",Tramite rendiconto e fatture nell'inbox
+Tech / Product,Sviluppare e mantenere il sistema,"Richieste dei reparti, KPI automazione","Funzioni rilasciate, integrazioni","Uptime, % automazione, bug aperti",No

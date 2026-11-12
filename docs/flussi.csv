@@ -1,0 +1,16 @@
+Da,A,Input,Output,Canale,Tempo / SLA
+Proprietario,Front Desk,Domanda / richiesta,Risposta o ticket assegnato,Form nell'app,Risposta entro SLA
+Front Desk,Property Manager / Operations,Ticket operativo,Ticket risolto (interno),Ticket interno,Secondo urgenza
+Qualsiasi reparto,Proprietario,Decisione necessaria,Approvazione / rifiuto,"Inbox ""Da fare per te""",Scadenza indicata
+Ospite,Guest Experience,Messaggio / problema,"Risposta, richiesta extra",Inbox unificata canali,Pochi minuti in orario
+Guest Experience,Planner / fornitori,Richiesta extra o guasto,Turno o ticket,Ticket interno,Stesso giorno
+Canali / prenotazioni,Planner pulizie,Check-in e check-out,Turni generati,Automatico,In tempo reale
+Planner,Fornitori,"Turno assegnato (partenza/rientro Magazzino Via dell'Agnolo 72R, Firenze · Ufficio Blue Arroyo Srl Via Matteo Palmieri 20R, 50122 Firenze)",Turno accettato,App fornitore,Entro poche ore
+Fornitori,Property Manager,Servizio completato,"Foto-report, anomalie",App fornitore,Entro l'orario stabilito
+Fornitori,Amministrazione,Attività completate,Bozza fattura,Automatico,Mensile
+Property Manager,Amministrazione,Bill verificate,Coda pagamenti,Flusso approvazione,Settimanale
+Prenotazioni + costi,ARM,"Lordo, commissioni, costi",Saldo proprietario,Automatico,Mensile
+Amministrazione,Proprietario,"Rendiconto ARM, fatture","Rendiconto letto, pagamento",Inbox proprietario,Mensile
+Revenue,Proprietario,Prezzi oltre i limiti,Approvazione,Inbox proprietario,Entro la data
+Commerciale,Onboarding,Contratto firmato,Unità attiva,CRM → wizard,Entro i giorni concordati
+Tutti i reparti,Direzione,KPI,Decisioni,Dashboard + riunione settimanale,Settimanale

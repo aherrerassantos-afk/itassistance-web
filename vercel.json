@@ -1,6 +1,20 @@
 {
-  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/crm", "destination": "/crm.html" },
+    { "source": "/crm/", "destination": "/crm.html" },
+    { "source": "/api/crm-prospects", "destination": "https://palazzobluearroyo.it/api/crm-prospects" },
+    { "source": "/en", "destination": "/en/index.html" },
+    { "source": "/en/", "destination": "/en/index.html" },
+    { "source": "/contabilita", "destination": "/admin.html" },
+    { "source": "/contabilita/", "destination": "/admin.html" },
+    { "source": "/affitti-brevi-firenze", "destination": "/guide-affitti-brevi-firenze.html" },
+    { "source": "/affitti-brevi-firenze/", "destination": "/guide-affitti-brevi-firenze.html" },
+    { "source": "/affitti-brevi-firenze/:slug", "destination": "/:slug.html" },
+    { "source": "/affitti-brevi-firenze/:slug/", "destination": "/:slug.html" }
+  ],
   "redirects": [
+    { "source": "/itassistance", "destination": "/", "permanent": true },
+    { "source": "/itassistance-firenze", "destination": "/", "permanent": true },
     { "source": "/istat-ross1000-firenze", "destination": "/istat-ross1000-flussi-turistici-affitti-brevi-firenze.html", "permanent": true },
     { "source": "/dotazioni-sicurezza-firenze", "destination": "/dotazioni-sicurezza-estintori-rilevatori-affitti-brevi-firenze.html", "permanent": true },
     { "source": "/check-out-firenze", "destination": "/check-out-deposito-bagagli-recensioni-affitti-brevi-firenze.html", "permanent": true },
@@ -31,7 +45,6 @@
     { "source": "/admin", "destination": "/admin.html", "permanent": true },
     { "source": "/superadmin", "destination": "/admin.html", "permanent": true },
     { "source": "/fatturazione", "destination": "/admin.html?role=billing", "permanent": true },
-    { "source": "/contabilita", "destination": "/admin.html?role=billing&view=fatturazione", "permanent": true },
     { "source": "/portal.html", "destination": "/app.html", "permanent": true },
     { "source": "/portal", "destination": "/app.html", "permanent": true },
     { "source": "/area-proprietario", "destination": "/app.html", "permanent": true },

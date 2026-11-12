@@ -2,3 +2,9 @@
 .env*
 .credentials.md
 node_modules/
+data/
+palazzina-holding/
+holding-mirrors/
+config/progetti.json
+BOARD.md
+README-PALAZZINA.md

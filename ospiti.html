@@ -467,21 +467,21 @@
     </section>
 
     <footer style="text-align:center;font-size:0.875rem;color:var(--ink-muted);">
-      <span id="lbl-footer-support">Assistenza Ospiti Firenze (09:00–23:00): +39 351 038 0392 · info@itadreamteam.com</span><br/>
-      Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]
+      <span id="lbl-footer-support">Assistenza Ospiti Firenze (09:00–23:00): +39 349 177 5561 · itassistance@bluearroyo.it</span><br/>
+      Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v.
     </footer>
   </main>
 
   <script>
     var currentLang = 'it';
     var aptInfo = {
-      name: 'Appartamento Santo Spirito',
-      address: 'Via Maggio 18, 50125 Firenze',
-      doorCode: 'Keybox 4829 a sinistra del portone',
-      floor: 'Secondo piano',
-      wifi: 'Fibra-SantoSpirito',
-      pass: 'Firenze2026!',
-      checkout: 'Entro le ore 10:00'
+      name: 'Appartamento Firenze',
+      address: '[DA CONFERMARE]',
+      doorCode: '[DA CONFERMARE]',
+      floor: '[DA CONFERMARE]',
+      wifi: '[DA CONFERMARE]',
+      pass: '[DA CONFERMARE]',
+      checkout: 'Orario check-out: 10:00'
     };
 
     var I18N = {
@@ -510,7 +510,7 @@
         okTitle: 'Documenti registrati con successo',
         okDesc: 'I tuoi dati sono stati inviati al proprietario per la trasmissione su Alloggiati Web. Ora puoi scaricare il PDF con l’indirizzo, i codici di accesso e la password Wi-Fi.',
         btnPdf: 'Scarica il PDF con le istruzioni di check-in (IT)',
-        footerSupport: 'Assistenza Ospiti Firenze (Tutti i giorni 09:00–23:00): +39 351 038 0392 · info@itadreamteam.com'
+        footerSupport: 'Assistenza Ospiti Firenze (Tutti i giorni 09:00–23:00): +39 349 177 5561 · itassistance@bluearroyo.it'
       },
       en: {
         eyebrow: 'MANDATORY GUEST REGISTRATION BY ITALIAN LAW (ART. 109 TULPS)',
@@ -535,9 +535,9 @@
         privacy: 'Your data is processed solely for mandatory registration with the Italian State Police (Alloggiati Web, art. 109 TULPS).',
         btnSubmit: 'Submit ID Details and Unlock Check-in Instructions',
         okTitle: 'ID Details Successfully Registered',
-        okDesc: 'Your details have been sent to the property owner. You can now download your Check-in Instructions PDF with address, keybox code and Wi-Fi.',
+        okDesc: 'Your details have been sent to the property owner. You can now download your Check-in Instructions PDF with address, access details and Wi-Fi.',
         btnPdf: 'Download Check-in Instructions PDF (EN)',
-        footerSupport: 'Florence Guest Support (Every day 09:00 AM – 11:00 PM): +39 351 038 0392 · info@itadreamteam.com'
+        footerSupport: 'Florence Guest Support (Every day 09:00 AM – 11:00 PM): +39 349 177 5561 · itassistance@bluearroyo.it'
       }
     };
 
@@ -701,8 +701,8 @@
       if (typeof pdfMake === 'undefined') return;
       var isEN = currentLang === 'en';
       var cfg = window.SITE_CONFIG || {};
-      var phone = (cfg.support && cfg.support.phoneDisplay) || '+39 351 038 0392';
-      var email = (cfg.support && cfg.support.email) || 'info@itadreamteam.com';
+      var phone = (cfg.support && cfg.support.phoneDisplay) || '+39 349 177 5561';
+      var email = (cfg.support && cfg.support.email) || 'itassistance@bluearroyo.it';
       var hours = (cfg.support && cfg.support.hoursShort) || '09:00 – 23:00';
 
       var rows = [];

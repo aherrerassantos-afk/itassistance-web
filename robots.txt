@@ -1,4 +1,4 @@
-# robots.txt — itassistance (https://www.itadreamteam.com) — Blue Arroyo SRL, Firenze
+# robots.txt — Itassistance (https://www.itadreamteam.com) — Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze
 # Regola SEO + GEO: Accesso esplicito a Google, Bing e ai Crawler di Ricerca e Citazione delle IA
 
 User-agent: Googlebot

@@ -139,7 +139,7 @@ function startStaticServer(rootDir) {
 
 function collectHtmlFiles(dir, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name.startsWith('.') || entry.name === 'node_modules' || entry.name === 'scripts') continue;
+    if (entry.name.startsWith('.') || entry.name === 'node_modules' || entry.name === 'scripts' || entry.name === 'palazzina-holding' || entry.name === 'holding-mirrors' || entry.name === 'data') continue;
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       collectHtmlFiles(full, out);

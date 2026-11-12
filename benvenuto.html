@@ -438,25 +438,25 @@
         <label for="ob-reptime">Orario preferito per il Riepilogo Mattutino</label>
         <select id="ob-reptime">
           <option value="07:30">07:30 · Mattina presto</option>
-          <option value="08:00" selected>08:00 · Orario consigliato (10 minuti)</option>
+          <option value="08:00" selected>08:00 · Orario consigliato</option>
           <option value="08:30">08:30 · Mattina</option>
           <option value="09:00">09:00 · Apertura giornata</option>
         </select>
       </div>
 
       <div class="field">
-        <label for="ob-code">Codice Portone o Keybox (per il PDF Check-in)</label>
-        <input type="text" id="ob-code" placeholder="Es. Keybox 4829 a sinistra del portone"/>
+        <label for="ob-code">Modalità di accesso o note check-in (per il PDF Check-in)</label>
+        <input type="text" id="ob-code" placeholder="Es. Accoglienza in loco o istruzioni portone"/>
       </div>
 
       <div class="field">
         <label for="ob-wifi">Nome Rete Wi-Fi e Password</label>
-        <input type="text" id="ob-wifi" placeholder="Es. Fibra-Casa / Password123"/>
+        <input type="text" id="ob-wifi" placeholder="Es. Fibra-Casa / Password"/>
       </div>
 
       <div class="field">
-        <label for="ob-ical">Link Calendario iCal (.ics) Airbnb o Booking.com (Facoltativo · importa subito le tue prenotazioni)</label>
-        <input type="url" id="ob-ical" placeholder="Es. https://www.airbnb.it/calendar/ical/12345678.ics"/>
+        <label for="ob-ical">Link Calendario (.ics) Airbnb o Booking.com (Facoltativo · es. https://...)</label>
+        <input type="url" id="ob-ical" placeholder="Inserisci il link calendario (https:// o webcal://)"/>
       </div>
 
       <div id="ob-feedback" class="save-feedback" role="status">
@@ -473,7 +473,7 @@
     <!-- AZIONI SECONDARIE DOCUMENTALI -->
     <section aria-label="Documenti e promemoria">
       <button type="button" class="btn btn-outline" onclick="downloadWelcomeInvoicePDF()">
-        Scarica Fattura / Ricevuta PDF (Blue Arroyo S.r.l.)
+        Scarica Pro-Forma / Riepilogo PDF (My Box · Blue Arroyo S.r.l.)
       </button>
       <button type="button" class="btn btn-outline" onclick="sendActivationSummaryWhatsApp()">
         Invia riepilogo e link di accesso su WhatsApp
@@ -481,8 +481,8 @@
     </section>
 
     <footer style="text-align:center;font-size:0.875rem;color:var(--ink-muted);margin-top:32px;">
-      Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]<br/>
-      Assistenza proprietari Firenze (Tutti i giorni 09:00–23:00): +39 351 038 0392 · info@itadreamteam.com
+      Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v.<br/>
+      Assistenza Ospiti Firenze (Tutti i giorni 09:00–23:00): +39 349 177 5561 · itassistance@bluearroyo.it · Admin: admin@bluearroyo.it
     </footer>
   </main>
 
@@ -500,12 +500,12 @@
         var now = new Date();
         var gEnd = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
         actData = {
-          invoiceId: 'FATT-2026-109',
+          invoiceId: 'PF-2026-001',
           activatedAt: now.toLocaleDateString('it-IT'),
           guaranteeUntil: gEnd.toLocaleDateString('it-IT'),
           ownerName: params.get('nome') || 'Proprietario',
           ownerEmail: params.get('email') || '',
-          ownerPhone: params.get('tel') || '+39 351 038 0392',
+          ownerPhone: params.get('tel') || '+39 349 177 5561',
           ownerCf: params.get('cf') || '—',
           apartmentName: params.get('imm') || 'Appartamento Firenze',
           apartmentAddress: params.get('addr') || 'Firenze',
@@ -523,7 +523,7 @@
         ? amtFmt + ' / anno (IVA incl.)'
         : amtFmt + ' / mese (IVA incl.)';
       document.getElementById('w-addon').textContent = actData.addon10Active
-        ? 'Attivo (+10%)'
+        ? 'Attivo (+10% sul netto proprietario)'
         : 'Non attivo (0% commissioni)';
       document.getElementById('w-guarantee').textContent = actData.guaranteeUntil || '14 giorni da oggi';
 
@@ -542,20 +542,17 @@
             billingCycle: actData.billingCycle,
             lockedMonthlyEur: actData.lockedMonthlyEur || (actData.billingCycle === 'annuale' ? amtNum / 12 : amtNum),
             ownerCode: codeVal,
-            invoiceId: actData.invoiceId || 'FATT-2026'
+            invoiceId: actData.invoiceId || 'PF-2026-001'
           })
-        : { iban: '[DA CONFERMARE]', causale: 'Attivazione itassistance ' + codeVal + ' - ' + (actData.invoiceId || 'FATT-2026') };
+        : { iban: '[DA CONFERMARE]', causale: 'Attivazione itassistance ' + codeVal + ' - ' + (actData.invoiceId || 'PF-2026-001') };
 
       var bIban = document.getElementById('w-bonifico-iban');
       if (bIban) bIban.textContent = bankDetails.iban;
       var bCaus = document.getElementById('w-bonifico-causale');
       if (bCaus) bCaus.textContent = bankDetails.causale;
 
-      var metodo = params.get('metodo') || actData.paymentMethod || 'stripe';
-      if (metodo === 'bonifico') {
-        var bBox = document.getElementById('w-bonifico-box');
-        if (bBox) bBox.style.display = 'block';
-      }
+      var bBox = document.getElementById('w-bonifico-box');
+      if (bBox) bBox.style.display = 'block';
     });
 
     function copyWelcomeBankDetails() {
@@ -578,16 +575,16 @@
         'ATTIVAZIONE itassistance COMPLETATA',
         'Immobile: ' + (actData.apartmentName || 'Appartamento Firenze'),
         'Codice Personale Proprietario: ' + code,
-        'Fattura Blue Arroyo SRL: ' + (actData.invoiceId || 'FATT-2026') + ' (' + (actData.amountEur || 99) + ',00 € IVA incl.)',
+        'Pro-Forma My Box Blue Arroyo S.r.l.: ' + (actData.invoiceId || 'PF-2026-001') + ' (' + (actData.amountEur || 99) + ',00 € IVA incl.)',
         'Garanzia 14 giorni Soddisfatto o Rimborsato attiva fino al: ' + (actData.guaranteeUntil || ''),
         '',
-        'Link Diretto Area Proprietario (Riepilogo delle 08:00):',
+        'Link Diretto Area Proprietario (Riepilogo delle 08:00 e My Box):',
         'https://www.itadreamteam.com/app.html?code=' + code,
         '',
-        'Link Self Check-in Documenti per gli Ospiti (IT/EN):',
-        'https://www.itadreamteam.com/ospiti.html'
+        'Assistenza Ospiti Firenze (il proprietario manda sempre il numero di assistenza agli ospiti):',
+        '+39 349 177 5561 · itassistance@bluearroyo.it'
       ].join('\n');
-      window.open('https://wa.me/393510380392?text=' + encodeURIComponent(text), '_blank');
+      window.open('https://wa.me/393491775561?text=' + encodeURIComponent(text), '_blank');
     }
 
     async function saveQuickOnboardingAndOpenApp() {
@@ -624,6 +621,10 @@
     }
 
     function downloadWelcomeInvoicePDF() {
+      if (window.ITACloudSync && typeof window.ITACloudSync.downloadMyBoxProformaPdf === 'function') {
+        window.ITACloudSync.downloadMyBoxProformaPdf();
+        return;
+      }
       if (typeof pdfMake === 'undefined' || !actData) return;
       var tot = Number(actData.amountEur || 99);
       var net = (tot / 1.22).toFixed(2);
@@ -640,14 +641,14 @@
                   { text: 'itassistance', fontSize: 20, bold: true, color: '#1E1035' },
                   { text: 'Blue Arroyo S.r.l.', fontSize: 11, bold: true, margin: [0, 4, 0, 0] },
                   { text: 'Sede legale: Via Matteo Palmieri 20R, Firenze', fontSize: 9.5, color: '#4C3D63' },
-                  { text: 'P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]', fontSize: 9.5, color: '#4C3D63' }
+                  { text: 'P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v.', fontSize: 9.5, color: '#4C3D63' }
                 ]
               },
               {
                 alignment: 'right',
                 stack: [
-                  { text: 'RICEVUTA ATTIVAZIONE / FATTURA', fontSize: 12, bold: true, color: '#5B21B6' },
-                  { text: 'Numero: ' + (actData.invoiceId || 'FATT-2026'), fontSize: 11, bold: true, margin: [0, 4, 0, 0] },
+                  { text: 'PRO-FORMA (DOCUMENTO NON FISCALE) · MY BOX', fontSize: 11, bold: true, color: '#5B21B6' },
+                  { text: 'Numero: ' + (actData.invoiceId || 'PF-2026-001'), fontSize: 11, bold: true, margin: [0, 4, 0, 0] },
                   { text: 'Data: ' + (actData.activatedAt || new Date().toLocaleDateString('it-IT')), fontSize: 9.5 }
                 ]
               }

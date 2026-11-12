@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-  <title>Attiva itassistance in 3 passaggi – 99 €/mese IVA inclusa | Garanzia 14 Giorni</title>
-  <meta name="description" content="Attiva itassistance sul tuo appartamento a Firenze in 3 passaggi: 99 € al mese IVA inclusa, zero commissioni e garanzia 14 giorni soddisfatto o rimborsato."/>
+  <title>Attiva ITASSISTANCEDREAMTEAM.IT Firenze – Quota Fissa 99,00 €/mese IVA Inclusa | Garanzia 14 Giorni</title>
+  <meta name="description" content="Attiva il servizio di gestione operativa ITASSISTANCEDREAMTEAM.IT sul tuo appartamento a Firenze in 3 passaggi: quota fissa di 99,00 €/mese IVA inclusa (o 1.188,00 €/anno), zero commissioni e Garanzia 14 giorni Soddisfatto o Rimborsato."/>
   <meta name="robots" content="index, follow"/>
   <link rel="canonical" href="https://www.itadreamteam.com/checkout.html"/>
   <link rel="icon" type="image/png" href="/brand/logo.png"/>
@@ -13,9 +13,9 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "Attiva itassistance in 3 passaggi – 99 €/mese IVA inclusa",
+    "name": "Attiva ITASSISTANCEDREAMTEAM.IT Firenze – Quota Fissa 99,00 €/mese IVA Inclusa | Garanzia 14 Giorni",
     "url": "https://www.itadreamteam.com/checkout.html",
-    "description": "Attivazione guidata di itassistance per il Proprietario-Gestore a Firenze: 99 €/mese IVA inclusa, zero commissioni e garanzia 14 giorni."
+    "description": "Attiva il servizio di gestione operativa ITASSISTANCEDREAMTEAM.IT sul tuo appartamento a Firenze in 3 passaggi: quota fissa di 99,00 €/mese IVA inclusa (o 1.188,00 €/anno), zero commissioni e Garanzia 14 giorni Soddisfatto o Rimborsato."
   }
   </script>
 
@@ -119,11 +119,13 @@
     }
 
     .header-title {
-      font-size: 1rem;
+      font-size: clamp(0.75rem, 3.2vw, 1.05rem);
       font-weight: 700;
       color: var(--bg-light);
       text-align: center;
       flex: 1;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .step-indicator {
@@ -143,33 +145,40 @@
     }
 
     .kicker {
-      display: inline-block;
+      display: block;
+      text-align: center;
       font-size: 1rem;
       font-weight: 700;
       color: var(--gold-text-light);
-      margin-bottom: 8px;
+      margin: 0 auto 8px;
     }
 
     h1 {
       font-family: var(--font-display);
-      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
       line-height: 1.15;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin: 0 auto 12px;
+      text-align: center;
+      overflow-wrap: anywhere;
     }
 
     h2 {
       font-family: var(--font-display);
-      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-size: clamp(1.35rem, 3vw, 1.85rem);
       line-height: 1.2;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin: 0 auto 8px;
+      text-align: center;
+      overflow-wrap: anywhere;
     }
 
     .step-desc {
       font-size: 1rem;
       color: var(--ink-muted);
-      margin-bottom: 24px;
+      margin: 0 auto 24px;
+      text-align: center;
+      max-width: 60ch;
     }
 
     .step-panel {
@@ -391,16 +400,16 @@
       <button type="button" class="back-btn" id="hdr-back-btn" onclick="handleCheckoutBack()">
         &larr; Indietro
       </button>
-      <div class="header-title" id="hdr-step-title">Attiva itassistance</div>
+      <div class="header-title" id="hdr-step-title">ITASSISTANCEDREAMTEAM.IT</div>
       <div class="step-indicator" id="hdr-step-badge">Passaggio 1 di 3</div>
     </div>
   </header>
 
   <main class="co-shell">
-    <span class="kicker">itassistance · Garanzia 14 giorni soddisfatto o rimborsato</span>
+    <span class="kicker">ITASSISTANCEDREAMTEAM.IT · Garanzia 14 giorni soddisfatto o rimborsato</span>
     <h1>Attiva la prova sul tuo appartamento.</h1>
     <p class="step-desc" id="main-lead-text">
-      Zero commissioni sulle prenotazioni. Se entro 14 giorni decidi che non fa per te, ricevi il rimborso integrale del 100%.
+      Zero commissioni sulle prenotazioni. Se entro 14 giorni decidi che non fa per te, ricevi il rimborso integrale del 100% tramite bonifico bancario manuale gestito dall'amministrazione.
     </p>
 
     <div id="co-error-box" class="error-banner" role="alert"></div>
@@ -408,58 +417,39 @@
     <!-- PASSAGGIO 1 DI 3: SCELTA DEL PIANO -->
     <section class="step-panel active" id="step-1" aria-labelledby="step1-heading">
       <span class="status-badge">Passaggio 1 di 3 · Scegli la formula</span>
-      <h2 id="step1-heading">Blocca la quotazione di oggi per il tuo immobile.</h2>
+      <h2 id="step1-heading">Attiva la quota fissa di 99,00 €/mese per il tuo immobile.</h2>
       <p class="step-desc">
-        <strong>Prezzo attuale in base ai posti disponibili nel team</strong> (variabile tra <strong>99,00 € e 299,00 € al mese</strong> per unità secondo la regola domanda e offerta). Chi firma blocca il prezzo per tutta la durata contrattuale (Price Lock).
+        Quota fissa trasparente di 99,00 € al mese (IVA inclusa) per unità, oppure 1.188,00 € all'anno anticipato. Zero commissioni sulle prenotazioni, zero costi di attivazione e disdetta libera in qualsiasi momento senza penali.
       </p>
 
       <div class="summary-box" style="margin-bottom: 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-          <div>
-            <div style="font-size: 0.875rem; font-weight: 700; color: var(--gold-text-light);">PREZZO ATTUALE IN BASE AI POSTI DISPONIBILI NEL TEAM</div>
-            <div style="font-size: 1.125rem; font-weight: 700; color: var(--ink-navy);" id="co-dyn-slots-badge">Disponibilità nuovi immobili: 40 posti su 40 (Saturazione 0% · 99,00 €/mese)</div>
-          </div>
-          <button type="button" class="btn btn-secondary" style="width: auto; margin-top: 0; min-height: 44px; padding: 8px 14px; font-size: 0.875rem;" onclick="rerollCheckoutDynamicPrice()">
-            Simula variazione saturazione
-          </button>
+        <div style="font-size: 1rem; font-weight: 700; color: var(--ink-navy);" id="co-fixed-rate-badge">
+          Quota Fissa Unica: 99,00 € / mese per unità (IVA inclusa · 1.188,00 € / anno) · Zero Commissioni (0%) · Garanzia 14 Giorni Soddisfatto o Rimborsato
         </div>
-      </div>
-
-      <!-- Box Lista d'attesa quando la saturazione è al 100% -->
-      <div id="co-waitlist-banner" style="display: none; background: #FEF2F2; border: 2px solid #DC2626; border-radius: 12px; padding: 18px; margin-bottom: 18px; color: #7F1D1D;">
-        <strong style="display: block; font-size: 1.1rem; color: #991B1B; margin-bottom: 6px;">Saturazione Team al 100% — Lista d'attesa attiva</strong>
-        <p style="font-size: 0.95rem; margin-bottom: 12px;">
-          Tutti i posti operativi del team sono attualmente assegnati. L'iscrizione diretta è temporaneamente chiusa: registrati nella Lista d'attesa per ricevere una notifica prioritaria non appena si libera capacità.
+        <p style="margin-top: 8px; font-size: 0.95rem; color: var(--ink-muted);">
+          <strong>Cosa include il servizio ITASSISTANCEDREAMTEAM.IT (Tariffario Precompilato):</strong> Coordinamento della parte operativa del Property Management (pulizie, ospiti, manutenzioni e fornitori, report giornaliero e promemoria; zero commissioni sulle prenotazioni nel piano base; extra opzionali a richiesta: check-in di persona 20,00 €, manutenzione 30,00 € prima ora + materiali).
         </p>
-        <div class="field-group" style="margin-bottom: 10px;">
-          <input type="text" id="co-wl-name" class="field-input" placeholder="Nome e Cognome"/>
-        </div>
-        <div class="field-group" style="margin-bottom: 10px;">
-          <input type="email" id="co-wl-email" class="field-input" placeholder="La tua email per la notifica"/>
-        </div>
-        <button type="button" class="btn btn-primary" onclick="submitCheckoutWaitlist()">Iscriviti alla Lista d'attesa con notifica</button>
-        <div id="co-wl-feedback" style="display: none; margin-top: 10px; font-weight: 700; color: #065F46;"></div>
       </div>
 
       <div class="field-group" style="margin-bottom: 16px;">
-        <label for="co-units-select" class="field-label">Numero di appartamenti da attivare (Sconto Volume automatico per 4+ immobili)</label>
+        <label for="co-units-select" class="field-label">Numero di appartamenti da attivare (Quota fissa 99,00 €/mese per unità)</label>
         <select id="co-units-select" class="field-input" onchange="renderCheckoutDynamicPricing()">
-          <option value="1" selected>1 Immobile — Fascia 1–3 Immobili</option>
-          <option value="2">2 Immobili — Fascia 1–3 Immobili</option>
-          <option value="3">3 Immobili — Fascia 1–3 Immobili</option>
-          <option value="5">5 Immobili — Fascia Pro 4–10 Immobili (79,00 €/mese cad.)</option>
-          <option value="8">8 Immobili — Fascia Pro 4–10 Immobili (79,00 €/mese cad.)</option>
-          <option value="12">12 Immobili — Fascia Enterprise 11+ Immobili (59,00 €/mese cad.)</option>
+          <option value="1" selected>1 Immobile — Quota fissa 99,00 €/mese</option>
+          <option value="2">2 Immobili — Quota fissa 99,00 €/mese per unità</option>
+          <option value="3">3 Immobili — Quota fissa 99,00 €/mese per unità</option>
+          <option value="5">5 Immobili — Quota fissa 99,00 €/mese per unità</option>
+          <option value="8">8 Immobili — Quota fissa 99,00 €/mese per unità</option>
+          <option value="12">12 Immobili — Quota fissa 99,00 €/mese per unità</option>
         </select>
       </div>
 
       <button type="button" class="choice-card selected" id="opt-mensile" onclick="selectBillingCycle('mensile')">
-        <span class="status-badge">Consigliato · Tariffa bloccata per la durata contrattuale</span>
+        <span class="status-badge">Consigliato · Quota fissa 99,00 €/mese (IVA inclusa)</span>
         <div class="choice-head">
           <span class="choice-title">Pagamento mensile</span>
           <span class="choice-price" id="co-price-mensile">99,00 € / mese</span>
         </div>
-        <p style="color: var(--ink-muted);">IVA inclusa (Range capacità: 99,00 € – 299,00 €/mese). Rinnovi mese per mese e disdici quando vuoi senza penali.</p>
+        <p style="color: var(--ink-muted);">IVA inclusa. Quota fissa di 99,00 €/mese per unità, rinnovi mese per mese e disdici quando vuoi senza penali.</p>
       </button>
 
       <button type="button" class="choice-card" id="opt-annuale" onclick="selectBillingCycle('annuale')">
@@ -467,15 +457,20 @@
           <span class="choice-title">Pagamento annuale anticipato (12 mesi)</span>
           <span class="choice-price" id="co-price-annuale">1.188,00 € / anno</span>
         </div>
-        <p style="color: var(--ink-muted);" id="co-desc-annuale">Pari a 12 mensilità alla quotazione bloccata di oggi (IVA inclusa). Unica fattura annuale per il tuo commercialista.</p>
+        <p style="color: var(--ink-muted);" id="co-desc-annuale">Pari a 12 mensilità a quota fissa (99,00 € × 12 = 1.188,00 €/anno per unità, IVA inclusa). Unica fattura annuale per il tuo commercialista.</p>
       </button>
 
       <div class="summary-box" style="margin-top: 16px;">
-        <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;">
-          <input type="checkbox" id="chk-extra-revenue" onchange="toggleExtraRevenue()" style="width: 24px; height: 24px; margin-top: 2px; accent-color: var(--ink-navy); flex-shrink: 0;"/>
+        <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;" for="chk-revenue-plan-optin">
+          <input type="checkbox" id="chk-revenue-plan-optin" onchange="toggleExtraRevenue(this.checked)" style="width: 24px; height: 24px; margin-top: 2px; accent-color: var(--ink-navy); flex-shrink: 0;"/>
+          <input type="checkbox" id="chk-extra-revenue" onchange="toggleExtraRevenue(this.checked)" style="display: none;" aria-hidden="true"/>
           <span>
-            <strong>Opzionale: aggiungi delega Revenue Management e adempimenti (+10%)</strong><br/>
-            <span style="color: var(--ink-muted);">Selezionalo solo se desideri che il nostro team gestisca al posto tuo anche i prezzi dinamici e l'invio operativo delle comunicazioni.</span>
+            <strong>Revenue Plan opzionale (+10% sul netto spettante al proprietario, prima delle sue tasse personali · fatturazione mensile a fine mese sulle prenotazioni del mese · termine di pagamento fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario)</strong><br/>
+            <span style="color: var(--ink-muted); display: block; margin-top: 4px;">
+              Senza Revenue Plan il piano base a <strong>99,00 €/mese</strong> è a <strong>0% commissioni</strong> sulle prenotazioni (Itassistance coordina la parte operativa del PM: pulizie, ospiti, manutenzioni e fornitori, report giornaliero e promemoria). Solo se selezioni questa opzione la clausola del <strong>10% sul netto spettante al proprietario, prima delle sue tasse personali</strong> viene inserita nel contratto.<br/>
+              <strong>Definizione di "Netto" e Fatturazione:</strong> il 10% si calcola sull'<strong>incasso dell'ospite al netto di commissioni delle piattaforme, imposta di soggiorno e costi di pulizia</strong> (prima delle tasse personali del proprietario), con maturazione e <strong>fatturazione mensile a fine mese sulle prenotazioni del mese</strong> (termine di pagamento fattura: <strong>Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario</strong>).<br/>
+              <em>Esempio illustrativo con importi di puro esempio, non dati reali: incasso ospite 1.000 € &minus; commissioni piattaforme 150 € &minus; imposta di soggiorno 40 € &minus; pulizie 60 € = netto proprietario 750 € &rarr; commissione 10% = 75 €, fatturata a fine mese sulle prenotazioni del mese.</em>
+            </span>
           </span>
         </label>
       </div>
@@ -488,16 +483,31 @@
     <!-- PASSAGGIO 2 DI 3: DATI ESSENZIALI -->
     <section class="step-panel" id="step-2" aria-labelledby="step2-heading">
       <span class="status-badge">Passaggio 2 di 3 · I tuoi recapiti</span>
-      <h2 id="step2-heading">A chi intestiamo l'accesso dell'appartamento?</h2>
-      <p class="step-desc">Inserisci i tre dati essenziali per ricevere il codice proprietario e il Riepilogo delle 08:00.</p>
+      <h2 id="step2-heading">A chi intestiamo l'accesso dell'appartamento e il pro-forma?</h2>
+      <p class="step-desc">Inserisci i tuoi recapiti per generare il codice proprietario e il pro-forma nella tua area riservata "My Box".</p>
 
       <div class="field-group">
-        <label for="f-nome" class="field-label">Nome e cognome (o ragione sociale) *</label>
-        <input type="text" id="f-nome" class="field-input" placeholder="Es. Marco Rossi" required/>
+        <label for="f-nome" class="field-label">Nome *</label>
+        <input type="text" id="f-nome" class="field-input" placeholder="Es. Marco" required/>
       </div>
 
       <div class="field-group">
-        <label for="f-email" class="field-label">Indirizzo email (per l'accesso e la ricevuta) *</label>
+        <label for="f-cognome" class="field-label">Cognome (o ragione sociale) *</label>
+        <input type="text" id="f-cognome" class="field-input" placeholder="Es. Rossi" required/>
+      </div>
+
+      <div class="field-group">
+        <label for="f-residenza" class="field-label">Residenza (Comune e indirizzo) *</label>
+        <input type="text" id="f-residenza" class="field-input" placeholder="Es. Firenze (FI)" required/>
+      </div>
+
+      <div class="field-group">
+        <label for="f-cf" class="field-label">Codice fiscale o Partita IVA *</label>
+        <input type="text" id="f-cf" class="field-input" placeholder="Codice fiscale o Partita IVA" required/>
+      </div>
+
+      <div class="field-group">
+        <label for="f-email" class="field-label">Indirizzo email (per l'accesso e l'invio copia del pro-forma) *</label>
         <input type="email" id="f-email" class="field-input" placeholder="marco.rossi@esempio.it" required/>
       </div>
 
@@ -507,19 +517,15 @@
       </div>
 
       <details style="margin-bottom: 24px; padding: 12px 16px; background-color: var(--bg-stone); border: 1px solid var(--border-control); border-radius: 8px;">
-        <summary style="font-weight: 700; cursor: pointer;">Dati immobile e fatturazione (opzionali ora, modificabili dopo)</summary>
+        <summary style="font-weight: 700; cursor: pointer;">Dati immobile (opzionali ora, modificabili dopo nel My Box)</summary>
         <div style="margin-top: 16px;">
           <div class="field-group">
             <label for="f-imm" class="field-label">Nome dell'appartamento</label>
             <input type="text" id="f-imm" class="field-input" placeholder="Es. Appartamento Santo Spirito"/>
           </div>
-          <div class="field-group">
-            <label for="f-addr" class="field-label">Indirizzo a Firenze</label>
-            <input type="text" id="f-addr" class="field-input" placeholder="Es. Via Maggio 18, Firenze"/>
-          </div>
           <div class="field-group" style="margin-bottom: 0;">
-            <label for="f-cf" class="field-label">Codice fiscale o Partita IVA</label>
-            <input type="text" id="f-cf" class="field-input" placeholder="Codice fiscale o Partita IVA"/>
+            <label for="f-addr" class="field-label">Indirizzo dell'immobile</label>
+            <input type="text" id="f-addr" class="field-input" placeholder="Es. Via Maggio 18, Firenze"/>
           </div>
         </div>
       </details>
@@ -532,88 +538,88 @@
       </button>
     </section>
 
-    <!-- PASSAGGIO 3 DI 3: RIEPILOGO E UNA SOLA AZIONE DI CONFERMA -->
+    <!-- PASSAGGIO 3 DI 3: RIEPILOGO E UNA SOLA AZIONE DI CONFERMA (SOLO FATTURA / MY BOX PRO-FORMA) -->
     <section class="step-panel" id="step-3" aria-labelledby="step3-heading">
       <span class="status-badge">Passaggio 3 di 3 · Riepilogo e attivazione</span>
       <h2 id="step3-heading">Controlla il riepilogo e attiva il tuo immobile.</h2>
-      <p class="step-desc">Scegli se attivare subito i 14 giorni di prova con bonifico/fattura oppure saldare con carta.</p>
-
-      <button type="button" class="choice-card selected" id="pay-opt-bonifico" onclick="selectPaymentMethod('bonifico')">
-        <div class="choice-head">
-          <span class="choice-title">Attivazione immediata Prova 14 giorni (Bonifico / Fattura)</span>
-          <span style="font-weight: 700; color: var(--status-ok-text);">Accesso istantaneo</span>
-        </div>
-        <p style="color: var(--ink-muted);">Entri subito nell'Area Riservata e ricevi la fattura pro-forma di Blue Arroyo S.r.l.</p>
-      </button>
-
-      <button type="button" class="choice-card" id="pay-opt-stripe" onclick="selectPaymentMethod('stripe')">
-        <div class="choice-head">
-          <span class="choice-title">Carta di credito, debito o Apple Pay (Stripe)</span>
-          <span style="font-weight: 700; color: var(--ink-navy);">Ricevuta immediata</span>
-        </div>
-        <p style="color: var(--ink-muted);">Pagamento elettronico protetto con rimborso integrale garantito entro 14 giorni.</p>
-      </button>
+      <p class="step-desc">
+        <strong>Solo fattura:</strong> nella tua area riservata <strong>"My Box"</strong> troverai il <strong>pro-forma (documento non fiscale)</strong> da controllare e confermare per ricevere copia via email e richiedere l'emissione manuale della fattura da parte dell'amministrazione.
+      </p>
 
       <div class="summary-box">
         <div class="summary-row">
-          <span>Intestatario</span>
+          <span>Intestatario e recapiti</span>
           <strong id="sum-owner-name">Proprietario Firenze</strong>
         </div>
         <div class="summary-row">
-          <span>Formula scelta</span>
-          <strong id="sum-cycle-name">Mese per mese</strong>
+          <span>Residenza e Codice Fiscale / P.IVA</span>
+          <strong id="sum-owner-details">[DA CONFERMARE]</strong>
         </div>
         <div class="summary-row">
-          <span>Delega Extra (+10%)</span>
-          <strong id="sum-extra-revenue">Non selezionata (0%)</strong>
+          <span>Formula scelta (con 14 giorni di prova gratuita)</span>
+          <strong id="sum-cycle-name">Mensile 99,00 €/mese IVA inclusa</strong>
         </div>
         <div class="summary-row">
-          <span>Commissioni sulle prenotazioni</span>
-          <strong style="color: var(--status-ok-text);">0% (Zero)</strong>
+          <span>Revenue Plan opzionale (+10% sul netto proprietario prima delle tasse personali)</span>
+          <strong id="sum-extra-revenue">Non selezionato (0% commissioni piano base)</strong>
         </div>
         <div class="summary-row">
-          <span id="sum-total-label">Totale (IVA inclusa)</span>
+          <span>Commissioni sulle prenotazioni (piano base)</span>
+          <strong id="sum-commissions-label" style="color: var(--status-ok-text);">0% (Zero)</strong>
+        </div>
+        <div class="summary-row">
+          <span>Modalità e termini di pagamento fattura</span>
+          <strong id="sum-billing-mode">Solo fattura tramite Pro-Forma in "My Box" · Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario (Gestione manuale Admin: admin@bluearroyo.it)</strong>
+        </div>
+        <div class="summary-row">
+          <span>Contatti ufficiali ITASSISTANCEDREAMTEAM.IT</span>
+          <strong>Amministrazione: <a href="mailto:admin@bluearroyo.it">admin@bluearroyo.it</a> · Assistenza Ospiti: <a href="mailto:itassistance@bluearroyo.it">itassistance@bluearroyo.it</a> (<a href="tel:+393491775561">+39 349 177 5561</a>)</strong>
+        </div>
+        <div class="summary-row">
+          <span>Garanzia 14 giorni soddisfatto o rimborsato</span>
+          <strong>Rimborso 100% tramite bonifico bancario manuale gestito dall'amministrazione</strong>
+        </div>
+        <div class="summary-row">
+          <span id="sum-total-label">Totale Canone (IVA inclusa)</span>
           <span id="sum-total" style="font-family: var(--font-display); font-size: 1.75rem;">99,00 € / mese</span>
         </div>
       </div>
 
-      <button type="button" class="btn btn-primary" id="btn-pay" onclick="proceedToStripe()">
+      <button type="button" class="btn btn-primary" id="btn-confirm-open-mybox" onclick="confirmAndOpenMyBox()">
         Conferma e apri la tua area riservata
       </button>
-      <button type="button" class="btn btn-secondary" onclick="goToCheckoutStep(2)">
+      <button type="button" class="btn btn-secondary" id="btn-edit-contact-step3" onclick="goToCheckoutStep(2)">
         Modifica i tuoi recapiti
       </button>
     </section>
 
     <!-- STATO DI CONFERMA FINALE -->
     <section class="step-panel" id="step-conferma" aria-labelledby="conf-heading">
-      <span class="status-badge">Attivazione completata</span>
-      <h2 id="conf-heading">Il tuo appartamento è attivo su itassistance.</h2>
+      <span class="status-badge">Attivazione completata · Pro-Forma pronto nel tuo My Box</span>
+      <h2 id="conf-heading">Il tuo appartamento è attivo su ITASSISTANCEDREAMTEAM.IT.</h2>
       <p class="step-desc" id="conf-details-text">
-        Il tuo codice proprietario è stato generato e il Riepilogo delle 08:00 è pronto.
+        Il tuo pro-forma è stato generato nella sezione "My Box" della tua area riservata: controlla i dati e confermalo per ricevere copia via email e richiedere l'emissione manuale della fattura.
       </p>
-      <a href="/app.html" id="conf-open-app-link" class="btn btn-primary">
-        Entra ora nella tua Home (Livello 1)
+      <a href="/app.html?tab=mybox#my-box" id="conf-open-app-link" class="btn btn-primary">
+        Apri ora il tuo "My Box" nell'Area Riservata (Pro-Forma da confermare)
+      </a>
+      <a href="/contratto.html" id="conf-open-contract-link" class="btn btn-secondary" style="margin-top: 12px;">
+        Apri e firma il Contratto di Servizio ITASSISTANCEDREAMTEAM.IT (99,00 €/mese)
       </a>
       <button type="button" class="btn btn-secondary" onclick="if(window.ITACloudSync && ITACloudSync.openDynamicInvoicePrint) ITACloudSync.openDynamicInvoicePrint()">
-        Stampa il Certificato di Attivazione e Tariffa Bloccata (A4)
+        Stampa Pro-Forma di Servizio (A4)
       </button>
     </section>
   </main>
 
   <footer class="site-footer">
-    Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE] · Assistenza 09:00–23:00: <a href="tel:+393510380392" style="text-decoration: underline; font-weight: 700;">+39 351 038 0392</a>
+    <strong>ITASSISTANCEDREAMTEAM.IT</strong> · Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v.<br/>
+    Assistenza Ospiti: <a href="mailto:itassistance@bluearroyo.it" style="text-decoration: underline; font-weight: 700;">itassistance@bluearroyo.it</a> · <a href="tel:+393491775561" style="text-decoration: underline; font-weight: 700;">+39 349 177 5561</a> · Amministrazione / Fatturazione: <a href="mailto:admin@bluearroyo.it" style="text-decoration: underline; font-weight: 700;">admin@bluearroyo.it</a> · Rete Fornitori &amp; Risorse Umane: <a href="mailto:risorseumane@bluearroyo.it" style="text-decoration: underline; font-weight: 700;">risorseumane@bluearroyo.it</a> · <a href="tel:+393498041146" style="text-decoration: underline; font-weight: 700;">+39 349 804 1146</a>
   </footer>
 
   <script>
-    var STRIPE_LINKS = {
-      mensile: (window.SITE_CONFIG && window.SITE_CONFIG.payments && window.SITE_CONFIG.payments.stripeMonthlyUrl) || 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_99_mensile',
-      annuale: (window.SITE_CONFIG && window.SITE_CONFIG.payments && window.SITE_CONFIG.payments.stripeYearlyUrl) || 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_1188_annuale'
-    };
-
     var currentStep = 1;
     var currentCycle = 'mensile';
-    var currentPaymentMethod = 'bonifico';
 
     function showCheckoutError(msg) {
       var box = document.getElementById('co-error-box');
@@ -630,13 +636,22 @@
     function renderCheckoutStep(stepNum, pushHistory) {
       if (stepNum === 3) {
         var nome = (document.getElementById('f-nome').value || '').trim();
+        var cognome = (document.getElementById('f-cognome') ? document.getElementById('f-cognome').value || '' : '').trim();
+        var residenza = (document.getElementById('f-residenza') ? document.getElementById('f-residenza').value || '' : '').trim();
+        var cf = (document.getElementById('f-cf') ? document.getElementById('f-cf').value || '' : '').trim();
         var email = (document.getElementById('f-email').value || '').trim();
         var tel = (document.getElementById('f-tel').value || '').trim();
+        var addr = (document.getElementById('f-addr') ? document.getElementById('f-addr').value || '' : '').trim();
         if (!nome || !email || !tel) {
           showCheckoutError('Per favore compila Nome, Email e Telefono prima di procedere al Passaggio 3.');
           return;
         }
-        document.getElementById('sum-owner-name').textContent = nome + ' (' + tel + ')';
+        var fullOwner = (nome + (cognome ? ' ' + cognome : '')).trim();
+        document.getElementById('sum-owner-name').textContent = fullOwner + ' · ' + email + ' · ' + tel;
+        var sumDet = document.getElementById('sum-owner-details');
+        if (sumDet) {
+          sumDet.textContent = 'Residenza: ' + (residenza || '[DA CONFERMARE]') + ' · C.F./P.IVA: ' + (cf || '[DA CONFERMARE]') + (addr ? ' · Immobile: ' + addr : '');
+        }
       }
       showCheckoutError('');
       currentStep = stepNum;
@@ -653,8 +668,8 @@
         if (title) title.textContent = 'Conferma attivazione';
       } else {
         if (badge) badge.textContent = 'Passaggio ' + stepNum + ' di 3';
-        var titles = { 1: 'Scegli la formula', 2: 'I tuoi recapiti', 3: 'Conferma e accesso' };
-        if (title) title.textContent = titles[stepNum] || 'Attiva itassistance';
+        var titles = { 1: 'ITASSISTANCEDREAMTEAM.IT · Scegli formula', 2: 'ITASSISTANCEDREAMTEAM.IT · I tuoi recapiti', 3: 'ITASSISTANCEDREAMTEAM.IT · Riepilogo' };
+        if (title) title.textContent = titles[stepNum] || 'ITASSISTANCEDREAMTEAM.IT';
       }
 
       if (pushHistory !== false && window.history && window.history.pushState) {
@@ -694,90 +709,37 @@
       return sel ? (parseInt(sel.value, 10) || 1) : 1;
     }
 
+    function formatCheckoutEuro(amount) {
+      return Number(amount || 0).toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    }
+
     function getActiveCheckoutPricing() {
-      var dp = (window.SITE_CONFIG && typeof SITE_CONFIG.getDynamicPricing === 'function')
-        ? SITE_CONFIG.getDynamicPricing()
-        : {
-            todayMonthlyEur: 99,
-            todayFormatted: '99,00 €',
-            yearlyEquivalentEur: 1188,
-            yearlyFormatted: '1.188,00 €',
-            slotsAvailable: 4,
-            maxSlots: 6,
-            demandLevel: 'Disponibilità alta'
-          };
-      var units = getSelectedCheckoutUnits();
-      if (window.SITE_CONFIG && typeof SITE_CONFIG.computePortfolioVolumeCheckout === 'function') {
-        var vol = SITE_CONFIG.computePortfolioVolumeCheckout({
-          units: units,
-          billingCycle: currentCycle,
-          lockedMonthlyEur: dp.todayMonthlyEur
-        });
-        return {
-          units: units,
-          tierLabel: vol.tierLabel,
-          todayMonthlyEur: vol.totalMonthlyEur,
-          todayFormatted: vol.totalMonthlyFormatted,
-          yearlyEquivalentEur: vol.totalYearlyEur,
-          yearlyFormatted: vol.totalYearlyFormatted,
-          slotsAvailable: dp.slotsAvailable,
-          maxSlots: dp.maxSlots,
-          saturationPct: dp.saturationPct || 0,
-          isWaitlistOnly: Boolean(dp.isWaitlistOnly),
-          demandLevel: dp.demandLevel
-        };
-      }
-      return dp;
+      var units = Math.max(1, getSelectedCheckoutUnits());
+      var monthlyTotal = 99 * units;
+      var yearlyTotal = 1188 * units;
+      return {
+        units: units,
+        tierLabel: units === 1 ? '1 Immobile — Quota fissa 99,00 €/mese' : (units + ' Immobili — Quota fissa 99,00 €/mese per unità'),
+        todayMonthlyEur: monthlyTotal,
+        todayFormatted: formatCheckoutEuro(monthlyTotal),
+        yearlyEquivalentEur: yearlyTotal,
+        yearlyFormatted: formatCheckoutEuro(yearlyTotal),
+        isWaitlistOnly: false
+      };
     }
 
     function renderCheckoutDynamicPricing() {
       var dp = getActiveCheckoutPricing();
       var mEl = document.getElementById('co-price-mensile');
-      if (mEl) mEl.textContent = dp.isWaitlistOnly ? 'Lista d\'attesa' : (dp.todayFormatted + ' / mese');
+      if (mEl) mEl.textContent = dp.todayFormatted + ' / mese';
       var aEl = document.getElementById('co-price-annuale');
-      if (aEl) aEl.textContent = dp.isWaitlistOnly ? 'Lista d\'attesa' : (dp.yearlyFormatted + ' / anno');
-      var sBadge = document.getElementById('co-dyn-slots-badge');
-      if (sBadge) {
-        sBadge.textContent = (dp.isWaitlistOnly ? 'Lista d\'attesa (100% saturo)' : (dp.todayFormatted + '/mese')) +
-          ' · Disponibilità: ' + dp.slotsAvailable + ' posti liberi su ' + dp.maxSlots + ' nel team (Saturazione ' + (dp.saturationPct || 0) + '%)';
-      }
-      var wlBanner = document.getElementById('co-waitlist-banner');
+      if (aEl) aEl.textContent = dp.yearlyFormatted + ' / anno';
       var nextBtn = document.getElementById('co-step1-next-btn');
-      if (wlBanner && nextBtn) {
-        wlBanner.style.display = dp.isWaitlistOnly ? 'block' : 'none';
-        nextBtn.disabled = Boolean(dp.isWaitlistOnly);
-        nextBtn.textContent = dp.isWaitlistOnly
-          ? 'Iscrizione diretta sospesa (Saturazione 100% · Usa la Lista d\'attesa sopra)'
-          : 'Vai ai tuoi dati (Passaggio 2 di 3)';
+      if (nextBtn) {
+        nextBtn.disabled = false;
+        nextBtn.textContent = 'Vai ai tuoi dati (Passaggio 2 di 3)';
       }
       selectBillingCycle(currentCycle);
-    }
-
-    function submitCheckoutWaitlist() {
-      var name = ((document.getElementById('co-wl-name') || {}).value || '').trim();
-      var email = ((document.getElementById('co-wl-email') || {}).value || '').trim();
-      var fb = document.getElementById('co-wl-feedback');
-      if (!email) {
-        if (fb) {
-          fb.style.display = 'block';
-          fb.textContent = 'Inserisci la tua email per ricevere la notifica appena si libera un posto.';
-        }
-        return;
-      }
-      if (window.SITE_CONFIG && typeof SITE_CONFIG.submitWaitlistEntry === 'function') {
-        SITE_CONFIG.submitWaitlistEntry({ name: name || 'Proprietario', email: email, unitsCount: getSelectedCheckoutUnits() });
-      }
-      if (fb) {
-        fb.style.display = 'block';
-        fb.textContent = 'Registrazione in Lista d\'attesa confermata! Ti avviseremo appena si libera capacità.';
-      }
-    }
-
-    function rerollCheckoutDynamicPrice() {
-      if (window.SITE_CONFIG && typeof SITE_CONFIG.rerollDynamicPrice === 'function') {
-        SITE_CONFIG.rerollDynamicPrice();
-      }
-      renderCheckoutDynamicPricing();
     }
 
     function selectBillingCycle(cycle) {
@@ -786,33 +748,34 @@
       document.getElementById('opt-mensile').classList.toggle('selected', cycle === 'mensile');
       document.getElementById('opt-annuale').classList.toggle('selected', cycle === 'annuale');
       if (cycle === 'annuale') {
-        document.getElementById('sum-cycle-name').textContent = 'Annuale anticipato (12 mesi bloccati)';
+        document.getElementById('sum-cycle-name').textContent = 'Annuale anticipato 1.188,00 €/anno IVA inclusa (con 14 giorni di prova gratuita)';
         document.getElementById('sum-total').textContent = dp.yearlyFormatted + ' / anno';
       } else {
-        document.getElementById('sum-cycle-name').textContent = 'Mese per mese (Tariffa bloccata)';
+        document.getElementById('sum-cycle-name').textContent = 'Mensile 99,00 €/mese IVA inclusa (con 14 giorni di prova gratuita)';
         document.getElementById('sum-total').textContent = dp.todayFormatted + ' / mese';
       }
     }
 
-    function toggleExtraRevenue() {
-      var chk = document.getElementById('chk-extra-revenue');
+    function toggleExtraRevenue(explicitVal) {
+      var chkOpt = document.getElementById('chk-revenue-plan-optin');
+      var chkLegacy = document.getElementById('chk-extra-revenue');
+      var isChecked = typeof explicitVal === 'boolean'
+        ? explicitVal
+        : Boolean((chkOpt && chkOpt.checked) || (chkLegacy && chkLegacy.checked));
+      if (chkOpt) chkOpt.checked = isChecked;
+      if (chkLegacy) chkLegacy.checked = isChecked;
+      try {
+        localStorage.setItem('ita_revenue_plan_optin', isChecked ? 'true' : 'false');
+      } catch (e) {}
       var sumExtra = document.getElementById('sum-extra-revenue');
-      if (chk && chk.checked) {
-        sumExtra.textContent = 'Attiva (+10%)';
-      } else if (sumExtra) {
-        sumExtra.textContent = 'Non selezionata (0%)';
+      if (sumExtra) {
+        sumExtra.textContent = isChecked
+          ? 'Attivo (+10% sul netto spettante al proprietario prima delle tasse personali: incasso ospite al netto di commissioni piattaforme, imposta di soggiorno e costi di pulizia · fatturazione mensile a fine mese)'
+          : 'Non selezionato (0% commissioni piano base)';
       }
-    }
-
-    function selectPaymentMethod(method) {
-      currentPaymentMethod = method;
-      document.getElementById('pay-opt-bonifico').classList.toggle('selected', method === 'bonifico');
-      document.getElementById('pay-opt-stripe').classList.toggle('selected', method === 'stripe');
-      var btn = document.getElementById('btn-pay');
-      if (btn) {
-        btn.textContent = (method === 'stripe')
-          ? 'Paga in sicurezza con carta e apri l’area riservata'
-          : 'Conferma e apri la tua area riservata';
+      var contractLink = document.getElementById('conf-open-contract-link');
+      if (contractLink) {
+        contractLink.href = isChecked ? '/contratto.html?revenue_plan=1' : '/contratto.html';
       }
     }
 
@@ -838,26 +801,24 @@
           if (!matched) {
             var opt = document.createElement('option');
             opt.value = String(unitsParam);
-            opt.textContent = unitsParam + ' Immobili — Portafoglio personalizzato';
+            opt.textContent = unitsParam + ' Immobili — Quota fissa 99,00 €/mese per unità';
             uSel.appendChild(opt);
             uSel.value = String(unitsParam);
           }
         }
       }
       renderCheckoutDynamicPricing();
-      ['nome', 'email', 'tel', 'cf', 'imm', 'addr'].forEach(function (k) {
+      ['nome', 'cognome', 'residenza', 'email', 'tel', 'cf', 'imm', 'addr'].forEach(function (k) {
         var val = params.get(k);
         if (val) {
           var el = document.getElementById('f-' + k);
           if (el) el.value = decodeURIComponent(val);
         }
       });
-      if (params.get('extra10') === '1') {
-        var chk = document.getElementById('chk-extra-revenue');
-        if (chk) {
-          chk.checked = true;
-          toggleExtraRevenue();
-        }
+      if (params.get('extra10') === '1' || params.get('revenue_plan') === '1') {
+        toggleExtraRevenue(true);
+      } else {
+        toggleExtraRevenue(false);
       }
       var initStep = parseInt(params.get('step'), 10);
       if (initStep === 2 || initStep === 3) {
@@ -865,77 +826,158 @@
       }
     });
 
-    async function proceedToStripe() {
+    async function confirmAndOpenMyBox() {
       var nome = (document.getElementById('f-nome').value || '').trim();
+      var cognome = (document.getElementById('f-cognome') ? document.getElementById('f-cognome').value || '' : '').trim();
+      var residenza = (document.getElementById('f-residenza') ? document.getElementById('f-residenza').value || '' : '').trim();
       var email = (document.getElementById('f-email').value || '').trim();
       var tel = (document.getElementById('f-tel').value || '').trim();
       var cf = (document.getElementById('f-cf').value || '').trim();
       var imm = (document.getElementById('f-imm').value || '').trim();
       var addr = (document.getElementById('f-addr').value || '').trim();
-      var extraRevenue = document.getElementById('chk-extra-revenue') && document.getElementById('chk-extra-revenue').checked;
+      var extraRevenue = Boolean(
+        (document.getElementById('chk-revenue-plan-optin') && document.getElementById('chk-revenue-plan-optin').checked) ||
+        (document.getElementById('chk-extra-revenue') && document.getElementById('chk-extra-revenue').checked)
+      );
+      try {
+        localStorage.setItem('ita_revenue_plan_optin', extraRevenue ? 'true' : 'false');
+      } catch (e) {}
 
       if (!nome || !email || !tel) {
         renderCheckoutStep(2, true);
-        showCheckoutError('Inserisci Nome, Email e Telefono per completare l’attivazione.');
+        showCheckoutError('Inserisci Nome, Email e Telefono per completare l’attivazione e generare il pro-forma nel My Box.');
         return;
       }
 
-      var btn = document.getElementById('btn-pay');
-      btn.disabled = true;
-      btn.textContent = 'Attivazione appartamento in corso...';
+      var btn = document.getElementById('btn-confirm-open-mybox');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Generazione Pro-Forma nel tuo My Box in corso...';
+      }
 
       var dp = getActiveCheckoutPricing();
-      var activationResult = { ownerCode: 'ITA-FIRENZE-01', invoiceId: 'FATT-2026-101' };
+      var fullName = (nome + (cognome ? ' ' + cognome : '')).trim();
+      var grossEur = currentCycle === 'annuale' ? dp.yearlyEquivalentEur : dp.todayMonthlyEur;
+      var netVatEur = Math.round((grossEur / 1.22) * 100) / 100;
+      var vatEur = Math.round((grossEur - netVatEur) * 100) / 100;
+      var proformaId = 'PRF-ITA-2026-' + Math.floor(1000 + Math.random() * 9000);
+
+      var activationResult = { ownerCode: 'ITA-FIRENZE-01', invoiceId: proformaId };
       if (window.ITACloudSync && typeof ITACloudSync.activateNewOwnerFromCheckout === 'function') {
         activationResult = await ITACloudSync.activateNewOwnerFromCheckout({
-          nome: nome,
+          nome: fullName,
+          firstName: nome,
+          lastName: cognome,
+          residenza: residenza || '[DA CONFERMARE]',
           email: email,
           telefono: tel,
-          cf: cf,
+          cf: cf || '[DA CONFERMARE]',
           immobile: imm || 'Appartamento Firenze',
-          indirizzo: addr || 'Firenze',
+          indirizzo: addr || '[DA CONFERMARE]',
           ciclo: currentCycle,
           lockedMonthlyEur: dp.todayMonthlyEur,
           lockedYearlyEur: dp.yearlyEquivalentEur,
           extraRevenue: extraRevenue,
-          metodoPagamento: currentPaymentMethod
+          metodoPagamento: 'fattura_mybox'
         });
       }
 
-      var appUrl = '/app.html?code=' + encodeURIComponent(activationResult.ownerCode || 'ITA-FIRENZE-01');
-      var linkEl = document.getElementById('conf-open-app-link');
-      if (linkEl) linkEl.href = appUrl;
-      var txtEl = document.getElementById('conf-details-text');
-      if (txtEl) {
-        var bankInfo = (window.SITE_CONFIG && typeof SITE_CONFIG.getBankTransferDetails === 'function')
-          ? SITE_CONFIG.getBankTransferDetails({
-              billingCycle: currentCycle,
-              lockedMonthlyEur: dp.todayMonthlyEur,
-              ownerCode: activationResult.ownerCode || 'ITA-FIRENZE-01',
-              invoiceId: activationResult.invoiceId || 'FATT-2026-101'
+      var savedIban = '[DA CONFERMARE]';
+      try {
+        var ib = (localStorage.getItem('ita_proforma_iban_v1') || '').trim();
+        if (ib) savedIban = ib;
+      } catch (e) {}
+
+      var proformaData = {
+        proformaId: activationResult.invoiceId || proformaId,
+        ownerCode: activationResult.ownerCode || 'ITA-FIRENZE-01',
+        createdAt: new Date().toLocaleDateString('it-IT') + ' ' + new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }),
+        firstName: nome,
+        lastName: cognome || '',
+        fullName: fullName,
+        residenza: residenza || '[DA CONFERMARE]',
+        cfPiva: cf || '[DA CONFERMARE]',
+        email: email,
+        telefono: tel,
+        propertyName: imm || '[DA CONFERMARE]',
+        propertyAddress: addr || '[DA CONFERMARE]',
+        billingCycle: currentCycle,
+        units: dp.units,
+        amountGrossEur: grossEur,
+        amountNetVatEur: netVatEur,
+        vatEur: vatEur,
+        revenuePlanOptIn: extraRevenue,
+        paymentTerms: 'Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario',
+        iban: savedIban,
+        status: 'Da controllare e confermare nel My Box',
+        confirmedByClient: false,
+        confirmedAt: null
+      };
+
+      try {
+        localStorage.setItem('ita_mybox_proforma_v1', JSON.stringify(proformaData));
+        var crmLeadsRaw = localStorage.getItem('ita_team_crm_leads_v1');
+        var crmLeads = crmLeadsRaw ? JSON.parse(crmLeadsRaw) : [];
+        if (!Array.isArray(crmLeads)) crmLeads = [];
+        crmLeads.unshift({
+          id: 'LEAD-CO-' + Date.now(),
+          name: fullName,
+          firstName: nome,
+          lastName: cognome || '',
+          residenza: residenza || '[DA CONFERMARE]',
+          cfPiva: cf || '[DA CONFERMARE]',
+          email: email,
+          phone: tel,
+          propertyName: imm || '[DA CONFERMARE]',
+          propertyAddress: addr || '[DA CONFERMARE]',
+          sourcePage: '/checkout.html (Attivazione My Box · ' + currentCycle + ')',
+          message: 'Richiesta attivazione piano ' + currentCycle + ' (' + dp.units + ' unità)' + (extraRevenue ? ' + Revenue Plan 10%' : ''),
+          createdAt: proformaData.createdAt,
+          stage: 'Proposta/Contratto',
+          autoEmailSent: true,
+          yarvisCallTriggered: true
+        });
+        localStorage.setItem('ita_team_crm_leads_v1', JSON.stringify(crmLeads));
+      } catch (e) {}
+      if (window.ITACloudSync && typeof ITACloudSync.saveMyBoxProforma === 'function') {
+        try { ITACloudSync.saveMyBoxProforma(proformaData); } catch (e) {}
+      }
+      if (window.ITACloudSync && typeof ITACloudSync.submitInterestedLead === 'function') {
+        try {
+          ITACloudSync.submitInterestedLead({
+            name: fullName,
+            email: email,
+            phone: tel,
+            sourcePage: '/checkout.html',
+            message: 'Attivazione Checkout Pro-Forma ' + proformaData.proformaId
+          });
+        } catch (e) {}
+      } else {
+        try {
+          fetch('/api/lead-submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: fullName,
+              email: email,
+              phone: tel,
+              sourcePage: '/checkout.html',
+              message: 'Attivazione Checkout Pro-Forma ' + proformaData.proformaId
             })
-          : null;
-        txtEl.textContent = 'Codice Proprietario: ' + (activationResult.ownerCode || 'ITA-FIRENZE-01') +
-          ' · Tariffa bloccata: ' + dp.todayFormatted + '/mese · Riferimento: ' + (activationResult.invoiceId || 'FATT-2026-101') +
-          (currentPaymentMethod === 'bonifico' && bankInfo ? ' · IBAN Blue Arroyo S.r.l.: ' + bankInfo.iban + ' · Causale: ' + bankInfo.causale : '') +
-          '. Ora puoi entrare nella Home di Livello 1.';
+          }).catch(function () {});
+        } catch (e) {}
       }
 
-      if (currentPaymentMethod === 'stripe') {
-        if (window.SITE_CONFIG && typeof SITE_CONFIG.buildCheckoutPaymentUrl === 'function') {
-          var payObj = SITE_CONFIG.buildCheckoutPaymentUrl({
-            billingCycle: currentCycle,
-            lockedMonthlyEur: dp.todayMonthlyEur,
-            ownerEmail: email,
-            ownerCode: activationResult.ownerCode || 'ITA-FIRENZE-01',
-            addon10Active: extraRevenue
-          });
-          window.open(payObj.url, '_blank');
-        } else {
-          var targetUrl = STRIPE_LINKS[currentCycle] || STRIPE_LINKS.mensile;
-          var sep = targetUrl.indexOf('?') !== -1 ? '&' : '?';
-          window.open(targetUrl + sep + 'prefilled_email=' + encodeURIComponent(email), '_blank');
-        }
+      var appUrl = '/app.html?tab=mybox&code=' + encodeURIComponent(proformaData.ownerCode) + (extraRevenue ? '&revenue_plan=1' : '') + '#my-box';
+      var linkEl = document.getElementById('conf-open-app-link');
+      if (linkEl) linkEl.href = appUrl;
+      var contractLinkEl = document.getElementById('conf-open-contract-link');
+      if (contractLinkEl) contractLinkEl.href = extraRevenue ? '/contratto.html?revenue_plan=1' : '/contratto.html';
+      var txtEl = document.getElementById('conf-details-text');
+      if (txtEl) {
+        txtEl.textContent = 'Codice Proprietario: ' + proformaData.ownerCode +
+          ' · Pro-Forma n. ' + proformaData.proformaId +
+          ' (' + formatCheckoutEuro(grossEur) + ' IVA inclusa) disponibile ora nella sezione "My Box" della tua area riservata. Controlla i tuoi dati e clicca "Confermo il pro-forma" per ricevere copia via email e richiedere l\'emissione manuale della fattura da parte dell\'amministrazione.';
       }
 
       renderCheckoutStep('conferma', true);

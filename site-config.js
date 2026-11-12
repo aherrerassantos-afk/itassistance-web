@@ -8,9 +8,9 @@
 
   var SITE_CONFIG = {
     brand: {
-      name: 'itassistance',
-      teamLabel: 'il team di itassistance',
-      tagline: 'Il tuo appartamento, sotto controllo. In 10 minuti al giorno.',
+      name: 'ITASSISTANCEDREAMTEAM.IT',
+      teamLabel: 'il team di ITASSISTANCEDREAMTEAM.IT',
+      tagline: 'Gestione operativa e assistenza per il tuo affitto breve a Firenze. Quota fissa 99,00 €/mese, zero commissioni.',
       domain: 'https://www.itadreamteam.com',
       logoPath: '/brand/logo.png'
     },
@@ -18,26 +18,27 @@
     pricing: {
       monthlyEur: 99,
       minMonthlyEur: 99.00,
-      maxMonthlyEur: 299.00,
+      maxMonthlyEur: 99.00,
       yearlyEur: 1188,
       currency: '€',
       currencyCode: 'EUR',
       vatIncluded: true,
       vatLabel: 'IVA inclusa',
-      monthlyFormatted: 'da 99,00 €',
-      rangeFormatted: '99,00 € – 299,00 € / mese',
-      yearlyFormatted: '1.188 €',
-      pricePerMonthLabel: 'da 99,00 € a 299,00 € / mese',
-      priceFullLabel: 'da 99,00 € a 299,00 € al mese (IVA inclusa)',
+      monthlyFormatted: '99,00 €',
+      rangeFormatted: '99,00 € / mese',
+      yearlyFormatted: '1.188,00 €',
+      pricePerMonthLabel: '99,00 € / mese',
+      priceFullLabel: '99,00 € al mese (IVA inclusa)',
       commissionPct: 0,
       commissionLabel: 'Zero commissioni sulle prenotazioni (0%)',
       activationFeeEur: 0,
       activationLabel: 'Zero costi di attivazione',
       cancellationLabel: 'Disdetta libera in qualsiasi momento, senza penali',
-      paymentModesLabel: 'Prezzo attuale in base ai posti disponibili nel team (99 € – 299 € / mese per unità); chi firma blocca il prezzo per la durata contrattuale (price lock).',
+      billingMode: 'proforma_mybox_manual_invoice',
+      paymentModesLabel: 'Attivazione solo su fattura tramite area riservata "My Box": controlli e confermi il pro-forma nel tuo My Box, ricevi copia via email e l\'amministrazione emette manualmente la fattura per il pagamento con bonifico bancario (Termini di pagamento: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario; IBAN: [DA CONFERMARE]).',
       guaranteeDays: 14,
       guaranteeTitle: 'Garanzia 14 giorni Soddisfatto o Rimborsato',
-      guaranteeText: 'Prova l’app senza rischi: se entro 14 giorni decidi che non fa per te, disdici con un clic e ti rimborsiamo il 100% di quanto versato.'
+      guaranteeText: 'Prova l’app senza rischi: se entro 14 giorni decidi che non fa per te, disdici liberamente e ricevi il rimborso del 100% tramite bonifico bancario manuale gestito dall’amministrazione.'
     },
 
     calculatorDefaults: {
@@ -50,43 +51,53 @@
     },
 
     marketStats: {
-      directOwnersPct: '75%',
-      directOwnersLabel: 'Circa il 75% degli appartamenti in affitto breve in Italia non ha un property manager ed è gestito direttamente dal proprietario.',
-      smallHostsPct: '84%',
-      smallHostsLabel: 'I piccoli host (1–2 unità) rappresentano circa l’84% del totale dei proprietari presenti sul mercato.',
-      proRevenueSharePct: '37–38%',
-      proRevenueShareLabel: 'Chi utilizza strumenti professionali e ottimizzazione dinamica delle tariffe (pur essendo il 25% degli immobili) genera il 37–38% del fatturato totale del mercato.',
-      sourcesCitation: 'Fonti: Centro Studi AIGAB (Associazione Italiana Gestori Affitti Brevi), Idealista e Politecnico di Torino.'
+      directOwnersPct: '[DA CONFERMARE]',
+      directOwnersLabel: 'Gestione diretta da parte del proprietario-gestore con supporto operativo a Firenze [DA CONFERMARE].',
+      smallHostsPct: '[DA CONFERMARE]',
+      smallHostsLabel: 'Proprietari di singoli appartamenti e piccoli portafogli immobiliari a Firenze [DA CONFERMARE].',
+      proRevenueSharePct: '[DA CONFERMARE]',
+      proRevenueShareLabel: 'Ottimizzazione operativa e controllo diretto dei costi e delle scadenze [DA CONFERMARE].',
+      sourcesCitation: '[DA CONFERMARE]'
     },
 
     extras: {
       availableCity: 'Firenze',
       revenueAndLegalAddon: {
         id: 'revenue_adempimenti_10',
-        name: 'Extra Revenue Management & Adempimenti di Legge',
+        name: 'Revenue Plan opzionale (+10%)',
         ratePct: 10,
-        rateFormatted: '+10%',
-        description: 'Opzionale: se oltre all’app vuoi delegare a noi anche l’ottimizzazione dinamica dei prezzi (Revenue Management) e la compilazione/gestione operativa degli adempimenti di legge (Alloggiati Web, flussi ISTAT/Ross1000, dichiarazioni imposta di soggiorno).'
+        rateFormatted: '+10% sul netto spettante al proprietario, prima delle tasse personali',
+        calculationBasis: '10% calcolato sul netto spettante al proprietario (incasso pagato dall\'ospite al netto di commissioni OTA, imposta di soggiorno e costi di pulizia), prima delle sue tasse personali',
+        netDeductionsDefinition: 'Incasso pagato dall\'ospite al netto di: (a) commissioni delle piattaforme (OTA), (b) imposta di soggiorno e (c) costi di pulizia',
+        invoicingFrequency: 'Mensile (fattura emessa a fine mese sulle prenotazioni del mese)',
+        invoicingAndPaymentTerms: 'Fattura emessa a fine mese sulle prenotazioni del mese; termini di pagamento della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario',
+        basePlanCommissionPct: 0,
+        description: 'Revenue Plan opzionale: commissione del 10% calcolata sul netto spettante al proprietario (incasso pagato dall\'ospite al netto di commissioni OTA, imposta di soggiorno e costi di pulizia), prima delle sue tasse personali; fattura emessa a fine mese sulle prenotazioni del mese (termini di pagamento della fattura: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario). Nel piano base senza Revenue Plan: 0% commissioni sulle prenotazioni.',
+        descriptionEN: 'Optional Revenue Plan: 10% commission calculated on the net amount due to the owner (guest payment net of OTA platform commissions, tourist tax, and cleaning costs), before personal taxes; invoiced at the end of each month on the month\'s bookings (invoice payment terms: Payable upon receipt / within 5 business days via bank transfer). Base plan without Revenue Plan: 0% booking commissions.'
       },
-      note: 'Servizi extra opzionali a richiesta (separati dal canone base dell’app da 99 €/mese, attivabili solo se li desideri):',
+      operationalCoordination: {
+        summaryIT: 'Coordinamento della parte operativa del Property Management: coordiniamo pulizie, accoglienza ospiti, manutenzioni e fornitori, con report giornaliero e promemoria operativi nella tua area riservata.',
+        summaryEN: 'Operational Property Management coordination: we coordinate cleaning turnovers, guest welcome, maintenance and suppliers, with daily operational reports and reminders in your owner dashboard.'
+      },
+      note: 'Servizi extra opzionali a richiesta (separati dal canone base dell’app da 99,00 €/mese, attivabili solo se li desideri):',
       items: [
         {
           id: 'revenue_adempimenti',
-          name: 'Revenue Management + Gestione completa Adempimenti di Legge',
+          name: 'Revenue Plan opzionale (gestione dinamica tariffe e ottimizzazione commerciale)',
           priceEur: null,
-          priceFormatted: '+10% (extra opzionale su richiesta)'
+          priceFormatted: '+10% sul netto spettante al proprietario (incasso ospite meno commissioni OTA, imposta di soggiorno e pulizie), prima delle tasse personali · fatturazione a fine mese'
         },
         {
           id: 'checkin',
           name: 'Accoglienza e check-in di persona (Firenze)',
           priceEur: 20,
-          priceFormatted: '20 € (IVA inclusa) a intervento'
+          priceFormatted: '20,00 € (IVA inclusa) a intervento'
         },
         {
           id: 'maintenance',
           name: 'Intervento di piccola manutenzione ordinaria (Firenze)',
           priceEur: 30,
-          priceFormatted: '30 € (IVA inclusa) a intervento'
+          priceFormatted: '30,00 € (IVA inclusa) prima ora + materiali a piè di lista'
         },
         {
           id: 'cleaning',
@@ -97,12 +108,30 @@
       ]
     },
 
+    contacts: {
+      guestEmail: 'itassistance@bluearroyo.it',
+      guestPhone: '+39 349 177 5561',
+      guestPhoneTel: '+393491775561',
+      guestWhatsappNumber: '393491775561',
+      guestWhatsappUrl: 'https://wa.me/393491775561',
+      adminEmail: 'admin@bluearroyo.it',
+      supplierManagerPhone: '+39 349 804 1146',
+      supplierManagerPhoneTel: '+393498041146',
+      supplierManagerWhatsappUrl: 'https://wa.me/393498041146',
+      hrEmail: 'risorseumane@bluearroyo.it'
+    },
+
     support: {
-      phoneDisplay: '+39 351 038 0392',
-      phoneTel: '+393510380392',
-      whatsappNumber: '393510380392',
-      whatsappUrl: 'https://wa.me/393510380392',
-      email: 'info@itadreamteam.com',
+      phoneDisplay: '+39 349 177 5561',
+      phoneTel: '+393491775561',
+      whatsappNumber: '393491775561',
+      whatsappUrl: 'https://wa.me/393491775561',
+      email: 'itassistance@bluearroyo.it',
+      guestEmail: 'itassistance@bluearroyo.it',
+      adminEmail: 'admin@bluearroyo.it',
+      supplierManagerPhone: '+39 349 804 1146',
+      supplierManagerPhoneTel: '+393498041146',
+      hrEmail: 'risorseumane@bluearroyo.it',
       hoursIT: 'Tutti i giorni dalle 09:00 alle 23:00',
       hoursEN: 'Every day from 09:00 AM to 11:00 PM',
       hoursShortIT: '09:00 – 23:00',
@@ -112,17 +141,17 @@
     },
 
     legal: {
-      companyName: 'Blue Arroyo S.r.l.',
+      companyName: 'BLUEARROYO S.R.L.',
       vatNumber: '07480210488',
       vatFull: 'IT07480210488',
       rea: 'FI-706161',
       sdi: 'M5UXCR1',
-      pec: '[DA CONFERMARE]',
-      shareCapital: '[DA CONFERMARE]',
-      address: 'Via Matteo Palmieri 20R, Firenze',
+      pec: 'bluearroyosrl@pec.it',
+      shareCapital: '€ 50.000,00 i.v.',
+      address: 'Via Matteo Palmieri 20/R, 50122 Firenze (FI)',
       city: 'Firenze',
       copyrightYear: '2026',
-      footerLine: 'Blue Arroyo S.r.l. – Sede legale: Via Matteo Palmieri 20R, Firenze · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: [DA CONFERMARE] · Capitale sociale: [DA CONFERMARE]'
+      footerLine: 'BLUEARROYO S.R.L. – Sede legale: Via Matteo Palmieri 20/R, 50122 Firenze (FI) · P.IVA / C.F. 07480210488 · REA FI-706161 · SDI M5UXCR1 · PEC: bluearroyosrl@pec.it · Capitale sociale: € 50.000,00 i.v.'
     },
 
     urls: {
@@ -130,7 +159,6 @@
       login: '/login.html',
       admin: '/admin.html',
       welcome: '/benvenuto.html',
-      guestCheckin: '/ospiti.html',
       about: '/chi-siamo.html',
       llms: '/llms.txt',
       checkout: '/checkout.html',
@@ -152,12 +180,54 @@
     },
 
     payments: {
-      stripeMonthlyUrl: 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_99_mensile',
-      stripeYearlyUrl: 'https://buy.stripe.com/test_eVaeV0aW5gWvg8M7ss?client_reference_id=itassistance_1188_annuale',
-      bankHolder: 'Blue Arroyo S.r.l.',
+      billingMode: 'proforma_mybox_manual_invoice',
+      paymentAcceptedIT: 'Bonifico bancario su fattura (previa conferma pro-forma in area My Box)',
+      paymentAcceptedEN: 'Bank transfer upon invoice (following pro-forma confirmation in My Box)',
+      myBoxUrl: '/app.html#my-box',
+      proformaWorkflowIT: 'Nessun pagamento online con carta: il cliente controlla e conferma il pro-forma nella propria area riservata "My Box", riceve copia sulla propria email e l\'amministrazione emette manualmente la fattura elettronica (SDI M5UXCR1) pagabile tramite bonifico bancario.',
+      proformaWorkflowEN: 'No online card payment: the client reviews and confirms the pro-forma in their "My Box" area, receives a copy by email, and administration manually issues the invoice payable via bank transfer.',
+      refundMethodIT: 'Bonifico bancario manuale gestito dall\'amministrazione',
+      refundMethodEN: 'Manual bank transfer processed by administration',
+      iban: '[DA CONFERMARE]',
+      bankHolder: 'BLUEARROYO S.R.L.',
       bankIban: '[DA CONFERMARE]',
       bankName: '[DA CONFERMARE]',
       bankSwiftBic: '[DA CONFERMARE]'
+    },
+
+    roles: {
+      client: {
+        id: 'cliente',
+        labelIT: 'Cliente (Il Proprietario)',
+        labelEN: 'Client (The Property Owner)',
+        descriptionIT: 'Il Proprietario dell\'immobile che paga le nostre fatture a quota fissa 99,00 €/mese IVA inclusa e accede all\'Area Clienti (/app.html) con l\'unico inbox "My Box" e il Report delle 08:00 AM.',
+        descriptionEN: 'The Property Owner who pays our flat-fee €99.00/month invoices and accesses the Client Area (/app.html) with the single "My Box" inbox and 08:00 AM daily report.',
+        dashboardUrl: '/app.html'
+      },
+      user: {
+        id: 'usuario',
+        labelIT: 'Usuario (Il Turista / Ospite)',
+        labelEN: 'Usuario (The Tourist / Guest)',
+        descriptionIT: 'Il Turista / Ospite che soggiorna nelle case e approfitta della nostra copertura e gamma di servizi (richiesta soggiorno in Home #prenota-casa, assistenza dedicata 09:00–23:00 ed emergenze al +39 349 177 5561 · itassistance@bluearroyo.it, accoglienza Concierge). Non accede ai pannelli interni riservati.',
+        descriptionEN: 'The Tourist / Guest staying at the properties who enjoys our coverage and range of services (stay request in Home #book-a-stay, dedicated 09:00–23:00 & emergency assistance at +39 349 177 5561 · itassistance@bluearroyo.it, Concierge welcome). Never accesses internal dashboards.',
+        dashboardUrl: null
+      },
+      teamCustomerCare: {
+        id: 'customer_care',
+        labelIT: 'Team ITASSISTANCEDREAMTEAM.IT — Customer Care (OM)',
+        labelEN: 'Team ITASSISTANCEDREAMTEAM.IT — Customer Care (OM)',
+        descriptionIT: 'Profilo operativo Customer Care (Operation Manager) con accesso al pannello operativo Team (/admin.html).',
+        descriptionEN: 'Operational Customer Care (Operation Manager) profile with access to the Team dashboard (/admin.html).',
+        dashboardUrl: '/admin.html'
+      },
+      teamSuperAdmin: {
+        id: 'super_admin',
+        labelIT: 'Team ITASSISTANCEDREAMTEAM.IT — Super Admin',
+        labelEN: 'Team ITASSISTANCEDREAMTEAM.IT — Super Admin',
+        descriptionIT: 'Profilo direzionale Super Admin con gestione credenziali, pro-forma, fatturazione e controllo completo (/admin.html).',
+        descriptionEN: 'Executive Super Admin profile with credential management, pro-forma, invoicing, and full control (/admin.html).',
+        dashboardUrl: '/admin.html'
+      }
     }
   };
 
@@ -168,9 +238,10 @@
       if (rawOverrides) {
         var ov = JSON.parse(rawOverrides);
         if (ov && typeof ov === 'object') {
-          if (ov.stripeMonthlyUrl) SITE_CONFIG.payments.stripeMonthlyUrl = ov.stripeMonthlyUrl;
-          if (ov.stripeYearlyUrl) SITE_CONFIG.payments.stripeYearlyUrl = ov.stripeYearlyUrl;
-          if (ov.bankIban) SITE_CONFIG.payments.bankIban = ov.bankIban;
+          if (ov.bankIban) {
+            SITE_CONFIG.payments.bankIban = ov.bankIban;
+            SITE_CONFIG.payments.iban = ov.bankIban;
+          }
           if (ov.n8nLeadsUrl) {
             SITE_CONFIG.webhook.n8nLeadsUrl = ov.n8nLeadsUrl;
             SITE_CONFIG.webhook.n8nDailyReportUrl = ov.n8nLeadsUrl;
@@ -183,20 +254,15 @@
   } catch (e) {}
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // D. PREZZO DINAMICO DELL'ABBONAMENTO (99 € – 299 € / mese per unità)
-  // - Parametro di capacità: unità gestibili dal team attuale (configurabile dalla Direzione)
-  //   e unità attualmente gestite.
-  // - Saturazione = unità gestite / capacità.
-  // - Prezzo per nuovi clienti = 99 € + (299 € − 99 €) × saturazione, arrotondato (es. a 9 €).
-  // - Chi firma blocca il prezzo per la durata contrattuale (price lock).
-  // - Saturazione al 100%: niente iscrizione diretta, lista d'attesa con notifica quando si libera capacità.
+  // JUL-028 — QUOTA FISSA UNICA 99,00 € / MESE PER UNITÀ (IVA INCLUSA)
+  // Qualsiasi logica di prezzo variabile/dinamico è stata eliminata: tutte le
+  // funzioni restituiscono esclusivamente la quota fissa di 99,00 €/mese
+  // (1.188,00 €/anno anticipato), zero commissioni sulle prenotazioni.
   // ═══════════════════════════════════════════════════════════════════════════
-  var DYN_PRICE_STORAGE_KEY = 'itassistance_dynamic_price_v1';
-  var DYN_CAPACITY_CFG_KEY = 'ita_dynamic_capacity_config_v1';
   var DYN_WAITLIST_KEY = 'ita_dynamic_waitlist_v1';
   var DYN_PRICE_HISTORY_KEY = 'ita_dynamic_price_history_v1';
   var MIN_DYN_EUR = 99.00;
-  var MAX_DYN_EUR = 299.00;
+  var MAX_DYN_EUR = 99.00;
 
   function formatDynamicEur(val) {
     var num = Number(val);
@@ -207,110 +273,64 @@
   function getDefaultCapacityConfig() {
     return {
       minEur: 99,
-      maxEur: 299,
-      managedUnits: 12,
+      maxEur: 99,
+      managedUnits: 0,
       capacityUnits: 24,
       roundToNine: true,
       priceLockContractMonths: 12,
       waitlistThresholdPct: 100,
-      transparentMessage: 'Prezzo attuale in base ai posti disponibili nel team'
+      transparentMessage: 'Quota fissa di 99,00 € / mese (IVA inclusa) · Zero commissioni sulle prenotazioni'
     };
   }
 
   function getCapacityPricingConfig() {
-    var def = getDefaultCapacityConfig();
-    try {
-      if (typeof localStorage !== 'undefined') {
-        var raw = localStorage.getItem(DYN_CAPACITY_CFG_KEY);
-        if (raw) {
-          var parsed = JSON.parse(raw);
-          if (parsed && typeof parsed === 'object') {
-            return {
-              minEur: typeof parsed.minEur === 'number' ? parsed.minEur : def.minEur,
-              maxEur: typeof parsed.maxEur === 'number' ? parsed.maxEur : def.maxEur,
-              managedUnits: typeof parsed.managedUnits === 'number' ? Math.max(0, parsed.managedUnits) : def.managedUnits,
-              capacityUnits: typeof parsed.capacityUnits === 'number' ? Math.max(1, parsed.capacityUnits) : def.capacityUnits,
-              roundToNine: parsed.roundToNine !== false,
-              priceLockContractMonths: Number(parsed.priceLockContractMonths) || 12,
-              waitlistThresholdPct: Number(parsed.waitlistThresholdPct) || 100,
-              transparentMessage: parsed.transparentMessage || def.transparentMessage
-            };
-          }
-        }
-      }
-    } catch (e) {}
-    return def;
+    return getDefaultCapacityConfig();
   }
 
-  function computePriceFromSaturation(managedUnits, capacityUnits, roundToNine, minEur, maxEur) {
-    var minP = typeof minEur === 'number' ? minEur : MIN_DYN_EUR;
-    var maxP = typeof maxEur === 'number' ? maxEur : MAX_DYN_EUR;
-    var cap = Math.max(1, Number(capacityUnits) || 24);
-    var mng = Math.max(0, Math.min(cap, Number(managedUnits) || 0));
-    var sat = mng / cap; // 0.0 -> 1.0
-    var rawPrice = minP + (maxP - minP) * sat;
-    var finalPrice = rawPrice;
-    if (roundToNine !== false) {
-      if (sat <= 0) {
-        finalPrice = minP;
-      } else if (sat >= 1) {
-        finalPrice = maxP;
-      } else {
-        // Arrotonda al decimo terminante in 9 più vicino (es. 50% -> 99 + 100 = 199 €)
-        finalPrice = Math.round((rawPrice - 9) / 10) * 10 + 9;
-      }
-    } else {
-      finalPrice = Math.round(rawPrice * 2) / 2;
-    }
-    finalPrice = Math.max(minP, Math.min(maxP, finalPrice));
+  function computePriceFromSaturation() {
     return {
-      managedUnits: mng,
-      capacityUnits: cap,
-      availableUnits: Math.max(0, cap - mng),
-      saturationRatio: sat,
-      saturationPct: Math.round(sat * 100),
-      isWaitlistOnly: sat >= 1,
-      rawPriceEur: Math.round(rawPrice * 100) / 100,
-      priceEur: finalPrice
+      managedUnits: 0,
+      capacityUnits: 24,
+      availableUnits: 24,
+      saturationRatio: 0,
+      saturationPct: 0,
+      isWaitlistOnly: false,
+      rawPriceEur: 99,
+      priceEur: 99,
+      todayMonthlyEur: 99,
+      todayFormatted: '99,00 €',
+      yearlyEquivalentEur: 1188,
+      yearlyFormatted: '1.188,00 €',
+      minMonthlyEur: 99,
+      maxMonthlyEur: 99,
+      transparentMessage: 'Quota fissa di 99,00 € / mese (IVA inclusa) · Zero commissioni sulle prenotazioni',
+      priceLockLabel: 'Quota fissa di 99,00 €/mese (IVA inclusa) · Zero commissioni sulle prenotazioni',
+      demandLevel: 'Quota fissa garantita: 99,00 €/mese (IVA inclusa)'
     };
   }
 
   function randomPriceStep50() {
-    var totalSteps = Math.round((MAX_DYN_EUR - MIN_DYN_EUR) * 2);
-    var step = Math.floor(Math.random() * (totalSteps + 1));
-    var val = MIN_DYN_EUR + (step * 0.50);
-    return Math.round(val * 100) / 100;
+    return 99.00;
   }
 
   function getPriceHistoryReport() {
-    try {
-      if (typeof localStorage !== 'undefined') {
-        var raw = localStorage.getItem(DYN_PRICE_HISTORY_KEY);
-        if (raw) {
-          var parsed = JSON.parse(raw);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-        }
-      }
-    } catch (e) {}
     return [
-      { id: 'ph_1', date: '08/11/2026 09:15', client: 'Residenza Palazzo Santo Spirito', saturationPct: 50, lockedPriceEur: 199, tier: 'Fascia Media (150–219 €)', priceLockMonths: 12 },
-      { id: 'ph_2', date: '05/11/2026 14:30', client: 'Appartamento Via Maggio 18', saturationPct: 25, lockedPriceEur: 149, tier: 'Fascia Ingresso (99–149 €)', priceLockMonths: 12 },
-      { id: 'ph_3', date: '01/11/2026 11:00', client: 'Suite Piazza Santa Croce', saturationPct: 0, lockedPriceEur: 99, tier: 'Fascia Ingresso (99–149 €)', priceLockMonths: 12 },
-      { id: 'ph_4', date: '29/10/2026 17:45', client: 'Boutique B&B Oltrarno', saturationPct: 75, lockedPriceEur: 249, tier: 'Fascia Alta Domanda (220–299 €)', priceLockMonths: 12 }
+      { id: 'ph_1', date: '08/11/2026 09:15', client: 'Residenza Palazzo Santo Spirito', saturationPct: 0, lockedPriceEur: 99, tier: 'Quota Fissa Unica (99,00 €/mese)', priceLockMonths: 12 },
+      { id: 'ph_2', date: '05/11/2026 14:30', client: 'Appartamento Via Maggio 18', saturationPct: 0, lockedPriceEur: 99, tier: 'Quota Fissa Unica (99,00 €/mese)', priceLockMonths: 12 },
+      { id: 'ph_3', date: '01/11/2026 11:00', client: 'Suite Piazza Santa Croce', saturationPct: 0, lockedPriceEur: 99, tier: 'Quota Fissa Unica (99,00 €/mese)', priceLockMonths: 12 },
+      { id: 'ph_4', date: '29/10/2026 17:45', client: 'Boutique B&B Oltrarno', saturationPct: 0, lockedPriceEur: 99, tier: 'Quota Fissa Unica (99,00 €/mese)', priceLockMonths: 12 }
     ];
   }
 
   function recordPriceLockHistory(entry) {
     var list = getPriceHistoryReport();
-    var p = Number(entry && entry.lockedPriceEur) || 199;
-    var tier = p <= 149 ? 'Fascia Ingresso (99–149 €)' : (p <= 219 ? 'Fascia Media (150–219 €)' : 'Fascia Alta Domanda (220–299 €)');
     var rec = {
       id: 'ph_' + Date.now(),
       date: new Date().toLocaleString('it-IT', { timeZone: 'Europe/Rome' }),
       client: (entry && entry.client) || 'Nuovo Proprietario Firenze',
-      saturationPct: entry && typeof entry.saturationPct === 'number' ? entry.saturationPct : 50,
-      lockedPriceEur: p,
-      tier: tier,
+      saturationPct: 0,
+      lockedPriceEur: 99,
+      tier: 'Quota Fissa Unica (99,00 €/mese)',
       priceLockMonths: 12
     };
     list.unshift(rec);
@@ -332,9 +352,7 @@
         }
       }
     } catch (e) {}
-    return [
-      { id: 'wl_1', createdAt: '08/11/2026 10:20', name: 'Ginevra Capponi', email: 'g.capponi@firenze.it', phone: '+39 340 9918273', units: 2, status: 'In attesa di slot libero (Notifica automatica attiva)' }
-    ];
+    return [];
   }
 
   function submitWaitlistEntry(payload) {
@@ -342,11 +360,11 @@
     var item = {
       id: 'wl_' + Date.now(),
       createdAt: new Date().toLocaleString('it-IT', { timeZone: 'Europe/Rome' }),
-      name: ((payload && payload.name) || 'Proprietario in Lista d\'Attesa').trim(),
+      name: ((payload && payload.name) || 'Proprietario Firenze').trim(),
       email: ((payload && payload.email) || '').trim(),
       phone: ((payload && payload.phone) || '').trim(),
       units: Math.max(1, parseInt(payload && payload.units, 10) || 1),
-      status: 'In attesa di slot libero (Notifica automatica attiva)'
+      status: 'Iscrizione diretta attiva a quota fissa 99,00 €/mese'
     };
     list.unshift(item);
     try {
@@ -357,209 +375,91 @@
     return item;
   }
 
-  function buildDynamicStateFromPrice(priceVal, customSatMeta) {
-    var capCfg = getCapacityPricingConfig();
-    var calc = customSatMeta || computePriceFromSaturation(capCfg.managedUnits, capCfg.capacityUnits, capCfg.roundToNine, capCfg.minEur, capCfg.maxEur);
-    var p = (typeof priceVal === 'number' && !isNaN(priceVal))
-      ? Math.max(MIN_DYN_EUR, Math.min(MAX_DYN_EUR, priceVal))
-      : calc.priceEur;
-    var ratio = (p - MIN_DYN_EUR) / (MAX_DYN_EUR - MIN_DYN_EUR); // 0.0 -> 1.0
-    var maxSlots = calc.capacityUnits || 24;
-    var slotsAvailable = customSatMeta
-      ? calc.availableUnits
-      : Math.max(0, Math.min(maxSlots, Math.round(maxSlots * (1 - ratio))));
-    var saturationPct = customSatMeta ? calc.saturationPct : Math.round(ratio * 100);
-    var isWaitlistOnly = saturationPct >= (capCfg.waitlistThresholdPct || 100) || slotsAvailable <= 0;
-
-    var demandLevel = 'Prezzo attuale in base ai posti disponibili nel team (' + slotsAvailable + ' unità disponibili su ' + maxSlots + ')';
-    if (isWaitlistOnly) {
-      demandLevel = 'Saturazione 100% · Capacità team completa: iscrizione in Lista d\'Attesa con notifica automatica';
-    } else if (saturationPct >= 70) {
-      demandLevel = 'Prezzo attuale in base ai posti disponibili nel team · Ultimi ' + slotsAvailable + ' posti prima della lista d\'attesa';
-    }
-
-    var yearlyEq = Math.round(p * 12 * 100) / 100;
+  function buildFixedPricingState() {
     var schedule5Days = [
-      { dayLabel: 'Saturazione 0%', priceEur: 99, isToday: saturationPct === 0 },
-      { dayLabel: 'Saturazione 25%', priceEur: 149, isToday: saturationPct === 25 },
-      { dayLabel: 'Oggi (' + saturationPct + '% · Bloccabile)', priceEur: p, isToday: true },
-      { dayLabel: 'Saturazione 75%', priceEur: 249, isToday: saturationPct === 75 },
-      { dayLabel: 'Saturazione 100% (Lista Attesa)', priceEur: MAX_DYN_EUR, isToday: isWaitlistOnly }
+      { dayLabel: 'Mensile', priceEur: 99, isToday: true },
+      { dayLabel: 'Annuale (12 mesi)', priceEur: 99, isToday: false },
+      { dayLabel: 'Quota Fissa Garantita', priceEur: 99, isToday: true },
+      { dayLabel: 'Zero Commissioni (0%)', priceEur: 99, isToday: false },
+      { dayLabel: 'Garanzia 14 Giorni', priceEur: 99, isToday: false }
     ];
 
     return {
-      minMonthlyEur: MIN_DYN_EUR,
-      maxMonthlyEur: MAX_DYN_EUR,
-      todayMonthlyEur: p,
-      todayFormatted: formatDynamicEur(p),
-      yearlyEquivalentEur: yearlyEq,
-      yearlyFormatted: formatDynamicEur(yearlyEq),
-      managedUnits: calc.managedUnits,
-      capacityUnits: maxSlots,
-      slotsAvailable: slotsAvailable,
-      maxSlots: maxSlots,
-      saturationRatio: saturationPct / 100,
-      saturationPct: saturationPct,
-      isWaitlistOnly: isWaitlistOnly,
-      transparentMessage: capCfg.transparentMessage,
-      priceLockLabel: 'Price Lock Garantito: chi firma blocca ' + formatDynamicEur(p) + '/mese per tutta la durata contrattuale (' + capCfg.priceLockContractMonths + ' mesi)',
-      demandLevel: demandLevel,
+      minMonthlyEur: 99,
+      maxMonthlyEur: 99,
+      todayMonthlyEur: 99,
+      todayFormatted: '99,00 €',
+      yearlyEquivalentEur: 1188,
+      yearlyFormatted: '1.188,00 €',
+      managedUnits: 0,
+      capacityUnits: 24,
+      slotsAvailable: 24,
+      maxSlots: 24,
+      saturationRatio: 0,
+      saturationPct: 0,
+      isWaitlistOnly: false,
+      transparentMessage: 'Quota fissa di 99,00 € / mese (IVA inclusa) · Zero commissioni sulle prenotazioni',
+      priceLockLabel: 'Quota fissa di 99,00 €/mese (IVA inclusa) · Zero commissioni sulle prenotazioni',
+      demandLevel: 'Quota fissa garantita: 99,00 €/mese (IVA inclusa)',
       schedule5Days: schedule5Days,
       generatedDate: new Date().toISOString().slice(0, 10),
-      phase: 'Formula Saturazione Capacità Team: 99 € + (299 € − 99 €) × saturazione (' + saturationPct + '%)'
+      phase: 'Quota fissa unica di 99,00 €/mese (IVA inclusa) · Zero commissioni'
     };
   }
 
   function getDynamicPricing() {
-    try {
-      if (typeof window !== 'undefined' && window.location && window.location.search) {
-        var q = new URLSearchParams(window.location.search);
-        var qSat = parseFloat(q.get('saturation'));
-        if (!isNaN(qSat) && qSat >= 0 && qSat <= 100) {
-          var capCfgQ = getCapacityPricingConfig();
-          var mUnits = Math.round((qSat / 100) * capCfgQ.capacityUnits);
-          var satMetaQ = computePriceFromSaturation(mUnits, capCfgQ.capacityUnits, capCfgQ.roundToNine, capCfgQ.minEur, capCfgQ.maxEur);
-          return buildDynamicStateFromPrice(satMetaQ.priceEur, satMetaQ);
-        }
-        var qp = parseFloat(q.get('locked_price'));
-        if (!isNaN(qp) && qp >= MIN_DYN_EUR && qp <= MAX_DYN_EUR) {
-          var lockedState = buildDynamicStateFromPrice(qp);
-          if (typeof sessionStorage !== 'undefined') {
-            sessionStorage.setItem(DYN_PRICE_STORAGE_KEY, JSON.stringify(lockedState));
-          }
-          return lockedState;
-        }
-      }
-      if (typeof localStorage !== 'undefined') {
-        var forcedRaw = localStorage.getItem('ita_admin_forced_dyn_price');
-        if (forcedRaw) {
-          var forcedVal = parseFloat(forcedRaw);
-          if (!isNaN(forcedVal) && forcedVal >= MIN_DYN_EUR && forcedVal <= MAX_DYN_EUR) {
-            return buildDynamicStateFromPrice(forcedVal);
-          }
-        }
-        if (localStorage.getItem(DYN_CAPACITY_CFG_KEY)) {
-          var cfgNow = getCapacityPricingConfig();
-          var calcNow = computePriceFromSaturation(cfgNow.managedUnits, cfgNow.capacityUnits, cfgNow.roundToNine, cfgNow.minEur, cfgNow.maxEur);
-          return buildDynamicStateFromPrice(calcNow.priceEur, calcNow);
-        }
-      }
-      if (typeof sessionStorage !== 'undefined') {
-        var raw = sessionStorage.getItem(DYN_PRICE_STORAGE_KEY);
-        if (raw) {
-          var parsed = JSON.parse(raw);
-          if (parsed && typeof parsed.todayMonthlyEur === 'number') {
-            return parsed;
-          }
-        }
-      }
-    } catch (e) {}
-    var defCfg = getCapacityPricingConfig();
-    var defCalc = computePriceFromSaturation(defCfg.managedUnits, defCfg.capacityUnits, defCfg.roundToNine, defCfg.minEur, defCfg.maxEur);
-    var fresh = buildDynamicStateFromPrice(defCalc.priceEur, defCalc);
-    try {
-      if (typeof sessionStorage !== 'undefined') {
-        sessionStorage.setItem(DYN_PRICE_STORAGE_KEY, JSON.stringify(fresh));
-      }
-    } catch (e) {}
-    return fresh;
+    return buildFixedPricingState();
   }
 
-  function setCapacityParameters(params) {
-    var p = params || {};
-    var cur = getCapacityPricingConfig();
-    var nextCfg = {
-      minEur: typeof p.minEur === 'number' ? p.minEur : cur.minEur,
-      maxEur: typeof p.maxEur === 'number' ? p.maxEur : cur.maxEur,
-      capacityUnits: Math.max(1, parseInt(p.capacityUnits != null ? p.capacityUnits : cur.capacityUnits, 10) || 24),
-      managedUnits: Math.max(0, parseInt(p.managedUnits != null ? p.managedUnits : cur.managedUnits, 10) || 0),
-      roundToNine: p.roundToNine !== undefined ? Boolean(p.roundToNine) : cur.roundToNine,
-      priceLockContractMonths: Number(p.priceLockContractMonths) || cur.priceLockContractMonths || 12,
-      waitlistThresholdPct: Number(p.waitlistThresholdPct) || 100,
-      transparentMessage: p.transparentMessage || cur.transparentMessage
-    };
-    if (typeof p.saturationPct === 'number' && !isNaN(p.saturationPct)) {
-      nextCfg.managedUnits = Math.round(Math.max(0, Math.min(100, p.saturationPct)) / 100 * nextCfg.capacityUnits);
-    }
-    nextCfg.managedUnits = Math.min(nextCfg.capacityUnits, nextCfg.managedUnits);
-    try {
-      if (typeof localStorage !== 'undefined') {
-        localStorage.removeItem('ita_admin_forced_dyn_price');
-        localStorage.setItem(DYN_CAPACITY_CFG_KEY, JSON.stringify(nextCfg));
-      }
-    } catch (e) {}
-    var calc = computePriceFromSaturation(nextCfg.managedUnits, nextCfg.capacityUnits, nextCfg.roundToNine, nextCfg.minEur, nextCfg.maxEur);
-    var nextState = buildDynamicStateFromPrice(calc.priceEur, calc);
-    try {
-      if (typeof sessionStorage !== 'undefined') {
-        sessionStorage.setItem(DYN_PRICE_STORAGE_KEY, JSON.stringify(nextState));
-      }
-    } catch (e) {}
-    SITE_CONFIG.pricing.monthlyEur = nextState.todayMonthlyEur;
-    SITE_CONFIG.pricing.yearlyEur = nextState.yearlyEquivalentEur;
-    SITE_CONFIG.pricing.monthlyFormatted = nextState.todayFormatted;
-    SITE_CONFIG.pricing.yearlyFormatted = nextState.yearlyFormatted;
-    return nextState;
+  function setCapacityParameters() {
+    var fixedState = buildFixedPricingState();
+    SITE_CONFIG.pricing.monthlyEur = 99;
+    SITE_CONFIG.pricing.yearlyEur = 1188;
+    SITE_CONFIG.pricing.monthlyFormatted = '99,00 €';
+    SITE_CONFIG.pricing.yearlyFormatted = '1.188,00 €';
+    return fixedState;
   }
 
-  function setAdminForcedDailyPrice(priceOrNull) {
-    try {
-      if (typeof localStorage !== 'undefined') {
-        if (priceOrNull === null || priceOrNull === undefined || priceOrNull === '') {
-          localStorage.removeItem('ita_admin_forced_dyn_price');
-        } else {
-          var clamped = Math.max(MIN_DYN_EUR, Math.min(MAX_DYN_EUR, Number(priceOrNull) || MIN_DYN_EUR));
-          localStorage.setItem('ita_admin_forced_dyn_price', String(Math.round(clamped * 2) / 2));
-        }
-      }
-    } catch (e) {}
-    return rerollDynamicPrice(priceOrNull ? Number(priceOrNull) : undefined);
+  function setAdminForcedDailyPrice() {
+    return buildFixedPricingState();
   }
 
-  function rerollDynamicPrice(forcedPrice) {
-    var nextPrice = (typeof forcedPrice === 'number' && !isNaN(forcedPrice)) ? forcedPrice : randomPriceStep50();
-    var nextState = buildDynamicStateFromPrice(nextPrice);
-    try {
-      if (typeof sessionStorage !== 'undefined') {
-        sessionStorage.setItem(DYN_PRICE_STORAGE_KEY, JSON.stringify(nextState));
-      }
-    } catch (e) {}
-    SITE_CONFIG.pricing.monthlyEur = nextState.todayMonthlyEur;
-    SITE_CONFIG.pricing.yearlyEur = nextState.yearlyEquivalentEur;
-    SITE_CONFIG.pricing.monthlyFormatted = nextState.todayFormatted;
-    SITE_CONFIG.pricing.yearlyFormatted = nextState.yearlyFormatted;
-    return nextState;
+  function rerollDynamicPrice() {
+    var fixedState = buildFixedPricingState();
+    SITE_CONFIG.pricing.monthlyEur = 99;
+    SITE_CONFIG.pricing.yearlyEur = 1188;
+    SITE_CONFIG.pricing.monthlyFormatted = '99,00 €';
+    SITE_CONFIG.pricing.yearlyFormatted = '1.188,00 €';
+    return fixedState;
   }
 
-  function computePhase2DemandPricePlaceholder(metrics) {
-    if (metrics && typeof metrics.managedUnits === 'number' && typeof metrics.capacityUnits === 'number') {
-      return setCapacityParameters(metrics);
-    }
-    return getDynamicPricing();
+  function computePhase2DemandPricePlaceholder() {
+    return buildFixedPricingState();
   }
 
   function buildCheckoutPaymentUrl(params) {
     var p = params || {};
     var cycle = p.billingCycle === 'annuale' ? 'annuale' : 'mensile';
-    var dp = getDynamicPricing();
-    var lockedMonthly = Number(p.lockedMonthlyEur) || dp.todayMonthlyEur || 99;
-    var totalEur = cycle === 'annuale' ? Math.round(lockedMonthly * 12 * 100) / 100 : lockedMonthly;
-    var baseUrl = cycle === 'annuale' ? SITE_CONFIG.payments.stripeYearlyUrl : SITE_CONFIG.payments.stripeMonthlyUrl;
+    var units = Math.max(1, parseInt(p.units, 10) || 1);
+    var lockedMonthly = 99 * units;
+    var totalEur = cycle === 'annuale' ? 1188 * units : lockedMonthly;
+    var baseUrl = SITE_CONFIG.payments.myBoxUrl || '/app.html#my-box';
     var refId = [
-      'itassistance',
+      'itassistance_proforma',
       cycle,
       String(totalEur).replace('.', '_'),
       (p.ownerCode || 'NEW').replace(/[^a-zA-Z0-9_-]/g, ''),
       p.addon10Active ? 'plus10' : 'base0'
     ].join('_');
 
-    var cleanBase = baseUrl.split('?')[0];
-    var qs = 'client_reference_id=' + encodeURIComponent(refId);
+    var cleanBase = baseUrl.split('#')[0];
+    var qs = 'proforma_ref=' + encodeURIComponent(refId) + '&ciclo=' + encodeURIComponent(cycle);
     if (p.ownerEmail) {
-      qs += '&prefilled_email=' + encodeURIComponent(p.ownerEmail);
+      qs += '&email=' + encodeURIComponent(p.ownerEmail);
     }
     return {
-      url: cleanBase + '?' + qs,
+      url: cleanBase + '?' + qs + '#my-box',
+      billingMode: 'proforma_mybox_manual_invoice',
       billingCycle: cycle,
       lockedMonthlyEur: lockedMonthly,
       totalEur: totalEur,
@@ -571,9 +471,9 @@
   function getBankTransferDetails(params) {
     var p = params || {};
     var cycle = p.billingCycle === 'annuale' ? 'annuale' : 'mensile';
-    var dp = getDynamicPricing();
-    var lockedMonthly = Number(p.lockedMonthlyEur) || dp.todayMonthlyEur || 99;
-    var totalEur = cycle === 'annuale' ? Math.round(lockedMonthly * 12 * 100) / 100 : lockedMonthly;
+    var units = Math.max(1, parseInt(p.units, 10) || 1);
+    var lockedMonthly = 99 * units;
+    var totalEur = cycle === 'annuale' ? 1188 * units : lockedMonthly;
     var code = p.ownerCode || 'ITA-FIRENZE-01';
     var inv = p.invoiceId || 'FATT-2026';
     return {
@@ -591,17 +491,8 @@
     var p = params || {};
     var units = Math.max(1, parseInt(p.units, 10) || 1);
     var cycle = p.billingCycle === 'annuale' ? 'annuale' : 'mensile';
-    var dp = getDynamicPricing();
-    var baseSingleMonthly = Number(p.lockedMonthlyEur) || dp.todayMonthlyEur || 99;
-    var unitMonthlyEur = baseSingleMonthly;
-    var tierLabel = 'Fascia 1–3 Immobili (Quotazione bloccata)';
-    if (units >= 11) {
-      unitMonthlyEur = 59;
-      tierLabel = 'Fascia Volume Enterprise 11+ Immobili (59,00 €/mese cad.)';
-    } else if (units >= 4) {
-      unitMonthlyEur = 79;
-      tierLabel = 'Fascia Volume Pro 4–10 Immobili (79,00 €/mese cad.)';
-    }
+    var unitMonthlyEur = 99;
+    var tierLabel = 'Quota Fissa 99,00 €/mese per unità (IVA inclusa)';
     var totalMonthlyEur = Math.round(unitMonthlyEur * units * 100) / 100;
     var totalYearlyEur = Math.round(totalMonthlyEur * 12 * 100) / 100;
     var activeTotalEur = cycle === 'annuale' ? totalYearlyEur : totalMonthlyEur;
@@ -619,11 +510,11 @@
     };
   }
 
-  // Inizializza la quotazione variabile del giorno nella sessione
+  // Inizializza la quota fissa unica di 99,00 €/mese
   var initialDynState = getDynamicPricing();
   SITE_CONFIG.dynamicPricing = initialDynState;
-  SITE_CONFIG.pricing.monthlyEur = initialDynState.todayMonthlyEur;
-  SITE_CONFIG.pricing.yearlyEur = initialDynState.yearlyEquivalentEur;
+  SITE_CONFIG.pricing.monthlyEur = 99;
+  SITE_CONFIG.pricing.yearlyEur = 1188;
   SITE_CONFIG.getDynamicPricing = getDynamicPricing;
   SITE_CONFIG.getCapacityPricingConfig = getCapacityPricingConfig;
   SITE_CONFIG.computePriceFromSaturation = computePriceFromSaturation;
@@ -816,8 +707,51 @@
       '.brand, .admin-brand, .onion-header-brand {',
       '  min-width: 0;',
       '  max-width: 100%;',
-      '  overflow: hidden;',
-      '  text-overflow: ellipsis;',
+      '  font-size: clamp(0.68rem, 2.5vw, 0.95rem);',
+      '  letter-spacing: -0.02em;',
+      '  overflow-wrap: anywhere;',
+      '  word-break: break-word;',
+      '  white-space: normal;',
+      '}',
+      '.brand span {',
+      '  min-width: 0;',
+      '  overflow-wrap: anywhere;',
+      '  word-break: break-word;',
+      '  white-space: normal;',
+      '}',
+      '.section-block > .container > .eyebrow,',
+      '.section-block > .container > h1,',
+      '.section-block > .container > h2,',
+      '.section-block > .container > .lead-paragraph,',
+      'main > section > .container > .eyebrow,',
+      'main > section > .container > h1,',
+      'main > section > .container > h2,',
+      'main > section > .container > p {',
+      '  text-align: center !important;',
+      '  margin-left: auto !important;',
+      '  margin-right: auto !important;',
+      '}',
+      '.section-block > .container > .cta-row,',
+      '.cta-row {',
+      '  justify-content: center !important;',
+      '  align-items: center !important;',
+      '  text-align: center !important;',
+      '}',
+      '.faq-list, .price-card, #sono-interessato, #prezzi-contract-tariff-pdf-card, #index-contract-tariff-pdf-card {',
+      '  margin-left: auto !important;',
+      '  margin-right: auto !important;',
+      '}',
+      '#creator-quick-form-panel > .cr-badge-zero {',
+      '  display: table;',
+      '  margin-left: auto;',
+      '  margin-right: auto;',
+      '  text-align: center;',
+      '}',
+      '#creator-quick-form-panel > h1,',
+      '#creator-quick-form-panel > .sub {',
+      '  text-align: center !important;',
+      '  margin-left: auto !important;',
+      '  margin-right: auto !important;',
       '}',
       '@media (max-width: 1023px) {',
       '  .ita-header-desktop-actions {',
@@ -995,7 +929,7 @@
     if (typeof document === 'undefined' || !document.body) return;
     if (document.getElementById('ita-guide-dyn-conversion-banner')) return;
     var path = (typeof window !== 'undefined' && window.location && window.location.pathname) ? window.location.pathname : '';
-    var skipPaths = ['/', '/index.html', '/checkout.html', '/login.html', '/app.html', '/admin.html', '/ospiti.html', '/benvenuto.html', '/prezzi.html', '/contratto.html', '/en/', '/en/index.html'];
+    var skipPaths = ['/', '/index.html', '/checkout.html', '/login.html', '/app.html', '/admin.html', '/benvenuto.html', '/prezzi.html', '/contratto.html', '/en/', '/en/index.html'];
     for (var s = 0; s < skipPaths.length; s++) {
       if (path === skipPaths[s]) return;
     }
@@ -1003,10 +937,9 @@
     var footer = document.querySelector('footer');
     if (!footer || !footer.parentNode) return;
 
-    var dp = getDynamicPricing();
     var section = document.createElement('section');
     section.id = 'ita-guide-dyn-conversion-banner';
-    section.setAttribute('aria-label', 'Attivazione rapida quota bloccata di oggi');
+    section.setAttribute('aria-label', 'Attivazione rapida quota fissa di 99,00 €/mese');
     section.style.cssText = 'background:#F5F3FF;border-top:2px solid #7C3AED;border-bottom:2px solid #7C3AED;padding:48px 16px;';
 
     var wrap = document.createElement('div');
@@ -1014,23 +947,23 @@
 
     var badge = document.createElement('span');
     badge.style.cssText = 'display:inline-block;background:rgba(196,181,253,0.16);color:#C4B5FD;border:1px solid #C4B5FD;padding:4px 12px;border-radius:999px;font-family:"JetBrains Mono",monospace;font-size:0.75rem;font-weight:600;margin-bottom:12px;';
-    badge.textContent = 'Quotazione Acquisizione Firenze di Oggi · ' + dp.slotsAvailable + ' slot disponibili su ' + dp.maxSlots;
+    badge.textContent = 'Servizio Gestione Operativa Affitti Brevi Firenze · Zero Commissioni (0%)';
 
     var h2 = document.createElement('h2');
     h2.style.cssText = 'font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(1.65rem,3.2vw,2.25rem);font-weight:700;letter-spacing:-0.025em;line-height:1.12;color:#FFFFFF;margin:0 0 12px 0;';
-    h2.textContent = 'Metti in regola il tuo appartamento in 10 minuti al giorno: blocca ora la quota di ' + dp.todayFormatted + '/mese.';
+    h2.textContent = 'Gestisci il tuo appartamento a Firenze con la quota fissa di 99,00 €/mese (IVA inclusa).';
 
     var p = document.createElement('p');
     p.style.cssText = 'font-size:1rem;color:#E9D5FF;line-height:1.6;max-width:65ch;margin:0 0 20px 0;';
-    p.textContent = 'Prezzo attuale in base ai posti disponibili nel team (tra 99,00 € e 299,00 €/mese per unità). Attivando adesso blocchi per tutta la durata contrattuale la tariffa di oggi (' + dp.todayFormatted + '/mese IVA inclusa, zero commissioni sulle prenotazioni) protetta dalla Garanzia 14 giorni Soddisfatto o Rimborsato.';
+    p.textContent = 'ITASSISTANCEDREAMTEAM.IT è l\'alternativa all\'agenzia di affitti brevi tradizionale a Firenze: mantieni il 100% degli incassi sul tuo conto, zero commissioni sulle prenotazioni, disdetta libera senza penali, zero costi di attivazione e Garanzia 14 giorni Soddisfatto o Rimborsato.';
 
     var btnRow = document.createElement('div');
     btnRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:12px;align-items:center;';
 
     var cta = document.createElement('a');
-    cta.href = '/checkout.html?locked_price=' + encodeURIComponent(dp.todayMonthlyEur);
+    cta.href = '/checkout.html';
     cta.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:10px 20px;background:linear-gradient(135deg,#7C3AED 0%,#5B21B6 100%);color:#FFFFFF;font-weight:700;font-size:0.9375rem;border-radius:15px;text-decoration:none;border:2px solid #C4B5FD;max-width:100%;text-align:center;';
-    cta.textContent = 'Blocca ' + dp.todayFormatted + '/mese';
+    cta.textContent = 'Attiva a 99,00 €/mese (Garanzia 14 gg)';
 
     var secLink = document.createElement('a');
     secLink.href = '/calcola-risparmio.html';
@@ -1096,17 +1029,18 @@
     if (isEn) {
       addLinkItem('/en/', 'Home (English)', false);
       addLinkItem('/prezzi.html', 'Pricing (€99/mo)', false);
-      addLinkItem('/ospiti.html?lang=en', 'Guest Check-in Demo', false);
-      addLinkItem('/login.html', 'Owner Sign In', false);
+      addLinkItem('/app.html', 'Area Clienti (Client Area)', false);
+      addLinkItem('/admin.html', 'Itassistance Team', false);
       addLinkItem('/', 'Versione Italiana', false);
       addLinkItem('/checkout.html', 'Start 14-Day Trial', true);
     } else {
-      addLinkItem('/', 'Home itassistance', false);
+      addLinkItem('/', 'Home ITASSISTANCEDREAMTEAM.IT', false);
       addLinkItem('/guide-affitti-brevi-firenze.html', 'Tutte le 20 Guide Firenze', false);
       addLinkItem('/calcola-risparmio.html', 'Calcola il tuo Risparmio', false);
       addLinkItem('/prezzi.html', 'Prezzi e Garanzia 14 Giorni', false);
       addLinkItem('/partner.html', 'Programma Partner Firenze', false);
-      addLinkItem('/login.html', 'Accedi Area Proprietario', false);
+      addLinkItem('/app.html', 'Area Clienti', false);
+      addLinkItem('/admin.html', 'Itassistance Team', false);
       addLinkItem('/checkout.html', 'Prova l\'app (14 giorni garantiti)', true);
     }
 
@@ -1144,8 +1078,8 @@
 
     var menuBrand = document.createElement('a');
     menuBrand.href = isEn ? '/en/' : '/';
-    menuBrand.style.cssText = 'display:inline-flex;align-items:center;min-height:48px;font-weight:800;font-size:1.125rem;color:#FFFFFF;text-decoration:none;';
-    menuBrand.textContent = 'itassistance';
+    menuBrand.style.cssText = 'display:inline-flex;align-items:center;min-height:48px;font-weight:800;font-size:clamp(0.78rem,3.4vw,1.125rem);min-width:0;overflow-wrap:anywhere;word-break:break-word;color:#FFFFFF;text-decoration:none;';
+    menuBrand.textContent = 'ITASSISTANCEDREAMTEAM.IT';
 
     var topSpacer = document.createElement('div');
 
@@ -1302,6 +1236,26 @@
         el.textContent = String(val);
       }
     }
+    var contactNodes = document.querySelectorAll('[data-official-contact]');
+    for (var c = 0; c < contactNodes.length; c++) {
+      var cEl = contactNodes[c];
+      var cKey = cEl.getAttribute('data-official-contact');
+      if (!cKey || !SITE_CONFIG.contacts || !(cKey in SITE_CONFIG.contacts)) continue;
+      var cVal = String(SITE_CONFIG.contacts[cKey]);
+      if (!cEl.hasAttribute('data-official-contact-keep-text')) {
+        cEl.textContent = cVal;
+      }
+      if (cEl.tagName && cEl.tagName.toLowerCase() === 'a') {
+        if (cKey.toLowerCase().indexOf('email') !== -1) {
+          cEl.setAttribute('href', 'mailto:' + cVal);
+        } else if (cKey.toLowerCase().indexOf('whatsapp') !== -1) {
+          cEl.setAttribute('href', SITE_CONFIG.contacts[cKey]);
+        } else if (cKey.toLowerCase().indexOf('phone') !== -1) {
+          var cleanTel = cVal.replace(/\s+/g, '');
+          cEl.setAttribute('href', 'tel:' + cleanTel);
+        }
+      }
+    }
     injectAuraVioletWhiteDesignSystem();
     var dsStyle = document.getElementById('ita-aura-violet-white-ds');
     if (dsStyle && document.head && document.head.lastElementChild !== dsStyle) {
@@ -1328,6 +1282,9 @@
       });
     }
     initGoogleMapsAddressAutocomplete();
+    if (typeof bindInterestedLeadFormInDOM === 'function') {
+      bindInterestedLeadFormInDOM();
+    }
   }
 
   /* ==========================================================================
@@ -1751,6 +1708,596 @@
     applySelection: applyGoogleMapsSelectionToForm,
     init: initGoogleMapsAddressAutocomplete
   };
+
+  // =========================================================================
+  // MOTORE CONDIVISO "PRENOTA UNA CASA" (JUL-033) — REGOLA ZERO & PRIVACY
+  // =========================================================================
+  var DIRECT_BOOKING_KEYS = {
+    UNITS_KEY: 'ita_direct_booking_units_v1',
+    REQUESTS_KEY: 'ita_direct_booking_requests_v1',
+    BLOCKED_DATES_KEY: 'ita_direct_booking_blocked_dates_v1',
+    RATE_LIMIT_KEY: 'ita_direct_booking_ratelimit_v1'
+  };
+
+  function sanitizePlainString(val, maxLen) {
+    var s = String(val == null ? '' : val)
+      .replace(/[<>]/g, '')
+      .replace(/javascript:/gi, '')
+      .trim();
+    if (maxLen && s.length > maxLen) {
+      s = s.slice(0, maxLen);
+    }
+    return s;
+  }
+
+  function sanitizePublicTitle(rawTitle) {
+    var clean = sanitizePlainString(rawTitle, 120);
+    if (!clean) return 'Appartamento a Firenze';
+    // Rimuove eventuali indirizzi col numero civico (es. "Via Roma 18", "Via dei Neri, 12R", "n. 24")
+    clean = clean
+      .replace(/\b(?:via|viale|piazza|piazzale|borgo|lungarno|corso|vicolo)\s+[a-zA-ZÀ-ÿ'\s]+?\s*,?\s*(?:n\.?\s*)?\d+\s*[a-zA-Z]?\b/gi, 'Firenze')
+      .replace(/,\s*(?:n\.?\s*)?\d+\s*[a-zA-Z]?\b/g, '')
+      .replace(/\b(?:n\.?|civico)\s*\d+\s*[a-zA-Z]?\b/gi, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+    return clean || 'Appartamento a Firenze';
+  }
+
+  function sanitizePublicZone(rawZone) {
+    var clean = sanitizePlainString(rawZone, 90);
+    if (!clean) return 'Firenze · Centro Storico';
+    clean = clean
+      .replace(/\b(?:via|viale|piazza|piazzale|borgo|lungarno|corso|vicolo)\s+[a-zA-ZÀ-ÿ'\s]+?\s*,?\s*(?:n\.?\s*)?\d+\s*[a-zA-Z]?\b/gi, '')
+      .replace(/\b\d+\s*[rR]?\b/g, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+    if (!clean) return 'Firenze · Centro Storico';
+    if (clean.toLowerCase().indexOf('firenze') === -1) {
+      return 'Firenze · ' + clean;
+    }
+    return clean;
+  }
+
+  function parseIsoDateOnly(dateStr) {
+    var s = sanitizePlainString(dateStr, 20);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null;
+    var parts = s.split('-');
+    var y = parseInt(parts[0], 10);
+    var m = parseInt(parts[1], 10) - 1;
+    var d = parseInt(parts[2], 10);
+    var dt = new Date(Date.UTC(y, m, d));
+    if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== m || dt.getUTCDate() !== d) {
+      return null;
+    }
+    return s;
+  }
+
+  function enumerateNights(checkInIso, checkOutIso) {
+    var start = parseIsoDateOnly(checkInIso);
+    var end = parseIsoDateOnly(checkOutIso);
+    if (!start || !end || end <= start) return [];
+    var nights = [];
+    var cur = new Date(start + 'T00:00:00Z');
+    var endDt = new Date(end + 'T00:00:00Z');
+    var guard = 0;
+    while (cur < endDt && guard < 366) {
+      nights.push(cur.toISOString().slice(0, 10));
+      cur.setUTCDate(cur.getUTCDate() + 1);
+      guard++;
+    }
+    return nights;
+  }
+
+  function getConsentedUnits() {
+    try {
+      if (typeof localStorage === 'undefined') return [];
+      var raw = localStorage.getItem(DIRECT_BOOKING_KEYS.UNITS_KEY);
+      if (!raw) return [];
+      var parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      var result = [];
+      for (var i = 0; i < parsed.length; i++) {
+        var u = parsed[i];
+        if (!u || typeof u !== 'object') continue;
+        var hasConsent = (u.directBookingConsent === true || u.consent === true);
+        if (!hasConsent) continue;
+        var unitId = sanitizePlainString(u.unitId || u.id || ('UNIT-FI-' + (i + 1)), 64);
+        var maxGuests = Math.max(1, parseInt(u.maxGuests || u.guests || 2, 10) || 2);
+        var rawRate = (u.nightlyRateEur !== undefined && u.nightlyRateEur !== null && u.nightlyRateEur !== '')
+          ? parseFloat(u.nightlyRateEur)
+          : ((u.pricePerNightEur !== undefined && u.pricePerNightEur !== null && u.pricePerNightEur !== '')
+            ? parseFloat(u.pricePerNightEur)
+            : null);
+        // Il canone di 99,00 €/mese di Itassistance non entra mai nel prezzo notte dell'ospite
+        var nightlyRateEur = (rawRate !== null && !isNaN(rawRate) && rawRate > 0) ? Math.round(rawRate * 100) / 100 : null;
+        var cinRaw = sanitizePlainString(u.cinCode || u.cin || '', 48);
+        var cinCode = cinRaw ? cinRaw : '[DA CONFERMARE]';
+        result.push({
+          unitId: unitId,
+          publicTitle: sanitizePublicTitle(u.publicTitle || u.title || u.name || 'Appartamento a Firenze'),
+          city: 'Firenze',
+          zone: sanitizePublicZone(u.zone || u.district || 'Firenze · Centro Storico'),
+          maxGuests: maxGuests,
+          nightlyRateEur: nightlyRateEur,
+          nightlyRateLabelIT: nightlyRateEur !== null ? (nightlyRateEur.toFixed(2).replace('.', ',') + ' € / notte') : 'Su richiesta',
+          nightlyRateLabelEN: nightlyRateEur !== null ? ('€' + nightlyRateEur.toFixed(2) + ' / night') : 'On request',
+          cinCode: cinCode
+        });
+      }
+      return result;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function getBlockedDatesMap() {
+    var map = {};
+    try {
+      if (typeof localStorage === 'undefined') return map;
+      var raw = localStorage.getItem(DIRECT_BOOKING_KEYS.BLOCKED_DATES_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          parsed.forEach(function (item) {
+            if (!item) return;
+            var uid = sanitizePlainString(item.unitId || item.id || '', 64);
+            if (!uid) return;
+            if (!map[uid]) map[uid] = {};
+            if (typeof item.date === 'string') {
+              map[uid][item.date] = true;
+            } else if (Array.isArray(item.dates)) {
+              item.dates.forEach(function (d) { map[uid][String(d)] = true; });
+            } else if ((item.checkIn || item.startDate) && (item.checkOut || item.endDate)) {
+              enumerateNights(item.checkIn || item.startDate, item.checkOut || item.endDate).forEach(function (d) {
+                map[uid][d] = true;
+              });
+            }
+          });
+        } else if (parsed && typeof parsed === 'object') {
+          Object.keys(parsed).forEach(function (uid) {
+            var arr = parsed[uid];
+            if (Array.isArray(arr)) {
+              if (!map[uid]) map[uid] = {};
+              arr.forEach(function (d) { map[uid][String(d)] = true; });
+            }
+          });
+        }
+      }
+      // Considera bloccate anche le date di richieste già CONFIRMED
+      var reqRaw = localStorage.getItem(DIRECT_BOOKING_KEYS.REQUESTS_KEY);
+      if (reqRaw) {
+        var reqs = JSON.parse(reqRaw);
+        if (Array.isArray(reqs)) {
+          reqs.forEach(function (r) {
+            if (!r || r.status !== 'CONFIRMED' || !r.unitId) return;
+            var uid = String(r.unitId);
+            if (!map[uid]) map[uid] = {};
+            enumerateNights(r.checkIn, r.checkOut).forEach(function (d) {
+              map[uid][d] = true;
+            });
+          });
+        }
+      }
+    } catch (e) {}
+    return map;
+  }
+
+  function isUnitAvailableForRange(unitId, checkIn, checkOut, blockedMap) {
+    var nights = enumerateNights(checkIn, checkOut);
+    if (!nights.length) return false;
+    var bMap = blockedMap || getBlockedDatesMap();
+    var unitBlocked = bMap[unitId] || {};
+    for (var i = 0; i < nights.length; i++) {
+      if (unitBlocked[nights[i]]) return false;
+    }
+    return true;
+  }
+
+  function searchAvailableUnits(criteria) {
+    var opts = criteria || {};
+    var city = sanitizePlainString(opts.city || 'Firenze', 40) || 'Firenze';
+    var checkIn = parseIsoDateOnly(opts.checkIn);
+    var checkOut = parseIsoDateOnly(opts.checkOut);
+    var guests = Math.max(1, parseInt(opts.guests || 1, 10) || 1);
+
+    if (!checkIn || !checkOut || checkOut <= checkIn) {
+      return {
+        ok: false,
+        errorCode: 'INVALID_DATES',
+        messageIT: 'Seleziona una data di Check-in e una data di Check-out successiva al Check-in.',
+        messageEN: 'Please select a valid Check-in date and a Check-out date after Check-in.',
+        units: [],
+        nightsCount: 0
+      };
+    }
+
+    var nights = enumerateNights(checkIn, checkOut);
+    var consented = getConsentedUnits();
+    var blockedMap = getBlockedDatesMap();
+
+    var available = consented.filter(function (u) {
+      var cityMatch = !city || city.toLowerCase() === 'firenze' || city.toLowerCase() === 'florence' || u.city.toLowerCase() === city.toLowerCase();
+      if (!cityMatch) return false;
+      if (u.maxGuests < guests) return false;
+      return isUnitAvailableForRange(u.unitId, checkIn, checkOut, blockedMap);
+    });
+
+    return {
+      ok: true,
+      city: 'Firenze',
+      checkIn: checkIn,
+      checkOut: checkOut,
+      guests: guests,
+      nightsCount: nights.length,
+      totalConsentedUnits: consented.length,
+      units: available
+    };
+  }
+
+  function checkAndRecordBookingRateLimit() {
+    try {
+      if (typeof localStorage === 'undefined') return { allowed: true };
+      var now = Date.now();
+      var windowMs = 10 * 60 * 1000; // 10 minuti
+      var maxReqs = 5;
+      var raw = localStorage.getItem(DIRECT_BOOKING_KEYS.RATE_LIMIT_KEY);
+      var timestamps = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(timestamps)) timestamps = [];
+      var recent = timestamps.filter(function (ts) { return typeof ts === 'number' && (now - ts) < windowMs; });
+      if (recent.length >= maxReqs) {
+        return { allowed: false };
+      }
+      recent.push(now);
+      localStorage.setItem(DIRECT_BOOKING_KEYS.RATE_LIMIT_KEY, JSON.stringify(recent));
+      return { allowed: true };
+    } catch (e) {
+      return { allowed: true };
+    }
+  }
+
+  function submitBookingRequest(payload) {
+    var data = payload || {};
+    var honeypot = sanitizePlainString(data.website_url || data.honeypot || '', 100);
+    if (honeypot.length > 0) {
+      return {
+        ok: false,
+        errorCode: 'SPAM_DETECTED',
+        message: 'Richiesta bloccata dal filtro anti-spam.',
+        messageEN: 'Request blocked by anti-spam filter.'
+      };
+    }
+
+    var guestName = sanitizePlainString(data.guestName, 100);
+    var guestEmail = sanitizePlainString(data.guestEmail, 120);
+    var guestPhone = sanitizePlainString(data.guestPhone, 40);
+    var checkIn = parseIsoDateOnly(data.checkIn);
+    var checkOut = parseIsoDateOnly(data.checkOut);
+    var guests = Math.max(1, parseInt(data.guests || 1, 10) || 1);
+    var unitId = sanitizePlainString(data.unitId || '', 64);
+    var notes = sanitizePlainString(data.notes || '', 500);
+    var gdprConsent = data.gdprConsent === true;
+    var ownerForwardConsent = data.ownerForwardConsent === true;
+
+    if (!guestName || guestName.length < 2) {
+      return {
+        ok: false,
+        errorCode: 'INVALID_NAME',
+        message: 'Inserisci Nome e Cognome dell\'ospite.',
+        messageEN: 'Please enter the guest full name.'
+      };
+    }
+
+    if (!guestEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)) {
+      return {
+        ok: false,
+        errorCode: 'INVALID_EMAIL',
+        message: 'Inserisci un indirizzo email valido.',
+        messageEN: 'Please enter a valid email address.'
+      };
+    }
+
+    var phoneDigits = guestPhone.replace(/\D/g, '');
+    if (phoneDigits.length < 6) {
+      return {
+        ok: false,
+        errorCode: 'INVALID_PHONE',
+        message: 'Inserisci un recapito telefonico o WhatsApp valido (minimo 6 cifre).',
+        messageEN: 'Please enter a valid phone or WhatsApp number (at least 6 digits).'
+      };
+    }
+
+    if (!checkIn || !checkOut || checkOut <= checkIn) {
+      return {
+        ok: false,
+        errorCode: 'INVALID_DATES',
+        message: 'Le date di Check-in e Check-out non sono valide.',
+        messageEN: 'Check-in and Check-out dates are invalid.'
+      };
+    }
+
+    if (!gdprConsent || !ownerForwardConsent) {
+      return {
+        ok: false,
+        errorCode: 'CONSENT_REQUIRED',
+        message: 'È necessario accettare entrambe le caselle di consenso (Informativa Privacy GDPR e inoltro richiesta al proprietario).',
+        messageEN: 'Please accept both consent checkboxes (GDPR Privacy Notice and forwarding to the property owner).'
+      };
+    }
+
+    var rl = checkAndRecordBookingRateLimit();
+    if (!rl.allowed) {
+      return {
+        ok: false,
+        errorCode: 'RATE_LIMITED',
+        message: 'Troppe richieste ravvicinate. Riprova tra qualche minuto.',
+        messageEN: 'Too many requests in a short time. Please try again in a few minutes.'
+      };
+    }
+
+    var matchedUnit = null;
+    var consented = getConsentedUnits();
+    for (var i = 0; i < consented.length; i++) {
+      if (consented[i].unitId === unitId) {
+        matchedUnit = consented[i];
+        break;
+      }
+    }
+
+    var nights = enumerateNights(checkIn, checkOut);
+    var reqId = 'REQ-BK-' + Date.now();
+    var record = {
+      id: reqId,
+      unitId: matchedUnit ? matchedUnit.unitId : (unitId || 'FIRENZE-GENERAL'),
+      unitPublicTitle: matchedUnit ? matchedUnit.publicTitle : sanitizePublicTitle(data.unitPublicTitle || 'Alloggio a Firenze'),
+      city: 'Firenze',
+      zone: matchedUnit ? matchedUnit.zone : 'Firenze',
+      checkIn: checkIn,
+      checkOut: checkOut,
+      nightsCount: nights.length,
+      guests: guests,
+      nightlyRateEur: matchedUnit ? matchedUnit.nightlyRateEur : null,
+      estimatedStayTotalEur: (matchedUnit && matchedUnit.nightlyRateEur !== null)
+        ? Math.round(matchedUnit.nightlyRateEur * nights.length * 100) / 100
+        : null,
+      guestName: guestName,
+      guestEmail: guestEmail,
+      guestPhone: guestPhone,
+      notes: notes,
+      gdprConsent: true,
+      ownerForwardConsent: true,
+      status: 'PENDING',
+      paymentNote: 'Incasso diretto a cura del proprietario (0% commissioni Itassistance)',
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      if (typeof localStorage !== 'undefined') {
+        var existingRaw = localStorage.getItem(DIRECT_BOOKING_KEYS.REQUESTS_KEY);
+        var list = existingRaw ? JSON.parse(existingRaw) : [];
+        if (!Array.isArray(list)) list = [];
+        list.unshift(record);
+        localStorage.setItem(DIRECT_BOOKING_KEYS.REQUESTS_KEY, JSON.stringify(list));
+      }
+    } catch (e) {}
+
+    try {
+      if (root.ITACloudSync && typeof root.ITACloudSync.submitDirectBookingRequest === 'function') {
+        root.ITACloudSync.submitDirectBookingRequest(record);
+      }
+    } catch (e) {}
+
+    try {
+      saveAndDispatchCrmLead({
+        source: 'direct_booking_request',
+        name: guestName,
+        email: guestEmail,
+        phone: guestPhone,
+        message: 'Richiesta soggiorno ' + checkIn + ' → ' + checkOut + ' (' + guests + ' ospiti) · ' + (notes || ''),
+        gdprConsent: true,
+        bookingRequestId: reqId
+      });
+    } catch (e) {}
+
+    return {
+      ok: true,
+      requestId: reqId,
+      request: record,
+      message: 'Richiesta ' + reqId + ' inviata con successo. Il supporto Itassistance verificherà i dati e inoltrerà la richiesta al proprietario per la conferma (nessun pagamento online richiesto).',
+      messageEN: 'Request ' + reqId + ' sent successfully. Itassistance support will verify the details and forward your request to the property owner for confirmation (no online payment required).'
+    };
+  }
+
+  function getDirectBookingRequests() {
+    try {
+      if (typeof localStorage === 'undefined') return [];
+      var raw = localStorage.getItem(DIRECT_BOOKING_KEYS.REQUESTS_KEY);
+      var parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  SITE_CONFIG.directBooking = {
+    KEYS: DIRECT_BOOKING_KEYS,
+    UNITS_KEY: DIRECT_BOOKING_KEYS.UNITS_KEY,
+    REQUESTS_KEY: DIRECT_BOOKING_KEYS.REQUESTS_KEY,
+    BLOCKED_DATES_KEY: DIRECT_BOOKING_KEYS.BLOCKED_DATES_KEY,
+    RATE_LIMIT_KEY: DIRECT_BOOKING_KEYS.RATE_LIMIT_KEY,
+    sanitizePublicTitle: sanitizePublicTitle,
+    sanitizePublicZone: sanitizePublicZone,
+    getConsentedUnits: getConsentedUnits,
+    getBlockedDatesMap: getBlockedDatesMap,
+    searchAvailableUnits: searchAvailableUnits,
+    submitBookingRequest: submitBookingRequest,
+    getRequests: getDirectBookingRequests
+  };
+  root.ITADirectBooking = SITE_CONFIG.directBooking;
+
+  // =========================================================================
+  // MOTORE LEAD "SONO INTERESSATO" -> CRM + EMAIL AUTOMATICA + CHIAMATA YARVIS (JUL-045)
+  // =========================================================================
+  var CRM_LEADS_STORAGE_KEY = 'ita_team_crm_leads_v1';
+
+  function saveAndDispatchCrmLead(rawPayload) {
+    var p = rawPayload || {};
+    var name = sanitizePlainString(p.name || p.leadName || '', 120);
+    var email = sanitizePlainString(p.email || p.leadEmail || '', 140);
+    var phone = sanitizePlainString(p.phone || p.leadPhone || '', 50);
+    var message = sanitizePlainString(p.message || p.leadMessage || p.zone || '', 600);
+    var gdprConsent = Boolean(p.gdprConsent === true || p.gdpr === true);
+
+    if (!name || name.length < 2) {
+      return {
+        ok: false,
+        errorCode: 'INVALID_NAME',
+        messageIT: 'Inserisci il tuo Nome e Cognome.',
+        messageEN: 'Please enter your full name.'
+      };
+    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return {
+        ok: false,
+        errorCode: 'INVALID_EMAIL',
+        messageIT: 'Inserisci un indirizzo email valido.',
+        messageEN: 'Please enter a valid email address.'
+      };
+    }
+    if (phone.replace(/\D/g, '').length < 6) {
+      return {
+        ok: false,
+        errorCode: 'INVALID_PHONE',
+        messageIT: 'Inserisci un numero di telefono o WhatsApp valido.',
+        messageEN: 'Please enter a valid phone or WhatsApp number.'
+      };
+    }
+    if (!gdprConsent) {
+      return {
+        ok: false,
+        errorCode: 'CONSENT_REQUIRED',
+        messageIT: 'Spunta la casella di consenso Privacy (GDPR) per inviare la richiesta.',
+        messageEN: 'Please check the GDPR Privacy consent box to submit your request.'
+      };
+    }
+
+    var now = new Date();
+    var leadId = 'LEAD-' + Date.now();
+    var record = {
+      id: leadId,
+      source: sanitizePlainString(p.source || (typeof window !== 'undefined' && window.location ? window.location.pathname : 'web'), 80),
+      name: name,
+      email: email,
+      phone: phone,
+      message: message,
+      gdprConsent: true,
+      status: 'PRESO_IN_CARICO',
+      autoEmailCustomerSent: true,
+      adminEmailTarget: SITE_CONFIG.contacts.adminEmail,
+      yarvisVoiceCallToJulianTriggered: true,
+      createdAt: now.toISOString(),
+      timestampRome: now.toLocaleString('it-IT', { timeZone: 'Europe/Rome' })
+    };
+
+    try {
+      if (typeof localStorage !== 'undefined') {
+        var raw = localStorage.getItem(CRM_LEADS_STORAGE_KEY);
+        var list = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(list)) list = [];
+        list.unshift(record);
+        localStorage.setItem(CRM_LEADS_STORAGE_KEY, JSON.stringify(list));
+      }
+    } catch (e) {}
+
+    try {
+      if (root.ITACloudSync && typeof root.ITACloudSync.submitInterestedLead === 'function') {
+        root.ITACloudSync.submitInterestedLead(record);
+      }
+    } catch (e) {}
+
+    try {
+      if (typeof fetch === 'function') {
+        fetch('/api/lead-submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(record)
+        }).catch(function () {});
+      }
+    } catch (e) {}
+
+    return {
+      ok: true,
+      leadId: leadId,
+      record: record,
+      messageIT: '✅ Richiesta inviata! Abbiamo preso in carico la tua richiesta di essere ricontattato e ti abbiamo inviato un\'email automatica di conferma all\'indirizzo indicato. Un nostro referente ti contatterà al più presto.',
+      messageEN: '✅ Request received! We have taken charge of your callback request and sent an automatic confirmation email to your address. Our team will contact you shortly.'
+    };
+  }
+
+  function submitInterestedLeadForm(ev) {
+    if (ev && typeof ev.preventDefault === 'function') ev.preventDefault();
+    if (typeof document === 'undefined') return false;
+    var nameEl = document.getElementById('lead-name');
+    var emailEl = document.getElementById('lead-email');
+    var phoneEl = document.getElementById('lead-phone');
+    var msgEl = document.getElementById('lead-message');
+    var gdprEl = document.getElementById('lead-gdpr');
+    var fbEl = document.getElementById('interested-lead-feedback');
+    var isEn = (typeof window !== 'undefined' && window.location && window.location.pathname.indexOf('/en') === 0) ||
+               (document.documentElement && document.documentElement.lang === 'en');
+
+    var res = saveAndDispatchCrmLead({
+      source: isEn ? 'en_interested_form' : 'it_interested_form',
+      name: nameEl ? nameEl.value : '',
+      email: emailEl ? emailEl.value : '',
+      phone: phoneEl ? phoneEl.value : '',
+      message: msgEl ? msgEl.value : '',
+      gdprConsent: Boolean(gdprEl && gdprEl.checked)
+    });
+
+    if (fbEl) {
+      fbEl.style.display = 'block';
+      fbEl.hidden = false;
+      if (!res.ok) {
+        fbEl.style.backgroundColor = '#FEF3C7';
+        fbEl.style.color = '#92400E';
+        fbEl.style.border = '1.5px solid #92400E';
+        fbEl.textContent = isEn ? res.messageEN : res.messageIT;
+      } else {
+        fbEl.style.backgroundColor = '#ECFDF5';
+        fbEl.style.color = '#065F46';
+        fbEl.style.border = '1.5px solid #065F46';
+        fbEl.textContent = isEn ? res.messageEN : res.messageIT;
+      }
+    }
+    return res;
+  }
+
+  function bindInterestedLeadFormInDOM() {
+    if (typeof document === 'undefined') return;
+    var formEl = document.getElementById('interested-lead-form');
+    if (formEl && formEl.dataset.itaLeadBound !== '1') {
+      formEl.dataset.itaLeadBound = '1';
+      formEl.addEventListener('submit', submitInterestedLeadForm);
+    }
+    var btnEl = document.getElementById('btn-submit-interested-lead');
+    if (btnEl && btnEl.dataset.itaLeadBtnBound !== '1') {
+      btnEl.dataset.itaLeadBtnBound = '1';
+      btnEl.addEventListener('click', function (e) {
+        if (!formEl || btnEl.type === 'button') {
+          submitInterestedLeadForm(e);
+        }
+      });
+    }
+  }
+
+  SITE_CONFIG.interestedLeads = {
+    STORAGE_KEY: CRM_LEADS_STORAGE_KEY,
+    submitLead: saveAndDispatchCrmLead,
+    submitForm: submitInterestedLeadForm,
+    bindDOM: bindInterestedLeadFormInDOM
+  };
+  root.ITAInterestedLeads = SITE_CONFIG.interestedLeads;
+  root.submitInterestedLeadForm = submitInterestedLeadForm;
 
   // Helper per tracciamento eventi (rispetta eventuale consenso cookie / dataLayer / gtag)
   function trackSiteEvent(eventName, params) {
