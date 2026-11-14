@@ -1244,6 +1244,7 @@
               </div>
             </div>
 
+            <div id="tc-error-box" role="alert" style="display:none;margin-bottom:16px;padding:12px 16px;border-radius:8px;background:#FEF2F2;border:1.5px solid #DC2626;color:#991B1B;font-weight:700;font-size:0.95rem;"></div>
             <button type="submit" class="btn btn-primary" id="btn-submit-tc" style="min-height:52px;width:100%;font-size:1.05rem;font-weight:800;">
               Attiva Pass Copertura &amp; Ricevi Assistenza H24
             </button>
@@ -2060,23 +2061,46 @@
     async function handleTravelerCoverageSubmit(e) {
       e.preventDefault();
       var btn = document.getElementById('btn-submit-tc');
+      var errBox = document.getElementById('tc-error-box');
+      if (errBox) errBox.style.display = 'none';
+
+      var nome = (document.getElementById('tc-nome') && document.getElementById('tc-nome').value.trim()) || '';
+      var cognome = (document.getElementById('tc-cognome') && document.getElementById('tc-cognome').value.trim()) || '';
+      var email = (document.getElementById('tc-email') && document.getElementById('tc-email').value.trim()) || '';
+      var telefono = (document.getElementById('tc-telefono') && document.getElementById('tc-telefono').value.trim()) || '';
+
+      if (!email || email.indexOf('@') === -1) {
+        if (errBox) {
+          errBox.textContent = 'Inserisci un indirizzo email valido per ricevere il tuo Pass Copertura.';
+          errBox.style.display = 'block';
+        }
+        return;
+      }
+      if (!telefono) {
+        if (errBox) {
+          errBox.textContent = 'Inserisci un recapito telefonico / WhatsApp valido per il supporto H24.';
+          errBox.style.display = 'block';
+        }
+        return;
+      }
+
       if (btn) {
         btn.disabled = true;
         btn.textContent = 'Generazione Pass in corso...';
       }
 
       var payload = {
-        nome: (document.getElementById('tc-nome') && document.getElementById('tc-nome').value) || '',
-        cognome: (document.getElementById('tc-cognome') && document.getElementById('tc-cognome').value) || '',
-        email: (document.getElementById('tc-email') && document.getElementById('tc-email').value) || '',
-        telefonoWhatsapp: (document.getElementById('tc-telefono') && document.getElementById('tc-telefono').value) || '',
+        nome: nome,
+        cognome: cognome,
+        email: email,
+        telefonoWhatsapp: telefono,
         citta: (document.getElementById('tc-citta') && document.getElementById('tc-citta').value) || 'Firenze',
         indirizzo: (document.getElementById('tc-indirizzo') && document.getElementById('tc-indirizzo').value) || '',
         lingua: 'IT',
-        reqLuggage: document.getElementById('srv-luggage') && document.getElementById('srv-luggage').checked,
-        reqTaxiNcc: document.getElementById('srv-taxi') && document.getElementById('srv-taxi').checked,
-        reqBarca: document.getElementById('srv-barca') && document.getElementById('srv-barca').checked,
-        reqRistoranti: document.getElementById('srv-ristoranti') && document.getElementById('srv-ristoranti').checked
+        reqLuggage: Boolean(document.getElementById('srv-luggage') && document.getElementById('srv-luggage').checked),
+        reqTaxiNcc: Boolean(document.getElementById('srv-taxi') && document.getElementById('srv-taxi').checked),
+        reqBarca: Boolean(document.getElementById('srv-barca') && document.getElementById('srv-barca').checked),
+        reqRistoranti: Boolean(document.getElementById('srv-ristoranti') && document.getElementById('srv-ristoranti').checked)
       };
 
       var syncMod = window.ITACloudSync;
@@ -2085,10 +2109,13 @@
         : null;
 
       if (!res || !res.ok || !res.profilo || !res.profilo.passCode) {
-        alert('Impossibile attivare il pass in questo istante. Ti preghiamo di riprovare o contattare direttamente l\'assistenza WhatsApp.');
+        if (errBox) {
+          errBox.textContent = (res && res.error) ? res.error : 'Impossibile attivare il pass in questo istante. Riprova tra poco o contatta l\'assistenza H24.';
+          errBox.style.display = 'block';
+        }
         if (btn) {
           btn.disabled = false;
-          btn.textContent = 'Richiedi Pass Copertura Immediata';
+          btn.textContent = 'Attiva Pass Copertura & Ricevi Assistenza H24';
         }
         return;
       }

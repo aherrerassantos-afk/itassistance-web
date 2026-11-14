@@ -4562,8 +4562,8 @@
      (Supporto PostgreSQL / Supabase + LocalStorage Fallback ad alta affidabilità)
   ──────────────────────────────────────────────────────── */
 
-  var _inMemoryPropertyAccounts = [];
-  var _inMemoryTravelerProfiles = [];
+  var _inMemoryPropertyAccounts = null;
+  var _inMemoryTravelerProfiles = null;
 
   function sanitizeInput(val, maxLen) {
     if (val === null || val === undefined) return '';
@@ -4582,48 +4582,62 @@
   }
 
   function getLocalPropertyAccounts() {
+    if (_inMemoryPropertyAccounts !== null) {
+      return _inMemoryPropertyAccounts.slice();
+    }
     try {
       if (typeof localStorage !== 'undefined') {
         var raw = localStorage.getItem('ita_db_accounts_proprieta_v1');
-        if (raw) return JSON.parse(raw);
+        if (raw) {
+          _inMemoryPropertyAccounts = JSON.parse(raw) || [];
+          return _inMemoryPropertyAccounts.slice();
+        }
       }
     } catch (e) {
-      console.warn('[ITACloudSync] Lettura storage account proprietari fallita, uso memoria locale:', e.message || e);
+      console.warn('[ITACloudSync] Lettura storage account fallita:', e.message || e);
     }
-    return _inMemoryPropertyAccounts.slice();
+    _inMemoryPropertyAccounts = [];
+    return [];
   }
 
   function saveLocalPropertyAccounts(list) {
     _inMemoryPropertyAccounts = Array.isArray(list) ? list.slice() : [];
     try {
       if (typeof localStorage !== 'undefined') {
-        localStorage.setItem('ita_db_accounts_proprieta_v1', JSON.stringify(list));
+        localStorage.setItem('ita_db_accounts_proprieta_v1', JSON.stringify(_inMemoryPropertyAccounts));
       }
     } catch (e) {
-      console.warn('[ITACloudSync] Scrittura storage account proprietari fallita, mantenuto in memoria:', e.message || e);
+      console.warn('[ITACloudSync] Scrittura storage account fallita, mantenuto in memoria:', e.message || e);
     }
   }
 
   function getLocalTravelerProfiles() {
+    if (_inMemoryTravelerProfiles !== null) {
+      return _inMemoryTravelerProfiles.slice();
+    }
     try {
       if (typeof localStorage !== 'undefined') {
         var raw = localStorage.getItem('ita_db_profili_turisti_copertura_v1');
-        if (raw) return JSON.parse(raw);
+        if (raw) {
+          _inMemoryTravelerProfiles = JSON.parse(raw) || [];
+          return _inMemoryTravelerProfiles.slice();
+        }
       }
     } catch (e) {
-      console.warn('[ITACloudSync] Lettura storage profili turisti fallita, uso memoria locale:', e.message || e);
+      console.warn('[ITACloudSync] Lettura storage profili fallita:', e.message || e);
     }
-    return _inMemoryTravelerProfiles.slice();
+    _inMemoryTravelerProfiles = [];
+    return [];
   }
 
   function saveLocalTravelerProfiles(list) {
     _inMemoryTravelerProfiles = Array.isArray(list) ? list.slice() : [];
     try {
       if (typeof localStorage !== 'undefined') {
-        localStorage.setItem('ita_db_profili_turisti_copertura_v1', JSON.stringify(list));
+        localStorage.setItem('ita_db_profili_turisti_copertura_v1', JSON.stringify(_inMemoryTravelerProfiles));
       }
     } catch (e) {
-      console.warn('[ITACloudSync] Scrittura storage profili turisti fallita, mantenuto in memoria:', e.message || e);
+      console.warn('[ITACloudSync] Scrittura storage profili fallita, mantenuto in memoria:', e.message || e);
     }
   }
 
