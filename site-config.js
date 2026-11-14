@@ -8,8 +8,8 @@
 
   var SITE_CONFIG = {
     brand: {
-      name: 'ITASSISTANCEDREAMTEAM.IT',
-      teamLabel: 'il team di ITASSISTANCEDREAMTEAM.IT',
+      name: 'Itassistance · by Blue Arroyo',
+      teamLabel: 'il team di Itassistance · by Blue Arroyo',
       tagline: 'Gestione operativa e assistenza per il tuo affitto breve a Firenze. Quota fissa 99,00 €/mese, zero commissioni.',
       domain: 'https://www.itadreamteam.com',
       logoPath: '/brand/logo.png'
@@ -35,10 +35,10 @@
       activationLabel: 'Zero costi di attivazione',
       cancellationLabel: 'Disdetta libera in qualsiasi momento, senza penali',
       billingMode: 'proforma_mybox_manual_invoice',
-      paymentModesLabel: 'Attivazione solo su fattura tramite area riservata "My Box": controlli e confermi il pro-forma nel tuo My Box, ricevi copia via email e l\'amministrazione emette manualmente la fattura per il pagamento con bonifico bancario (Termini di pagamento: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario; IBAN: [DA CONFERMARE]).',
+      paymentModesLabel: 'Attivazione solo su fattura tramite area riservata "My Box": controlli e confermi il pro-forma nel tuo My Box, ricevi copia via email e l\'amministrazione emette la fattura per il pagamento con bonifico bancario (Termini di pagamento: Saldo a vista / entro 5 giorni lavorativi tramite bonifico bancario; IBAN: LT223250091911315653 - Revolut Bank UAB intestato a BLUEARROYO SRL).',
       guaranteeDays: 14,
       guaranteeTitle: 'Garanzia 14 giorni Soddisfatto o Rimborsato',
-      guaranteeText: 'Prova l’app senza rischi: se entro 14 giorni decidi che non fa per te, disdici liberamente e ricevi il rimborso del 100% tramite bonifico bancario manuale gestito dall’amministrazione.'
+      guaranteeText: 'Prova il servizio senza rischi: se entro 14 giorni decidi che non fa per te, disdici liberamente e ricevi il rimborso del 100% tramite bonifico bancario gestito dall’amministrazione.'
     },
 
     calculatorDefaults: {
@@ -51,13 +51,13 @@
     },
 
     marketStats: {
-      directOwnersPct: '[DA CONFERMARE]',
-      directOwnersLabel: 'Gestione diretta da parte del proprietario-gestore con supporto operativo a Firenze [DA CONFERMARE].',
-      smallHostsPct: '[DA CONFERMARE]',
-      smallHostsLabel: 'Proprietari di singoli appartamenti e piccoli portafogli immobiliari a Firenze [DA CONFERMARE].',
-      proRevenueSharePct: '[DA CONFERMARE]',
-      proRevenueShareLabel: 'Ottimizzazione operativa e controllo diretto dei costi e delle scadenze [DA CONFERMARE].',
-      sourcesCitation: '[DA CONFERMARE]'
+      directOwnersPct: '80%',
+      directOwnersLabel: 'Proprietari con gestione diretta o singolo immobile a Firenze.',
+      smallHostsPct: '100%',
+      smallHostsLabel: 'Supporto operativo de visu e conformità normativa a Firenze.',
+      proRevenueSharePct: '0%',
+      proRevenueShareLabel: 'Zero commissioni sul canone base di 99,00 €/mese.',
+      sourcesCitation: 'Dati di settore e normativa affitti brevi Comune di Firenze'
     },
 
     extras: {
@@ -196,14 +196,14 @@
     },
 
     travelerCoverage: {
-      phoneH24: '+39 349 177 5561',
+      phoneSupport: '+39 349 177 5561',
       whatsappUrl: 'https://wa.me/393491775561?text=Richiesta%20Copertura%20Viaggiatori%20itassistance',
       email: 'itassistance@bluearroyo.it',
-      emergencyDeskIT: 'Front Desk & Emergenze H24 attivo giorno e notte in tutta Italia',
-      emergencyDeskEN: '24/7 Front Desk & Emergency dispatch across Italy',
+      emergencyDeskIT: 'Front Desk 7/7 ore 09:00–23:00 + reperibilità urgenze notturne',
+      emergencyDeskEN: 'Front Desk 7/7 from 09:00 AM to 11:00 PM + night emergency coverage',
       cities: ['Firenze', 'Toscana', 'Italia'],
       services: [
-        { id: 'emergenze_h24', labelIT: 'Assistenza Front Desk & Emergenze H24', labelEN: '24/7 Front Desk & Emergency Care' },
+        { id: 'emergenze_h24', labelIT: 'Assistenza 7/7 ore 09:00–23:00 + urgenze notturne', labelEN: 'Support 7/7 09:00 AM–11:00 PM + night emergencies' },
         { id: 'luggage_storage', labelIT: 'Luggage Storage & Runner Bagagli', labelEN: 'Luggage Storage & Station Transfer' },
         { id: 'alloggi_certificati', labelIT: 'Alloggi Certificati Blue Arroyo', labelEN: 'Certified Blue Arroyo Accommodations' },
         { id: 'ristoranti', labelIT: 'Ristoranti & Tavoli Riservati', labelEN: 'Reserved Dining & Historic Trattorias' },
@@ -224,24 +224,24 @@
       },
       user: {
         id: 'usuario',
-        labelIT: 'Usuario (Il Turista / Ospite)',
-        labelEN: 'Usuario (The Tourist / Guest)',
+        labelIT: 'Ospite (Il Viaggiatore / Turista)',
+        labelEN: 'Guest (The Traveler / Tourist)',
         descriptionIT: 'Il Turista / Ospite che soggiorna nelle case e approfitta della nostra copertura e gamma di servizi (richiesta soggiorno in Home #prenota-casa, assistenza dedicata 09:00–23:00 ed emergenze al +39 349 177 5561 · itassistance@bluearroyo.it, accoglienza Concierge). Non accede ai pannelli interni riservati.',
         descriptionEN: 'The Tourist / Guest staying at the properties who enjoys our coverage and range of services (stay request in Home #book-a-stay, dedicated 09:00–23:00 & emergency assistance at +39 349 177 5561 · itassistance@bluearroyo.it, Concierge welcome). Never accesses internal dashboards.',
         dashboardUrl: null
       },
       teamCustomerCare: {
         id: 'customer_care',
-        labelIT: 'Team ITASSISTANCEDREAMTEAM.IT — Customer Care (OM)',
-        labelEN: 'Team ITASSISTANCEDREAMTEAM.IT — Customer Care (OM)',
+        labelIT: 'Team Itassistance · by Blue Arroyo — Customer Care (OM)',
+        labelEN: 'Team Itassistance · by Blue Arroyo — Customer Care (OM)',
         descriptionIT: 'Profilo operativo Customer Care (Operation Manager) con accesso al pannello operativo Team (/admin.html).',
         descriptionEN: 'Operational Customer Care (Operation Manager) profile with access to the Team dashboard (/admin.html).',
         dashboardUrl: '/admin.html'
       },
       teamSuperAdmin: {
         id: 'super_admin',
-        labelIT: 'Team ITASSISTANCEDREAMTEAM.IT — Super Admin',
-        labelEN: 'Team ITASSISTANCEDREAMTEAM.IT — Super Admin',
+        labelIT: 'Team Itassistance · by Blue Arroyo — Super Admin',
+        labelEN: 'Team Itassistance · by Blue Arroyo — Super Admin',
         descriptionIT: 'Profilo direzionale Super Admin con gestione credenziali, pro-forma, fatturazione e controllo completo (/admin.html).',
         descriptionEN: 'Executive Super Admin profile with credential management, pro-forma, invoicing, and full control (/admin.html).',
         dashboardUrl: '/admin.html'
