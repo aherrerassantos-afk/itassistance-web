@@ -602,32 +602,7 @@
       var raw = localStorage.getItem(LEADS_KEY);
       if (raw) return JSON.parse(raw);
     } catch (e) {}
-    return [
-      {
-        id: 'lead_demo_1',
-        createdAt: '02/11/2026, 09:15:00',
-        name: 'Dott. Alessandro Conti (Oltrarno)',
-        email: 'a.conti@email.it',
-        phone: '+39 335 8192011',
-        annualRevenue: 35000,
-        pmPct: 20,
-        netSaving: 5812,
-        addon10Interest: true,
-        status: 'Da ricontattare (Interessato +10%)'
-      },
-      {
-        id: 'lead_demo_2',
-        createdAt: '01/11/2026, 18:40:00',
-        name: 'Elena Guicciardini (Santa Croce)',
-        email: 'elena.guicciardini@email.it',
-        phone: '+39 347 4401928',
-        annualRevenue: 28000,
-        pmPct: 20,
-        netSaving: 4412,
-        addon10Interest: false,
-        status: 'Report WhatsApp Inviato'
-      }
-    ];
+    return [];
   }
 
   // Gestione Sessione Proprietario (/login.html <->/app.html)
@@ -4582,7 +4557,370 @@
     };
   }
 
+  /* ────────────────────────────────────────────────────────
+     MODELLO DATABASE BICEFALO: accounts_proprieta & profili_turisti_copertura
+     (Supporto PostgreSQL / Supabase + LocalStorage Fallback ad alta affidabilità)
+  ──────────────────────────────────────────────────────── */
+
+  var _inMemoryPropertyAccounts = [];
+  var _inMemoryTravelerProfiles = [];
+
+  function sanitizeInput(val, maxLen) {
+    if (val === null || val === undefined) return '';
+    var str = String(val);
+    var clean = str.replace(/[<>'"&]/g, function (m) {
+      switch (m) {
+        case '<': return '&lt;';
+        case '>': return '&gt;';
+        case '"': return '&quot;';
+        case "'": return '&#39;';
+        case '&': return '&amp;';
+        default: return m;
+      }
+    }).trim();
+    return maxLen && clean.length > maxLen ? clean.substring(0, maxLen) : clean;
+  }
+
+  function getLocalPropertyAccounts() {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        var raw = localStorage.getItem('ita_db_accounts_proprieta_v1');
+        if (raw) return JSON.parse(raw);
+      }
+    } catch (e) {
+      console.warn('[ITACloudSync] Lettura storage account proprietari fallita, uso memoria locale:', e.message || e);
+    }
+    return _inMemoryPropertyAccounts.slice();
+  }
+
+  function saveLocalPropertyAccounts(list) {
+    _inMemoryPropertyAccounts = Array.isArray(list) ? list.slice() : [];
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('ita_db_accounts_proprieta_v1', JSON.stringify(list));
+      }
+    } catch (e) {
+      console.warn('[ITACloudSync] Scrittura storage account proprietari fallita, mantenuto in memoria:', e.message || e);
+    }
+  }
+
+  function getLocalTravelerProfiles() {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        var raw = localStorage.getItem('ita_db_profili_turisti_copertura_v1');
+        if (raw) return JSON.parse(raw);
+      }
+    } catch (e) {
+      console.warn('[ITACloudSync] Lettura storage profili turisti fallita, uso memoria locale:', e.message || e);
+    }
+    return _inMemoryTravelerProfiles.slice();
+  }
+
+  function saveLocalTravelerProfiles(list) {
+    _inMemoryTravelerProfiles = Array.isArray(list) ? list.slice() : [];
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('ita_db_profili_turisti_copertura_v1', JSON.stringify(list));
+      }
+    } catch (e) {
+      console.warn('[ITACloudSync] Scrittura storage profili turisti fallita, mantenuto in memoria:', e.message || e);
+    }
+  }
+
+  async function registerPropertyAccount(payload) {
+    var p = payload || {};
+    var email = (p.email || '').trim().toLowerCase();
+    if (!email || email.indexOf('@') === -1) {
+      return { ok: false, error: 'Indirizzo email valido obbligatorio per l\'account proprietario.' };
+    }
+
+    var now = new Date();
+    var expiry = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+    var acc = {
+      id: Date.now(),
+      uuid: 'prop-' + Math.random().toString(36).substring(2, 10),
+      createdAt: now.toISOString(),
+      updatedAt: now.toISOString(),
+      nome: sanitizeInput(p.nome, 100),
+      cognome: sanitizeInput(p.cognome, 100),
+      email: email,
+      telefono: sanitizeInput(p.telefono, 30),
+      passwordHash: p.password ? await hashCredentialSha256(p.password) : '',
+      pinAccesso: p.pin ? String(p.pin).trim() : '1234',
+      ragioneSociale: sanitizeInput(p.ragioneSociale || (p.nome ? p.nome + ' ' + (p.cognome || '') : ''), 150),
+      codiceFiscale: sanitizeInput(p.codiceFiscale || p.cf || '', 20).toUpperCase(),
+      partitaIva: sanitizeInput(p.partitaIva || p.piva || '', 20),
+      sdiCodiceDestinatario: sanitizeInput(p.sdi || 'M5UXCR1', 10).toUpperCase(),
+      pec: (p.pec || '').trim().toLowerCase(),
+      pianoCanone: '99_euro_mese',
+      canoneMensileEur: 99.00,
+      statoAbbonamento: 'prova_14_giorni',
+      dataScadenzaGaranzia: expiry.toISOString().split('T')[0],
+      metodoPagamento: p.metodoPagamento || 'revolut_business',
+      ibanAddebito: sanitizeInput(p.ibanAddebito || '', 40),
+      alloggiAssociati: Array.isArray(p.alloggi) ? p.alloggi : [{
+        id: 'apt-' + Date.now(),
+        nome: sanitizeInput(p.nomeAlloggio || 'Appartamento Firenze', 100),
+        indirizzo: sanitizeInput(p.indirizzo || 'Firenze Centro', 150),
+        cin: sanitizeInput(p.cin || '', 30),
+        cir: sanitizeInput(p.cir || '', 30)
+      }],
+      inboxMyBox: [],
+      storicoReport0800: [],
+      metadatiHolding: { piano: 4, brand: 'itassistance', sede: 'Via Matteo Palmieri 20R, Firenze' }
+    };
+
+    var list = getLocalPropertyAccounts();
+    var idx = list.findIndex(function (a) { return a.email === acc.email; });
+    if (idx >= 0) {
+      list[idx] = Object.assign({}, list[idx], acc, { id: list[idx].id, uuid: list[idx].uuid, updatedAt: now.toISOString() });
+      acc = list[idx];
+    } else {
+      list.unshift(acc);
+    }
+    saveLocalPropertyAccounts(list);
+
+    var cloudSyncStatus = { supabase: 'not_configured', webhook: 'not_sent' };
+
+    try {
+      var cfg = (root.SITE_CONFIG && root.SITE_CONFIG.cloud) || {};
+      if (cfg.supabaseUrl && cfg.supabaseAnonKey) {
+        var supaRes = await fetch(cfg.supabaseUrl + '/rest/v1/accounts_proprieta', {
+          method: 'POST',
+          headers: {
+            'apikey': cfg.supabaseAnonKey,
+            'Authorization': 'Bearer ' + cfg.supabaseAnonKey,
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates'
+          },
+          body: JSON.stringify({
+            uuid: acc.uuid,
+            nome: acc.nome,
+            cognome: acc.cognome,
+            email: acc.email,
+            telefono: acc.telefono,
+            ragione_sociale: acc.ragioneSociale,
+            codice_fiscale: acc.codiceFiscale,
+            stato_abbonamento: acc.statoAbbonamento,
+            canone_mensile_eur: acc.canoneMensileEur,
+            metadati_holding: acc.metadatiHolding
+          })
+        });
+        cloudSyncStatus.supabase = supaRes.ok ? 'synced' : ('http_error_' + supaRes.status);
+      }
+    } catch (eCloud) {
+      cloudSyncStatus.supabase = 'network_error: ' + (eCloud && eCloud.message ? eCloud.message : 'offline');
+      console.warn('[ITACloudSync] Supabase non raggiungibile per account proprietario:', cloudSyncStatus.supabase);
+    }
+
+    try {
+      var hookRes = await fetch('https://aherreras.app.n8n.cloud/webhook/leads/itassistance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tipo_account: 'proprietario_partner',
+          account_uuid: acc.uuid,
+          nome: acc.nome + ' ' + acc.cognome,
+          email: acc.email,
+          telefono: acc.telefono,
+          canone: '99_euro_mese',
+          coordinate_holding: 'Blue Arroyo S.r.l. · Piano 4',
+          timestamp: now.toISOString()
+        })
+      });
+      cloudSyncStatus.webhook = hookRes.ok ? 'delivered' : ('http_error_' + hookRes.status);
+    } catch (eHook) {
+      cloudSyncStatus.webhook = 'network_error: ' + (eHook && eHook.message ? eHook.message : 'offline');
+      console.warn('[ITACloudSync] Webhook n8n non raggiungibile per account proprietario:', cloudSyncStatus.webhook);
+    }
+
+    return { ok: true, account: acc, cloudSync: cloudSyncStatus };
+  }
+
+  async function loginPropertyAccount(email, pinOrPassword) {
+    var em = (email || '').trim().toLowerCase();
+    var cred = pinOrPassword ? String(pinOrPassword).trim() : '';
+    if (!em || !cred) {
+      return { ok: false, error: 'Email e credenziali sono obbligatorie.' };
+    }
+    var list = getLocalPropertyAccounts();
+    var acc = list.find(function (a) { return a.email === em; });
+    if (!acc) return { ok: false, error: 'Account non trovato.' };
+    var pwdH = await hashCredentialSha256(cred);
+    if ((acc.pinAccesso && acc.pinAccesso === cred) || (acc.passwordHash && acc.passwordHash === pwdH)) {
+      return { ok: true, account: acc };
+    }
+    return { ok: false, error: 'Credenziali non valide.' };
+  }
+
+  function updatePropertyAlloggi(accountId, alloggiArray) {
+    var list = getLocalPropertyAccounts();
+    var idx = list.findIndex(function (a) { return a.id === accountId || a.uuid === accountId; });
+    if (idx >= 0) {
+      list[idx].alloggiAssociati = Array.isArray(alloggiArray) ? alloggiArray : [];
+      list[idx].updatedAt = new Date().toISOString();
+      saveLocalPropertyAccounts(list);
+      return { ok: true, account: list[idx] };
+    }
+    return { ok: false, error: 'Account non trovato.' };
+  }
+
+  async function registerTravelerCoverageProfile(payload) {
+    var p = payload || {};
+    var email = (p.email || '').trim().toLowerCase();
+    var nome = sanitizeInput(p.nome, 80);
+    var telefono = sanitizeInput(p.telefonoWhatsapp || p.telefono, 30);
+    if (!email || email.indexOf('@') === -1) {
+      return { ok: false, error: 'Indirizzo email valido obbligatorio per l\'attivazione del Pass.' };
+    }
+    if (!telefono) {
+      return { ok: false, error: 'Numero di cellulare / WhatsApp obbligatorio per il supporto H24.' };
+    }
+
+    var now = new Date();
+    var randCode = Math.floor(100 + Math.random() * 900);
+    var passCode = (typeof p.passCode === 'string' && p.passCode.trim())
+      ? sanitizeInput(p.passCode, 30).toUpperCase()
+      : ('ITA-2026-FI' + randCode);
+
+    var prof = {
+      id: Date.now(),
+      uuid: 'tur-' + Math.random().toString(36).substring(2, 10),
+      passCode: passCode,
+      createdAt: now.toISOString(),
+      updatedAt: now.toISOString(),
+      nome: nome,
+      cognome: sanitizeInput(p.cognome, 80),
+      email: email,
+      telefonoWhatsapp: telefono,
+      cittaSoggiorno: sanitizeInput(p.citta || p.cittaSoggiorno || 'Firenze', 80),
+      indirizzoAlloggio: sanitizeInput(p.indirizzo || p.indirizzoAlloggio || '', 150),
+      lingua: sanitizeInput(p.lingua || 'IT', 10).toUpperCase(),
+      coperturaEmergenzeH24: true,
+      statoCopertura: 'attiva',
+      luggageStorage: p.luggageStorage || { richiesto: !!p.reqLuggage, colli: parseInt(p.colliBagagli, 10) || 0, puntoDeposito: 'SMN Firenze / Convenzionato' },
+      prenotazioneRistoranti: p.prenotazioneRistoranti || { richiesto: !!p.reqRistoranti, preferenze: sanitizeInput(p.prefRistoranti || '', 200) },
+      trasferimentiTaxiNcc: p.trasferimentiTaxiNcc || { richiesto: !!p.reqTaxiNcc, tratta: sanitizeInput(p.trattaTaxi || '', 100) },
+      viaggiInBarcaTour: p.viaggiInBarcaTour || { richiesto: !!p.reqBarca, tour: sanitizeInput(p.tourBarca || '', 100) },
+      ticketEmergenza: [],
+      canaleContattoPreferito: 'whatsapp',
+      noteConcierge: sanitizeInput(p.note || '', 500)
+    };
+
+    var list = getLocalTravelerProfiles();
+    list.unshift(prof);
+    saveLocalTravelerProfiles(list);
+
+    var cloudSyncStatus = { supabase: 'not_configured', webhook: 'not_sent' };
+
+    try {
+      var cfg = (root.SITE_CONFIG && root.SITE_CONFIG.cloud) || {};
+      if (cfg.supabaseUrl && cfg.supabaseAnonKey) {
+        var supaRes = await fetch(cfg.supabaseUrl + '/rest/v1/profili_turisti_copertura', {
+          method: 'POST',
+          headers: {
+            'apikey': cfg.supabaseAnonKey,
+            'Authorization': 'Bearer ' + cfg.supabaseAnonKey,
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates'
+          },
+          body: JSON.stringify({
+            uuid: prof.uuid,
+            pass_code: prof.passCode,
+            nome: prof.nome,
+            cognome: prof.cognome,
+            email: prof.email,
+            telefono_whatsapp: prof.telefonoWhatsapp,
+            lingua: prof.lingua,
+            citta_soggiorno: prof.cittaSoggiorno,
+            copertura_emergenze_h24: prof.coperturaEmergenzeH24,
+            stato_copertura: prof.statoCopertura
+          })
+        });
+        cloudSyncStatus.supabase = supaRes.ok ? 'synced' : ('http_error_' + supaRes.status);
+      }
+    } catch (eCloud) {
+      cloudSyncStatus.supabase = 'network_error: ' + (eCloud && eCloud.message ? eCloud.message : 'offline');
+      console.warn('[ITACloudSync] Supabase non raggiungibile per profilo turista:', cloudSyncStatus.supabase);
+    }
+
+    try {
+      var serviziArr = [
+        prof.coperturaEmergenzeH24 ? 'emergenze_h24' : null,
+        prof.luggageStorage && prof.luggageStorage.richiesto ? 'luggage_storage' : null,
+        prof.trasferimentiTaxiNcc && prof.trasferimentiTaxiNcc.richiesto ? 'taxi_ncc' : null,
+        prof.viaggiInBarcaTour && prof.viaggiInBarcaTour.richiesto ? 'barca_tour' : null,
+        prof.prenotazioneRistoranti && prof.prenotazioneRistoranti.richiesto ? 'ristoranti' : null
+      ].filter(Boolean);
+
+      var hookRes = await fetch('https://aherreras.app.n8n.cloud/webhook/leads/itassistance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tipo_account: 'turista_copertura',
+          pass_code: prof.passCode,
+          nome: prof.nome + ' ' + prof.cognome,
+          email: prof.email,
+          telefono: prof.telefonoWhatsapp,
+          lingua: prof.lingua,
+          servizi_richiesti: serviziArr,
+          coordinate_holding: 'Blue Arroyo S.r.l. · Piano 4',
+          timestamp: now.toISOString()
+        })
+      });
+      cloudSyncStatus.webhook = hookRes.ok ? 'delivered' : ('http_error_' + hookRes.status);
+    } catch (eHook) {
+      cloudSyncStatus.webhook = 'network_error: ' + (eHook && eHook.message ? eHook.message : 'offline');
+      console.warn('[ITACloudSync] Webhook n8n non raggiungibile per profilo turista:', cloudSyncStatus.webhook);
+    }
+
+    return { ok: true, profilo: prof, cloudSync: cloudSyncStatus };
+  }
+
+  function getTravelerCoverageByPass(passCode) {
+    if (!passCode || typeof passCode !== 'string') {
+      return { ok: false, error: 'Codice Pass non specificato o formato non valido.' };
+    }
+    var code = passCode.trim().toUpperCase();
+    if (!code) {
+      return { ok: false, error: 'Codice Pass vuoto.' };
+    }
+    var list = getLocalTravelerProfiles();
+    var prof = list.find(function (p) {
+      return p && typeof p.passCode === 'string' && p.passCode.trim().toUpperCase() === code;
+    });
+    if (prof) return { ok: true, profilo: prof };
+    return { ok: false, error: 'Pass di Copertura non trovato.' };
+  }
+
+  function updateTravelerServiceRequest(passCode, serviceType, serviceData) {
+    if (!passCode || typeof passCode !== 'string') {
+      return { ok: false, error: 'Codice Pass non specificato o formato non valido.' };
+    }
+    var code = passCode.trim().toUpperCase();
+    var list = getLocalTravelerProfiles();
+    var idx = list.findIndex(function (p) {
+      return p && typeof p.passCode === 'string' && p.passCode.trim().toUpperCase() === code;
+    });
+    if (idx >= 0) {
+      if (serviceType === 'luggage') list[idx].luggageStorage = Object.assign({}, list[idx].luggageStorage, serviceData);
+      else if (serviceType === 'ristoranti') list[idx].prenotazioneRistoranti = Object.assign({}, list[idx].prenotazioneRistoranti, serviceData);
+      else if (serviceType === 'taxi') list[idx].trasferimentiTaxiNcc = Object.assign({}, list[idx].trasferimentiTaxiNcc, serviceData);
+      else if (serviceType === 'barca') list[idx].viaggiInBarcaTour = Object.assign({}, list[idx].viaggiInBarcaTour, serviceData);
+      list[idx].updatedAt = new Date().toISOString();
+      saveLocalTravelerProfiles(list);
+      return { ok: true, profilo: list[idx] };
+    }
+    return { ok: false, error: 'Pass di Copertura non trovato.' };
+  }
+
   root.ITACloudSync = {
+    registerPropertyAccount: registerPropertyAccount,
+    loginPropertyAccount: loginPropertyAccount,
+    updatePropertyAlloggi: updatePropertyAlloggi,
+    registerTravelerCoverageProfile: registerTravelerCoverageProfile,
+    getTravelerCoverageByPass: getTravelerCoverageByPass,
+    updateTravelerServiceRequest: updateTravelerServiceRequest,
     getRomeNowFormatted: getRomeNowFormatted,
     getAlloggiatiCountryCatalog: getAlloggiatiCountryCatalog,
     buildAndValidateAlloggiatiRecord: buildAndValidateAlloggiatiRecord,

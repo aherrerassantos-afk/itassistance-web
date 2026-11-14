@@ -222,6 +222,76 @@
       padding-right: max(16px, env(safe-area-inset-right));
     }
 
+    /* AUDIENCE SWITCHER BAR (GEMINI.MD / BRAND TOKEN) */
+    .audience-switcher-bar {
+      background: var(--bg-light);
+      border-bottom: 2px solid var(--border-color);
+      padding: 8px max(16px, env(safe-area-inset-right)) 8px max(16px, env(safe-area-inset-left));
+      position: sticky;
+      top: 68px;
+      z-index: 490;
+      box-shadow: 0 2px 8px rgba(30,16,53,0.04);
+    }
+    .audience-switcher-inner {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .audience-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      width: 100%;
+    }
+    @media (max-width: 600px) {
+      .audience-tabs {
+        grid-template-columns: 1fr;
+      }
+    }
+    .audience-tab {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      min-height: 48px;
+      border: 1.5px solid #CBD5E1;
+      border-radius: 10px;
+      background: #FFFFFF;
+      color: var(--ink-navy);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+    .audience-tab:hover {
+      border-color: var(--gold-accent);
+    }
+    .audience-tab.active {
+      background: var(--bg-stone);
+      border-color: var(--gold-accent);
+      box-shadow: 0 0 0 1px var(--gold-accent);
+    }
+    .aud-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .aud-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .aud-text strong {
+      font-size: clamp(0.85rem, 2vw, 0.95rem);
+      line-height: 1.2;
+    }
+    .aud-sub {
+      font-size: clamp(0.7rem, 1.5vw, 0.78rem);
+      color: var(--ink-muted);
+      white-space: normal;
+    }
+
     /* STICKY HEADER COMPLIANT WITH GEMINI.MD */
     .site-header {
       position: sticky;
@@ -921,6 +991,22 @@
     </div>
   </header>
 
+  <!-- AUDIENCE SWITCHER BAR (GEMINI.MD / BRAND TOKEN) -->
+  <div class="audience-switcher-bar" role="region" aria-label="Audience path selector">
+    <div class="container audience-switcher-inner">
+      <div class="audience-tabs" role="tablist" aria-label="Choose your experience">
+        <button type="button" class="audience-tab active" id="tab-proprietari" role="tab" aria-selected="true" aria-controls="hero" onclick="switchAudienceView('proprietari')">
+          <span class="aud-icon">🏢</span>
+          <span class="aud-text"><strong>For Property Owners &amp; Partners</strong> <span class="aud-sub">EBITDA, Operations &amp; €99 Flat Fee</span></span>
+        </button>
+        <button type="button" class="audience-tab" id="tab-turisti" role="tab" aria-selected="false" aria-controls="sezione-turisti-coperti" onclick="switchAudienceView('turisti')">
+          <span class="aud-icon">✈️</span>
+          <span class="aud-text"><strong>For Travelers in Italy</strong> <span class="aud-sub">24/7 Care, Concierge, Luggage, Taxi, Boats</span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- FULLSCREEN MOBILE MENU -->
   <div class="mobile-fullscreen-menu" id="mobile-fullscreen-menu" data-open="false" role="dialog" aria-modal="true" aria-label="Navigation menu">
     <div class="mobile-menu-top">
@@ -929,6 +1015,18 @@
         <span>itassistance</span>
       </a>
       <button type="button" class="mobile-menu-toggle" id="mobile-menu-close-btn" onclick="toggleMobileFullscreenMenu(false)" aria-label="Close navigation menu">Close</button>
+    </div>
+
+    <!-- QUICK MOBILE SWITCHER -->
+    <div style="display:flex;flex-direction:column;gap:8px;padding:12px 0;border-bottom:1.5px solid var(--border-color);">
+      <button type="button" class="audience-tab active" id="tab-mob-proprietari" onclick="switchAudienceView('proprietari'); toggleMobileFullscreenMenu(false);">
+        <span class="aud-icon">🏢</span>
+        <span class="aud-text"><strong>1. For Property Owners &amp; Partners</strong><span class="aud-sub">EBITDA &amp; €99/mo Flat Fee</span></span>
+      </button>
+      <button type="button" class="audience-tab" id="tab-mob-turisti" onclick="switchAudienceView('turisti'); toggleMobileFullscreenMenu(false);">
+        <span class="aud-icon">✈️</span>
+        <span class="aud-text"><strong>2. For Travelers in Italy</strong><span class="aud-sub">24/7 Care, Taxi, Luggage, Boat Tours</span></span>
+      </button>
     </div>
     <ul class="mobile-menu-list">
       <li><a href="#benefits" onclick="toggleMobileFullscreenMenu(false)"><span>Owner Benefits</span><span>→</span></a></li>
@@ -949,6 +1047,141 @@
   </div>
 
   <main id="main-content">
+    <!-- SECTION TRAVELERS IN ITALY WITH CONTINUOUS ITASSISTANCE COVERAGE -->
+    <section class="section-block section-stone" id="sezione-turisti-coperti" style="display:none;" aria-label="Coverage and Services for Travelers in Italy">
+      <div class="container">
+        <div style="background:var(--bg-light);border:2px solid var(--gold-accent);border-radius:16px;padding:clamp(20px, 4vw, 36px);box-shadow:var(--shadow-card);margin-bottom:32px;">
+          <span class="eyebrow" style="color:var(--gold-accent);font-weight:800;letter-spacing:0.08em;">Traveler Coverage &amp; Dedicated Concierge · Florence &amp; Italy · itassistance</span>
+          <h1 style="font-size:clamp(1.75rem, 4vw, 2.75rem);line-height:1.2;margin:12px 0 16px;color:var(--ink-navy);font-weight:900;">
+            Your Comprehensive Travel Coverage in Italy: 24/7 Assistance, Verified Accommodations, Taxi/NCC &amp; Boat Trips.
+          </h1>
+          <p class="lead-paragraph" style="font-size:clamp(1rem, 2vw, 1.2rem);line-height:1.6;color:var(--ink-muted);margin-bottom:24px;">
+            Leave nothing to chance: the <strong>ITASSISTANCE</strong> team is your physical front desk in Italy, ready day and night for any accommodation or city emergency. We handle verified apartments, luggage storage and transfer, dining reservations, local logistics, private transit, and boat excursions.
+          </p>
+
+          <!-- 24/7 RAPID CONTACT -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 260px), 1fr));gap:12px;margin-bottom:12px;">
+            <a href="tel:+393491775561" class="btn btn-primary" style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;font-weight:700;">
+              <span>📞</span> <span>Call 24/7 Front Desk: +39 349 177 5561</span>
+            </a>
+            <a href="https://wa.me/393491775561?text=Traveler%20Coverage%20Request%20itassistance" target="_blank" rel="noopener" class="btn btn-secondary" style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;font-weight:700;border:2px solid #25D366;color:#128C7E;">
+              <span>💬</span> <span>WhatsApp 24/7 Support</span>
+            </a>
+            <a href="mailto:itassistance@bluearroyo.it" class="btn btn-secondary" style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;font-weight:700;">
+              <span>✉️</span> <span>Email: itassistance@bluearroyo.it</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 7 OPERATIONAL PILLARS -->
+        <h2 style="font-size:clamp(1.4rem, 3vw, 2.1rem);color:var(--ink-navy);margin-bottom:20px;font-weight:800;">
+          The 7 Pillars of itassistance Traveler Coverage in Italy
+        </h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 300px), 1fr));gap:16px;margin-bottom:36px;">
+          <div class="card" style="padding:20px;border:1px solid rgba(30,16,53,0.1);border-radius:12px;background:#FFF;">
+            <div style="font-size:1.8rem;margin-bottom:8px;">🛎️</div>
+            <h3 style="font-size:1.15rem;margin-bottom:8px;color:var(--ink-navy);">1. 24/7 Front Desk &amp; Emergency Care</h3>
+            <p style="font-size:0.95rem;color:var(--ink-muted);line-height:1.5;">Continuous day-and-night assistance for any trip disruption: apartment technical issues, urgent medical support, lost keys, and bilingual orientation.</p>
+          </div>
+          <div class="card" style="padding:20px;border:1px solid rgba(30,16,53,0.1);border-radius:12px;background:#FFF;">
+            <div style="font-size:1.8rem;margin-bottom:8px;">🧳</div>
+            <h3 style="font-size:1.15rem;margin-bottom:8px;color:var(--ink-navy);">2. Luggage Storage &amp; Door-to-Station Transfer</h3>
+            <p style="font-size:0.95rem;color:var(--ink-muted);line-height:1.5;">Secure luggage storage facilities and luggage runner service to/from railway stations or apartments so you can enjoy the city hands-free.</p>
+          </div>
+          <div class="card" style="padding:20px;border:1px solid rgba(30,16,53,0.1);border-radius:12px;background:#FFF;">
+            <div style="font-size:1.8rem;margin-bottom:8px;">🏡</div>
+            <h3 style="font-size:1.15rem;margin-bottom:8px;color:var(--ink-navy);">3. Certified Accommodations by Blue Arroyo</h3>
+            <p style="font-size:0.95rem;color:var(--ink-muted);line-height:1.5;">Curated suites sanitized at 60°C with sterile hotel-grade linens, full amenities, and assisted check-in with 0% OTA intermediary markups.</p>
+          </div>
+          <div class="card" style="padding:20px;border:1px solid rgba(30,16,53,0.1);border-radius:12px;background:#FFF;">
+            <div style="font-size:1.8rem;margin-bottom:8px;">🍽️</div>
+            <h3 style="font-size:1.15rem;margin-bottom:8px;color:var(--ink-navy);">4. Priority Dining &amp; Wine Cellars</h3>
+            <p style="font-size:0.95rem;color:var(--ink-muted);line-height:1.5;">Priority reservations at handpicked traditional Tuscan trattorias and historic enotecas, bypassing tourist traps and long waiting lines.</p>
+          </div>
+          <div class="card" style="padding:20px;border:1px solid rgba(30,16,53,0.1);border-radius:12px;background:#FFF;">
+            <div style="font-size:1.8rem;margin-bottom:8px;">🚌</div>
+            <h3 style="font-size:1.15rem;margin-bottom:8px;color:var(--ink-navy);">5. Transit, High-Speed Trains &amp; Museums</h3>
+            <p style="font-size:0.95rem;color:var(--ink-muted);line-height:1.5;">Assistance with Frecciarossa/Italo trains, Florence tram lines, regional transport, and priority museum tickets (Uffizi Gallery, Accademia).</p>
+          </div>
+          <div class="card" style="padding:20px;border:1px solid rgba(30,16,53,0.1);border-radius:12px;background:#FFF;">
+            <div style="font-size:1.8rem;margin-bottom:8px;">🚗</div>
+            <h3 style="font-size:1.15rem;margin-bottom:8px;color:var(--ink-navy);">6. Chauffeur NCC &amp; Coordinated Taxi</h3>
+            <p style="font-size:0.95rem;color:var(--ink-muted);line-height:1.5;">Premium Mercedes cars and minivans with private licensed drivers (NCC) or coordinated taxis to Florence (FLR), Pisa (PSA), Bologna (BLQ), and Rome (FCO).</p>
+          </div>
+          <div class="card" style="padding:20px;border:1px solid rgba(30,16,53,0.1);border-radius:12px;background:#FFF;">
+            <div style="font-size:1.8rem;margin-bottom:8px;">⛵</div>
+            <h3 style="font-size:1.15rem;margin-bottom:8px;color:var(--ink-navy);">7. Skippered Boat Charters &amp; Unique Tours</h3>
+            <p style="font-size:0.95rem;color:var(--ink-muted);line-height:1.5;">Private boat excursions with licensed skippers (Etruscan Coast, Elba, Cinque Terre) covered by our 24/7 care network, plus bespoke private tours.</p>
+          </div>
+        </div>
+
+        <!-- TRAVELER PASS ACTIVATION FORM -->
+        <div style="background:var(--bg-light);border:1.5px solid var(--border-color);border-radius:16px;padding:clamp(20px, 4vw, 36px);box-shadow:var(--shadow-card);" id="form-copertura-box">
+          <h3 style="font-size:clamp(1.3rem, 2.5vw, 1.8rem);color:var(--ink-navy);margin-bottom:8px;">Activate Your Traveler Coverage Pass</h3>
+          <p style="color:var(--ink-muted);margin-bottom:20px;font-size:0.95rem;">You will instantly receive your unique <strong>Pass Code</strong> for priority WhatsApp and phone dispatch.</p>
+          
+          <form id="form-richiesta-copertura-turista" onsubmit="handleTravelerCoverageSubmit(event)">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 240px), 1fr));gap:16px;margin-bottom:16px;">
+              <div>
+                <label style="display:block;font-size:0.875rem;font-weight:700;margin-bottom:6px;color:var(--ink-navy);" for="tc-nome">First Name *</label>
+                <input type="text" id="tc-nome" required placeholder="John" style="width:100%;min-height:48px;padding:10px 14px;border:1px solid #CBD5E1;border-radius:8px;font-size:1rem;box-sizing:border-box;"/>
+              </div>
+              <div>
+                <label style="display:block;font-size:0.875rem;font-weight:700;margin-bottom:6px;color:var(--ink-navy);" for="tc-cognome">Last Name *</label>
+                <input type="text" id="tc-cognome" required placeholder="Doe" style="width:100%;min-height:48px;padding:10px 14px;border:1px solid #CBD5E1;border-radius:8px;font-size:1rem;box-sizing:border-box;"/>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 240px), 1fr));gap:16px;margin-bottom:16px;">
+              <div>
+                <label style="display:block;font-size:0.875rem;font-weight:700;margin-bottom:6px;color:var(--ink-navy);" for="tc-email">Email *</label>
+                <input type="email" id="tc-email" required placeholder="john.doe@email.com" style="width:100%;min-height:48px;padding:10px 14px;border:1px solid #CBD5E1;border-radius:8px;font-size:1rem;box-sizing:border-box;"/>
+              </div>
+              <div>
+                <label style="display:block;font-size:0.875rem;font-weight:700;margin-bottom:6px;color:var(--ink-navy);" for="tc-telefono">Mobile / WhatsApp *</label>
+                <input type="tel" id="tc-telefono" required placeholder="+1 555 123 4567" style="width:100%;min-height:48px;padding:10px 14px;border:1px solid #CBD5E1;border-radius:8px;font-size:1rem;box-sizing:border-box;"/>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 240px), 1fr));gap:16px;margin-bottom:16px;">
+              <div>
+                <label style="display:block;font-size:0.875rem;font-weight:700;margin-bottom:6px;color:var(--ink-navy);" for="tc-citta">Destination City</label>
+                <input type="text" id="tc-citta" value="Florence" style="width:100%;min-height:48px;padding:10px 14px;border:1px solid #CBD5E1;border-radius:8px;font-size:1rem;box-sizing:border-box;"/>
+              </div>
+              <div>
+                <label style="display:block;font-size:0.875rem;font-weight:700;margin-bottom:6px;color:var(--ink-navy);" for="tc-indirizzo">Apartment / Hotel Address (if known)</label>
+                <input type="text" id="tc-indirizzo" placeholder="e.g. Via del Proconsolo 10" style="width:100%;min-height:48px;padding:10px 14px;border:1px solid #CBD5E1;border-radius:8px;font-size:1rem;box-sizing:border-box;"/>
+              </div>
+            </div>
+
+            <div style="margin-bottom:16px;">
+              <span style="display:block;font-size:0.875rem;font-weight:700;margin-bottom:8px;color:var(--ink-navy);">Requested Services:</span>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 200px), 1fr));gap:10px;">
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.9rem;cursor:pointer;"><input type="checkbox" id="srv-h24" checked disabled/> 🚨 24/7 Emergency Dispatch</label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.9rem;cursor:pointer;"><input type="checkbox" id="srv-luggage"/> 🧳 Luggage Storage</label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.9rem;cursor:pointer;"><input type="checkbox" id="srv-taxi"/> 🚗 Chauffeur Taxi / NCC</label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.9rem;cursor:pointer;"><input type="checkbox" id="srv-barca"/> ⛵ Boat Tour / Excursion</label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:0.9rem;cursor:pointer;"><input type="checkbox" id="srv-ristoranti"/> 🍽️ Restaurant Tables</label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="btn-submit-tc" style="min-height:52px;width:100%;font-size:1.05rem;font-weight:800;">
+              Activate Traveler Pass &amp; Connect 24/7 Care
+            </button>
+          </form>
+
+          <div id="tc-feedback-box" style="display:none;margin-top:20px;padding:20px;border-radius:12px;background:#F0FDF4;border:1.5px solid #22C55E;">
+            <div style="font-weight:800;color:#15803D;font-size:1.15rem;margin-bottom:6px;">✅ Traveler Pass Successfully Created!</div>
+            <p style="color:#166534;font-size:0.95rem;margin-bottom:12px;">Your unique Pass Code is: <code id="tc-pass-code-val" style="background:#DCFCE7;padding:4px 8px;border-radius:6px;font-size:1.1rem;font-weight:800;">---</code></p>
+            <p style="color:#166534;font-size:0.9rem;margin-bottom:16px;">Our operations team has received your registration. You can now message us directly on WhatsApp with your active code.</p>
+            <a href="#" id="tc-open-wa-btn" target="_blank" rel="noopener" class="btn btn-primary" style="background:#16A34A;display:inline-flex;align-items:center;gap:8px;min-height:48px;">
+              <span>💬</span> <span>Open WhatsApp with Your Pass</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- SECTION 1: HERO WITH CLEAR PROMISE -->
     <section class="section-block section-stone" id="hero">
       <div class="container">
@@ -1692,9 +1925,97 @@
       fb.textContent = res.messageEN || res.message;
     }
 
+    function switchAudienceView(view) {
+      var isTuristi = view === 'turisti';
+      var tabProp = document.getElementById('tab-proprietari');
+      var tabTur = document.getElementById('tab-turisti');
+      var tabMobProp = document.getElementById('tab-mob-proprietari');
+      var tabMobTur = document.getElementById('tab-mob-turisti');
+      var sezTur = document.getElementById('sezione-turisti-coperti');
+
+      if (tabProp) {
+        tabProp.classList.toggle('active', !isTuristi);
+        tabProp.setAttribute('aria-selected', !isTuristi);
+      }
+      if (tabTur) {
+        tabTur.classList.toggle('active', isTuristi);
+        tabTur.setAttribute('aria-selected', isTuristi);
+      }
+      if (tabMobProp) tabMobProp.classList.toggle('active', !isTuristi);
+      if (tabMobTur) tabMobTur.classList.toggle('active', isTuristi);
+
+      if (sezTur) {
+        sezTur.style.display = isTuristi ? 'block' : 'none';
+        if (isTuristi) {
+          sezTur.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+      try {
+        var url = new URL(window.location.href);
+        url.searchParams.set('view', isTuristi ? 'turisti' : 'proprietari');
+        window.history.replaceState({}, '', url.toString());
+      } catch (e) {}
+    }
+
+    async function handleTravelerCoverageSubmit(e) {
+      e.preventDefault();
+      var btn = document.getElementById('btn-submit-tc');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Generating Pass...';
+      }
+
+      var payload = {
+        nome: (document.getElementById('tc-nome') && document.getElementById('tc-nome').value) || '',
+        cognome: (document.getElementById('tc-cognome') && document.getElementById('tc-cognome').value) || '',
+        email: (document.getElementById('tc-email') && document.getElementById('tc-email').value) || '',
+        telefonoWhatsapp: (document.getElementById('tc-telefono') && document.getElementById('tc-telefono').value) || '',
+        citta: (document.getElementById('tc-citta') && document.getElementById('tc-citta').value) || 'Florence',
+        indirizzo: (document.getElementById('tc-indirizzo') && document.getElementById('tc-indirizzo').value) || '',
+        lingua: 'EN',
+        reqLuggage: document.getElementById('srv-luggage') && document.getElementById('srv-luggage').checked,
+        reqTaxiNcc: document.getElementById('srv-taxi') && document.getElementById('srv-taxi').checked,
+        reqBarca: document.getElementById('srv-barca') && document.getElementById('srv-barca').checked,
+        reqRistoranti: document.getElementById('srv-ristoranti') && document.getElementById('srv-ristoranti').checked
+      };
+
+      var syncMod = window.ITACloudSync;
+      var res = (syncMod && typeof syncMod.registerTravelerCoverageProfile === 'function')
+        ? await syncMod.registerTravelerCoverageProfile(payload)
+        : null;
+
+      if (!res || !res.ok || !res.profilo || !res.profilo.passCode) {
+        alert('Unable to activate the Coverage Pass right now. Please retry or contact our 24/7 WhatsApp concierge directly.');
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Get Instant Coverage Pass';
+        }
+        return;
+      }
+
+      var passCode = res.profilo.passCode;
+      var formEl = document.getElementById('form-richiesta-copertura-turista');
+      var fbBox = document.getElementById('tc-feedback-box');
+      var passVal = document.getElementById('tc-pass-code-val');
+      var waBtn = document.getElementById('tc-open-wa-btn');
+
+      if (formEl) formEl.style.display = 'none';
+      if (passVal) passVal.textContent = passCode;
+      if (waBtn) {
+        waBtn.href = 'https://wa.me/393491775561?text=' + encodeURIComponent('Hello ITASSISTANCE, I activated my Traveler Coverage Pass ' + passCode + ' for ' + payload.citta + '. I need assistance for my stay.');
+      }
+      if (fbBox) fbBox.style.display = 'block';
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
       initHomeDirectBookingDates();
       runHomeDirectBookingSearch();
+      try {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('view') === 'turisti') {
+          switchAudienceView('turisti');
+        }
+      } catch (e) {}
     });
   </script>
 </body>

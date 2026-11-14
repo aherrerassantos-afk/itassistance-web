@@ -195,6 +195,24 @@
       bankSwiftBic: 'REVOLT21'
     },
 
+    travelerCoverage: {
+      phoneH24: '+39 349 177 5561',
+      whatsappUrl: 'https://wa.me/393491775561?text=Richiesta%20Copertura%20Viaggiatori%20itassistance',
+      email: 'itassistance@bluearroyo.it',
+      emergencyDeskIT: 'Front Desk & Emergenze H24 attivo giorno e notte in tutta Italia',
+      emergencyDeskEN: '24/7 Front Desk & Emergency dispatch across Italy',
+      cities: ['Firenze', 'Toscana', 'Italia'],
+      services: [
+        { id: 'emergenze_h24', labelIT: 'Assistenza Front Desk & Emergenze H24', labelEN: '24/7 Front Desk & Emergency Care' },
+        { id: 'luggage_storage', labelIT: 'Luggage Storage & Runner Bagagli', labelEN: 'Luggage Storage & Station Transfer' },
+        { id: 'alloggi_certificati', labelIT: 'Alloggi Certificati Blue Arroyo', labelEN: 'Certified Blue Arroyo Accommodations' },
+        { id: 'ristoranti', labelIT: 'Ristoranti & Tavoli Riservati', labelEN: 'Reserved Dining & Historic Trattorias' },
+        { id: 'logistica', labelIT: 'Servizi Pubblici, Treni & Musei', labelEN: 'Transit, Trains & Priority Museum Access' },
+        { id: 'taxi_ncc', labelIT: 'Mobilità Taxi & NCC con Conducente', labelEN: 'Private Chauffeur NCC & Taxi' },
+        { id: 'barca_tour', labelIT: 'Viaggi in Barca con Skipper & Tour in Italia', labelEN: 'Skippered Boat Tours & Italian Experiences' }
+      ]
+    },
+
     roles: {
       client: {
         id: 'cliente',

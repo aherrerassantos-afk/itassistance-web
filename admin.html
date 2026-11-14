@@ -2819,264 +2819,35 @@ Orari: Lunedì–Domenica 09:00–23:00</div>
       return {
         currentRole: 'superadmin',
         loggedIn: true,
-        partners: [
-          {
-            id: 'p1',
-            name: 'Studio Commercialista Ferri & Associati',
-            type: 'Studio Commercialista Partner',
-            contact: 'info@studioferrifi.it · +39 055 219843',
-            vat: 'IT04918270481',
-            apts: 12,
-            plan: 'Partner Fiscale · 12 appartamenti attivi a 99 €/mese',
-            active: true
-          },
-          {
-            id: 'p2',
-            name: 'Firenze Prestige Real Estate SRL',
-            type: 'Agenzia Immobiliare Segnalatrice',
-            contact: 'partner@firenzeprestige.it · +39 348 9123456',
-            vat: 'IT06123940482',
-            apts: 8,
-            plan: '99 €/mese + Revenue Plan (+10% sul netto proprietario)',
-            active: true
-          },
-          {
-            id: 'p3',
-            name: 'Famiglia Corsini (Palazzo Oltrarno)',
-            type: 'Proprietario Multi-Immobile',
-            contact: 'amministrazione@corsinifi.it · +39 335 7712390',
-            vat: 'IT03819200489',
-            apts: 4,
-            plan: '1.188 €/anno Anticipato + Revenue Plan (+10%)',
-            active: true
-          },
-          {
-            id: 'p4',
-            name: 'Marco Rinaldi (App. Santa Croce & Duomo)',
-            type: 'Proprietario Multi-Immobile',
-            contact: 'm.rinaldi@email.it · +39 340 5519823',
-            vat: 'RNLMRC78B12D612K',
-            apts: 2,
-            plan: '99 €/mese Base (Zero Commissioni)',
-            active: true
-          },
-          {
-            id: 'p5',
-            name: 'Chiara Bellini — Host Ambassador Centro Storico',
-            type: 'Host Ambassador Firenze',
-            contact: 'chiara.bellini@email.it · +39 392 4410982',
-            vat: 'BLLCHR85D55D612Z',
-            apts: 6,
-            plan: 'Partner Commerciale Segnalatore',
-            active: true
-          },
-          {
-            id: 'p6',
-            name: 'Toscan Costruzioni (Divisione Edile & Chiavi in Mano Gruppo)',
-            type: 'General Contractor Gruppo (5 SAL)',
-            contact: 'cantiere@toscancostruzioni.it · Subentro Diretto post-collaudo',
-            vat: 'Divisione Edile Ricettiva · DM 37/08 + APE + Agibilità',
-            apts: 10,
-            plan: 'Subentro automatico post-collaudo in 99 €/mese + Revenue Plan (+10%)',
-            active: true
-          }
-        ],
-        hr: [
-          {
-            id: 'h1',
-            name: 'Matteo Lombardi',
-            role: 'Supporto Proprietari & Coordinamento (Firenze)',
-            contract: 'Tempo Indeterminato Full-Time',
-            shift: 'Mattina 09:00 – 16:30',
-            salary: 1850,
-            phone: '+39 349 177 5561 · itassitance@bluearroyo.it',
-            paid: true
-          },
-          {
-            id: 'h2',
-            name: 'Sofia Moretti',
-            role: 'Specialista Alloggiati Web, ISTAT & Tassa Soggiorno',
-            contract: 'Tempo Indeterminato Full-Time',
-            shift: '09:30 – 17:30',
-            salary: 1900,
-            phone: '+39 349 177 5561 · admin@bluearroyo.it',
-            paid: true
-          },
-          {
-            id: 'h3',
-            name: 'Davide Galli',
-            role: 'Revenue Manager Dinamico Airbnb/Booking (+10%)',
-            contract: 'Collaboratore P.IVA',
-            shift: '10:00 – 18:30',
-            salary: 2100,
-            phone: '+39 349 804 1146 · risorseumane@bluearroyo.it',
-            paid: true
-          },
-          {
-            id: 'h4',
-            name: 'Martina Bartoli',
-            role: 'Presidio Serale Assistenza & Check-in Firenze',
-            contract: 'Part-Time Turnista',
-            shift: 'Sera 16:00 – 23:00',
-            salary: 1350,
-            phone: '+39 349 177 5561 · itassitance@bluearroyo.it',
-            paid: false
-          },
-          {
-            id: 'h5',
-            name: 'Alessandro Gori',
-            role: 'Tecnico Manutenzione Rapida Firenze (Interventi 30€)',
-            contract: 'Contratto a Chiamata',
-            shift: 'Reperibilità 09:00 – 21:00',
-            salary: 950,
-            phone: '+39 349 804 1146 · risorseumane@bluearroyo.it',
-            paid: false
-          }
-        ],
+        partners: [],
+        hr: [],
         suppliers: [
           {
             id: 's0',
-            name: 'Piano 2 · PBA – Palazzo by Blue Arroyo (Sede legale: Via Matteo Palmieri 20R, Firenze)',
-            category: 'Turnover 15:00 per PM, Biancheria 60°C, Kit Bio Gratuiti & Dossier SHA-256',
-            vat: 'Piano 2 · Gruppo Blue Arroyo (Cliente: PM) · Fattura Unica SDI 1-Clic',
-            rate: 'Turnover garantito h 15:00 + Forniture Bagno/Cucina gratuite (232€/m risparmio)',
-            amount: 2450,
-            contact: 'Sede legale: Via Matteo Palmieri 20R, Firenze · Certificato 4 Foto SHA-256 WhatsApp',
+            name: 'Blue Arroyo S.r.l.',
+            category: 'Sede Legale & Coordinamento Operativo Gruppo',
+            vat: 'P.IVA / C.F. 07480210488 · SDI M5UXCR1',
+            rate: 'Sede: Via Matteo Palmieri 20R, 50122 Firenze',
+            amount: 0,
+            contact: 'admin@bluearroyo.it · +39 349 177 5561 · IBAN Revolut Business: LT22 3250 0919 1131 5653',
             paid: true
-          },
-          {
-            id: 's1',
-            name: 'Elena Pulizie & Sanificazioni Firenze SRL (Squadra Supporto PBA)',
-            category: 'Pulizie & Sanificazione Appartamenti',
-            vat: 'P.IVA 06819230481 · IT60X0306902880...',
-            rate: '40–65 € a cambio ospite (in base ai mq)',
-            amount: 1420,
-            contact: 'Elena · +39 349 804 1146 · risorseumane@bluearroyo.it',
-            paid: false
-          },
-          {
-            id: 's2',
-            name: 'Lavanderia Industriale Giglio Bianco (Partner Igienizzazione 60°C)',
-            category: 'Lavanderia & Noleggio Biancheria',
-            vat: 'P.IVA 05419280484 · IT82M0103002800...',
-            rate: '11 € a kit matrimoniale completo sigillato',
-            amount: 680,
-            contact: 'Roberto · +39 055 318920',
-            paid: true
-          },
-          {
-            id: 's3',
-            name: 'Toscan Costruzioni & F.lli Conti — Pronto Intervento Tecnico FI',
-            category: 'Manutenzione Rapida (30€) & Adeguamenti Impianti DM 37/08',
-            vat: 'P.IVA 04910290488 · Squadra Tecnica Cantiere & Manutenzione',
-            rate: '30 € uscita rapida Firenze · Appalti 5 SAL a prezzo fisso',
-            amount: 210,
-            contact: 'Stefano / Squadra Tecnica · +39 349 804 1146 · risorseumane@bluearroyo.it',
-            paid: true
-          },
-          {
-            id: 's4',
-            name: 'Welcome Florence & Accoglienza Check-in Presenziale',
-            category: 'Accoglienza Check-in Presenziale (20€) & Logistica Ospiti',
-            vat: 'P.IVA 07192830482 · Coordinamento Sede legale Via Matteo Palmieri 20R, Firenze',
-            rate: '20 € ad accoglienza di persona',
-            amount: 340,
-            contact: 'Giulia · +39 349 177 5561 · itassitance@bluearroyo.it',
-            paid: false
           }
         ],
-        invoices: [
-          {
-            id: 'FATT-2026-101',
-            date: '02/11/2026',
-            client: 'Famiglia Corsini (Palazzo Oltrarno)',
-            cf: 'IT03819200489',
-            desc: 'Canone Annuale Anticipato App itassistance (1.188 € IVA incl.) + Revenue Plan (+10%)',
-            total: 1588,
-            method: 'Bonifico Bancario su Fattura (My Box · Blue Arroyo S.r.l.)',
-            status: 'Pagata'
-          },
-          {
-            id: 'FATT-2026-102',
-            date: '02/11/2026',
-            client: 'Marco Rinaldi (App. Santa Croce)',
-            cf: 'RNLMRC78B12D612K',
-            desc: 'Canone Mensile App itassistance (IVA inclusa)',
-            total: 99,
-            method: 'Bonifico Bancario su Fattura (My Box · Blue Arroyo S.r.l.)',
-            status: 'Pagata'
-          },
-          {
-            id: 'FATT-2026-103',
-            date: '01/11/2026',
-            client: 'Appartamento Santo Spirito (Via Maggio 18)',
-            cf: 'RSSMRA80A01D612X',
-            desc: 'Canone Mensile 99€ + Revenue Plan (+10% sul netto proprietario)',
-            total: 441,
-            method: 'Bonifico Bancario su Fattura (My Box · Blue Arroyo S.r.l.)',
-            status: 'Pagata'
-          },
-          {
-            id: 'FATT-2026-104',
-            date: '30/10/2026',
-            client: 'Elena Guicciardini (Borgo San Jacopo)',
-            cf: 'GCCLNE75C41D612W',
-            desc: 'Canone Annuale Anticipato App itassistance (IVA inclusa)',
-            total: 1188,
-            method: 'Bonifico Bancario su Fattura (My Box · Blue Arroyo S.r.l.)',
-            status: 'Pagata'
-          },
-          {
-            id: 'FATT-2026-105',
-            date: '29/10/2026',
-            client: 'Marco Rinaldi (App. Santa Croce)',
-            cf: 'RNLMRC78B12D612K',
-            desc: 'Intervento Extra Check-in di persona Firenze (20€) + Manutenzione (30€)',
-            total: 50,
-            method: 'Bonifico Bancario su Fattura (My Box · Blue Arroyo S.r.l.)',
-            status: 'In attesa'
-          },
-          {
-            id: 'FATT-2026-106',
-            date: '25/10/2026',
-            client: 'Paolo Benvenuti (Prova 14 giorni)',
-            cf: 'BNVPLA82E10D612T',
-            desc: 'Canone Mensile App itassistance — Rimborso Garanzia 14 gg Soddisfatto o Rimborsato',
-            total: 99,
-            method: 'Bonifico Bancario su Fattura (My Box · Blue Arroyo S.r.l.)',
-            status: 'Rimborsata 14gg'
-          }
-        ],
+        invoices: [],
         accounts: [
           {
             id: 'a1',
             name: 'Julian Herrera',
             email: 'admin@bluearroyo.it',
-            role: ' Super Admin (Accesso Totale)',
-            modules: 'Tutti i moduli (Strutture, Clienti & Fatture, Ticket Aperti, CRM Nuovi Clienti, HR)',
+            role: 'Super Admin (Accesso Totale)',
+            modules: 'Tutti i moduli abilitati · Amministrazione, Fatturazione, Credenziali & Configurazione',
             presetKey: 'superadmin'
           },
           {
             id: 'a2',
-            name: 'Ufficio Fatturazione Blue Arroyo S.r.l.',
-            email: 'admin@bluearroyo.it',
-            role: ' Admin Fatturazione',
-            modules: 'Fatture Attive/Passive, Pro-Forma My Box, Piani 99€/1.188€, Revenue Plan +10%, Export SDI',
-            presetKey: 'billing'
-          },
-          {
-            id: 'a3',
-            name: 'Coordinamento HR & Rete Manutentori Firenze',
-            email: 'risorseumane@bluearroyo.it',
-            role: ' HR & Team Manager',
-            modules: 'Anagrafica Dipendenti, Turni 09:00–23:00, Rete Manutentori & Fornitori (+39 349 804 1146)',
-            presetKey: 'hr'
-          },
-          {
-            id: 'a4',
-            name: 'Assistenza Ospiti & Front Desk Firenze',
-            email: 'itassitance@bluearroyo.it',
-            role: ' Assistenza Ospiti & Strutture',
+            name: 'Customer Care (OM)',
+            email: 'itassistance@bluearroyo.it',
+            role: 'Customer Care (OM)',
             modules: 'Modulo Ospiti Riservato Team (/ospiti.html), Strutture Associate (+39 349 177 5561)',
             presetKey: 'partners'
           }
@@ -3091,14 +2862,33 @@ Orari: Lunedì–Domenica 09:00–23:00</div>
         var raw = localStorage.getItem(ADM_STORAGE_KEY);
         if (raw) {
           var p = JSON.parse(raw);
-          if (p && p.partners && p.hr && p.suppliers && p.invoices && p.accounts) {
-            p.suppliers.forEach(function (sup) {
-              if (sup && sup.id === 's0') {
-                sup.name = 'Piano 2 · PBA – Palazzo by Blue Arroyo (Sede legale: Via Matteo Palmieri 20R, Firenze)';
-                sup.vat = 'Piano 2 · Gruppo Blue Arroyo (Cliente: PM) · Fattura Unica SDI 1-Clic';
-                sup.contact = 'Sede legale: Via Matteo Palmieri 20R, Firenze · Certificato 4 Foto SHA-256 WhatsApp';
-              }
+          if (p && Array.isArray(p.partners)) {
+            // Regola Zero: Rimuove i dati mockati fittizi
+            p.partners = p.partners.filter(function (x) {
+              if (!x || !x.name) return false;
+              var n = x.name.toLowerCase();
+              return n.indexOf('corsini') === -1 && n.indexOf('rinaldi') === -1 && n.indexOf('ferri') === -1 && n.indexOf('prestige') === -1 && n.indexOf('bellini') === -1;
             });
+            if (Array.isArray(p.invoices)) {
+              p.invoices = p.invoices.filter(function (x) {
+                if (!x || !x.client) return false;
+                var c = x.client.toLowerCase();
+                return c.indexOf('corsini') === -1 && c.indexOf('rinaldi') === -1 && c.indexOf('guicciardini') === -1 && c.indexOf('benvenuti') === -1;
+              });
+            }
+            p.hr = [];
+            p.suppliers = [
+              {
+                id: 's0',
+                name: 'Blue Arroyo S.r.l.',
+                category: 'Sede Legale & Coordinamento Operativo Gruppo',
+                vat: 'P.IVA / C.F. 07480210488 · SDI M5UXCR1',
+                rate: 'Sede: Via Matteo Palmieri 20R, 50122 Firenze',
+                amount: 0,
+                contact: 'admin@bluearroyo.it · +39 349 177 5561 · IBAN Revolut Business: LT22 3250 0919 1131 5653',
+                paid: true
+              }
+            ];
             return p;
           }
         }
