@@ -543,7 +543,7 @@
       <span class="status-badge">Passaggio 3 di 3 · Riepilogo e attivazione</span>
       <h2 id="step3-heading">Controlla il riepilogo e attiva il tuo immobile.</h2>
       <p class="step-desc">
-        <strong>Solo fattura:</strong> nella tua area riservata <strong>"My Box"</strong> troverai il <strong>pro-forma (documento non fiscale)</strong> da controllare e confermare per ricevere copia via email e richiedere l'emissione manuale della fattura da parte dell'amministrazione.
+        <strong>Solo fattura:</strong> nella tua area riservata <strong>"My Box"</strong> troverai il <strong>pro-forma (documento non fiscale)</strong> da controllare e confermare per ricevere copia via email e richiedere l'emissione manuale della fattura da parte dell'amministrazione (Bonifico su Revolut Bank UAB · BLUEARROYO SRL · IBAN LT22 3250 0919 1131 5653 · BIC REVOLT21).
       </p>
 
       <div class="summary-box">
@@ -882,7 +882,7 @@
         });
       }
 
-      var savedIban = '[DA CONFERMARE]';
+      var savedIban = (window.SITE_CONFIG && window.SITE_CONFIG.payments && window.SITE_CONFIG.payments.bankIban) || 'LT223250091911315653';
       try {
         var ib = (localStorage.getItem('ita_proforma_iban_v1') || '').trim();
         if (ib) savedIban = ib;
@@ -977,7 +977,7 @@
       if (txtEl) {
         txtEl.textContent = 'Codice Proprietario: ' + proformaData.ownerCode +
           ' · Pro-Forma n. ' + proformaData.proformaId +
-          ' (' + formatCheckoutEuro(grossEur) + ' IVA inclusa) disponibile ora nella sezione "My Box" della tua area riservata. Controlla i tuoi dati e clicca "Confermo il pro-forma" per ricevere copia via email e richiedere l\'emissione manuale della fattura da parte dell\'amministrazione.';
+          ' (' + formatCheckoutEuro(grossEur) + ' IVA inclusa) disponibile ora nella sezione "My Box" della tua area riservata (Bonifico Revolut Bank UAB · BLUEARROYO SRL · IBAN: ' + savedIban + ' · BIC: REVOLT21). Controlla i tuoi dati e clicca "Confermo il pro-forma" per ricevere copia via email e richiedere l\'emissione manuale della fattura da parte dell\'amministrazione.';
       }
 
       renderCheckoutStep('conferma', true);

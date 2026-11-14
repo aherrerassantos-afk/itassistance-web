@@ -2067,7 +2067,7 @@
       '<table><thead><tr><th>Descrizione Servizio</th><th>Commissioni Prenotazioni</th><th>Quota Fissa Unica (IVA incl.)</th></tr></thead><tbody>' +
       '<tr><td>Abbonamento Piattaforma itassistance Firenze (Quota Fissa Unica: 99,00 € / mese IVA inclusa)</td><td>0% (Zero)</td><td><strong>' + fmtAmt + '</strong></td></tr>' +
       '</tbody></table>' +
-      '<p><strong>Coordinate Bonifico Bancario:</strong> Intestatario: <strong>Blue Arroyo SRL</strong> · Causale: <strong>' + invId + ' - ' + ownerCode + '</strong></p>' +
+      '<p><strong>Coordinate Bonifico Bancario:</strong> Intestatario: <strong>BLUEARROYO SRL</strong> · Banca: <strong>Revolut Bank UAB</strong> · IBAN: <strong>LT22 3250 0919 1131 5653</strong> · BIC/SWIFT: <strong>REVOLT21</strong> · Causale: <strong>' + invId + ' - ' + ownerCode + '</strong></p>' +
       '<script>window.onload=function(){window.print();}<\/script></body></html>');
     w.document.close();
   }

@@ -188,11 +188,11 @@
       proformaWorkflowEN: 'No online card payment: the client reviews and confirms the pro-forma in their "My Box" area, receives a copy by email, and administration manually issues the invoice payable via bank transfer.',
       refundMethodIT: 'Bonifico bancario manuale gestito dall\'amministrazione',
       refundMethodEN: 'Manual bank transfer processed by administration',
-      iban: '[DA CONFERMARE]',
-      bankHolder: 'BLUEARROYO S.R.L.',
-      bankIban: '[DA CONFERMARE]',
-      bankName: '[DA CONFERMARE]',
-      bankSwiftBic: '[DA CONFERMARE]'
+      iban: 'LT223250091911315653',
+      bankHolder: 'BLUEARROYO SRL',
+      bankIban: 'LT223250091911315653',
+      bankName: 'Revolut Bank UAB',
+      bankSwiftBic: 'REVOLT21'
     },
 
     roles: {
